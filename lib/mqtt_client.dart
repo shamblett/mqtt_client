@@ -31,3 +31,5 @@ part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 part 'src/mqtt_client_connection_state.dart';
 
 part 'src/mqtt_client_topic.dart';
+
+part 'src/mqtt_client_publication_topic.dart';

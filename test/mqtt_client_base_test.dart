@@ -12,8 +12,8 @@ void main() {
   group("Exceptions", () {
     test("Client Identifier", () {
       final String clid = "ThisCLIDisMorethan23characterslong";
-      final ClientIdentifierException exception = new ClientIdentifierException(
-          clid);
+      final ClientIdentifierException exception =
+      new ClientIdentifierException(clid);
       expect(
           exception.toString(),
           "mqtt-client::ClientIdentifierException: Client id $clid is too long at ${clid
@@ -31,25 +31,23 @@ void main() {
     });
     test("Invalid Header", () {
       final String message = "Corrupt Header Packet";
-      final InvalidHeaderException exception = new InvalidHeaderException(
-          message);
-      expect(
-          exception.toString(),
+      final InvalidHeaderException exception =
+      new InvalidHeaderException(message);
+      expect(exception.toString(),
           "mqtt-client::InvalidHeaderException: $message");
     });
     test("Invalid Message", () {
       final String message = "Corrupt Message Packet";
-      final InvalidMessageException exception = new InvalidMessageException(
-          message);
-      expect(
-          exception.toString(),
+      final InvalidMessageException exception =
+      new InvalidMessageException(message);
+      expect(exception.toString(),
           "mqtt-client::InvalidMessageException: $message");
     });
     test("Invalid Payload Size", () {
       final int size = 2000;
       final int max = 1000;
-      final InvalidPayloadSizeException exception = new InvalidPayloadSizeException(
-          size, max);
+      final InvalidPayloadSizeException exception =
+      new InvalidPayloadSizeException(size, max);
       expect(
           exception.toString(),
           "mqtt-client::InvalidPayloadSizeException: The size of the payload ($size bytes) must "
@@ -58,12 +56,53 @@ void main() {
     test("Invalid Topic", () {
       final String message = "Too long";
       final String topic = "kkkk-yyyy";
-      final InvalidTopicException exception = new InvalidTopicException(
-          message, topic);
-      expect(
-          exception.toString(),
+      final InvalidTopicException exception =
+      new InvalidTopicException(message, topic);
+      expect(exception.toString(),
           "mqtt-client::InvalidTopicException: Topic $topic is $message");
     });
+  });
 
+  group("Publication Topic", () {
+    test("Min length", () {
+      final String topic = "";
+      try {
+        final PublicationTopic pubTopic = new PublicationTopic(topic);
+      } catch (exception) {
+        expect(exception.toString(),
+            "Exception: mqtt_client::Topic: rawTopic must contain at least one character");
+      }
+    });
+    test("Max length", () {
+      String topic = "";
+      for (int i = 0; i < Topic.maxTopicLength + 1; i++) {
+        topic += "a";
+      }
+      try {
+        final PublicationTopic pubTopic = new PublicationTopic(topic);
+      } catch (exception) {
+        expect(
+            exception.toString(),
+            "Exception: mqtt_client::Topic: The length of the supplied rawTopic "
+                "(65536) is longer than the maximum allowable (${Topic
+                .maxTopicLength})");
+      }
+    });
+    test("Wildcards", () {
+      final String topic = Topic.wildcard;
+      try {
+        final PublicationTopic pubTopic = new PublicationTopic(topic);
+      } catch (exception) {
+        expect(exception.toString(),
+            "Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
+      }
+      final String topic1 = Topic.multiWildcard;
+      try {
+        final PublicationTopic pubTopic1 = new PublicationTopic(topic1);
+      } catch (exception) {
+        expect(exception.toString(),
+            "Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
+      }
+    });
   });
 }
