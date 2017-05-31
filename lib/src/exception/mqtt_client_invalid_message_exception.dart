@@ -16,5 +16,6 @@ class InvalidMessageException implements Exception {
     "mqtt-client::InvalidMessageException: $text";
   }
 
+  @override
   String toString() => _message;
 }

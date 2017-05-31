@@ -17,5 +17,6 @@ class InvalidPayloadSizeException implements Exception {
         "be equal to or greater than 0 and less than $max bytes";
   }
 
+  @override
   String toString() => _message;
 }

@@ -19,5 +19,6 @@ class ClientIdentifierException implements Exception {
         .maxClientIdentifierLength}";
   }
 
+  @override
   String toString() => _message;
 }

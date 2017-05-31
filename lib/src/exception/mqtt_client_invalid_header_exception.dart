@@ -16,5 +16,6 @@ class InvalidHeaderException implements Exception {
     "mqtt-client::InvalidHeaderException: $text";
   }
 
+  @override
   String toString() => _message;
 }

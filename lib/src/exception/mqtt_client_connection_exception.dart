@@ -20,5 +20,6 @@ class ConnectionException implements Exception {
         "Current state is ${state.toString().substring(_classLength)}";
   }
 
+  @override
   String toString() => _message;
 }
