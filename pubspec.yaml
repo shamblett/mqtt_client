@@ -1,0 +1,19 @@
+name: mqtt_client
+description: A server side MQTT client for Dart
+version: 0.1.0
+author: Steve Hamblett <steve.hamblett@linux.com>
+homepage: https://github.com/shamblett/mqtt_client
+
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+
+dependencies:
+ typed_data: '>=1.1.3'
+
+dev_dependencies:
+  test: '^0.12.0'
+  coverage: '^0.7.3'
+  dart_dev: '^1.0.0'
+  dart_style: '>=0.2.0 <0.3.0'
+  dartdoc: '>=0.8.0 <=0.10.0'
+
