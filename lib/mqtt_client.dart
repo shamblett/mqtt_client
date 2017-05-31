@@ -14,3 +14,6 @@ import 'dart:convert';
 import 'package:typed_data/typed_data.dart' as typed;
 
 /// The mqtt_client package exported interface
+part 'src/mqtt_client_constants.dart';
+
+part 'src/exception/mqtt_client_client_identifier_exception.dart';
