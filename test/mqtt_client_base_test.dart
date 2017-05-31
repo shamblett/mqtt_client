@@ -104,5 +104,15 @@ void main() {
             "Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
       }
     });
+    test("Valid", () {
+      final String topic = "AValidTopic";
+      final PublicationTopic pubTopic = new PublicationTopic(topic);
+      expect(pubTopic.hasWildcards, false);
+      expect(pubTopic.rawTopic, topic);
+      expect(pubTopic.toString(), topic);
+      final PublicationTopic pubTopic1 = new PublicationTopic(topic);
+      expect(pubTopic1, pubTopic);
+      expect(pubTopic1.hashCode, pubTopic.hashCode);
+    });
   });
 }
