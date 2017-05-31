@@ -1,2 +1,2 @@
 # mqtt_client
-A server side MQTT client for dart
+A server side MQTT client for Dart
