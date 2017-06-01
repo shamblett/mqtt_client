@@ -6,6 +6,7 @@
  */
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
+import 'package:typed_data/typed_data.dart' as typed;
 import 'dart:io';
 
 void main() {
@@ -391,6 +392,29 @@ void main() {
       final String topic = "finance";
       final SubscriptionTopic subTopic = new SubscriptionTopic(topic);
       expect(subTopic.hasWildcards, isFalse);
+    });
+  });
+
+  group("ASCII String Data Convertor", () {
+    test("ASCII string to byte array", () {
+      final String testString = "testStringA-Z,1-9,a-z";
+      final AsciiPayloadConverter conv = new AsciiPayloadConverter();
+      final typed.Uint8Buffer buff = conv.convertToBytes(testString);
+      expect(testString.length, buff.length);
+      for (int i = 0; i < testString.length; i++) {
+        expect(testString.codeUnitAt(i), buff[i]);
+      }
+    });
+    test("Byte array to ASCII string", () {
+      final List<int> input = [40, 41, 42, 43];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(input);
+      final AsciiPayloadConverter conv = new AsciiPayloadConverter();
+      final String output = conv.convertFromBytes(buff);
+      expect(input.length, output.length);
+      for (int i = 0; i < input.length; i++) {
+        expect(input[i], output.codeUnitAt(i));
+      }
     });
   });
 }
