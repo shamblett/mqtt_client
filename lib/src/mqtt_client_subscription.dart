@@ -7,8 +7,8 @@
 
 part of mqtt_client;
 
-///     Entity that captures data related to an individual subscription
-class Subscription {
+/// Entity that captures data related to an individual subscription
+class Subscription extends Object with Observable {
   /// The message identifier assigned to the subscription
   int messageIdentifier;
 
@@ -22,27 +22,5 @@ class Subscription {
   MqttQos qos;
 
   /// The observable that receives messages from the broker.
-  public IObservable
-
-  <
-
-  MqttReceivedMessage
-
-  <
-
-  byte
-
-  [
-
-  ]
-
-  >
-
-  >
-
-  Observable
-
-  { get; set;
-  }
-}
+  MqttReceivedMessage<typed.Uint8Buffer> observable;
 }

@@ -12,6 +12,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'package:typed_data/typed_data.dart' as typed;
+import 'package:observable/observable.dart';
 
 /// The mqtt_client package exported interface
 part 'src/mqtt_client_constants.dart';
@@ -28,7 +29,7 @@ part 'src/exception/mqtt_client_invalid_payload_size_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 
-part 'src/mqtt_client_connection_state.dart';
+part 'package:mqtt_client/src/connectionhandling/mqtt_client_connection_state.dart';
 
 part 'src/mqtt_client_topic.dart';
 
@@ -43,3 +44,9 @@ part 'src/mqtt_client_mqtt_qos.dart';
 part 'src/mqtt_client_mqtt_received_message.dart';
 
 part 'src/mqtt_client_subscription.dart';
+
+part 'src/dataconvertors/mqtt_client_ipayload_convertor.dart';
+
+part 'src/dataconvertors/mqtt_client_passthru_payload_convertor.dart';
+
+part 'src/dataconvertors/mqtt_client_ascii_payload_convertor.dart';
