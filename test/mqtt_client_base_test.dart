@@ -68,6 +68,7 @@ void main() {
       final String topic = "";
       try {
         final PublicationTopic pubTopic = new PublicationTopic(topic);
+        print(pubTopic.rawTopic); // wont get here
       } catch (exception) {
         expect(exception.toString(),
             "Exception: mqtt_client::Topic: rawTopic must contain at least one character");
@@ -80,6 +81,7 @@ void main() {
       }
       try {
         final PublicationTopic pubTopic = new PublicationTopic(topic);
+        print(pubTopic.rawTopic); // wont get here
       } catch (exception) {
         expect(
             exception.toString(),
@@ -92,6 +94,7 @@ void main() {
       final String topic = Topic.wildcard;
       try {
         final PublicationTopic pubTopic = new PublicationTopic(topic);
+        print(pubTopic.rawTopic); // wont get here
       } catch (exception) {
         expect(exception.toString(),
             "Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
@@ -99,6 +102,7 @@ void main() {
       final String topic1 = Topic.multiWildcard;
       try {
         final PublicationTopic pubTopic1 = new PublicationTopic(topic1);
+        print(pubTopic1.rawTopic); // wont get here
       } catch (exception) {
         expect(exception.toString(),
             "Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
@@ -113,6 +117,8 @@ void main() {
       final PublicationTopic pubTopic1 = new PublicationTopic(topic);
       expect(pubTopic1, pubTopic);
       expect(pubTopic1.hashCode, pubTopic.hashCode);
+      final PublicationTopic pubTopic2 = new PublicationTopic("DDDDDDD");
+      expect(pubTopic.hashCode, isNot(equals(pubTopic2.hashCode)));
     });
   });
 }

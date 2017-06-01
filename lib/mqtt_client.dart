@@ -33,3 +33,5 @@ part 'src/mqtt_client_connection_state.dart';
 part 'src/mqtt_client_topic.dart';
 
 part 'src/mqtt_client_publication_topic.dart';
+
+part 'src/mqtt_client_subscription_topic.dart';
