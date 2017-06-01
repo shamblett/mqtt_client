@@ -45,8 +45,8 @@ class SubscriptionTopic extends Topic {
         topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
       throw new Exception(
-          "Topics using the # wildcard longer than 1 character must "
-              "be immediately preceeded by a the rawTopic separator /.");
+          "mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must "
+              "be immediately preceeded by a the rawTopic separator /");
     }
   }
 
