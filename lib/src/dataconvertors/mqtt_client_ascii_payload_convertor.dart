@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Converts string data to and from the MQTT wire format
-class AsciiPayloadConverter implements IPayloadConverter<String> {
+class AsciiPayloadConverter implements PayloadConverter<String> {
   /// Processes received data and returns it as a string.
   String convertFromBytes(typed.Uint8Buffer messageData) {
     final Utf8Decoder decoder = new Utf8Decoder();

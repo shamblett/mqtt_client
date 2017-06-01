@@ -20,7 +20,7 @@ part of mqtt_client;
 ///     This means, in both cases you can store state in the data converters if you wish, and
 ///     that state will persist between messages received or published, but only a default empty
 ///     constructor is supported.
-abstract class IPayloadConverter<T> {
+abstract class PayloadConverter<T> {
   /// Converts received data from a raw byte array to an object graph.
   T convertFromBytes(typed.Uint8Buffer messageData);
 
