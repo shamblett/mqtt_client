@@ -27,6 +27,21 @@ class MQTTEncoding extends Utf8Codec {
     return decoder.convert(bytes.toList());
   }
 
+  ///  When overridden in a derived class, calculates the number of characters produced by decoding all the bytes in the specified byte array.
+  int getCharCount(typed.Uint8Buffer bytes) {
+    if (bytes.length < 2) {
+      throw new Exception(
+          "mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes");
+    }
+    return ((bytes[0] << 8) + bytes[1]);
+  }
+
+  /// Calculates the number of bytes produced by encoding the characters in the specified.
+  int getByteCount(String chars) {
+    _validateString(chars);
+    return getBytes(chars).length + 2;
+  }
+
   /// Validates the string to ensure it doesn't contain any characters invalid within the Mqtt string format.
   static void _validateString(String s) {
     for (int i = 0; i < s.length; i++) {
