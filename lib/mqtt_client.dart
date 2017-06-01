@@ -35,3 +35,11 @@ part 'src/mqtt_client_topic.dart';
 part 'src/mqtt_client_publication_topic.dart';
 
 part 'src/mqtt_client_subscription_topic.dart';
+
+part 'src/mqtt_client_subscription_status.dart';
+
+part 'src/mqtt_client_mqtt_qos.dart';
+
+part 'src/mqtt_client_mqtt_received_message.dart';
+
+part 'src/mqtt_client_subscription.dart';
