@@ -37,7 +37,7 @@ abstract class Topic {
       throw new Exception(
           "mqtt_client::Topic: The length of the supplied rawTopic "
               "(${topicInstance.rawTopic
-              .length}) is longer than the maximum allowable (${maxTopicLength})");
+              .length}) is longer than the maximum allowable ($maxTopicLength)");
     }
   }
 
