@@ -9,6 +9,7 @@ environment:
 
 dependencies:
  typed_data: '>=1.1.3'
+ observable: '^0.20.4+1'
 
 dev_dependencies:
   test: '^0.12.0'
