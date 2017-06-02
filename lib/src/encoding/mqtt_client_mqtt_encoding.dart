@@ -39,7 +39,7 @@ class MQTTEncoding extends Utf8Codec {
   /// Calculates the number of bytes produced by encoding the characters in the specified.
   int getByteCount(String chars) {
     _validateString(chars);
-    return getBytes(chars).length + 2;
+    return getBytes(chars).length;
   }
 
   /// Validates the string to ensure it doesn't contain any characters invalid within the Mqtt string format.

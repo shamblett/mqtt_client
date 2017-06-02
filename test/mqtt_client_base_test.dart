@@ -417,4 +417,82 @@ void main() {
       }
     });
   });
+
+  group("Encoding", () {
+    test("Get bytes", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      final typed.Uint8Buffer bytes = enc.getBytes("abc");
+      expect(bytes.length, 5);
+      expect(bytes[0], 0);
+      expect(bytes[1], 3);
+      expect(bytes[2], "a".codeUnits[0]);
+      expect(bytes[3], "b".codeUnits[0]);
+      expect(bytes[4], "c".codeUnits[0]);
+    });
+    test("Get byte count", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      final int byteCount = enc.getByteCount("abc");
+      print(byteCount);
+      expect(byteCount, 5);
+    });
+    test("Get string", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(3);
+      buff[0] = "a".codeUnits[0];
+      buff[1] = "b".codeUnits[0];
+      buff[2] = "c".codeUnits[0];
+      final String message = enc.getString(buff);
+      expect(message, "abc");
+    });
+    test("Get char count valid length LSB", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
+      buff[0] = 0;
+      buff[1] = 3;
+      buff[2] = "a".codeUnits[0];
+      buff[3] = "b".codeUnits[0];
+      buff[4] = "c".codeUnits[0];
+      final int count = enc.getCharCount(buff);
+      expect(count, 3);
+    });
+    test("Get char count valid length MSB", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(2);
+      buff[0] = 0xFF;
+      buff[1] = 0xFF;
+      final int count = enc.getCharCount(buff);
+      expect(count, 65535);
+    });
+    test("Get char count invalid length", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      bool raised = false;
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(1);
+      buff[0] = 0;
+      try {
+        final int count = enc.getCharCount(buff);
+        print(count); // won't get here
+      } catch (exception) {
+        expect(exception.toString(),
+            "Exception: mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes");
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
+    test("Extended characters initiate failure", () {
+      final MQTTEncoding enc = new MQTTEncoding();
+      bool raised = false;
+      final String extStr = "©";
+      try {
+        final typed.Uint8Buffer buff = enc.getBytes(extStr);
+        print(buff.toString()); // won't get here
+      } catch (exception) {
+        expect(
+            exception.toString(),
+            "Exception: mqtt_client::MQTTEncoding: The input string has extended "
+                "UTF characters, which are not supported");
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
+  });
 }
