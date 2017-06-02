@@ -53,3 +53,9 @@ part 'src/encoding/mqtt_client_mqtt_encoding.dart';
 part 'src/dataconvertors/mqtt_client_ascii_payload_convertor.dart';
 
 part 'src/utilty/mqtt_client_byte_stream.dart';
+
+part 'src/utilty/mqtt_client_byte_buffer.dart';
+
+part 'src/messages/mqtt_client_mqtt_header.dart';
+
+part 'src/messages/mqtt_client_mqtt_message_type.dart';
