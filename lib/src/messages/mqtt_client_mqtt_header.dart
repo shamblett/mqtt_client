@@ -140,6 +140,30 @@ class MqttHeader {
     return remainingLength;
   }
 
+  /// Sets the IsDuplicate flag of the header.
+  MqttHeader isDuplicate() {
+    this.duplicate = true;
+    return this;
+  }
+
+  /// Sets the Qos of the message header.
+  MqttHeader withQos(MqttQos qos) {
+    this.qos = qos;
+    return this;
+  }
+
+  /// Sets the type of the message identified in the header.
+  MqttHeader asType(MqttMessageType messageType) {
+    this.messageType = messageType;
+    return this;
+  }
+
+  /// Defines that the message should be retained.
+  MqttHeader shouldBeRetained() {
+    this.retain = true;
+    return this;
+  }
+
   String toString() {
     return "Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize";
   }

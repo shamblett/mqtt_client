@@ -93,5 +93,22 @@ void main() {
       expect(raised, isTrue);
       expect(header.messageSize, 2);
     });
+    test("Duplicate", () {
+      final MqttHeader header = new MqttHeader().isDuplicate();
+      expect(header.duplicate, isTrue);
+    });
+    test("Qos", () {
+      final MqttHeader header = new MqttHeader().withQos(MqttQos.atMostOnce);
+      expect(header.qos, MqttQos.atMostOnce);
+    });
+    test("Message type", () {
+      final MqttHeader header = new MqttHeader().asType(
+          MqttMessageType.publishComplete);
+      expect(header.messageType, MqttMessageType.publishComplete);
+    });
+    test("Retain", () {
+      final MqttHeader header = new MqttHeader().shouldBeRetained();
+      expect(header.retain, isTrue);
+    });
   });
 }
