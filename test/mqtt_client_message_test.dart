@@ -11,13 +11,28 @@ import 'dart:io';
 
 void main() {
   group("Header", () {
-
     /// Test helper method to call Get Remaining Bytes with a specific value
     typed.Uint8Buffer callGetRemainingBytesWithValue(int value) {
       // validates a payload size of a single byte using the example values supplied in the MQTT spec
       final MqttHeader header = new MqttHeader();
       header.messageSize = value;
       return header.getRemainingLengthBytes();
+    }
+
+    /// Creates byte array header with a single byte length
+    /// byte1 - the first header byte
+    /// length - the length byte
+    typed.Uint8Buffer getHeaderBytes(int byte1, int length) {
+      final typed.Uint8Buffer tmp = new typed.Uint8Buffer(2);
+      tmp[0] = byte1;
+      tmp[1] = length;
+      return tmp;
+    }
+
+    /// Gets the MQTT header from a byte arrayed header.
+    MqttHeader getMqttHeader(typed.Uint8Buffer headerBytes) {
+      final ByteBuffer buff = new ByteBuffer(headerBytes);
+      return new MqttHeader.fromByteBuffer(buff);
     }
 
     test("Single byte payload size", () {
@@ -102,13 +117,84 @@ void main() {
       expect(header.qos, MqttQos.atMostOnce);
     });
     test("Message type", () {
-      final MqttHeader header = new MqttHeader().asType(
-          MqttMessageType.publishComplete);
+      final MqttHeader header =
+      new MqttHeader().asType(MqttMessageType.publishComplete);
       expect(header.messageType, MqttMessageType.publishComplete);
     });
     test("Retain", () {
       final MqttHeader header = new MqttHeader().shouldBeRetained();
       expect(header.retain, isTrue);
+    });
+    test("Round trip", () {
+      final MqttHeader inputHeader = new MqttHeader();
+      inputHeader.duplicate = true;
+      inputHeader.retain = false;
+      inputHeader.messageSize = 1;
+      inputHeader.messageType = MqttMessageType.connect;
+      inputHeader.qos = MqttQos.atLeastOnce;
+      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      inputHeader.writeTo(1, buffer);
+      final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
+      expect(inputHeader.duplicate, outputHeader.duplicate);
+      expect(inputHeader.retain, outputHeader.retain);
+      expect(inputHeader.messageSize, outputHeader.messageSize);
+      expect(inputHeader.messageType, outputHeader.messageType);
+      expect(inputHeader.qos, outputHeader.qos);
+    });
+    test("Corrupt header", () {
+      final MqttHeader inputHeader = new MqttHeader();
+      inputHeader.duplicate = true;
+      inputHeader.retain = false;
+      inputHeader.messageSize = 268435455;
+      inputHeader.messageType = MqttMessageType.connect;
+      inputHeader.qos = MqttQos.atLeastOnce;
+      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      inputHeader.writeTo(268435455, buffer);
+      // Fudge the header by making the last bit of the 4th message size byte a 1, therefore making the header
+      // invalid because the last bit of the 4th size byte should always be 0 (according to the spec). It's how
+      // we know to stop processing the header when reading a full message).
+      buffer.readByte();
+      buffer.readByte();
+      buffer.readByte();
+      buffer.writeByte(buffer.readByte() | 0xFF);
+      bool raised = false;
+      try {
+        final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
+      } catch (InvalidHeaderException) {
+        raised = true;
+      }
+      expect(raised, true);
+    });
+    test("Corrupt header undersize", () {
+      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      buffer.writeByte(0);
+      bool raised = false;
+      try {
+        final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
+      } catch (InvalidHeaderException) {
+        raised = true;
+      }
+      expect(raised, true);
+    });
+    test("QOS at most once", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(1, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.qos, MqttQos.atMostOnce);
+    });
+    test("QOS at least once", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(2, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.qos, MqttQos.atLeastOnce);
+    });
+    test("QOS exactly once", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.qos, MqttQos.exactlyOnce);
+    });
+    test("QOS reserved1", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(6, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.qos, MqttQos.reserved1);
     });
   });
 }
