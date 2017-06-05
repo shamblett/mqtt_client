@@ -160,6 +160,7 @@ void main() {
       bool raised = false;
       try {
         final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
+        print(outputHeader.toString());
       } catch (InvalidHeaderException) {
         raised = true;
       }
@@ -171,6 +172,7 @@ void main() {
       bool raised = false;
       try {
         final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
+        print(outputHeader.toString());
       } catch (InvalidHeaderException) {
         raised = true;
       }
@@ -195,6 +197,106 @@ void main() {
       final typed.Uint8Buffer headerBytes = getHeaderBytes(6, 0);
       final MqttHeader header = getMqttHeader(headerBytes);
       expect(header.qos, MqttQos.reserved1);
+    });
+    test("Message type reserved1", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.reserved1);
+    });
+    test("Message type connect", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(1 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.connect);
+    });
+    test("Message type connect ack", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(2 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.connectAck);
+    });
+    test("Message type publish", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(3 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.publish);
+    });
+    test("Message type publish ack", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(4 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.publishAck);
+    });
+    test("Message type publish received", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(5 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.publishReceived);
+    });
+    test("Message type publish release", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(6 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.publishRelease);
+    });
+    test("Message type publish complete", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(7 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.publishComplete);
+    });
+    test("Message type subscribe", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(8 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.subscribe);
+    });
+    test("Message type subscribe ack", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(9 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.subscribeAck);
+    });
+    test("Message type subscribe", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(8 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.subscribe);
+    });
+    test("Message type unsubscribe", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(10 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.unsubscribe);
+    });
+    test("Message type unsubscribe ack", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(11 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.unsubscribeAck);
+    });
+    test("Message type ping request", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(12 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.pingRequest);
+    });
+    test("Message type ping response", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(13 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.pingResponse);
+    });
+    test("Message type disconnect", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(14 << 4, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.messageType, MqttMessageType.disconnect);
+    });
+    test("Duplicate true", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(8, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.duplicate, isTrue);
+    });
+    test("Duplicate false", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.duplicate, isFalse);
+    });
+    test("Retain true", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(1, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.retain, isTrue);
+    });
+    test("Retain false", () {
+      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
+      final MqttHeader header = getMqttHeader(headerBytes);
+      expect(header.retain, isFalse);
     });
   });
 }
