@@ -58,4 +58,10 @@ part 'src/utilty/mqtt_client_byte_buffer.dart';
 
 part 'src/messages/mqtt_client_mqtt_header.dart';
 
+part 'src/messages/mqtt_client_mqtt_variable_header.dart';
+
+part 'src/messages/mqtt_client_mqtt_connect_return_code.dart';
+
+part 'src/messages/mqtt_client_mqtt_connect_flags.dart';
+
 part 'src/messages/mqtt_client_mqtt_message_type.dart';

@@ -299,4 +299,9 @@ void main() {
       expect(header.retain, isFalse);
     });
   });
+
+  group("Connect Flags", () {
+
+
+  });
 }
