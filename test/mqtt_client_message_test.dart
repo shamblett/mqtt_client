@@ -301,7 +301,61 @@ void main() {
   });
 
   group("Connect Flags", () {
+    /// Gets the connect flags for a specific byte value
+    MqttConnectFlags getConnectFlags(int value) {
+      final typed.Uint8Buffer tmp = new typed.Uint8Buffer(1);
+      tmp[0] = value;
+      final ByteBuffer buffer = new ByteBuffer(tmp);
+      return new MqttConnectFlags.fromByteBuffer(buffer);
+    }
 
-
+    test("WillQos - AtMostOnce", () {
+      expect(getConnectFlags(0).willQos, MqttQos.atMostOnce);
+    });
+    test("WillQos - AtLeastOnce", () {
+      expect(getConnectFlags(8).willQos, MqttQos.atLeastOnce);
+    });
+    test("WillQos - ExactlyOnce", () {
+      expect(getConnectFlags(16).willQos, MqttQos.exactlyOnce);
+    });
+    test("WillQos - Reserved1", () {
+      expect(getConnectFlags(24).willQos, MqttQos.reserved1);
+    });
+    test("Reserved1 true", () {
+      expect(getConnectFlags(1).reserved1, isTrue);
+    });
+    test("Reserved1 false", () {
+      expect(getConnectFlags(0).reserved1, isFalse);
+    });
+    test("Passwordflag true", () {
+      expect(getConnectFlags(64).passwordFlag, isTrue);
+    });
+    test("Passwordflag false", () {
+      expect(getConnectFlags(0).passwordFlag, isFalse);
+    });
+    test("Usernameflag true", () {
+      expect(getConnectFlags(128).usernameFlag, isTrue);
+    });
+    test("Usernameflag false", () {
+      expect(getConnectFlags(0).usernameFlag, isFalse);
+    });
+    test("Cleanstart true", () {
+      expect(getConnectFlags(2).cleanStart, isTrue);
+    });
+    test("Cleanstart false", () {
+      expect(getConnectFlags(1).cleanStart, isFalse);
+    });
+    test("Willretain true", () {
+      expect(getConnectFlags(32).willRetain, isTrue);
+    });
+    test("Willretain false", () {
+      expect(getConnectFlags(1).willRetain, isFalse);
+    });
+    test("Willflag true", () {
+      expect(getConnectFlags(4).willFlag, isTrue);
+    });
+    test("Willflag false", () {
+      expect(getConnectFlags(1).willFlag, isFalse);
+    });
   });
 }
