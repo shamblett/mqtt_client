@@ -39,10 +39,25 @@ class ByteBuffer {
     return tmp;
   }
 
+  /// Read a short int(16 bits)
+  int readShort() {
+    final int tmp = readByte();
+    final int tmp1 = readByte();
+    return tmp1 * 256 + tmp;
+  }
+
   /// Write a byte.
   void writeByte(int byte) {
     _buffer.add(byte);
     _index++;
+  }
+
+  /// Write a short(16 bit)
+  void writeShort(int short) {
+    final int tmp = short & 0xFF;
+    final int tmp1 = short & 0xFF00;
+    writeByte(tmp1);
+    writeByte(tmp);
   }
 
   /// Seek to. Increments the index to the seek value. If the index
@@ -54,10 +69,28 @@ class ByteBuffer {
       _index = _length;
   }
 
-  /// Write(replace) the current buffer
+  /// Write a byte buffer to the current buffer
   void write(typed.Uint8Buffer buffer) {
-    _buffer = buffer;
+    if (_buffer == null) {
+      _buffer = buffer;
+    } else {
+      _buffer.addAll(buffer);
+    }
     _length = _buffer.length;
-    _index = 0;
+  }
+
+  /// Writes an MQTT string.
+  /// stringStream - The stream containing the string to write.
+  /// stringToWrite - The string to write.
+  static void writeMqttString(ByteBuffer stringStream, String stringToWrite) {
+    final MQTTEncoding enc = new MQTTEncoding();
+    final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
+    stringStream.write(stringBytes);
+  }
+
+  /// Reads an MQTT string
+  static String readMqttString(ByteBuffer buffer) {
+    // TODO
+    return "";
   }
 }
