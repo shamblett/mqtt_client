@@ -46,6 +46,15 @@ class ByteBuffer {
     return tmp1 * 256 + tmp;
   }
 
+  /// Read a number of bytes
+  static typed.Uint8Buffer read(ByteBuffer buffer, int count) {
+    if (buffer.length < count) {
+      throw new Exception(
+          "mqtt_client::ByteBuffer: The stream did not have enough bytes to describe the length of the string");
+    }
+    return buffer.buffer.take(count);
+  }
+
   /// Write a byte.
   void writeByte(int byte) {
     _buffer.add(byte);
@@ -88,9 +97,14 @@ class ByteBuffer {
     stringStream.write(stringBytes);
   }
 
-  /// Reads an MQTT string
+  /// Reads an MQTT string from the underlying stream.
   static String readMqttString(ByteBuffer buffer) {
-    // TODO
-    return "";
+    // Read and check the length
+    final typed.Uint8Buffer tmp = ByteBuffer.read(buffer, 2);
+    buffer.seekTo(1);
+    final ByteBuffer lengthBytes = new ByteBuffer(tmp);
+    final MQTTEncoding enc = new MQTTEncoding();
+    final int stringLength = enc.getCharCount(lengthBytes.buffer);
+
   }
 }
