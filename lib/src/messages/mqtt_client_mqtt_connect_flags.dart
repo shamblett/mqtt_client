@@ -21,7 +21,7 @@ class MqttConnectFlags {
   MqttConnectFlags();
 
   /// Initializes a new instance of the <see cref="MqttConnectFlags" /> class configured as per the supplied stream.
-  MqttConnectFlags.fromByteBuffer(ByteBuffer connectFlagsStream) {
+  MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {
     readFrom(connectFlagsStream);
   }
 
@@ -36,12 +36,12 @@ class MqttConnectFlags {
   }
 
   /// Writes the connect flag byte to the supplied stream.
-  void writeTo(ByteBuffer connectFlagsStream) {
+  void writeTo(MqttByteBuffer connectFlagsStream) {
     connectFlagsStream.writeByte(connectFlagByte());
   }
 
   /// Reads the connect flags from the underlying stream.
-  void readFrom(ByteBuffer stream) {
+  void readFrom(MqttByteBuffer stream) {
     final int connectFlagsByte = stream.readByte();
 
     reserved1 = (connectFlagsByte & 1) == 1;

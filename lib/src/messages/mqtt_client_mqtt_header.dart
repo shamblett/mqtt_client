@@ -13,7 +13,7 @@ class MqttHeader {
   MqttHeader();
 
   /// Initializes a new instance of MqttHeader" based on data contained within the supplied stream.
-  MqttHeader.fromByteBuffer(ByteBuffer headerStream) {
+  MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }
 
@@ -48,14 +48,14 @@ class MqttHeader {
   }
 
   /// Writes the header to a supplied stream.
-  void writeTo(int messageSize, ByteBuffer messageStream) {
+  void writeTo(int messageSize, MqttByteBuffer messageStream) {
     _messageSize = messageSize;
     final typed.Uint8Buffer headerBuff = headerBytes();
     messageStream.write(headerBuff);
   }
 
   /// Creates a new MqttHeader based on a list of bytes.
-  void readFrom(ByteBuffer headerStream) {
+  void readFrom(MqttByteBuffer headerStream) {
     if (headerStream.length < 2) {
       throw new InvalidHeaderException(
           "The supplied header is invalid. Header must be at least 2 bytes long.");
@@ -91,13 +91,13 @@ class MqttHeader {
     return headerBytes;
   }
 
-  static int readRemainingLength(ByteBuffer headerStream) {
+  static int readRemainingLength(MqttByteBuffer headerStream) {
     final typed.Uint8Buffer lengthBytes = readLengthBytes(headerStream);
     return calculateLength(lengthBytes);
   }
 
   /// Reads the length bytes of an MqttHeader from the supplied stream.
-  static typed.Uint8Buffer readLengthBytes(ByteBuffer headerStream) {
+  static typed.Uint8Buffer readLengthBytes(MqttByteBuffer headerStream) {
     final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();
     // Read until we've got the entire size, or the 4 byte limit is reached
     int sizeByte;

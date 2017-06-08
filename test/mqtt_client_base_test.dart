@@ -420,7 +420,7 @@ void main() {
 
   group("Encoding", () {
     test("Get bytes", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       final typed.Uint8Buffer bytes = enc.getBytes("abc");
       expect(bytes.length, 5);
       expect(bytes[0], 0);
@@ -430,13 +430,13 @@ void main() {
       expect(bytes[4], "c".codeUnits[0]);
     });
     test("Get byte count", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       final int byteCount = enc.getByteCount("abc");
       print(byteCount);
       expect(byteCount, 5);
     });
     test("Get string", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(3);
       buff[0] = "a".codeUnits[0];
       buff[1] = "b".codeUnits[0];
@@ -445,7 +445,7 @@ void main() {
       expect(message, "abc");
     });
     test("Get char count valid length LSB", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
       buff[0] = 0;
       buff[1] = 3;
@@ -456,7 +456,7 @@ void main() {
       expect(count, 3);
     });
     test("Get char count valid length MSB", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(2);
       buff[0] = 0xFF;
       buff[1] = 0xFF;
@@ -464,7 +464,7 @@ void main() {
       expect(count, 65535);
     });
     test("Get char count invalid length", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       bool raised = false;
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(1);
       buff[0] = 0;
@@ -479,7 +479,7 @@ void main() {
       expect(raised, isTrue);
     });
     test("Extended characters initiate failure", () {
-      final MQTTEncoding enc = new MQTTEncoding();
+      final MqttEncoding enc = new MqttEncoding();
       bool raised = false;
       final String extStr = "©";
       try {

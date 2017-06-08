@@ -11,7 +11,7 @@ part of mqtt_client;
 ///
 /// The MQTT string format is simply a pascal string with ANSI character encoding. The first 2 bytes define
 /// the length of the string, and they are followed by the string itself.
-class MQTTEncoding extends Utf8Codec {
+class MqttEncoding extends Utf8Codec {
   /// Encodes all the characters in the specified string into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);

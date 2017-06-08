@@ -31,7 +31,7 @@ void main() {
 
     /// Gets the MQTT header from a byte arrayed header.
     MqttHeader getMqttHeader(typed.Uint8Buffer headerBytes) {
-      final ByteBuffer buff = new ByteBuffer(headerBytes);
+      final MqttByteBuffer buff = new MqttByteBuffer(headerBytes);
       return new MqttHeader.fromByteBuffer(buff);
     }
 
@@ -132,7 +132,7 @@ void main() {
       inputHeader.messageSize = 1;
       inputHeader.messageType = MqttMessageType.connect;
       inputHeader.qos = MqttQos.atLeastOnce;
-      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      final MqttByteBuffer buffer = new MqttByteBuffer(new typed.Uint8Buffer());
       inputHeader.writeTo(1, buffer);
       final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
       expect(inputHeader.duplicate, outputHeader.duplicate);
@@ -148,7 +148,7 @@ void main() {
       inputHeader.messageSize = 268435455;
       inputHeader.messageType = MqttMessageType.connect;
       inputHeader.qos = MqttQos.atLeastOnce;
-      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      final MqttByteBuffer buffer = new MqttByteBuffer(new typed.Uint8Buffer());
       inputHeader.writeTo(268435455, buffer);
       // Fudge the header by making the last bit of the 4th message size byte a 1, therefore making the header
       // invalid because the last bit of the 4th size byte should always be 0 (according to the spec). It's how
@@ -167,7 +167,7 @@ void main() {
       expect(raised, true);
     });
     test("Corrupt header undersize", () {
-      final ByteBuffer buffer = new ByteBuffer(new typed.Uint8Buffer());
+      final MqttByteBuffer buffer = new MqttByteBuffer(new typed.Uint8Buffer());
       buffer.writeByte(0);
       bool raised = false;
       try {
@@ -305,7 +305,7 @@ void main() {
     MqttConnectFlags getConnectFlags(int value) {
       final typed.Uint8Buffer tmp = new typed.Uint8Buffer(1);
       tmp[0] = value;
-      final ByteBuffer buffer = new ByteBuffer(tmp);
+      final MqttByteBuffer buffer = new MqttByteBuffer(tmp);
       return new MqttConnectFlags.fromByteBuffer(buffer);
     }
 

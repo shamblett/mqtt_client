@@ -87,65 +87,65 @@ class MqttVariableHeader {
     }
   }*/
 
-  void writeProtocolName(ByteBuffer stream) {
-    ByteBuffer.writeMqttString(stream, protocolName);
+  void writeProtocolName(MqttByteBuffer stream) {
+    MqttByteBuffer.writeMqttString(stream, protocolName);
   }
 
-  void writeProtocolVersion(ByteBuffer stream) {
+  void writeProtocolVersion(MqttByteBuffer stream) {
     stream.writeByte(protocolVersion);
   }
 
-  void writeKeepAlive(ByteBuffer stream) {
+  void writeKeepAlive(MqttByteBuffer stream) {
     stream.writeShort(keepAlive);
   }
 
-  void writeReturnCode(ByteBuffer stream) {
+  void writeReturnCode(MqttByteBuffer stream) {
     stream.writeByte(returnCode.index);
   }
 
-  void writeTopicName(ByteBuffer stream) {
-    ByteBuffer.writeMqttString(stream, topicName.toString());
+  void writeTopicName(MqttByteBuffer stream) {
+    MqttByteBuffer.writeMqttString(stream, topicName.toString());
   }
 
-  void writeMessageIdentifier(ByteBuffer stream) {
+  void writeMessageIdentifier(MqttByteBuffer stream) {
     stream.writeShort(messageIdentifier);
   }
 
-  void writeConnectFlags(ByteBuffer stream) {
+  void writeConnectFlags(MqttByteBuffer stream) {
     connectFlags.writeTo(stream);
   }
 
-  void readProtocolName(ByteBuffer stream) {
-    protocolName = ByteBuffer.readMqttString(stream);
+  void readProtocolName(MqttByteBuffer stream) {
+    protocolName = MqttByteBuffer.readMqttString(stream);
     length += protocolName.length + 2; // 2 for length short at front of string
   }
 
-  void readProtocolVersion(ByteBuffer stream) {
+  void readProtocolVersion(MqttByteBuffer stream) {
     protocolVersion = stream.readByte();
     length++;
   }
 
-  void readKeepAlive(ByteBuffer stream) {
+  void readKeepAlive(MqttByteBuffer stream) {
     keepAlive = stream.readShort();
     length += 2;
   }
 
-  void readReturnCode(ByteBuffer stream) {
+  void readReturnCode(MqttByteBuffer stream) {
     returnCode = MqttConnectReturnCode.values[stream.readByte()];
     length++;
   }
 
-  void readTopicName(ByteBuffer stream) {
-    topicName = ByteBuffer.readMqttString(stream);
+  void readTopicName(MqttByteBuffer stream) {
+    topicName = MqttByteBuffer.readMqttString(stream);
     length += topicName.length + 2; // 2 for length short at front of string.
   }
 
-  void readMessageIdentifier(ByteBuffer stream) {
+  void readMessageIdentifier(MqttByteBuffer stream) {
     messageIdentifier = stream.readShort();
     length += 2;
   }
 
-  void readConnectFlags(ByteBuffer stream) {
+  void readConnectFlags(MqttByteBuffer stream) {
     connectFlags = new MqttConnectFlags.fromByteBuffer(stream);
     length += 1;
   }

@@ -8,8 +8,10 @@
 part of mqtt_client;
 
 /// Utility class to allow stream like access to a sized byte buffer.
-class ByteBuffer {
-  ByteBuffer(this._buffer) {
+/// This clas is in effect a cut-down implementation of the C# NET
+/// System.IO class with Mqtt client specific extensions.
+class MqttByteBuffer {
+  MqttByteBuffer(this._buffer) {
     _length = _buffer.length;
   }
 
@@ -47,7 +49,7 @@ class ByteBuffer {
   }
 
   /// Read a number of bytes
-  static typed.Uint8Buffer read(ByteBuffer buffer, int count) {
+  static typed.Uint8Buffer read(MqttByteBuffer buffer, int count) {
     if (buffer.length < count) {
       throw new Exception(
           "mqtt_client::ByteBuffer: The stream did not have enough bytes to describe the length of the string");
@@ -91,19 +93,20 @@ class ByteBuffer {
   /// Writes an MQTT string.
   /// stringStream - The stream containing the string to write.
   /// stringToWrite - The string to write.
-  static void writeMqttString(ByteBuffer stringStream, String stringToWrite) {
-    final MQTTEncoding enc = new MQTTEncoding();
+  static void writeMqttString(MqttByteBuffer stringStream,
+      String stringToWrite) {
+    final MqttEncoding enc = new MqttEncoding();
     final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);
   }
 
   /// Reads an MQTT string from the underlying stream.
-  static String readMqttString(ByteBuffer buffer) {
+  static String readMqttString(MqttByteBuffer buffer) {
     // Read and check the length
-    final typed.Uint8Buffer tmp = ByteBuffer.read(buffer, 2);
+    final typed.Uint8Buffer tmp = MqttByteBuffer.read(buffer, 2);
     buffer.seekTo(1);
-    final ByteBuffer lengthBytes = new ByteBuffer(tmp);
-    final MQTTEncoding enc = new MQTTEncoding();
+    final MqttByteBuffer lengthBytes = new MqttByteBuffer(tmp);
+    final MqttEncoding enc = new MqttEncoding();
     final int stringLength = enc.getCharCount(lengthBytes.buffer);
 
   }
