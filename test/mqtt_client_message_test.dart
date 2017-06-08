@@ -134,6 +134,7 @@ void main() {
       inputHeader.qos = MqttQos.atLeastOnce;
       final MqttByteBuffer buffer = new MqttByteBuffer(new typed.Uint8Buffer());
       inputHeader.writeTo(1, buffer);
+      buffer.reset();
       final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
       expect(inputHeader.duplicate, outputHeader.duplicate);
       expect(inputHeader.retain, outputHeader.retain);
@@ -153,6 +154,7 @@ void main() {
       // Fudge the header by making the last bit of the 4th message size byte a 1, therefore making the header
       // invalid because the last bit of the 4th size byte should always be 0 (according to the spec). It's how
       // we know to stop processing the header when reading a full message).
+      buffer.seek(0);
       buffer.readByte();
       buffer.readByte();
       buffer.readByte();
@@ -169,6 +171,7 @@ void main() {
     test("Corrupt header undersize", () {
       final MqttByteBuffer buffer = new MqttByteBuffer(new typed.Uint8Buffer());
       buffer.writeByte(0);
+      buffer.seek(0);
       bool raised = false;
       try {
         final MqttHeader outputHeader = new MqttHeader.fromByteBuffer(buffer);
