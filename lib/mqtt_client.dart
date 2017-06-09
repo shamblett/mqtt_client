@@ -65,3 +65,7 @@ part 'src/messages/mqtt_client_mqtt_connect_return_code.dart';
 part 'src/messages/mqtt_client_mqtt_connect_flags.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
+
+part 'src/messages/mqtt_client_mqtt_message.dart';
+
+part 'src/messages/mqtt_client_mqtt_payload.dart';
