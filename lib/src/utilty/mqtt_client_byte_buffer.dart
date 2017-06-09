@@ -61,8 +61,9 @@ class MqttByteBuffer {
       throw new Exception(
           "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation");
     }
-    final typed.Uint8Buffer tmp = _buffer.getRange(
-        _position, _position + count);
+    final typed.Uint8Buffer tmp = new typed.Uint8Buffer();
+    tmp.addAll(_buffer.getRange(
+        _position, _position + count));
     _position += count;
     final typed.Uint8Buffer tmp2 = new typed.Uint8Buffer();
     tmp2.addAll(tmp);

@@ -361,4 +361,60 @@ void main() {
       expect(getConnectFlags(1).willFlag, isFalse);
     });
   });
+
+  group("Variable header", () {
+    test("Not enough bytes in string", () {
+      final typed.Uint8Buffer tmp = new typed.Uint8Buffer(3);
+      tmp[0] = 0;
+      tmp[1] = 2;
+      tmp[2] = 'm'.codeUnitAt(0);
+      final MqttByteBuffer buffer = new MqttByteBuffer(tmp);
+      bool raised = false;
+      try {
+        MqttByteBuffer.readMqttString(buffer);
+      } catch (exception) {
+        expect(
+            exception.toString(),
+            "Exception: mqtt_client::ByteBuffer: The buffer did not have enough "
+                "bytes for the read operation");
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
+    test("Long string is fully read", () {
+      final typed.Uint8Buffer tmp = new typed.Uint8Buffer(65537);
+      tmp.fillRange(2, tmp.length, 'a'.codeUnitAt(0));
+      tmp[0] = (tmp.length - 2) >> 8;
+      tmp[1] = (tmp.length - 2) & 0xFF;
+      final MqttByteBuffer buffer = new MqttByteBuffer(tmp);
+      final String expectedString =
+      new String.fromCharCodes(tmp.getRange(2, tmp.length));
+      bool raised = false;
+      try {
+        final String readString = MqttByteBuffer.readMqttString(buffer);
+        expect(readString.length, expectedString.length);
+        expect(readString, expectedString);
+      } catch (exception) {
+        print(exception.toString());
+        raised = true;
+      }
+      expect(raised, isFalse);
+    });
+    test("Not enough bytes to form string", () {
+      final typed.Uint8Buffer tmp = new typed.Uint8Buffer(1);
+      tmp[0] = 0;
+      final MqttByteBuffer buffer = new MqttByteBuffer(tmp);
+      bool raised = false;
+      try {
+        MqttByteBuffer.readMqttString(buffer);
+      } catch (exception) {
+        expect(
+            exception.toString(),
+            "Exception: mqtt_client::ByteBuffer: The buffer did not have enough "
+                "bytes for the read operation");
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
+  });
 }
