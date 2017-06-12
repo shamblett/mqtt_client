@@ -49,79 +49,46 @@ class MqttVariableHeader {
     readFrom(headerStream);
   }
 
-  /// Gets the Read Flags used during message deserialization
-  readWriteFlags readFlags() {
-    return readWriteFlags.none;
-  }
-
-  /// Gets the write flags used during message serialization
-  readWriteFlags writeFlags() {
-    return readWriteFlags.none;
-  }
-
-  /// Checks if the read flags are set
-  bool readFlagsValid() {
-    if (readFlags() == readWriteFlags.none) {
-      return false;
-    }
-    return true;
-  }
-
-  /// Checks if the write flags are set
-  bool writeFlagsValid() {
-    if (writeFlags() == readWriteFlags.none) {
-      return false;
-    }
-    return true;
-  }
-
   /// Creates a variable header from the specified header stream.
-  /// This base implementation uses the ReadFlags property that can be
-  /// overridden in subclasses to determine what to read from the variable header.
   /// A subclass can override this method to do completely custom read operations
   /// if required.
   void readFrom(MqttByteBuffer variableHeaderStream) {
-    if (readFlagsValid()) {
-      readProtocolName(variableHeaderStream);
-      readProtocolVersion(variableHeaderStream);
-      readConnectFlags(variableHeaderStream);
-      readKeepAlive(variableHeaderStream);
-      readReturnCode(variableHeaderStream);
-      readTopicName(variableHeaderStream);
-      readMessageIdentifier(variableHeaderStream);
-    }
+    readProtocolName(variableHeaderStream);
+    readProtocolVersion(variableHeaderStream);
+    readConnectFlags(variableHeaderStream);
+    readKeepAlive(variableHeaderStream);
+    readReturnCode(variableHeaderStream);
+    readTopicName(variableHeaderStream);
+    readMessageIdentifier(variableHeaderStream);
   }
 
   /// Writes the variable header to the supplied stream.
   /// This base implementation uses the WriteFlags property that can be
   /// overridden in subclasses to determine what to read from the variable header.
-  /// A subclass can override this method to do completely custom read operations
+  /// A subclass can override this method to do completely custom write operations
   /// if required.
   void writeTo(MqttByteBuffer variableHeaderStream) {
-    if (writeFlagsValid()) {
-      writeProtocolName(variableHeaderStream);
-      writeProtocolVersion(variableHeaderStream);
-      writeConnectFlags(variableHeaderStream);
-      writeKeepAlive(variableHeaderStream);
-      writeReturnCode(variableHeaderStream);
-      writeTopicName(variableHeaderStream);
-      writeMessageIdentifier(variableHeaderStream);
-    }
+    writeProtocolName(variableHeaderStream);
+    writeProtocolVersion(variableHeaderStream);
+    writeConnectFlags(variableHeaderStream);
+    writeKeepAlive(variableHeaderStream);
+    writeReturnCode(variableHeaderStream);
+    writeTopicName(variableHeaderStream);
+    writeMessageIdentifier(variableHeaderStream);
   }
 
   /// Gets the length of the write data when WriteTo will be called.
+  /// A subclass that overrides writeTo must also overwrite this method.
   int getWriteLength() {
     int headerLength = 0;
-    if (writeFlagsValid()) {
-      final MqttEncoding enc = new MqttEncoding();
-      headerLength += enc.getByteCount(protocolName);
-      headerLength += 1; // protocolVersion
-      headerLength += MqttConnectFlags.getWriteLength();
-      headerLength += 2; // keepAlive
-      headerLength += 1; // returnCode
-      headerLength += enc.getByteCount(topicName.toString());
-      headerLength += 2; // MessageIdentifier
-    }
+    final MqttEncoding enc = new MqttEncoding();
+    headerLength += enc.getByteCount(protocolName);
+    headerLength += 1; // protocolVersion
+    headerLength += MqttConnectFlags.getWriteLength();
+    headerLength += 2; // keepAlive
+    headerLength += 1; // returnCode
+    headerLength += enc.getByteCount(topicName.toString());
+    headerLength += 2; // MessageIdentifier
     return headerLength;
   }
 

@@ -112,6 +112,10 @@ class MqttByteBuffer {
       _position = _length;
   }
 
+  /// Writes an MQTT string member
+  void writeMqttStringM(String stringToWrite) {
+    writeMqttString(this, stringToWrite);
+  }
 
   /// Writes an MQTT string.
   /// stringStream - The stream containing the string to write.
@@ -121,6 +125,11 @@ class MqttByteBuffer {
     final MqttEncoding enc = new MqttEncoding();
     final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);
+  }
+
+  /// Reads an MQTT string from the underlying stream member
+  String readMqttStringM() {
+    return MqttByteBuffer.readMqttString(this);
   }
 
   /// Reads an MQTT string from the underlying stream.
