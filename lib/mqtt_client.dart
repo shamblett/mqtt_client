@@ -60,6 +60,8 @@ part 'src/messages/mqtt_client_mqtt_header.dart';
 
 part 'src/messages/mqtt_client_mqtt_variable_header.dart';
 
+part 'src/messages/mqtt_client_mqtt_message.dart';
+
 part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_return_code.dart';
 
 part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_flags.dart';
@@ -68,8 +70,8 @@ part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_payload.
 
 part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart';
 
-part 'src/messages/mqtt_client_mqtt_message_type.dart';
+part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_message.dart';
 
-part 'src/messages/mqtt_client_mqtt_message.dart';
+part 'src/messages/mqtt_client_mqtt_message_type.dart';
 
 part 'src/messages/mqtt_client_mqtt_payload.dart';
