@@ -506,5 +506,69 @@ void main() {
       expect((baseMessage as MqttConnectMessage).payload.willTopic, "m");
       expect((baseMessage as MqttConnectMessage).payload.willMessage, "a");
     });
+    test("Payload - invalid client idenfier length", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and ammeneded as work progresses
+      //
+      // Message Specs________________
+      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111andy111andy111andy111
+      final List<int> sampleMessage = [
+        0x10,
+        0x15,
+        0x00,
+        0x06,
+        'M'.codeUnitAt(0),
+        'Q'.codeUnitAt(0),
+        'I'.codeUnitAt(0),
+        's'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'p'.codeUnitAt(0),
+        0x03,
+        0x02,
+        0x00,
+        0x1E,
+        0x00,
+        0x1C,
+        'a'.codeUnitAt(0),
+        'n'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'y'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'n'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'y'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'n'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'y'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'n'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'y'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      bool raised = false;
+      try {
+        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      } catch (ClientIdentifierException) {
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
   });
 }
