@@ -1,0 +1,65 @@
+/*
+ * Package : mqtt_client
+ * Author : S. Hamblett <steve.hamblett@linux.com>
+ * Date   : 15/06/2017
+ * Copyright :  S.Hamblett
+ */
+
+part of mqtt_client;
+
+/// Factory for generating instances of MQTT Messages
+class MqttMessageFactory {
+  /// Gets an instance of an MqttMessage based on the message type requested.
+  MqttMessage getMessage(MqttHeader header, MqttByteBuffer messageStream) {
+    MqttMessage message;
+    switch (header.messageType) {
+      case MqttMessageType.connect:
+        message = new MqttConnectMessage.fromByteBuffer(header, messageStream);
+        break;
+      case MqttMessageType.connectAck:
+      //return new MqttConnectAckMessage(header, messageStream);
+        break;
+      case MqttMessageType.publish:
+      //return new MqttPublishMessage(header, messageStream);
+        break;
+      case MqttMessageType.publishAck:
+      //return new MqttPublishAckMessage(header, messageStream);
+        break;
+      case MqttMessageType.publishComplete:
+      //return new MqttPublishCompleteMessage(header, messageStream);
+        break;
+      case MqttMessageType.publishReceived:
+      //return new MqttPublishReceivedMessage(header, messageStream);
+        break;
+      case MqttMessageType.publishRelease:
+      //return new MqttPublishReleaseMessage(header, messageStream);
+        break;
+      case MqttMessageType.subscribe:
+      //return new MqttSubscribeMessage(header, messageStream);
+        break;
+      case MqttMessageType.subscribeAck:
+      //return new MqttSubscribeAckMessage(header, messageStream);
+        break;
+      case MqttMessageType.unsubscribe:
+      //return new MqttUnsubscribeMessage(header, messageStream);
+        break;
+      case MqttMessageType.unsubscribeAck:
+      //return new MqttUnsubscribeAckMessage(header, messageStream);
+        break;
+      case MqttMessageType.pingRequest:
+      //return new MqttPingRequestMessage(header);
+        break;
+      case MqttMessageType.pingResponse:
+      //return new MqttPingResponseMessage(header);
+        break;
+      case MqttMessageType.disconnect:
+      //return new MqttDisconnectMessage(header);
+        break;
+      default:
+        throw new InvalidHeaderException(
+            "The Message Type specified ($header.messageType) is not a valid "
+                "MQTT Message type or currently not supported.");
+    }
+    return message;
+  }
+}

@@ -74,4 +74,6 @@ part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_message.
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
 
+part 'src/messages/mqtt_client_mqtt_message_factory.dart';
+
 part 'src/messages/mqtt_client_mqtt_payload.dart';
