@@ -23,12 +23,13 @@ class MqttConnectPayload extends MqttPayload {
 
   String _clientIdentifier;
 
-  String get clientIdentifer => _clientIdentifier;
+  String get clientIdentifier => _clientIdentifier;
 
   set clientIdentifier(String id) {
     if (id.length > Constants.maxClientIdentifierLength) {
       throw new ClientIdentifierException(id);
     }
+    _clientIdentifier = id;
   }
 
   MqttConnectVariableHeader variableHeader;
@@ -62,7 +63,7 @@ class MqttConnectPayload extends MqttPayload {
 
   /// Writes the connect message payload to the supplied stream.
   void writeTo(MqttByteBuffer payloadStream) {
-    payloadStream.writeMqttStringM(clientIdentifer);
+    payloadStream.writeMqttStringM(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
       payloadStream.writeMqttStringM(willTopic);
       payloadStream.writeMqttStringM(willMessage);
@@ -78,7 +79,7 @@ class MqttConnectPayload extends MqttPayload {
   int getWriteLength() {
     int length = 0;
     final MqttEncoding enc = new MqttEncoding();
-    length += enc.getByteCount(clientIdentifer);
+    length += enc.getByteCount(clientIdentifier);
     if (this.variableHeader.connectFlags.willFlag) {
       length += enc.getByteCount(willTopic);
       length += enc.getByteCount(willMessage);

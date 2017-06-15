@@ -22,7 +22,7 @@ enum readWriteFlags {
 /// Represents the base class for the Variable Header portion of some MQTT Messages.
 class MqttVariableHeader {
   /// The length, in bytes, consumed by the variable header.
-  int length;
+  int length = 0;
 
   String protocolName;
   int protocolVersion;

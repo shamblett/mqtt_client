@@ -417,4 +417,94 @@ void main() {
       expect(raised, isTrue);
     });
   });
+
+  group("Connect", () {
+    test("Basic Deserialization", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and ammeneded as work progresses
+      //
+      // Message Specs________________
+      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111
+      final List<int> sampleMessage = [
+        0x10,
+        0x1B,
+        0x00,
+        0x06,
+        'M'.codeUnitAt(0),
+        'Q'.codeUnitAt(0),
+        'I'.codeUnitAt(0),
+        's'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'p'.codeUnitAt(0),
+        0x03,
+        0x2E,
+        0x00,
+        0x1E,
+        0x00,
+        0x07,
+        'a'.codeUnitAt(0),
+        'n'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        'y'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        '1'.codeUnitAt(0),
+        0x00,
+        0x01,
+        'm'.codeUnitAt(0),
+        0x00,
+        0x01,
+        'a'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print(baseMessage.toString());
+      // Check that the message was correctly identified as a connect message.
+      expect(baseMessage, new isInstanceOf<MqttConnectMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.duplicate, isFalse);
+      expect(baseMessage.header.retain, isFalse);
+      expect(baseMessage.header.qos, MqttQos.atMostOnce);
+      expect(baseMessage.header.messageType, MqttMessageType.connect);
+      expect(baseMessage.header.messageSize, 27);
+      // Validate the variable header
+      expect((baseMessage as MqttConnectMessage).variableHeader.protocolName,
+          "MQIsdp");
+      expect((baseMessage as MqttConnectMessage).variableHeader.keepAlive, 30);
+      expect((baseMessage as MqttConnectMessage).variableHeader.protocolVersion,
+          3);
+      expect(
+          (baseMessage as MqttConnectMessage)
+              .variableHeader
+              .connectFlags
+              .cleanStart,
+          isTrue);
+      expect(
+          (baseMessage as MqttConnectMessage)
+              .variableHeader
+              .connectFlags
+              .willFlag,
+          isTrue);
+      expect(
+          (baseMessage as MqttConnectMessage)
+              .variableHeader
+              .connectFlags
+              .willRetain,
+          isTrue);
+      expect(
+          (baseMessage as MqttConnectMessage)
+              .variableHeader
+              .connectFlags
+              .willQos,
+          MqttQos.atLeastOnce);
+      // Payload tests
+      expect((baseMessage as MqttConnectMessage).payload.clientIdentifier,
+          "andy111");
+      expect((baseMessage as MqttConnectMessage).payload.willTopic, "m");
+      expect((baseMessage as MqttConnectMessage).payload.willMessage, "a");
+    });
+  });
 }
