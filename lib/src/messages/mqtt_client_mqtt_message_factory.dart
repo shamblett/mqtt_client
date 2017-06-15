@@ -10,7 +10,8 @@ part of mqtt_client;
 /// Factory for generating instances of MQTT Messages
 class MqttMessageFactory {
   /// Gets an instance of an MqttMessage based on the message type requested.
-  MqttMessage getMessage(MqttHeader header, MqttByteBuffer messageStream) {
+  static MqttMessage getMessage(MqttHeader header,
+      MqttByteBuffer messageStream) {
     MqttMessage message;
     switch (header.messageType) {
       case MqttMessageType.connect:
