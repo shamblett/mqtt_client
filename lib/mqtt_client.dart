@@ -74,6 +74,8 @@ part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_message.
 
 part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart';
 
+part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart';
+
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_factory.dart';
