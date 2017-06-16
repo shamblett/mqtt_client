@@ -28,7 +28,7 @@ class MqttHeader {
   bool duplicate = false;
 
   /// Gets or sets the Quality of Service indicator for the message.
-  MqttQos qos = MqttQos.reserved1;
+  MqttQos qos = MqttQos.atMostOnce;
 
   /// Gets or sets a value indicating whether this MQTT message should be retained by the message broker for transmission to new subscribers.
   /// True if message should be retained by the message broker; otherwise, false.
@@ -83,10 +83,13 @@ class MqttHeader {
 
     // Build the bytes that make up the header. The first byte is a combination of message type, dup,
     // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
-    headerBytes.add((messageType.index << 4) +
-        ((duplicate ? 1 : 0) << 3) +
-        (qos.index << 1) +
-        (retain ? 1 : 0));
+    final int messageTypeLength = messageType.index << 4;
+    final int duplicateLength = (duplicate ? 1 : 0) << 3;
+    final int qosLength = qos.index << 1;
+    final int retainLength = retain ? 1 : 0;
+    final int firstByte = messageTypeLength + duplicateLength +
+        qosLength + retainLength;
+    headerBytes.add(firstByte);
     headerBytes.addAll(getRemainingLengthBytes());
     return headerBytes;
   }

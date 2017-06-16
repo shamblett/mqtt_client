@@ -586,14 +586,14 @@ void main() {
     test("Basic serialization", () {
       final MqttConnectMessage msg = new MqttConnectMessage()
           .withClientIdentifier("mark")
-          .keepAliveFor(30)
+          .keepAliveFor(40)
           .startClean();
       print("Connect - Basic serialization::" + msg.toString());
       final typed.Uint8Buffer mb =
       MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
       // VH will = 12, Msg = 6
-      expect(mb[1], 18);
+      expect(mb[1], 0x12);
     });
     test("With will set", () {
       final MqttConnectMessage msg = new MqttConnectMessage()
@@ -612,7 +612,7 @@ void main() {
       MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
       // VH will = 12, Msg = 6
-      expect(mb[1], 42);
+      expect(mb[1], 0x2A);
     });
   });
 }
