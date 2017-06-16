@@ -9,6 +9,19 @@ import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'dart:io';
 
+/// Helper methods for test message serialization and deserialization
+class MessageSerializationHelper {
+  /// Invokes the serialization of a message to get an array of bytes that represent the message.
+  static typed.Uint8Buffer getMessageBytes(MqttMessage msg) {
+    final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+    final MqttByteBuffer ms = new MqttByteBuffer(buff);
+    msg.writeTo(ms);
+    ms.seek(0);
+    final typed.Uint8Buffer msgBytes = ms.read(ms.length);
+    return msgBytes;
+  }
+}
+
 void main() {
   group("Header", () {
     /// Test helper method to call Get Remaining Bytes with a specific value
@@ -419,7 +432,7 @@ void main() {
   });
 
   group("Connect", () {
-    test("Basic Deserialization", () {
+    test("Basic deserialization", () {
       // Our test deserialization message, with the following properties. Note this message is not
       // yet a real MQTT message, because not everything is implemented, but it must be modified
       // and ammeneded as work progresses
@@ -461,7 +474,7 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print(baseMessage.toString());
+      print("Connect - Basic deserialization::" + baseMessage.toString());
       // Check that the message was correctly identified as a connect message.
       expect(baseMessage, new isInstanceOf<MqttConnectMessage>());
       // Validate the message deserialization
@@ -569,6 +582,37 @@ void main() {
         raised = true;
       }
       expect(raised, isTrue);
+    });
+    test("Basic serialization", () {
+      final MqttConnectMessage msg = new MqttConnectMessage()
+          .withClientIdentifier("mark")
+          .keepAliveFor(30)
+          .startClean();
+      print("Connect - Basic serialization::" + msg.toString());
+      final typed.Uint8Buffer mb =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(mb[0], 0x10);
+      // VH will = 12, Msg = 6
+      expect(mb[1], 18);
+    });
+    test("With will set", () {
+      final MqttConnectMessage msg = new MqttConnectMessage()
+          .withProtocolName("MQIsdp")
+          .withProtocolVersion(3)
+          .withClientIdentifier("mark")
+          .keepAliveFor(30)
+          .startClean()
+          .will()
+          .withWillQos(MqttQos.atLeastOnce)
+          .withWillRetain()
+          .withWillTopic("willTopic")
+          .withWillMessage("willMessage");
+      print("Connect - With will set::" + msg.toString());
+      final typed.Uint8Buffer mb =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(mb[0], 0x10);
+      // VH will = 12, Msg = 6
+      expect(mb[1], 42);
     });
   });
 }

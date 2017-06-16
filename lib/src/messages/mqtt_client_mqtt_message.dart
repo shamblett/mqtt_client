@@ -57,7 +57,7 @@ class MqttMessage {
 
   String toString() {
     final StringBuffer sb = new StringBuffer();
-    sb.writeln("MQTTMessage of type ");
+    sb.write("MQTTMessage of type ");
     sb.writeln(this.header.messageType.toString());
     sb.writeln(header.toString());
     return sb.toString();

@@ -18,22 +18,22 @@ class MqttHeader {
   }
 
   /// Backing storage for the payload size.
-  int _messageSize;
+  int _messageSize = 0;
 
   /// Gets or sets the type of the MQTT message.
   MqttMessageType messageType;
 
   /// Gets or sets a value indicating whether this MQTT Message is duplicate of a previous message.
   /// True if duplicate; otherwise, false.
-  bool duplicate;
+  bool duplicate = false;
 
   /// Gets or sets the Quality of Service indicator for the message.
-  MqttQos qos;
+  MqttQos qos = MqttQos.reserved1;
 
   /// Gets or sets a value indicating whether this MQTT message should be retained by the message broker for transmission to new subscribers.
   /// True if message should be retained by the message broker; otherwise, false.
   /// </value>
-  bool retain;
+  bool retain = false;
 
   ///     Gets or sets the size of the variable header + payload section of the message.
   /// <value>The size of the variable header + payload.</value>

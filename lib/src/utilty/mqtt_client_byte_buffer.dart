@@ -75,19 +75,17 @@ class MqttByteBuffer {
   void writeByte(int byte) {
     if (_length == _position) {
       _buffer.add(byte);
+      _length++;
     } else {
       _buffer[_position] = byte;
     }
     _position++;
-    _length++;
   }
 
   /// Write a short(16 bit)
   void writeShort(int short) {
     writeByte(short >> 8);
     writeByte(short & 0xFF);
-    _position += 2;
-    _length += 2;
   }
 
   /// Writes a sequence of bytes to the current

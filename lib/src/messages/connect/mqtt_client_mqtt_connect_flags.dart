@@ -9,13 +9,13 @@ part of mqtt_client;
 
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
-  bool reserved1;
-  bool cleanStart;
-  bool willFlag;
-  MqttQos willQos;
-  bool willRetain;
-  bool passwordFlag;
-  bool usernameFlag;
+  bool reserved1 = false;
+  bool cleanStart = false;
+  bool willFlag = false;
+  MqttQos willQos = MqttQos.reserved1;
+  bool willRetain = false;
+  bool passwordFlag = false;
+  bool usernameFlag = false;
 
   /// Initializes a new instance of the <see cref="MqttConnectFlags" /> class.
   MqttConnectFlags();

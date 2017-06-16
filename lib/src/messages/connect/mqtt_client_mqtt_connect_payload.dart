@@ -21,7 +21,7 @@ class MqttConnectPayload extends MqttPayload {
     readFrom(payloadStream);
   }
 
-  String _clientIdentifier;
+  String _clientIdentifier = "";
 
   String get clientIdentifier => _clientIdentifier;
 
@@ -32,7 +32,7 @@ class MqttConnectPayload extends MqttPayload {
     _clientIdentifier = id;
   }
 
-  MqttConnectVariableHeader variableHeader;
+  MqttConnectVariableHeader variableHeader = new MqttConnectVariableHeader();
   String _username;
 
   String get username => _username;
