@@ -845,7 +845,32 @@ void main() {
       expected[0] = 0xE0;
       expected[1] = 0x00;
       final MqttDisconnectMessage msg = new MqttDisconnectMessage();
-      print("Disconenct - Serialisation::" + msg.toString());
+      print("Disconnect - Serialisation::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]);
+      expect(actual[1], expected[1]);
+    });
+  });
+
+  group("Ping Request", () {
+    test("Deserialisation", () {
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(2);
+      sampleMessage[0] = 0xC0;
+      sampleMessage[1] = 0x0;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Ping Request  - Deserialisation::" + baseMessage.toString());
+      // Check that the message was correctly identified as a ping request message.
+      expect(baseMessage, new isInstanceOf<MqttPingRequestMessage>());
+    });
+    test("Serialisation", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
+      expected[0] = 0xC0;
+      expected[1] = 0x00;
+      final MqttPingRequestMessage msg = new MqttPingRequestMessage();
+      print("Ping Request - Serialisation::" + msg.toString());
       final typed.Uint8Buffer actual =
       MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);

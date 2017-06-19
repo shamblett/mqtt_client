@@ -62,21 +62,23 @@ part 'src/messages/mqtt_client_mqtt_variable_header.dart';
 
 part 'src/messages/mqtt_client_mqtt_message.dart';
 
-part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_return_code.dart';
+part 'src/messages/connect/mqtt_client_mqtt_connect_return_code.dart';
 
-part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_flags.dart';
+part 'src/messages/connect/mqtt_client_mqtt_connect_flags.dart';
 
-part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_payload.dart';
+part 'src/messages/connect/mqtt_client_mqtt_connect_payload.dart';
 
-part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart';
+part 'src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart';
 
-part 'package:mqtt_client/src/messages/connect/mqtt_client_mqtt_connect_message.dart';
+part 'src/messages/connect/mqtt_client_mqtt_connect_message.dart';
 
-part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart';
+part 'src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart';
 
-part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart';
+part 'src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart';
 
-part 'package:mqtt_client/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart';
+part 'src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart';
+
+part 'src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
 

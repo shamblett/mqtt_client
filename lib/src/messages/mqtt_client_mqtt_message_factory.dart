@@ -49,7 +49,7 @@ class MqttMessageFactory {
       //return new MqttUnsubscribeAckMessage(header, messageStream);
         break;
       case MqttMessageType.pingRequest:
-      //return new MqttPingRequestMessage(header);
+        message = new MqttPingRequestMessage.fromHeader(header);
         break;
       case MqttMessageType.pingResponse:
       //return new MqttPingResponseMessage(header);

@@ -9,12 +9,12 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Disconnect Message.
 class MqttDisconnectMessage extends MqttMessage {
-  /// Initializes a new instance of the <see cref="MqttPublishMessage" /> class.
+  /// Initializes a new instance of the MqttDisconnectMessage class.
   MqttDisconnectMessage() {
     this.header = new MqttHeader().asType(MqttMessageType.disconnect);
   }
 
-  /// Initializes a new instance of the <see cref="MqttConnectMessage" /> class.
+  /// Initializes a new instance of the MqttDisconnectMessage class.
   MqttDisconnectMessage.fromHeader(MqttHeader header) {
     this.header = header;
   }
