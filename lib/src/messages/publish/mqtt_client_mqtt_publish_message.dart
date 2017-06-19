@@ -47,6 +47,36 @@ class MqttPublishMessage extends MqttMessage {
     this.payload.writeTo(messageStream);
   }
 
+  /// Sets the topic to publish data to.
+  MqttPublishMessage toTopic(String topicName) {
+    this.variableHeader.topicName = topicName;
+    return this;
+  }
+
+  /// Appends data to publish to the end of the current message payload.
+  MqttPublishMessage publishData(typed.Uint8Buffer data) {
+    this.payload.message.addAll(data);
+    return this;
+  }
+
+  /// Sets the message identifier of the message.
+  MqttPublishMessage withMessageIdentifier(int messageIdentifier) {
+    this.variableHeader.messageIdentifier = messageIdentifier;
+    return this;
+  }
+
+  ///  Sets the Qos of the published message.
+  MqttPublishMessage withQos(MqttQos qos) {
+    this.header.withQos(qos);
+    return this;
+  }
+
+  /// Removes the current published data.
+  MqttPublishMessage clearPublishData() {
+    this.payload.message.clear();
+    return this;
+  }
+
   String toString() {
     final StringBuffer sb = new StringBuffer();
     sb.write(super.toString());
