@@ -15,10 +15,43 @@ class MqttPublishMessage extends MqttMessage {
   /// Gets or sets the payload of the Mqtt Message.
   MqttPublishPayload payload;
 
-  /// Initializes a new instance of the <see cref="MqttPublishMessage" /> class.
+  /// Initializes a new instance of the MqttPublishMessage class.
   MqttPublishMessage() {
     this.header = new MqttHeader().asType(MqttMessageType.publish);
     this.variableHeader = new MqttPublishVariableHeader(this.header);
     this.payload = new MqttPublishPayload();
+  }
+
+  /// Initializes a new instance of the MqttPublishMessage class.
+  MqttPublishMessage.fromByteBuffer(MqttHeader header,
+      MqttByteBuffer messageStream) {
+    this.header = header;
+    readFrom(messageStream);
+  }
+
+  /// Reads a message from the supplied stream.
+  void readFrom(MqttByteBuffer messageStream) {
+    super.readFrom(messageStream);
+    this.variableHeader = new MqttPublishVariableHeader.fromByteBuffer(
+        this.header, messageStream);
+    this.payload = new MqttPublishPayload.fromByteBuffer(
+        this.header, this.variableHeader, messageStream);
+  }
+
+  /// Writes the message to the supplied stream.
+  void writeTo(MqttByteBuffer messageStream) {
+    this.header.writeTo(
+        variableHeader.getWriteLength() + payload.getWriteLength(),
+        messageStream);
+    this.variableHeader.writeTo(messageStream);
+    this.payload.writeTo(messageStream);
+  }
+
+  String toString() {
+    final StringBuffer sb = new StringBuffer();
+    sb.write(super.toString());
+    sb.writeln(variableHeader.toString());
+    sb.writeln(payload.toString());
+    return sb.toString();
   }
 }
