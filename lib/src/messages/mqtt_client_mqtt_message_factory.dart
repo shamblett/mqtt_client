@@ -18,7 +18,8 @@ class MqttMessageFactory {
         message = new MqttConnectMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.connectAck:
-      //return new MqttConnectAckMessage(header, messageStream);
+        message =
+        new MqttConnectAckMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.publish:
       //return new MqttPublishMessage(header, messageStream);

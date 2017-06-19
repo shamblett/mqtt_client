@@ -615,4 +615,148 @@ void main() {
       expect(mb[1], 0x2A);
     });
   });
+
+  group("Connect Ack", () {
+    test("Deserialisation - Connection accepted", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and amended as work progresses
+      //
+      // Message Specs________________
+      // <20><02><00><00>
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x0;
+      sampleMessage[3] = 0x0;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Connect Ack - Connection accepted::" + baseMessage.toString());
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      final MqttConnectAckMessage message =
+      baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header.duplicate,
+        false,
+      );
+      expect(
+        message.header.retain,
+        false,
+      );
+      expect(message.header.qos, MqttQos.atMostOnce);
+      expect(message.header.messageType, MqttMessageType.connectAck);
+      expect(message.header.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
+    });
+    test("Deserialisation - Unacceptable protocol version", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and amended as work progresses
+      //
+      // Message Specs________________
+      // <20><02><00><00>
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x0;
+      sampleMessage[3] = 0x1;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Connect Ack - Unacceptable protocol version::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      final MqttConnectAckMessage message =
+      baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header.duplicate,
+        false,
+      );
+      expect(
+        message.header.retain,
+        false,
+      );
+      expect(message.header.qos, MqttQos.atMostOnce);
+      expect(message.header.messageType, MqttMessageType.connectAck);
+      expect(message.header.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.unacceptedProtocolVersion);
+    });
+    test("Deserialisation - Identifier rejected", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and amended as work progresses
+      //
+      // Message Specs________________
+      // <20><02><00><00>
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x0;
+      sampleMessage[3] = 0x2;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Connect Ack - Identifier rejected::" + baseMessage.toString());
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      final MqttConnectAckMessage message =
+      baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header.duplicate,
+        false,
+      );
+      expect(
+        message.header.retain,
+        false,
+      );
+      expect(message.header.qos, MqttQos.atMostOnce);
+      expect(message.header.messageType, MqttMessageType.connectAck);
+      expect(message.header.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.identifierRejected);
+    });
+    test("Deserialisation - Broker unavailable", () {
+      // Our test deserialization message, with the following properties. Note this message is not
+      // yet a real MQTT message, because not everything is implemented, but it must be modified
+      // and amended as work progresses
+      //
+      // Message Specs________________
+      // <20><02><00><00>
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x0;
+      sampleMessage[3] = 0x3;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Connect Ack - Broker unavailable::" + baseMessage.toString());
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      final MqttConnectAckMessage message =
+      baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header.duplicate,
+        false,
+      );
+      expect(
+        message.header.retain,
+        false,
+      );
+      expect(message.header.qos, MqttQos.atMostOnce);
+      expect(message.header.messageType, MqttMessageType.connectAck);
+      expect(message.header.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.brokerUnavailable);
+    });
+  });
 }
