@@ -82,6 +82,12 @@ part 'src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart';
 
 part 'src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart';
 
+part 'src/messages/publish/mqtt_client_mqtt_publish_message.dart';
+
+part 'src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart';
+
+part 'src/messages/publish/mqtt_client_mqtt_publish_payload.dart';
+
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_factory.dart';
