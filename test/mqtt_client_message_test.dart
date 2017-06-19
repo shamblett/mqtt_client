@@ -578,6 +578,7 @@ void main() {
       bool raised = false;
       try {
         final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        print(baseMessage.toString());
       } catch (ClientIdentifierException) {
         raised = true;
       }
@@ -826,5 +827,30 @@ void main() {
     expect(actual[1], expected[1]); // remaining length
     expect(actual[2], expected[2]); // connect ack - compression? always empty
     expect(actual[3], expected[3]); // return code.
+  });
+
+  group("Disconnect", () {
+    test("Deserialisation", () {
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(2);
+      sampleMessage[0] = 0xE0;
+      sampleMessage[1] = 0x0;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Disconnect  - Deserialisation::" + baseMessage.toString());
+      // Check that the message was correctly identified as a disconnect message.
+      expect(baseMessage, new isInstanceOf<MqttDisconnectMessage>());
+    });
+    test("Serialisation", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
+      expected[0] = 0xE0;
+      expected[1] = 0x00;
+      final MqttDisconnectMessage msg = new MqttDisconnectMessage();
+      print("Disconenct - Serialisation::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]);
+      expect(actual[1], expected[1]);
+    });
   });
 }

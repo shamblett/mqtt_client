@@ -55,7 +55,7 @@ class MqttMessageFactory {
       //return new MqttPingResponseMessage(header);
         break;
       case MqttMessageType.disconnect:
-      //return new MqttDisconnectMessage(header);
+        message = new MqttDisconnectMessage.fromHeader(header);
         break;
       default:
         throw new InvalidHeaderException(

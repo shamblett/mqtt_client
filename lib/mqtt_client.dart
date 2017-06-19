@@ -76,6 +76,8 @@ part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_v
 
 part 'package:mqtt_client/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart';
 
+part 'package:mqtt_client/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart';
+
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_factory.dart';
