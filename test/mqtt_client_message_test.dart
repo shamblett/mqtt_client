@@ -878,4 +878,29 @@ void main() {
       expect(actual[1], expected[1]);
     });
   });
+
+  group("Ping Response", () {
+    test("Deserialisation", () {
+      final typed.Uint8Buffer sampleMessage = new typed.Uint8Buffer(2);
+      sampleMessage[0] = 0xD0;
+      sampleMessage[1] = 0x00;
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(sampleMessage);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Ping Response  - Deserialisation::" + baseMessage.toString());
+      // Check that the message was correctly identified as a ping response message.
+      expect(baseMessage, new isInstanceOf<MqttPingResponseMessage>());
+    });
+    test("Serialisation", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
+      expected[0] = 0xD0;
+      expected[1] = 0x00;
+      final MqttPingResponseMessage msg = new MqttPingResponseMessage();
+      print("Ping Response - Serialisation::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]);
+      expect(actual[1], expected[1]);
+    });
+  });
 }

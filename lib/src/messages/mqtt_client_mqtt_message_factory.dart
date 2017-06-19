@@ -52,7 +52,7 @@ class MqttMessageFactory {
         message = new MqttPingRequestMessage.fromHeader(header);
         break;
       case MqttMessageType.pingResponse:
-      //return new MqttPingResponseMessage(header);
+        message = new MqttPingResponseMessage.fromHeader(header);
         break;
       case MqttMessageType.disconnect:
         message = new MqttDisconnectMessage.fromHeader(header);
