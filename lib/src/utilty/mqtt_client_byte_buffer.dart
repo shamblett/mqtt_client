@@ -98,7 +98,7 @@ class MqttByteBuffer {
       _buffer.addAll(buffer);
     }
     _length = _buffer.length;
-    _position = buffer.length - 1;
+    _position = buffer.length;
   }
 
   /// Seek. Sets the position in the buffer. If overflow occurs

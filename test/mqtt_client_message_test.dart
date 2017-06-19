@@ -759,4 +759,72 @@ void main() {
           MqttConnectReturnCode.brokerUnavailable);
     });
   });
+  test("Serialisation - Connection accepted", () {
+    final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x0;
+    expected[3] = 0x0;
+    final MqttConnectAckMessage msg = new MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+    print("Connect Ack - Connection accepted::" + msg.toString());
+    final typed.Uint8Buffer actual =
+    MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
+  test("Serialisation - Unacceptable protocol version", () {
+    final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x0;
+    expected[3] = 0x1;
+    final MqttConnectAckMessage msg = new MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.unacceptedProtocolVersion);
+    print("Connect Ack - Unacceptable protocol version::" + msg.toString());
+    final typed.Uint8Buffer actual =
+    MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
+  test("Serialisation - Identifier rejected", () {
+    final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x0;
+    expected[3] = 0x2;
+    final MqttConnectAckMessage msg = new MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.identifierRejected);
+    print("Connect Ack - Identifier rejected::" + msg.toString());
+    final typed.Uint8Buffer actual =
+    MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
+  test("Serialisation - Broker unavailable", () {
+    final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x0;
+    expected[3] = 0x3;
+    final MqttConnectAckMessage msg = new MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.brokerUnavailable);
+    print("Connect Ack - Broker unavailable::" + msg.toString());
+    final typed.Uint8Buffer actual =
+    MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
 }
