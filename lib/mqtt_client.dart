@@ -86,6 +86,10 @@ part 'src/messages/publish/mqtt_client_mqtt_publish_message.dart';
 
 part 'src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart';
 
+part 'src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart';
+
+part 'src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart';
+
 part 'src/messages/publish/mqtt_client_mqtt_publish_payload.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
