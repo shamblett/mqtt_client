@@ -40,9 +40,9 @@ class MqttPublishMessage extends MqttMessage {
 
   /// Writes the message to the supplied stream.
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(
-        variableHeader.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    final int variableHeaderLength = variableHeader.getWriteLength();
+    final int payloadLength = payload.getWriteLength();
+    this.header.writeTo(variableHeaderLength + payloadLength, messageStream);
     this.variableHeader.writeTo(messageStream);
     this.payload.writeTo(messageStream);
   }

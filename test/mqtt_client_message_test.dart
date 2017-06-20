@@ -953,7 +953,7 @@ void main() {
       expect((baseMessage as MqttPublishMessage).payload.message[5],
           '!'.codeUnitAt(0));
     });
-    test("Serialisation - payload too short", () {
+    test("Deserialisation - payload too short", () {
       final List<int> sampleMessage = [
         0x30,
         0x0C,
@@ -981,6 +981,57 @@ void main() {
         raised = true;
       }
       expect(raised, isTrue);
+    });
+    test("Serialisation - Qos Level 2 Exactly Once", () {
+      final List<int> expected = [
+        0x34,
+        0x0E,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x00,
+        0x0A,
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0),
+        '!'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer payload = new typed.Uint8Buffer(6);
+      payload[0] = 'h'.codeUnitAt(0);
+      payload[1] = 'e'.codeUnitAt(0);
+      payload[2] = 'l'.codeUnitAt(0);
+      payload[3] = 'l'.codeUnitAt(0);
+      payload[4] = 'o'.codeUnitAt(0);
+      payload[5] = '!'.codeUnitAt(0);
+      final MqttMessage msg = new MqttPublishMessage()
+          .withQos(MqttQos.exactlyOnce)
+          .withMessageIdentifier(10)
+          .toTopic("fred")
+          .publishData(payload);
+      print("Publish - Qos Level 2 Exactly Once::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // first topic length byte
+      expect(actual[3], expected[3]); // second topic length byte
+      expect(actual[4], expected[4]); // f
+      expect(actual[5], expected[5]); // r
+      expect(actual[6], expected[6]); // e
+      expect(actual[7], expected[7]); // d
+      expect(actual[8], expected[8]); // h
+      expect(actual[9], expected[9]); // e
+      expect(actual[10], expected[10]); // l
+      expect(actual[11], expected[11]); // l
+      expect(actual[12], expected[12]); // o
+      expect(actual[13], expected[13]); // !
     });
   });
 }
