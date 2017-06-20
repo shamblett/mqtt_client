@@ -34,7 +34,7 @@ class MqttPublishPayload extends MqttPayload {
     // The length of the bytes is the length specified in the header, minus any bytes
     // spent in the variable header.
     final int messageBytes = header.messageSize - variableHeader.length;
-    message = new typed.Uint8Buffer(messageBytes);
+    message = payloadStream.read(messageBytes);
   }
 
   /// Writes the payload to the supplied stream.
@@ -49,13 +49,13 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Returns a string representation of the payload.
   String toString() {
-    return "Payload: {$message.length} bytes={$bytesToString(message}";
+    return "Payload: {${message.length} bytes={${bytesToString(message)}";
   }
 
   /// Converts an array of bytes to a byte string.
   static String bytesToString(typed.Uint8Buffer message) {
     final StringBuffer sb = new StringBuffer();
-    for (var b in message) {
+    for (int b in message) {
       sb.write('<');
       sb.write(b);
       sb.write('>');

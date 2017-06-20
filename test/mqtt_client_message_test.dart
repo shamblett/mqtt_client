@@ -903,4 +903,84 @@ void main() {
       expect(actual[1], expected[1]);
     });
   });
+
+  group("Publish", () {
+    test("Deserialisation - Valid payload", () {
+      // Tests basic message deserialization from a raw byte array.
+      // Message Specs________________
+      // <30><0C><00><04>fredhello!
+      final List<int> sampleMessage = [
+        0x30,
+        0x0C,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0),
+        '!'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Publish - Valid payload::" + baseMessage.toString());
+      // Check that the message was correctly identified as a publish message.
+      expect(baseMessage, new isInstanceOf<MqttPublishMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.duplicate, isFalse);
+      expect(baseMessage.header.retain, isFalse);
+      expect(baseMessage.header.qos, MqttQos.atMostOnce);
+      expect(baseMessage.header.messageType, MqttMessageType.publish);
+      expect(baseMessage.header.messageSize, 12);
+      // Check the payload
+      expect((baseMessage as MqttPublishMessage).payload.message[0],
+          'h'.codeUnitAt(0));
+      expect((baseMessage as MqttPublishMessage).payload.message[1],
+          'e'.codeUnitAt(0));
+      expect((baseMessage as MqttPublishMessage).payload.message[2],
+          'l'.codeUnitAt(0));
+      expect((baseMessage as MqttPublishMessage).payload.message[3],
+          'l'.codeUnitAt(0));
+      expect((baseMessage as MqttPublishMessage).payload.message[4],
+          'o'.codeUnitAt(0));
+      expect((baseMessage as MqttPublishMessage).payload.message[5],
+          '!'.codeUnitAt(0));
+    });
+    test("Serialisation - payload too short", () {
+      final List<int> sampleMessage = [
+        0x30,
+        0x0C,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      bool raised = false;
+      try {
+        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        print(baseMessage.toString());
+      } catch (InvalidPayloadSizeException) {
+        raised = true;
+      }
+      expect(raised, isTrue);
+    });
+  });
 }
