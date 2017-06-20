@@ -1099,4 +1099,33 @@ void main() {
       expect(msg.payload.message.length, 0);
     });
   });
+
+  group("Publish Ack", () {
+    test("Deserialisation - Valid payload", () {
+      // Tests basic message deserialization from a raw byte array.
+      // Message Specs________________
+      // <30><0C><00><04>fredhello!
+      final List<int> sampleMessage = [
+        0x40,
+        0x02,
+        0x00,
+        0x04,
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Publish Ack - Valid payload::" + baseMessage.toString());
+      // Check that the message was correctly identified as a publish ack message.
+      expect(baseMessage, new isInstanceOf<MqttPublishAckMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.messageType, MqttMessageType.publishAck);
+      expect(baseMessage.header.messageSize, 2);
+      expect(
+          (baseMessage as MqttPublishAckMessage)
+              .variableHeader
+              .messageIdentifier,
+          4);
+    });
+  });
 }
