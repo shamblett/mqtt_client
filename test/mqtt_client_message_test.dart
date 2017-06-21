@@ -1718,5 +1718,101 @@ void main() {
       expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[2],
           MqttQos.exactlyOnce);
     });
+    test("Serialisation - Single Qos at most once", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(5);
+      expected[0] = 0x90;
+      expected[1] = 0x03;
+      expected[2] = 0x00;
+      expected[3] = 0x02;
+      expected[4] = 0x00;
+      final MqttMessage msg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.atMostOnce);
+      print("Subscribe Ack - Single Qos at most once::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // message id b1
+      expect(actual[3], expected[3]); // message id b2
+      expect(actual[4], expected[4]); // QOS
+    });
+    test("Serialisation - Single Qos at least once", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(5);
+      expected[0] = 0x90;
+      expected[1] = 0x03;
+      expected[2] = 0x00;
+      expected[3] = 0x02;
+      expected[4] = 0x01;
+      final MqttMessage msg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.atLeastOnce);
+      print("Subscribe Ack - Single Qos at least once::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // message id b1
+      expect(actual[3], expected[3]); // message id b2
+      expect(actual[4], expected[4]); // QOS
+    });
+    test("Serialisation - Single Qos exactly once", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(5);
+      expected[0] = 0x90;
+      expected[1] = 0x03;
+      expected[2] = 0x00;
+      expected[3] = 0x02;
+      expected[4] = 0x02;
+      final MqttMessage msg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.exactlyOnce);
+      print("Subscribe Ack - Single Qos exactly once::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // message id b1
+      expect(actual[3], expected[3]); // message id b2
+      expect(actual[4], expected[4]); // QOS
+    });
+    test("Serialisation - Multi QOS", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(7);
+      expected[0] = 0x90;
+      expected[1] = 0x05;
+      expected[2] = 0x00;
+      expected[3] = 0x02;
+      expected[4] = 0x00;
+      expected[5] = 0x01;
+      expected[6] = 0x02;
+      final MqttMessage msg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.atMostOnce)
+          .addQosGrant(MqttQos.atLeastOnce)
+          .addQosGrant(MqttQos.exactlyOnce);
+      print("Subscribe Ack - Multi QOS::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // message id b1
+      expect(actual[3], expected[3]); // message id b2
+      expect(actual[4], expected[4]); // QOS 1 (Most)
+      expect(actual[5], expected[5]); // QOS 2 (Least)
+      expect(actual[6], expected[6]); // QOS 3 (Exactly)
+    });
+    test("Serialisation - Clear grants", () {
+      final MqttSubscribeAckMessage msg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.atMostOnce)
+          .addQosGrant(MqttQos.atLeastOnce)
+          .addQosGrant(MqttQos.exactlyOnce);
+      expect(msg.payload.qosGrants.length, 3);
+      msg.payload.clearGrants();
+      expect(msg.payload.qosGrants.length, 0);
+    });
   });
 }
