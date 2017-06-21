@@ -1645,4 +1645,78 @@ void main() {
       expect(msg.payload.subscriptions.length, 0);
     });
   });
+
+  group("Subscribe Ack", () {
+    test("Deserialisation - Single Qos at most once", () {
+      // Message Specs________________
+      // <90><03><00><02><00>
+      final List<int> sampleMessage = [0x90, 0x03, 0x00, 0x02, 0x00];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print(
+          "Subscribe Ack - Single Qos at most once::" + baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe ack message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(
+          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          MqttQos.atMostOnce);
+    });
+    test("Deserialisation - Single Qos at least once", () {
+      // Message Specs________________
+      // <90><03><00><02><01>
+      final List<int> sampleMessage = [0x90, 0x03, 0x00, 0x02, 0x01];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe Ack - Single Qos at least once::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe ack message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(
+          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          MqttQos.atLeastOnce);
+    });
+    test("Deserialisation - Single Qos exactly once", () {
+      // Message Specs________________
+      // <90><03><00><02><02>
+      final List<int> sampleMessage = [0x90, 0x03, 0x00, 0x02, 0x02];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print(
+          "Subscribe Ack - Single Qos exactly once::" + baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe ack message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(
+          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          MqttQos.exactlyOnce);
+    });
+    test("Deserialisation - Multi Qos", () {
+      // Message Specs________________
+      // <90><03><00><02><00> <01><02>
+      final List<int> sampleMessage = [0x90, 0x05, 0x00, 0x02, 0x0, 0x01, 0x02];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe Ack - multi Qos::" + baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe ack message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(
+          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 3);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          MqttQos.atMostOnce);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[1],
+          MqttQos.atLeastOnce);
+      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[2],
+          MqttQos.exactlyOnce);
+    });
+  });
 }

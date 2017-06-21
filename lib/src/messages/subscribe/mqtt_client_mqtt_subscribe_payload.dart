@@ -18,7 +18,7 @@ class MqttSubscribePayload extends MqttPayload {
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload();
 
-  /// Initializes a new instance of the <see cref="MqttSubscribePayload" /> class.
+  /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload.fromByteBuffer(MqttHeader header,
       MqttSubscribeVariableHeader variableHeader,
       MqttByteBuffer payloadStream) {
@@ -72,7 +72,7 @@ class MqttSubscribePayload extends MqttPayload {
 
   String toString() {
     final StringBuffer sb = new StringBuffer();
-    sb.writeln("Payload: Subscription [{$subscriptions.length}]");
+    sb.writeln("Payload: Subscription [{${subscriptions.length}}]");
     subscriptions.forEach((String key, MqttQos value) {
       sb.writeln("{{ Topic={$key}, Qos={$value} }}");
     });
