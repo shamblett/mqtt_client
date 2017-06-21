@@ -1127,5 +1127,23 @@ void main() {
               .messageIdentifier,
           4);
     });
+    test("Serialisation - Valid payload", () {
+      // Publish ack msg with message identifier 4
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+      expected[0] = 0x40;
+      expected[1] = 0x02;
+      expected[2] = 0x0;
+      expected[3] = 0x4;
+      final MqttPublishAckMessage msg =
+      new MqttPublishAckMessage().withMessageIdentifier(4);
+      print("Publish Ack - Valid payload::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // first topic length byte
+      expect(actual[3], expected[3]); // second topic length byte
+    });
   });
 }
