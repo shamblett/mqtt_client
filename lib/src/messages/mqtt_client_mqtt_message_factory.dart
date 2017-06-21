@@ -29,7 +29,8 @@ class MqttMessageFactory {
         new MqttPublishAckMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.publishComplete:
-      //return new MqttPublishCompleteMessage(header, messageStream);
+        message =
+        new MqttPublishCompleteMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.publishReceived:
       //return new MqttPublishReceivedMessage(header, messageStream);

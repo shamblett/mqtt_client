@@ -7,23 +7,23 @@
 
 part of mqtt_client;
 
-/// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a publish message that has it's QOS set to AtLeast or Exactly Once.
-class MqttPublishAckMessage extends MqttMessage {
+/// Implementation of an MQTT Publish Complete Message.
+class MqttPublishCompleteMessage extends MqttMessage {
   /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttPublishAckVariableHeader variableHeader;
+  MqttPublishCompleteVariableHeader variableHeader;
 
-  /// Initializes a new instance of the MqttPublishAckMessage class.
-  MqttPublishAckMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.publishAck);
-    this.variableHeader = new MqttPublishAckVariableHeader();
+  /// Initializes a new instance of the MqttPublishCompleteMessage class.
+  MqttPublishCompleteMessage() {
+    this.header = new MqttHeader().asType(MqttMessageType.publishComplete);
+    this.variableHeader = new MqttPublishCompleteVariableHeader();
   }
 
-  /// Initializes a new instance of the MqttPublishAckMessage class.
-  MqttPublishAckMessage.fromByteBuffer(MqttHeader header,
+  /// Initializes a new instance of the MqttPublishCompleteMessage class.
+  MqttPublishCompleteMessage.fromByteBuffer(MqttHeader header,
       MqttByteBuffer messageStream) {
     this.header = header;
     this.variableHeader =
-    new MqttPublishAckVariableHeader.fromByteBuffer(messageStream);
+    new MqttPublishCompleteVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
@@ -33,7 +33,7 @@ class MqttPublishAckMessage extends MqttMessage {
   }
 
   /// Sets the message identifier of the MqttMessage.
-  MqttPublishAckMessage withMessageIdentifier(int messageIdentifier) {
+  MqttPublishCompleteMessage withMessageIdentifier(int messageIdentifier) {
     this.variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
