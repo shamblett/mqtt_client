@@ -1284,4 +1284,269 @@ void main() {
       expect(actual[3], expected[3]); // second topic length byte
     });
   });
+
+  group("Subscribe", () {
+    test("Deserialisation - Single topic", () {
+      // Message Specs________________
+      // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x09,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x00
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Single topic::" + baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          1);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.atMostOnce);
+    });
+    test("Deserialisation - Multi topic", () {
+      // Message Specs________________
+      // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x10,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x00,
+        0x00,
+        0x04,
+        'm'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'k'.codeUnitAt(0),
+        0x00
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Multi topic::" + baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          2);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.atMostOnce);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("mark"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["mark"],
+          MqttQos.atMostOnce);
+    });
+    test("Deserialisation - Single topic at least once Qos", () {
+      // Message Specs________________
+      // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x09,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x01
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Single topic at least once Qos::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          1);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.atLeastOnce);
+    });
+    test("Deserialisation - Multi topic at least once Qos", () {
+      // Message Specs________________
+      // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x10,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x01,
+        0x00,
+        0x04,
+        'm'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'k'.codeUnitAt(0),
+        0x01
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Multi topic at least once Qos::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          2);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.atLeastOnce);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("mark"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["mark"],
+          MqttQos.atLeastOnce);
+    });
+    test("Deserialisation - Single topic exactly once Qos", () {
+      // Message Specs________________
+      // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x09,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x02
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Single topic exactly once Qos::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          1);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.exactlyOnce);
+    });
+    test("Deserialisation - Multi topic exactly once Qos", () {
+      // Message Specs________________
+      // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
+      final List<int> sampleMessage = [
+        0x82,
+        0x10,
+        0x00,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x02,
+        0x00,
+        0x04,
+        'm'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'k'.codeUnitAt(0),
+        0x02
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Subscribe - Multi topic exactly once Qos::" +
+          baseMessage.toString());
+      // Check that the message was correctly identified as a subscribe message.
+      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
+          2);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["fred"],
+          MqttQos.exactlyOnce);
+      expect(
+          (baseMessage as MqttSubscribeMessage)
+              .payload
+              .subscriptions
+              .containsKey("mark"),
+          isTrue);
+      expect(
+          (baseMessage as MqttSubscribeMessage).payload.subscriptions["mark"],
+          MqttQos.exactlyOnce);
+    });
+  });
 }
