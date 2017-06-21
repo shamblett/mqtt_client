@@ -94,6 +94,10 @@ part 'src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dar
 
 part 'src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart';
 
+part 'src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart';
+
+part 'src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart';
+
 part 'src/messages/publish/mqtt_client_mqtt_publish_payload.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
