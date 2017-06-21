@@ -1238,4 +1238,50 @@ void main() {
       expect(actual[3], expected[3]); // second topic length byte
     });
   });
+
+  group("Publish Release", () {
+    test("Deserialisation - Valid payload", () {
+      // Message Specs________________
+      // <40><02><00><04> (Pub Release for Message ID 4)
+      final List<int> sampleMessage = [
+        0x60,
+        0x02,
+        0x00,
+        0x04,
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Publish Release - Valid payload::" + baseMessage.toString());
+      // Check that the message was correctly identified as a publish release message.
+      expect(baseMessage, new isInstanceOf<MqttPublishReleaseMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.messageType, MqttMessageType.publishRelease);
+      expect(baseMessage.header.messageSize, 2);
+      expect(
+          (baseMessage as MqttPublishReleaseMessage)
+              .variableHeader
+              .messageIdentifier,
+          4);
+    });
+    test("Serialisation - Valid payload", () {
+      // Publish complete msg with message identifier 4
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+      expected[0] = 0x60;
+      expected[1] = 0x02;
+      expected[2] = 0x0;
+      expected[3] = 0x4;
+      final MqttPublishReleaseMessage msg =
+      new MqttPublishReleaseMessage().withMessageIdentifier(4);
+      print("Publish Release - Valid payload::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // first topic length byte
+      expect(actual[3], expected[3]); // second topic length byte
+    });
+  });
 }

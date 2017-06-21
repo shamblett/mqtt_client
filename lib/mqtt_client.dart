@@ -98,6 +98,10 @@ part 'src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dar
 
 part 'src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart';
 
+part 'src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart';
+
+part 'src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart';
+
 part 'src/messages/publish/mqtt_client_mqtt_publish_payload.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';

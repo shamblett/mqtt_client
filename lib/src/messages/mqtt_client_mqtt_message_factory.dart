@@ -37,7 +37,8 @@ class MqttMessageFactory {
         new MqttPublishReceivedMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.publishRelease:
-      //return new MqttPublishReleaseMessage(header, messageStream);
+        message =
+        new MqttPublishReleaseMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.subscribe:
       //return new MqttSubscribeMessage(header, messageStream);
