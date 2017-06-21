@@ -1548,5 +1548,101 @@ void main() {
           (baseMessage as MqttSubscribeMessage).payload.subscriptions["mark"],
           MqttQos.exactlyOnce);
     });
+    test("Serialisation - Single topic", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(11);
+      expected[0] = 0x8A;
+      expected[1] = 0x09;
+      expected[2] = 0x00;
+      expected[3] = 0x02;
+      expected[4] = 0x00;
+      expected[5] = 0x04;
+      expected[6] = 'f'.codeUnitAt(0);
+      expected[7] = 'r'.codeUnitAt(0);
+      expected[8] = 'e'.codeUnitAt(0);
+      expected[9] = 'd'.codeUnitAt(0);
+      expected[10] = 0x01;
+      final MqttMessage msg = new MqttSubscribeMessage()
+          .toTopic("fred")
+          .atQos(MqttQos.atLeastOnce)
+          .withMessageIdentifier(2)
+          .expectAcknowledgement()
+          .isDuplicate();
+      print("Subscribe - Single topic::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // Start of VH: MsgID Byte1
+      expect(actual[3], expected[3]); // MsgID Byte 2
+      expect(actual[4], expected[4]); // Topic Length B1
+      expect(actual[5], expected[5]); // Topic Length B2
+      expect(actual[6], expected[6]); // f
+      expect(actual[7], expected[7]); // r
+      expect(actual[8], expected[8]); // e
+      expect(actual[9], expected[9]); // d
+    });
+    test("Serialisation - multi topic", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(18);
+      expected[0] = 0x82;
+      expected[1] = 0x10;
+      expected[2] = 0x00;
+      expected[3] = 0x03;
+      expected[4] = 0x00;
+      expected[5] = 0x04;
+      expected[6] = 'f'.codeUnitAt(0);
+      expected[7] = 'r'.codeUnitAt(0);
+      expected[8] = 'e'.codeUnitAt(0);
+      expected[9] = 'd'.codeUnitAt(0);
+      expected[10] = 0x01;
+      expected[11] = 0x00;
+      expected[12] = 0x04;
+      expected[13] = 'm'.codeUnitAt(0);
+      expected[14] = 'a'.codeUnitAt(0);
+      expected[15] = 'r'.codeUnitAt(0);
+      expected[16] = 'k'.codeUnitAt(0);
+      expected[17] = 0x02;
+      final MqttMessage msg = new MqttSubscribeMessage()
+          .toTopic("fred")
+          .atQos(MqttQos.atLeastOnce)
+          .toTopic("mark")
+          .atQos(MqttQos.exactlyOnce)
+          .withMessageIdentifier(3)
+          .expectAcknowledgement();
+      print("Subscribe - multi topic::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // Start of VH: MsgID Byte1
+      expect(actual[3], expected[3]); // MsgID Byte 2
+      expect(actual[4], expected[4]); // Topic Length B1
+      expect(actual[5], expected[5]); // Topic Length B2
+      expect(actual[6], expected[6]); // f
+      expect(actual[7], expected[7]); // r
+      expect(actual[8], expected[8]); // e
+      expect(actual[9], expected[9]); // d
+      expect(actual[10], expected[10]); // Qos (LeastOnce)
+      expect(actual[11], expected[11]); // Topic Length B1
+      expect(actual[12], expected[12]); // Topic Length B2
+      expect(actual[13], expected[13]); // m
+      expect(actual[14], expected[14]); // a
+      expect(actual[15], expected[15]); // r
+      expect(actual[16], expected[16]); // k
+      expect(actual[17], expected[17]); // Qos (ExactlyOnce)
+    });
+    test("Add subscription over existing subscription", () {
+      final MqttSubscribeMessage msg = new MqttSubscribeMessage();
+      msg.payload.addSubscription("A/Topic", MqttQos.atMostOnce);
+      msg.payload.addSubscription("A/Topic", MqttQos.atLeastOnce);
+      expect(msg.payload.subscriptions["A/Topic"], MqttQos.atLeastOnce);
+    });
+    test("Clear subscription", () {
+      final MqttSubscribeMessage msg = new MqttSubscribeMessage();
+      msg.payload.addSubscription("A/Topic", MqttQos.atMostOnce);
+      msg.payload.clearSubscriptions();
+      expect(msg.payload.subscriptions.length, 0);
+    });
   });
 }
