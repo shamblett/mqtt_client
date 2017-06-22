@@ -1816,7 +1816,7 @@ void main() {
     });
   });
 
-  group("Unubscribe", () {
+  group("Unsubscribe", () {
     test("Deserialisation - Single topic", () {
       // Message Specs________________
       // <A2><08><00><03><00><04>fred (Unsubscribe to topic fred)
@@ -1974,6 +1974,74 @@ void main() {
       msg.payload.addSubscription("A/Topic");
       msg.payload.clearSubscriptions();
       expect(msg.payload.subscriptions.length, 0);
+    });
+  });
+
+  group("Unsubscribe Ack", () {
+    test("Deserialisation - Valid payload", () {
+      // Message Specs________________
+      // <B0><02><00><04> (Subscribe ack for message id 4)
+      final List<int> sampleMessage = [
+        0xB0,
+        0x02,
+        0x00,
+        0x04,
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Unsubscribe Ack - Valid payload::" + baseMessage.toString());
+      // Check that the message was correctly identified as a publish release message.
+      expect(baseMessage, new isInstanceOf<MqttUnsubscribeAckMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.messageType, MqttMessageType.unsubscribeAck);
+      expect(baseMessage.header.messageSize, 2);
+      expect(
+          (baseMessage as MqttUnsubscribeAckMessage)
+              .variableHeader
+              .messageIdentifier,
+          4);
+    });
+    test("Serialisation - Valid payload", () {
+      // Publish complete msg with message identifier 4
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(4);
+      expected[0] = 0xB0;
+      expected[1] = 0x02;
+      expected[2] = 0x0;
+      expected[3] = 0x4;
+      final MqttUnsubscribeAckMessage msg =
+      new MqttUnsubscribeAckMessage().withMessageIdentifier(4);
+      print("Unsubscribe Ack - Valid payload::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // connect ack - compression? always empty
+      expect(actual[3], expected[3]); // return code.
+    });
+  });
+
+  group("Unimplemented", () {
+    test("Deserialisation - Invalid payload", () {
+      final List<int> sampleMessage = [
+        0xFF,
+        0x02,
+        0x00,
+        0x04,
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      bool raised = false;
+      try {
+        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        print(baseMessage.toString());
+      } catch (InvalidMessageException) {
+        raised = true;
+      }
+      expect(raised, isTrue);
     });
   });
 }

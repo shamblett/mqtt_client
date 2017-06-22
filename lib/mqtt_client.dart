@@ -120,6 +120,10 @@ part 'src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart';
 
 part 'src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart';
 
+part 'src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart';
+
+part 'src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart';
+
 part 'src/messages/publish/mqtt_client_mqtt_publish_payload.dart';
 
 part 'src/messages/mqtt_client_mqtt_message_type.dart';
