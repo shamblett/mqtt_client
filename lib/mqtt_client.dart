@@ -10,6 +10,7 @@ library mqtt_client;
 import 'dart:typed_data';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:observable/observable.dart';
 
@@ -19,6 +20,8 @@ part 'src/mqtt_client_constants.dart';
 part 'src/exception/mqtt_client_client_identifier_exception.dart';
 
 part 'src/exception/mqtt_client_connection_exception.dart';
+
+part 'src/exception/mqtt_client_noconnection_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_header_exception.dart';
 
@@ -31,6 +34,8 @@ part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_connection_state.dart';
 
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
+
+part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
 part 'src/mqtt_client_topic.dart';
 
