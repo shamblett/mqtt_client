@@ -49,7 +49,8 @@ class MqttMessageFactory {
         new MqttSubscribeAckMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.unsubscribe:
-      //return new MqttUnsubscribeMessage(header, messageStream);
+        message =
+        new MqttUnsubscribeMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.unsubscribeAck:
       //return new MqttUnsubscribeAckMessage(header, messageStream);

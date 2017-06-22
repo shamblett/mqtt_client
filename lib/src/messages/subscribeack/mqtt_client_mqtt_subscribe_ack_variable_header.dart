@@ -9,7 +9,7 @@ part of mqtt_client;
 
 /// Implementation of the variable header for an MQTT Subscribe Ack message.
 class MqttSubscribeAckVariableHeader extends MqttVariableHeader {
-  /// Initializes a new instance of the MqttPublishReleaseVariableHeader class.
+  /// Initializes a new instance of the MqttSubscribeAckVariableHeader class.
   MqttSubscribeAckVariableHeader();
 
   /// Initializes a new instance of the MqttSubscribeAckVariableHeader class.

@@ -1815,4 +1815,165 @@ void main() {
       expect(msg.payload.qosGrants.length, 0);
     });
   });
+
+  group("Unubscribe", () {
+    test("Deserialisation - Single topic", () {
+      // Message Specs________________
+      // <A2><08><00><03><00><04>fred (Unsubscribe to topic fred)
+      final List<int> sampleMessage = [
+        0xA2,
+        0x08,
+        0x00,
+        0x03,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Unsubscribe - Single topic::" + baseMessage.toString());
+      // Check that the message was correctly identified as an unsubscribe message.
+      expect(baseMessage, new isInstanceOf<MqttUnsubscribeMessage>());
+      expect(
+          (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
+          1);
+      expect(
+          (baseMessage as MqttUnsubscribeMessage)
+              .payload
+              .subscriptions
+              .contains("fred"),
+          isTrue);
+    });
+    test("Deserialisation - Multi topic", () {
+      // Message Specs________________
+      // <A2><0E><00><03><00><04>fred<00><04>mark (Unsubscribe to topic fred, mark)
+      final List<int> sampleMessage = [
+        0xA2,
+        0x0E,
+        0x00,
+        0x03,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x00,
+        0x04,
+        'm'.codeUnitAt(0),
+        'a'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'k'.codeUnitAt(0),
+      ];
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = new MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print("Unsubscribe - Multi topic::" + baseMessage.toString());
+      // Check that the message was correctly identified as an unsubscribe message.
+      expect(baseMessage, new isInstanceOf<MqttUnsubscribeMessage>());
+      expect(
+          (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
+          2);
+      expect(
+          (baseMessage as MqttUnsubscribeMessage)
+              .payload
+              .subscriptions
+              .contains("fred"),
+          isTrue);
+      expect(
+          (baseMessage as MqttUnsubscribeMessage)
+              .payload
+              .subscriptions
+              .contains("mark"),
+          isTrue);
+    });
+    test("Serialisation - Single topic", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(10);
+      expected[0] = 0xAA;
+      expected[1] = 0x08;
+      expected[2] = 0x00;
+      expected[3] = 0x03;
+      expected[4] = 0x00;
+      expected[5] = 0x04;
+      expected[6] = 'f'.codeUnitAt(0);
+      expected[7] = 'r'.codeUnitAt(0);
+      expected[8] = 'e'.codeUnitAt(0);
+      expected[9] = 'd'.codeUnitAt(0);
+      final MqttMessage msg = new MqttUnsubscribeMessage()
+          .fromTopic("fred")
+          .withMessageIdentifier(3)
+          .expectAcknowledgement()
+          .isDuplicate();
+      print("Unsubscribe - Single topic::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // Start of VH: MsgID Byte1
+      expect(actual[3], expected[3]); // MsgID Byte 2
+      expect(actual[4], expected[4]); // Topic Length B1
+      expect(actual[5], expected[5]); // Topic Length B2
+      expect(actual[6], expected[6]); // f
+      expect(actual[7], expected[7]); // r
+      expect(actual[8], expected[8]); // e
+      expect(actual[9], expected[9]); // d
+    });
+    test("Serialisation - multi topic", () {
+      final typed.Uint8Buffer expected = new typed.Uint8Buffer(16);
+      expected[0] = 0xA2;
+      expected[1] = 0x0E;
+      expected[2] = 0x00;
+      expected[3] = 0x03;
+      expected[4] = 0x00;
+      expected[5] = 0x04;
+      expected[6] = 'f'.codeUnitAt(0);
+      expected[7] = 'r'.codeUnitAt(0);
+      expected[8] = 'e'.codeUnitAt(0);
+      expected[9] = 'd'.codeUnitAt(0);
+      expected[10] = 0x00;
+      expected[11] = 0x04;
+      expected[12] = 'm'.codeUnitAt(0);
+      expected[13] = 'a'.codeUnitAt(0);
+      expected[14] = 'r'.codeUnitAt(0);
+      expected[15] = 'k'.codeUnitAt(0);
+      final MqttMessage msg = new MqttUnsubscribeMessage()
+          .fromTopic("fred")
+          .fromTopic("mark")
+          .withMessageIdentifier(3)
+          .expectAcknowledgement();
+      print("Unubscribe - multi topic::" + msg.toString());
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // Start of VH: MsgID Byte1
+      expect(actual[3], expected[3]); // MsgID Byte 2
+      expect(actual[4], expected[4]); // Topic Length B1
+      expect(actual[5], expected[5]); // Topic Length B2
+      expect(actual[6], expected[6]); // f
+      expect(actual[7], expected[7]); // r
+      expect(actual[8], expected[8]); // e
+      expect(actual[9], expected[9]); // d
+      expect(actual[10], expected[10]); // Topic Length B1
+      expect(actual[11], expected[11]); // Topic Length B2
+      expect(actual[12], expected[12]); // m
+      expect(actual[13], expected[13]); // a
+      expect(actual[14], expected[14]); // r
+      expect(actual[15], expected[15]); // k
+    });
+    test("Clear subscription", () {
+      final MqttUnsubscribeMessage msg = new MqttUnsubscribeMessage();
+      msg.payload.addSubscription("A/Topic");
+      msg.payload.clearSubscriptions();
+      expect(msg.payload.subscriptions.length, 0);
+    });
+  });
 }

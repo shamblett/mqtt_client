@@ -7,13 +7,13 @@
 
 part of mqtt_client;
 
-/// Implementation of the variable header for an MQTT Subscribe message.
-class MqttSubscribeVariableHeader extends MqttVariableHeader {
-  /// Initializes a new instance of the MqttSubscribeVariableHeader class.
-  MqttSubscribeVariableHeader();
+/// Implementation of the variable header for an MQTT Unsubscribe message.
+class MqttUnsubscribeVariableHeader extends MqttVariableHeader {
+  /// Initializes a new instance of the MqttUnsubscribeVariableHeader class.
+  MqttUnsubscribeVariableHeader();
 
-  /// Initializes a new instance of the MqttSubscribeVariableHeader class.
-  MqttSubscribeVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
+  /// Initializes a new instance of the MqttUnsubscribeVariableHeader class.
+  MqttUnsubscribeVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }
 
@@ -33,6 +33,6 @@ class MqttSubscribeVariableHeader extends MqttVariableHeader {
   }
 
   String toString() {
-    return "Subscribe Variable Header: MessageIdentifier={$messageIdentifier}";
+    return "Unsubscribe VariableHeader Variable Header: MessageIdentifier={$messageIdentifier}";
   }
 }
