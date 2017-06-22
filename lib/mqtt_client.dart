@@ -30,6 +30,8 @@ part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_connection_state.dart';
 
+part 'package:mqtt_client/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
+
 part 'src/mqtt_client_topic.dart';
 
 part 'src/mqtt_client_publication_topic.dart';
