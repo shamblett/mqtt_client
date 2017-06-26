@@ -38,6 +38,8 @@ part 'package:mqtt_client/src/connectionhandling/mqtt_client_connection_state.da
 
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
 
+part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart';
+
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
 part 'src/mqtt_client_topic.dart';

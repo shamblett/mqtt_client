@@ -20,6 +20,6 @@ class MessageDataAvailable {
     this.messageBytes = messageBytes;
     final typed.Uint8Buffer tmp = new typed.Uint8Buffer();
     tmp.addAll(messageBytes);
-    stream = new MqttByteBuffer(tmp);
+    this.stream = new MqttByteBuffer(tmp);
   }
 }

@@ -34,9 +34,7 @@ abstract class IMqttConnectionHandler {
 
   /// Unregisters the specified callbacks so it not longer receives messages of the specified type.
   /// The message type the callback currently receives
-  /// The callback to unregister.
-  void unRegisterForMessage(MqttMessageType msgType,
-      MessageCallbackFunction msgProcessorCallback);
+  void unRegisterForMessage(MqttMessageType msgType);
 
   /// Registers a callback to be executed whenever a message is sent by the connection handler.
   void registerForAllSentMessages(MessageCallbackFunction sentMsgCallback);
