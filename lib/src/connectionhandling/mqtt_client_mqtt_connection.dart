@@ -52,7 +52,7 @@ class ReadWrapper {
 }
 
 /// The MQTT connection class
-class MqttConnection {
+class MqttConnection extends Object with events.EventEmitter {
   /// The socket that maintains the connection to the MQTT broker.
   Socket tcpClient;
 
@@ -99,7 +99,7 @@ class MqttConnection {
       final typed.Uint8Buffer lengthBytes = MqttHeader.readLengthBytes(stream);
       final int remainingLength = MqttHeader.calculateLength(lengthBytes);
       if (remainingLength == 0) {
-        //TODO FireDataAvailableEvent(readWrapper.MessageBytes);
+        emitEvent(new MessageDataAvailable(readWrapper.messageBytes));
       } else {
         // Total bytes of content is the remaining length plus the header.
         readWrapper.totalBytes =
@@ -115,7 +115,7 @@ class MqttConnection {
         readWrapper.recalculateNextReadSize();
       } else {
         readWrapper.readState = ConnectionReadState.header;
-        //TODO FireDataAvailableEvent(readWrapper.MessageBytes);
+        emitEvent(new MessageDataAvailable(readWrapper.messageBytes));
       }
     }
     // If we are reading a header then recreate the read wrapper for the next message
@@ -125,10 +125,16 @@ class MqttConnection {
   }
 
   /// OnError listener callback
-  void _onError(Error error) {}
+  void _onError(Error error) {
+    _disconnect();
+  }
 
   /// OnDone listener callback
-  void _onDone() {}
+  void _onDone() {
+    // We should never be done
+    _disconnect();
+    throw new SocketException("On Done called, disconnecting.");
+  }
 
   /// Disconnects from the message broker
   void _disconnect() {

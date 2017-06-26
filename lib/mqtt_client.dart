@@ -13,9 +13,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:observable/observable.dart';
+import 'package:eventable/eventable.dart' as events;
 
 /// The mqtt_client package exported interface
 part 'src/mqtt_client_constants.dart';
+
+part 'src/mqtt_client_events.dart';
 
 part 'src/exception/mqtt_client_client_identifier_exception.dart';
 
