@@ -42,12 +42,29 @@ class MqttConnectionKeepAlive {
   bool _shutdownPadlock = false;
 
   /// Pings the message broker if there has been no activity for the specified amount of idle time.
-  void _pingRequired(Timer timer) {}
+  void _pingRequired(Timer timer) {
+    if (_shutdownPadlock) {
+      return;
+    } else {
+      _shutdownPadlock = true;
+    }
+    final MqttPingRequestMessage pingMsg = new MqttPingRequestMessage();
+    _connectionHandler.sendMessage(pingMsg);
+    _shutdownPadlock = false;
+  }
 
   /// Signal to the keepalive that a ping request has been received from the message broker.
   /// The effect of calling this method on the keepalive handler is the transmission of a ping response
   /// message to the message broker on the current connection.
   bool _pingRequestReceived(MqttMessage pingMsg) {
+    if (_shutdownPadlock) {
+      return false;
+    } else {
+      _shutdownPadlock = true;
+    }
+    final MqttPingResponseMessage pingMsg = new MqttPingResponseMessage();
+    _connectionHandler.sendMessage(pingMsg);
+    _shutdownPadlock = false;
     return true;
   }
 
