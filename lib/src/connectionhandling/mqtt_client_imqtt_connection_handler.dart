@@ -12,7 +12,6 @@ typedef bool MessageCallbackFunction(MqttMessage message);
 
 /// The connection handler interface class
 abstract class IMqttConnectionHandler {
-  ConnectionState state;
 
   /// Closes a connection.
   void close();
