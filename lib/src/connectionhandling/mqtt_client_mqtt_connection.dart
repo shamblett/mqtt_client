@@ -62,8 +62,17 @@ class MqttConnection extends Object with events.EventEmitter {
   /// The read wrapper
   ReadWrapper readWrapper;
 
+  /// Default constructor
+  MqttConnection();
+
   /// Initializes a new instance of the MqttConnection class.
-  MqttConnection(String server, int port) {
+  MqttConnection.fromConnect(String server, int port) {
+    connect(server, port);
+  }
+
+  /// Connect
+  Future connect(String server, int port) {
+    final Completer completer = new Completer();
     try {
       // Connect and save the socket. Do this lazily,
       // we wont process anything until the connection state moves to
@@ -72,12 +81,14 @@ class MqttConnection extends Object with events.EventEmitter {
         tcpClient = socket;
         readWrapper = new ReadWrapper();
         _startListening();
-      });
+        return completer.complete();
+      }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
-          "The connection to the message broker {$server}:{$port} could not be made.";
+          "MqttConnection::The connection to the message broker {$server}:{$port} could not be made.";
       throw new NoConnectionException(message);
     }
+    return completer.future;
   }
 
   /// Create the listening stream subscription and subscribe the callbacks
@@ -125,7 +136,7 @@ class MqttConnection extends Object with events.EventEmitter {
   }
 
   /// OnError listener callback
-  void _onError(Error error) {
+  void _onError(error) {
     _disconnect();
   }
 
@@ -133,12 +144,14 @@ class MqttConnection extends Object with events.EventEmitter {
   void _onDone() {
     // We should never be done
     _disconnect();
-    throw new SocketException("On Done called, disconnecting.");
+    throw new SocketException("MqttConnection::On Done called, disconnecting.");
   }
 
   /// Disconnects from the message broker
   void _disconnect() {
-    tcpClient.close();
+    if (tcpClient != null) {
+      tcpClient.close();
+    }
   }
 
   /// Sends the message in the stream to the broker.
@@ -151,10 +164,5 @@ class MqttConnection extends Object with events.EventEmitter {
     final typed.Uint8Buffer messageBytes = message.read(message.length);
     tcpClient.add(messageBytes.toList());
     _sendPadlock = false;
-  }
-
-  /// Initiate a new connection to a message broker
-  static MqttConnection connect(String server, int port) {
-    return new MqttConnection(server, port);
   }
 }

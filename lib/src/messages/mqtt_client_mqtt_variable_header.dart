@@ -31,7 +31,7 @@ class MqttVariableHeader {
   /// Defines the maximum allowable lag, in seconds, between expected messages.
   /// The spec indicates that clients won't be disconnected until KeepAlive + 1/2 KeepAlive time period
   /// elapses.
-  int keepAlive;
+  int keepAlive = 0;
 
   MqttConnectReturnCode returnCode;
   String topicName;

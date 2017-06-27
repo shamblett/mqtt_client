@@ -1,24 +1,31 @@
 import 'dart:io';
+import'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:typed_data/typed_data.dart' as typed;
+
+typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise.
 class MockBroker {
   int brokerPort = 1883;
   ServerSocket listener;
-
+  MessageHandlerFunction handler;
   Socket client = null;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = new typed.Uint8Buffer(1);
 
-  MockBroker() {
+  MockBroker();
+
+  Future start() {
+    final Completer completer = new Completer();
     ServerSocket.bind("localhost", brokerPort).then((ServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
+      return completer.complete();
     });
+    return completer.future;
   }
-
   void _connectAccept(Socket clientSocket) {
     client = clientSocket;
     client.listen(_dataArrivedOnConnection);
@@ -40,46 +47,23 @@ class MockBroker {
       // We have all the data
       final MqttMessage msg = MqttMessage.createFrom(networkstream);
       print(msg.toString());
+      handler(networkstream.buffer);
       networkstream = null;
     } else {
       final int remaining = length - networkstream.length;
       print("Mock Broker:: remaining bytes $remaining");
     }
   }
-//
-//  /// <summary>
-//  /// Sets a function that will be passed the next message received by the faked out broker.
-//  /// </summary>
-//  /// <param name="handler"></param>
-//  public void SetMessageHandler(Action<byte[]> handler)
-//  {
-//  messageHandler = handler;
-//  }
-//
-//  /// <summary>
-//  /// Sends the message to the client connected to the broker.
-//  /// </summary>
-//  /// <param name="msg">The Mqtt Message.</param>
-//  public void SendMessage(MqttMessage msg)
-//  {
-//  msg.WriteTo(networkStream);
-//  networkStream.Flush();
-//  }
-//
-//  #region IDisposable Members
-//
-//  public void Dispose()
-//  {
-//  listener.Stop();
-//  GC.SuppressFinalize(this);
-//  }
-//
-//  #endregion
-//
-//  internal void SendMessage(MqttConnectAckMessage ack)
-//  {
-//  throw new NotImplementedException();
-//  }
-//}
 
+  /// Sets a function that will be passed the next message received by the faked out broker.
+  void setMessageHandler(MessageHandlerFunction messageHandler) {
+    handler = messageHandler;
+  }
+
+  /// Sends the message to the client connected to the broker.
+  void sendMessage(MqttMessage msg) {
+    MqttByteBuffer mess;
+    msg.writeTo(mess);
+    _dataArrivedOnConnection(mess.buffer.toList());
+  }
 }

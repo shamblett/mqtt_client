@@ -10,16 +10,17 @@ part of mqtt_client;
 /// Connection handler that performs connections and disconnections to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler
     with events.EventDetector {
-  static const int maxConnectionAttempts = 5;
+  static const int maxConnectionAttempts = 3;
 
   /// Synchronously connect to the specific Mqtt Connection.
-  ConnectionState internalConnect(String hostname, int port,
-      MqttConnectMessage connectMessage) {
+  Future<ConnectionState> internalConnect(String hostname, int port,
+      MqttConnectMessage connectMessage) async {
     int connectionAttempts = 0;
     do {
       // Initiate the connection
       connectionState = ConnectionState.connecting;
-      connection = MqttConnection.connect(hostname, port);
+      connection = new MqttConnection();
+      await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       this.listen(connection, MessageDataAvailable, this.messageDataAvailable);
       // Transmit the required connection message to the broker.

@@ -27,16 +27,16 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Connect to the specific Mqtt Connection.
   ConnectionState connect(String server, int port, MqttConnectMessage message) {
     try {
-      connectionState = internalConnect(server, port, message);
+      internalConnect(server, port, message);
     } catch (ConnectionException) {
-      connectionState = ConnectionState.faulted;
+      this.connectionState = ConnectionState.faulted;
       rethrow;
     }
-    return connectionState;
+    return this.connectionState;
   }
 
   /// Connect to the specific Mqtt Connection.
-  ConnectionState internalConnect(String hostname, int port,
+  Future<ConnectionState> internalConnect(String hostname, int port,
       MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.
