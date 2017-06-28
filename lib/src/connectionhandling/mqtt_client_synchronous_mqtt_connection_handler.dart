@@ -26,7 +26,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       // Transmit the required connection message to the broker.
       sendMessage(connectMessage);
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
-      sleep(const Duration(seconds: 5));
+      await MqttUtilities.asyncSleep(5);
       // If we don't get a response in 5 seconds, dispose the connection and rebuild it
       connectionState = ConnectionState.disconnected;
     } while (connectionState != ConnectionState.connected &&

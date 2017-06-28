@@ -1,5 +1,5 @@
 import 'dart:io';
-import'dart:async';
+import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
@@ -22,16 +22,19 @@ class MockBroker {
     ServerSocket.bind("localhost", brokerPort).then((ServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
+      print("MockBroker::we are bound");
       return completer.complete();
     });
     return completer.future;
   }
   void _connectAccept(Socket clientSocket) {
+    print("MockBroker::connectAccept");
     client = clientSocket;
     client.listen(_dataArrivedOnConnection);
   }
 
   void _dataArrivedOnConnection(List<int> data) {
+    print("MockBroker::data arrived ${data.toString()}");
     final int bytesRead = data.length;
     final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
@@ -62,6 +65,7 @@ class MockBroker {
 
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
+    print("MockBroker::sending message ${msg.header.messageType.toString()}");
     MqttByteBuffer mess;
     msg.writeTo(mess);
     _dataArrivedOnConnection(mess.buffer.toList());

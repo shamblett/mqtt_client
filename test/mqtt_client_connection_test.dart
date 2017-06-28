@@ -58,17 +58,16 @@ void main() {
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
+
       broker = new MockBroker();
-      await broker.start();
-      broker.setMessageHandler(messageHandler);
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
-      final t1 = expectAsync0(() {
+      broker.setMessageHandler(messageHandler);
+      broker.start().then((gg) {
         ch.connect(mockBrokerAddress, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.connected);
       });
-      t1();
+      expect(ch.connectionState, ConnectionState.connected);
     });
   });
 }
