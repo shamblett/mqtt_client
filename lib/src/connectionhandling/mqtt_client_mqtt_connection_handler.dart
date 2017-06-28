@@ -25,14 +25,15 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   MqttConnectionHandler();
 
   /// Connect to the specific Mqtt Connection.
-  ConnectionState connect(String server, int port, MqttConnectMessage message) {
+  Future connect(String server, int port, MqttConnectMessage message) async {
+    final Completer completer = new Completer();
     try {
-      internalConnect(server, port, message);
+      await internalConnect(server, port, message);
+      return completer.complete(this.connectionState);
     } catch (ConnectionException) {
       this.connectionState = ConnectionState.faulted;
       rethrow;
     }
-    return this.connectionState;
   }
 
   /// Connect to the specific Mqtt Connection.

@@ -46,7 +46,6 @@ void main() {
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.disconnected);
       });
       t1();
     });
@@ -63,10 +62,9 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandler);
-      broker.start().then((gg) {
-        ch.connect(mockBrokerAddress, mockBrokerPort,
+      await broker.start();
+      await ch.connect(mockBrokerAddress, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
-      });
       expect(ch.connectionState, ConnectionState.connected);
     });
   });

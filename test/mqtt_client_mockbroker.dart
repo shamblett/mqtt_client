@@ -38,14 +38,14 @@ class MockBroker {
     final int bytesRead = data.length;
     final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
-    final typed.Uint8Buffer lengthBytes =
-    MqttHeader.readLengthBytes(networkstream);
-    final int length = MqttHeader.calculateLength(lengthBytes);
     if (networkstream == null) {
       networkstream = new MqttByteBuffer(dataBytesBuff);
     } else {
       networkstream.write(dataBytesBuff);
     }
+    final typed.Uint8Buffer lengthBytes =
+    MqttHeader.readLengthBytes(networkstream);
+    final int length = MqttHeader.calculateLength(lengthBytes);
     if (networkstream.length == length) {
       // We have all the data
       final MqttMessage msg = MqttMessage.createFrom(networkstream);
