@@ -30,6 +30,8 @@ class MqttByteBuffer {
 
   typed.Uint8Buffer get buffer => _buffer;
 
+  set buffer(typed.Uint8Buffer buff) => _buffer = buff;
+
   /// Resets the position to 0
   void reset() {
     _position = 0;

@@ -24,8 +24,8 @@ class MqttVariableHeader {
   /// The length, in bytes, consumed by the variable header.
   int length = 0;
 
-  String protocolName;
-  int protocolVersion;
+  String protocolName = "";
+  int protocolVersion = 0;
   MqttConnectFlags connectFlags;
 
   /// Defines the maximum allowable lag, in seconds, between expected messages.
@@ -33,9 +33,9 @@ class MqttVariableHeader {
   /// elapses.
   int keepAlive = 0;
 
-  MqttConnectReturnCode returnCode;
-  String topicName;
-  int messageIdentifier;
+  MqttConnectReturnCode returnCode = MqttConnectReturnCode.brokerUnavailable;
+  String topicName = "";
+  int messageIdentifier = 0;
 
   /// Initializes a new instance of the MqttVariableHeader class.
   MqttVariableHeader() {

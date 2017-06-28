@@ -4,6 +4,7 @@
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
+import 'dart:typed_data';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
@@ -50,6 +51,9 @@ void main() {
       t1();
     });
     test("Successful response", () async {
+      final String end =
+      Endianness.HOST_ENDIAN == Endianness.BIG_ENDIAN ? "Big" : "Little";
+      print("We are $end way round");
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttByteBuffer buff = new MqttByteBuffer(messageArrived);
         final MqttConnectMessage connect = MqttMessage.createFrom(buff);
@@ -64,7 +68,7 @@ void main() {
       broker.setMessageHandler(messageHandler);
       await broker.start();
       await ch.connect(mockBrokerAddress, mockBrokerPort,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+          new MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
     });
   });

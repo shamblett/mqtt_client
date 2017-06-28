@@ -5,6 +5,19 @@ import 'package:typed_data/typed_data.dart' as typed;
 
 typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 
+/// Helper methods for test message serialization and deserialization
+class MessageSerializationHelper {
+  /// Invokes the serialization of a message to get an array of bytes that represent the message.
+  static typed.Uint8Buffer getMessageBytes(MqttMessage msg) {
+    final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+    final MqttByteBuffer ms = new MqttByteBuffer(buff);
+    msg.writeTo(ms);
+    ms.seek(0);
+    final typed.Uint8Buffer msgBytes = ms.read(ms.length);
+    return msgBytes;
+  }
+}
+
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise.
 class MockBroker {
@@ -35,7 +48,6 @@ class MockBroker {
 
   void _dataArrivedOnConnection(List<int> data) {
     print("MockBroker::data arrived ${data.toString()}");
-    final int bytesRead = data.length;
     final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     if (networkstream == null) {
@@ -43,19 +55,12 @@ class MockBroker {
     } else {
       networkstream.write(dataBytesBuff);
     }
-    final typed.Uint8Buffer lengthBytes =
-    MqttHeader.readLengthBytes(networkstream);
-    final int length = MqttHeader.calculateLength(lengthBytes);
-    if (networkstream.length == length) {
-      // We have all the data
+    networkstream.seek(0);
+    // Assume will have all the data for localhost testing purposes
       final MqttMessage msg = MqttMessage.createFrom(networkstream);
       print(msg.toString());
       handler(networkstream.buffer);
       networkstream = null;
-    } else {
-      final int remaining = length - networkstream.length;
-      print("Mock Broker:: remaining bytes $remaining");
-    }
   }
 
   /// Sets a function that will be passed the next message received by the faked out broker.
@@ -66,8 +71,8 @@ class MockBroker {
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print("MockBroker::sending message ${msg.header.messageType.toString()}");
-    MqttByteBuffer mess;
-    msg.writeTo(mess);
-    _dataArrivedOnConnection(mess.buffer.toList());
+    final typed.Uint8Buffer messBuff = MessageSerializationHelper
+        .getMessageBytes(msg);
+    client.writeAll(messBuff.toList());
   }
 }

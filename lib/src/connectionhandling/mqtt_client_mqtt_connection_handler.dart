@@ -21,7 +21,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   ConnectionState connectionState = ConnectionState.disconnected;
 
-  /// Initializes a new instance of the <see cref="MqttConnectionHandler" /> class.
+  /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
   /// Connect to the specific Mqtt Connection.
