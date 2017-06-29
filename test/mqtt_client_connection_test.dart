@@ -11,15 +11,15 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client_mockbroker.dart';
 
 void main() {
-  group("Synchronous MqttConnectionHandler", () {
-    // Group wide variables
-    MockBroker broker;
-    final String mockBrokerAddress = "localhost";
-    final int mockBrokerPort = 1883;
-    final String testClientId = "syncMqttTests";
-    final String nonExistantHostName = "aabbccddeeffeeddccbbaa.aa.bb";
-    final int badPort = 1884;
+  // Test wide variables
+  MockBroker broker;
+  final String mockBrokerAddress = "localhost";
+  final int mockBrokerPort = 1883;
+  final String testClientId = "syncMqttTests";
+  final String nonExistantHostName = "aabbccddeeffeeddccbbaa.aa.bb";
+  final int badPort = 1884;
 
+  group("Synchronous MqttConnectionHandler", () {
     test("Connect to bad host name", () {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
@@ -51,9 +51,6 @@ void main() {
       t1();
     });
     test("Successful response", () async {
-      final String end =
-      Endianness.HOST_ENDIAN == Endianness.BIG_ENDIAN ? "Big" : "Little";
-      print("We are $end way round");
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttByteBuffer buff = new MqttByteBuffer(messageArrived);
         final MqttConnectMessage connect = MqttMessage.createFrom(buff);
@@ -70,6 +67,42 @@ void main() {
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
+    });
+  });
+
+  group("Connection Keep Alive ", () {
+    test("Successful response", () async {
+      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final MqttByteBuffer buff = new MqttByteBuffer(messageArrived);
+        final MqttConnectMessage connect = MqttMessage.createFrom(buff);
+        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
+        final MqttByteBuffer headerStream = new MqttByteBuffer(messageArrived);
+        final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
+        expect(header.messageType, MqttMessageType.pingRequest);
+        print("Connection Keep Alive - Successful response - PR received");
+        final MqttPingRequestMessage pr = new MqttPingRequestMessage();
+        final MqttPingRequestMessage msg = new MqttPingRequestMessage();
+        broker.sendMessage(msg);
+      }
+
+      final SynchronousMqttConnectionHandler ch =
+      new SynchronousMqttConnectionHandler();
+      broker.setMessageHandler(messageHandlerConnect);
+      await ch.connect(mockBrokerAddress, mockBrokerPort,
+          new MqttConnectMessage().withClientIdentifier(testClientId));
+      expect(ch.connectionState, ConnectionState.connected);
+      broker.setMessageHandler(messageHandlerPingRequest);
+      final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
+      final Stopwatch stopwatch = new Stopwatch()
+        ..start();
+      await MqttUtilities.asyncSleep(3);
+      print("Connection Keep Alive - Successful response - Elapsed time "
+          "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
     });
   });
 }
