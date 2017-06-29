@@ -131,7 +131,7 @@ class MqttHeader {
     return lengthBytes;
   }
 
-  /// Calculates the remaining length of an mqttmessage from the bytes that make up the length
+  /// Calculates the remaining length of an MqttMessage from the bytes that make up the length
   static int calculateLength(typed.Uint8Buffer lengthBytes) {
     var remainingLength = 0;
     var multiplier = 1;

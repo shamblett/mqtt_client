@@ -20,35 +20,10 @@ enum ConnectionReadState {
 class ReadWrapper {
   /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
   ReadWrapper() {
-    this.readState = ConnectionReadState.header;
     this.messageBytes = new List<int>();
-    this.totalBytes = 1; // default to header read size.
-    this.nextReadSize = this.totalBytes;
   }
-
-  /// The total bytes expected to be read from from the header of content
-  int totalBytes;
-
   /// The bytes associated with the message being read.
   List<int> messageBytes;
-
-  /// The amount of content to read during the next read.
-  int nextReadSize;
-
-  /// What is the connection currently reading.
-  ConnectionReadState readState;
-
-  /// A boolean that indicates whether the message read is complete
-  bool get isReadComplete => messageBytes.length < totalBytes;
-
-  /// Recalculates the number of bytes to read given the expected total size and the amount read so far.
-  void recalculateNextReadSize() {
-    if (totalBytes == 0) {
-      throw new SocketException(
-          "Total ReadBytes is 0, cannot calculate next read size.");
-    }
-    this.nextReadSize = totalBytes - messageBytes.length;
-  }
 }
 
 /// The MQTT connection class
@@ -103,35 +78,18 @@ class MqttConnection extends Object with events.EventEmitter {
       return;
     }
     readWrapper.messageBytes.addAll(data);
-    if (readWrapper.readState == ConnectionReadState.header) {
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
-      buff.addAll(data);
-      final MqttByteBuffer stream = new MqttByteBuffer(buff);
-      final typed.Uint8Buffer lengthBytes = MqttHeader.readLengthBytes(stream);
-      final int remainingLength = MqttHeader.calculateLength(lengthBytes);
-      if (remainingLength == 0) {
-        emitEvent(new MessageDataAvailable(readWrapper.messageBytes));
-      } else {
-        // Total bytes of content is the remaining length plus the header.
-        readWrapper.totalBytes =
-            remainingLength + readWrapper.messageBytes.length;
-        readWrapper.recalculateNextReadSize();
-        readWrapper.readState = ConnectionReadState.content;
-      }
-    } else if (readWrapper.readState == ConnectionReadState.content) {
-      // If we haven't yet read all of the message repeat the read otherwise if
-      // we're finished process the message and switch back to waiting for the next header.
-      if (readWrapper.isReadComplete) {
-        // Reset the read buffer to accommodate the remaining length (last - what was read)
-        readWrapper.recalculateNextReadSize();
-      } else {
-        readWrapper.readState = ConnectionReadState.header;
-        emitEvent(new MessageDataAvailable(readWrapper.messageBytes));
-      }
+    // Attempt to create a message, if this works we have a full message
+    // if not add the bytes to the read wrapper and wait for more bytes.
+    bool messageIsValid = true;
+    MqttMessage msg;
+    try {
+      final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);
+      msg = MqttMessage.createFrom(messageStream);
+    } catch (exception) {
+      messageIsValid = false;
     }
-    // If we are reading a header then recreate the read wrapper for the next message
-    if (readWrapper.readState == ConnectionReadState.header) {
-      readWrapper = new ReadWrapper();
+    if (messageIsValid) {
+      emitEvent(new MessageAvailable(msg));
     }
   }
 

@@ -24,6 +24,12 @@ class MqttByteBuffer {
     _length = _buffer.length;
   }
 
+  MqttByteBuffer.fromList(List<int> data) {
+    this._buffer = new typed.Uint8Buffer();
+    this._buffer.addAll(data);
+    _length = _buffer.length;
+  }
+
   int get position => _position;
 
   int get length => _length;

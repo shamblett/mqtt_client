@@ -22,16 +22,11 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       connection = new MqttConnection();
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
-      this.listen(connection, MessageDataAvailable, this.messageDataAvailable);
+      this.listen(connection, MessageAvailable, this.messageAvailable);
       // Transmit the required connection message to the broker.
-      print(
-          "SynchronousMqttConnectionHandler::connect message is ${connectMessage
-              .toString()}");
       sendMessage(connectMessage);
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
       await MqttUtilities.asyncSleep(5);
-      // If we don't get a response in 5 seconds, dispose the connection and rebuild it
-      connectionState = ConnectionState.disconnected;
     } while (connectionState != ConnectionState.connected &&
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.

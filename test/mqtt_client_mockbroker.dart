@@ -70,9 +70,10 @@ class MockBroker {
 
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
-    print("MockBroker::sending message ${msg.header.messageType.toString()}");
+    print("MockBroker::sending message ${msg.toString()}");
     final typed.Uint8Buffer messBuff = MessageSerializationHelper
         .getMessageBytes(msg);
-    client.writeAll(messBuff.toList());
+    print("MockBroker::sending message bytes ${messBuff.toString()}");
+    client.add(messBuff.toList());
   }
 }

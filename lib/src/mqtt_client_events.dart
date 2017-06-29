@@ -23,3 +23,14 @@ class MessageDataAvailable {
     this.stream = new MqttByteBuffer(tmp);
   }
 }
+
+/// The message available event raised by the Connection class
+class MessageAvailable {
+  /// Constructor
+  MessageAvailable(this._message);
+
+  /// The message associated with the event
+  MqttMessage _message;
+
+  MqttMessage get message => _message;
+}
