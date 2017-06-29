@@ -4,7 +4,6 @@
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
-import 'dart:typed_data';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
@@ -52,8 +51,6 @@ void main() {
     });
     test("Successful response", () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
-        final MqttByteBuffer buff = new MqttByteBuffer(messageArrived);
-        final MqttConnectMessage connect = MqttMessage.createFrom(buff);
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -73,8 +70,6 @@ void main() {
   group("Connection Keep Alive ", () {
     test("Successful response", () async {
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
-        final MqttByteBuffer buff = new MqttByteBuffer(messageArrived);
-        final MqttConnectMessage connect = MqttMessage.createFrom(buff);
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -85,7 +80,6 @@ void main() {
         final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
         expect(header.messageType, MqttMessageType.pingRequest);
         print("Connection Keep Alive - Successful response - PR received");
-        final MqttPingRequestMessage pr = new MqttPingRequestMessage();
         final MqttPingRequestMessage msg = new MqttPingRequestMessage();
         broker.sendMessage(msg);
       }
@@ -98,6 +92,7 @@ void main() {
       expect(ch.connectionState, ConnectionState.connected);
       broker.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
+      print("Connection Keep Alive - Successful response - ${ka.toString()}");
       final Stopwatch stopwatch = new Stopwatch()
         ..start();
       await MqttUtilities.asyncSleep(3);
