@@ -58,6 +58,10 @@ part 'src/mqtt_client_mqtt_qos.dart';
 
 part 'src/mqtt_client_mqtt_received_message.dart';
 
+part 'src/mqtt_client_publishing_manager.dart';
+
+part 'src/mqtt_client_ipublishing_manager.dart';
+
 part 'src/mqtt_client_subscription.dart';
 
 part 'src/mqtt_client_message_identifier_dispenser.dart';

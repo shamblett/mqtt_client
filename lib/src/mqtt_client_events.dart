@@ -34,3 +34,21 @@ class MessageAvailable {
 
   MqttMessage get message => _message;
 }
+
+/// Message recieved class for publishing
+class MessageReceived {
+  /// Constructor
+  MessageReceived(this._topic, this._message);
+
+  /// The message associated with the event
+  MqttMessage _message;
+
+  MqttMessage get message => _message;
+
+  /// The topic
+  PublicationTopic _topic;
+
+  PublicationTopic get topic => _topic;
+
+
+}
