@@ -23,11 +23,10 @@ class MqttConnectionKeepAlive {
     connectionHandler.registerForMessage(
         MqttMessageType.pingResponse, _pingResponseReceived);
     connectionHandler.registerForAllSentMessages(_messageSent);
-
     // Start the timer so we do a ping whenever required.
-    pingTimer = new Timer.periodic(
+    pingTimer = new Timer(
         new Duration(milliseconds: this.keepAlivePeriod),
-            (Timer timer) => _pingRequired);
+        _pingRequired);
   }
 
   /// The keep alive period in  milliseconds
@@ -42,7 +41,7 @@ class MqttConnectionKeepAlive {
   bool _shutdownPadlock = false;
 
   /// Pings the message broker if there has been no activity for the specified amount of idle time.
-  void _pingRequired(Timer timer) {
+  void _pingRequired() {
     if (_shutdownPadlock) {
       return;
     } else {
@@ -50,6 +49,9 @@ class MqttConnectionKeepAlive {
     }
     final MqttPingRequestMessage pingMsg = new MqttPingRequestMessage();
     _connectionHandler.sendMessage(pingMsg);
+    pingTimer = new Timer(
+        new Duration(milliseconds: this.keepAlivePeriod),
+        _pingRequired);
     _shutdownPadlock = false;
   }
 

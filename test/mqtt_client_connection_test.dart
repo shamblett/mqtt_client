@@ -69,6 +69,8 @@ void main() {
 
   group("Connection Keep Alive ", () {
     test("Successful response", () async {
+      int expectRequest = 0;
+
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -78,10 +80,17 @@ void main() {
       void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
         final MqttByteBuffer headerStream = new MqttByteBuffer(messageArrived);
         final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
-        expect(header.messageType, MqttMessageType.pingRequest);
-        print("Connection Keep Alive - Successful response - PR received");
-        final MqttPingRequestMessage msg = new MqttPingRequestMessage();
-        broker.sendMessage(msg);
+        if (expectRequest <= 3) {
+          print(
+              "Connection Keep Alive - Successful response - Ping Request received $expectRequest");
+          expect(header.messageType, MqttMessageType.pingRequest);
+          expectRequest++;
+        } else {
+          print(
+              "Connection Keep Alive - Successful response - Ping Response received $expectRequest");
+          expect(header.messageType, MqttMessageType.pingResponse);
+          expectRequest = 0;
+        }
       }
 
       final SynchronousMqttConnectionHandler ch =
@@ -92,12 +101,20 @@ void main() {
       expect(ch.connectionState, ConnectionState.connected);
       broker.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
-      print("Connection Keep Alive - Successful response - ${ka.toString()}");
+      print(
+          "Connection Keep Alive - Successful response - keepealive ms is ${ka
+              .keepAlivePeriod}");
+      print(
+          "Connection Keep Alive - Successful response - ping timer active is ${ka
+              .pingTimer.isActive.toString()}");
       final Stopwatch stopwatch = new Stopwatch()
         ..start();
-      await MqttUtilities.asyncSleep(3);
+      await MqttUtilities.asyncSleep(10);
       print("Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
+      final MqttPingRequestMessage prMess = new MqttPingRequestMessage();
+      broker.sendMessage(prMess);
+      await MqttUtilities.asyncSleep(2);
     });
   });
 }
