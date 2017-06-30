@@ -60,6 +60,8 @@ part 'src/mqtt_client_mqtt_received_message.dart';
 
 part 'src/mqtt_client_subscription.dart';
 
+part 'src/mqtt_client_message_identifier_dispenser.dart';
+
 part 'src/dataconvertors/mqtt_client_payload_convertor.dart';
 
 part 'src/dataconvertors/mqtt_client_passthru_payload_convertor.dart';
