@@ -8,7 +8,6 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'mqtt_client_test_connection_handler.dart';
-
 import 'package:typed_data/typed_data.dart' as typed;
 
 // Mock classes
@@ -50,7 +49,7 @@ void main() {
     });
   });
 
-  group("Publishing Manager", () {
+  group("Message registration", () {
     // Group wide
     final MockCON con = new MockCON();
     var message;
@@ -107,6 +106,21 @@ void main() {
       expect(
           testCH.messageProcessorRegistry[MqttMessageType.publishRelease],
           cbFunc);
+    });
+  });
+
+  group("Publishing", () {
+    test("Publish", () {
+      final PublishingManager pm = new PublishingManager(testCH);
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      buff[0] = 't'.codeUnitAt(0);
+      buff[1] = 'e'.codeUnitAt(0);
+      buff[2] = 's'.codeUnitAt(0);
+      buff[3] = 't'.codeUnitAt(0);
+      final int msgId = pm.publish(
+          new PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff);
+      expect(msgId, 1);
+      expect(pm.publishedMessages.containsKey(1), isFalse);
     });
   });
 }
