@@ -54,13 +54,22 @@ void main() {
     // Group wide
     final MockCON con = new MockCON();
     var message;
-    when(con.send(message)).thenReturn(print(message.toString()));
+    when(con.send(message)).thenReturn(() => print(message?.toString()));
     final MockCH ch = new MockCH();
     testCH.connection = con;
     ch.connection = con;
     MessageCallbackFunction cbFunc;
 
     test("Register for publish messages", () {
+      testCH.registerForMessage(MqttMessageType.publish, cbFunc);
+      expect(
+          testCH.messageProcessorRegistry
+              .containsKey(MqttMessageType.publish),
+          isTrue);
+      expect(
+          testCH.messageProcessorRegistry[MqttMessageType.publish], cbFunc);
+    });
+    test("Register for publish ack messages", () {
       testCH.registerForMessage(MqttMessageType.publishAck, cbFunc);
       expect(
           testCH.messageProcessorRegistry
@@ -68,6 +77,36 @@ void main() {
           isTrue);
       expect(
           testCH.messageProcessorRegistry[MqttMessageType.publishAck], cbFunc);
+    });
+    test("Register for publish complete messages", () {
+      testCH.registerForMessage(MqttMessageType.publishComplete, cbFunc);
+      expect(
+          testCH.messageProcessorRegistry
+              .containsKey(MqttMessageType.publishComplete),
+          isTrue);
+      expect(
+          testCH.messageProcessorRegistry[MqttMessageType.publishComplete],
+          cbFunc);
+    });
+    test("Register for publish received messages", () {
+      testCH.registerForMessage(MqttMessageType.publishReceived, cbFunc);
+      expect(
+          testCH.messageProcessorRegistry
+              .containsKey(MqttMessageType.publishReceived),
+          isTrue);
+      expect(
+          testCH.messageProcessorRegistry[MqttMessageType.publishReceived],
+          cbFunc);
+    });
+    test("Register for publish release messages", () {
+      testCH.registerForMessage(MqttMessageType.publishRelease, cbFunc);
+      expect(
+          testCH.messageProcessorRegistry
+              .containsKey(MqttMessageType.publishRelease),
+          isTrue);
+      expect(
+          testCH.messageProcessorRegistry[MqttMessageType.publishRelease],
+          cbFunc);
     });
   });
 }
