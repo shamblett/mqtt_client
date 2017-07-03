@@ -6,8 +6,20 @@
  */
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client_mockbroker.dart';
+
+// Mock classes
+class MockCH extends Mock implements MqttConnectionHandler {}
+
+class MockKA extends Mock implements MqttConnectionKeepAlive {
+  MqttConnectionKeepAlive ka;
+
+  MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
+    ka = new MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
+  }
+}
 
 void main() {
   // Test wide variables
@@ -17,6 +29,40 @@ void main() {
   final String testClientId = "syncMqttTests";
   final String nonExistantHostName = "aabbccddeeffeeddccbbaa.aa.bb";
   final int badPort = 1884;
+
+  group("Connection Keep Alive - Mock tests", () {
+    // Group setup
+    final MockCH ch = new MockCH();
+    final MockKA ka = new MockKA(ch, 3);
+    test("Message sent", () {
+      final MqttMessage msg = new MqttPingRequestMessage();
+      when(ka.messageSent(msg)).thenReturn(ka.ka.messageSent(msg));
+      expect(ka.messageSent(msg), isTrue);
+      verify(ka.messageSent(msg));
+    });
+    test("Ping response received", () {
+      final MqttMessage msg = new MqttPingResponseMessage();
+      when(ka.pingResponseReceived(msg))
+          .thenReturn(ka.ka.pingResponseReceived(msg));
+      expect(ka.pingResponseReceived(msg), isTrue);
+      verify(ka.pingResponseReceived(msg));
+    });
+    test("Ping request received", () {
+      final MqttMessage msg = new MqttPingRequestMessage();
+      when(ka.pingRequestReceived(msg))
+          .thenReturn(ka.ka.pingRequestReceived(msg));
+      expect(ka.pingRequestReceived(msg), isTrue);
+      verify(ka.pingRequestReceived(msg));
+    });
+    test("Ping required", () {
+      when(ka.pingRequired).thenReturn(ka.ka.pingRequired());
+      expect(ka.pingRequired(), isNull);
+      verify(ka.pingRequired());
+      expect(ka.ka.pingTimer, isNotNull);
+      expect(ka.ka.pingTimer.isActive, isTrue);
+      ka.ka.pingTimer.cancel();
+    });
+  });
 
   group("Synchronous MqttConnectionHandler", () {
     test("Connect to bad host name", () {
@@ -67,7 +113,7 @@ void main() {
     });
   });
 
-  group("Connection Keep Alive ", () {
+  group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
       int expectRequest = 0;
 
@@ -101,8 +147,7 @@ void main() {
       expect(ch.connectionState, ConnectionState.connected);
       broker.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
-      print(
-          "Connection Keep Alive - Successful response - keepealive ms is ${ka
+      print("Connection Keep Alive - Successful response - keepealive ms is ${ka
               .keepAlivePeriod}");
       print(
           "Connection Keep Alive - Successful response - ping timer active is ${ka

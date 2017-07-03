@@ -19,14 +19,14 @@ class MqttConnectionKeepAlive {
     this.keepAlivePeriod = keepAliveSeconds * 1000;
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
-        MqttMessageType.pingRequest, _pingRequestReceived);
+        MqttMessageType.pingRequest, pingRequestReceived);
     connectionHandler.registerForMessage(
-        MqttMessageType.pingResponse, _pingResponseReceived);
-    connectionHandler.registerForAllSentMessages(_messageSent);
+        MqttMessageType.pingResponse, pingResponseReceived);
+    connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = new Timer(
         new Duration(milliseconds: this.keepAlivePeriod),
-        _pingRequired);
+        pingRequired);
   }
 
   /// The keep alive period in  milliseconds
@@ -41,7 +41,7 @@ class MqttConnectionKeepAlive {
   bool _shutdownPadlock = false;
 
   /// Pings the message broker if there has been no activity for the specified amount of idle time.
-  void _pingRequired() {
+  void pingRequired() {
     if (_shutdownPadlock) {
       return;
     } else {
@@ -51,14 +51,14 @@ class MqttConnectionKeepAlive {
     _connectionHandler.sendMessage(pingMsg);
     pingTimer = new Timer(
         new Duration(milliseconds: this.keepAlivePeriod),
-        _pingRequired);
+        pingRequired);
     _shutdownPadlock = false;
   }
 
   /// Signal to the keepalive that a ping request has been received from the message broker.
   /// The effect of calling this method on the keepalive handler is the transmission of a ping response
   /// message to the message broker on the current connection.
-  bool _pingRequestReceived(MqttMessage pingMsg) {
+  bool pingRequestReceived(MqttMessage pingMsg) {
     if (_shutdownPadlock) {
       return false;
     } else {
@@ -71,12 +71,12 @@ class MqttConnectionKeepAlive {
   }
 
   /// Processed ping response messages received from a message broker.
-  bool _pingResponseReceived(MqttMessage pingMsg) {
+  bool pingResponseReceived(MqttMessage pingMsg) {
     return true;
   }
 
   /// Handles the MessageSent event of the connectionHandler control.
-  bool _messageSent(MqttMessage msg) {
+  bool messageSent(MqttMessage msg) {
     return true;
   }
 }
