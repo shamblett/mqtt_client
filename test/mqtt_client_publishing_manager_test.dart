@@ -7,8 +7,16 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'mqtt_client_test_connection_handler.dart';
+
 import 'package:typed_data/typed_data.dart' as typed;
 
+// Mock classes
+class MockCH extends Mock implements MqttConnectionHandler {}
+
+class MockCON extends Mock implements MqttConnection {}
+
+final TestConnectionHandler testCH = new TestConnectionHandler();
 void main() {
   group("Message Identifier", () {
     test("Numbering starts at 1", () {
@@ -39,6 +47,27 @@ void main() {
       expect(
           dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic/Overflow"),
           1);
+    });
+  });
+
+  group("Publishing Manager", () {
+    // Group wide
+    final MockCON con = new MockCON();
+    var message;
+    when(con.send(message)).thenReturn(print(message.toString()));
+    final MockCH ch = new MockCH();
+    testCH.connection = con;
+    ch.connection = con;
+    MessageCallbackFunction cbFunc;
+
+    test("Register for publish messages", () {
+      testCH.registerForMessage(MqttMessageType.publishAck, cbFunc);
+      expect(
+          testCH.messageProcessorRegistry
+              .containsKey(MqttMessageType.publishAck),
+          isTrue);
+      expect(
+          testCH.messageProcessorRegistry[MqttMessageType.publishAck], cbFunc);
     });
   });
 }

@@ -60,15 +60,15 @@ class PublishingManager extends events.EventEmitter
   PublishingManager(IMqttConnectionHandler connectionHandler) {
     this.connectionHandler = connectionHandler;
     connectionHandler.registerForMessage(
-        MqttMessageType.publishAck, _handlePublishAcknowledgement);
+        MqttMessageType.publishAck, handlePublishAcknowledgement);
     connectionHandler.registerForMessage(
-        MqttMessageType.publish, _handlePublish);
+        MqttMessageType.publish, handlePublish);
     connectionHandler.registerForMessage(
-        MqttMessageType.publishComplete, _handlePublishComplete);
+        MqttMessageType.publishComplete, handlePublishComplete);
     connectionHandler.registerForMessage(
-        MqttMessageType.publishRelease, _handlePublishRelease);
+        MqttMessageType.publishRelease, handlePublishRelease);
     connectionHandler.registerForMessage(
-        MqttMessageType.publishReceived, _handlePublishReceived);
+        MqttMessageType.publishReceived, handlePublishReceived);
   }
 
   /// Publish a message to the broker on the specified topic.
@@ -96,7 +96,7 @@ class PublishingManager extends events.EventEmitter
 
   /// Handles the receipt of publish acknowledgement messages.
   /// This callback simply removes it from the list of published messages.
-  bool _handlePublishAcknowledgement(MqttMessage msg) {
+  bool handlePublishAcknowledgement(MqttMessage msg) {
     final MqttPublishAckMessage ackMsg = msg as MqttPublishAckMessage;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
     if (publishedMessages.keys
@@ -107,7 +107,7 @@ class PublishingManager extends events.EventEmitter
   }
 
   /// Handles the receipt of publish messages from a message broker.
-  bool _handlePublish(MqttMessage msg) {
+  bool handlePublish(MqttMessage msg) {
     final MqttPublishMessage pubMsg = msg as MqttPublishMessage;
     bool publishSuccess = true;
     try {
@@ -145,7 +145,7 @@ class PublishingManager extends events.EventEmitter
   }
 
   /// Handles the publish complete, for messages that are undergoing Qos ExactlyOnce processing.
-  bool _handlePublishRelease(MqttMessage msg) {
+  bool handlePublishRelease(MqttMessage msg) {
     final MqttPublishReleaseMessage pubRelMsg =
     msg as MqttPublishReleaseMessage;
     bool publishSuccess = true;
@@ -170,7 +170,7 @@ class PublishingManager extends events.EventEmitter
 
   /// Handles a publish complete message received from a broker.
   /// Returns true if the message flow completed successfully, otherwise false.
-  bool _handlePublishComplete(MqttMessage msg) {
+  bool handlePublishComplete(MqttMessage msg) {
     final MqttPublishCompleteMessage compMsg =
     msg as MqttPublishCompleteMessage;
     final MqttPublishMessage ok =
@@ -183,7 +183,7 @@ class PublishingManager extends events.EventEmitter
 
   /// Handles publish received messages during processing of QOS level 2 (Exactly once) messages.
   /// Returns true or false, depending on the success of message processing.
-  bool _handlePublishReceived(MqttMessage msg) {
+  bool handlePublishReceived(MqttMessage msg) {
     final MqttPublishReceivedMessage recvMsg =
     msg as MqttPublishReceivedMessage;
     // If we've got a matching message, respond with a "ok release it for processing"
