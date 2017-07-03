@@ -15,7 +15,9 @@ class MockCH extends Mock implements MqttConnectionHandler {}
 
 class MockCON extends Mock implements MqttConnection {}
 
-final TestConnectionHandler testCH = new TestConnectionHandler();
+final TestConnectionHandlerNoSend testCHNS = new TestConnectionHandlerNoSend();
+final TestConnectionHandlerSend testCHS = new TestConnectionHandlerSend();
+
 void main() {
   group("Message Identifier", () {
     test("Numbering starts at 1", () {
@@ -55,63 +57,64 @@ void main() {
     var message;
     when(con.send(message)).thenReturn(() => print(message?.toString()));
     final MockCH ch = new MockCH();
-    testCH.connection = con;
+    testCHNS.connection = con;
     ch.connection = con;
     MessageCallbackFunction cbFunc;
 
     test("Register for publish messages", () {
-      testCH.registerForMessage(MqttMessageType.publish, cbFunc);
+      testCHNS.registerForMessage(MqttMessageType.publish, cbFunc);
       expect(
-          testCH.messageProcessorRegistry
+          testCHNS.messageProcessorRegistry
               .containsKey(MqttMessageType.publish),
           isTrue);
       expect(
-          testCH.messageProcessorRegistry[MqttMessageType.publish], cbFunc);
+          testCHNS.messageProcessorRegistry[MqttMessageType.publish], cbFunc);
     });
     test("Register for publish ack messages", () {
-      testCH.registerForMessage(MqttMessageType.publishAck, cbFunc);
+      testCHNS.registerForMessage(MqttMessageType.publishAck, cbFunc);
       expect(
-          testCH.messageProcessorRegistry
+          testCHNS.messageProcessorRegistry
               .containsKey(MqttMessageType.publishAck),
           isTrue);
       expect(
-          testCH.messageProcessorRegistry[MqttMessageType.publishAck], cbFunc);
+          testCHNS.messageProcessorRegistry[MqttMessageType.publishAck],
+          cbFunc);
     });
     test("Register for publish complete messages", () {
-      testCH.registerForMessage(MqttMessageType.publishComplete, cbFunc);
+      testCHNS.registerForMessage(MqttMessageType.publishComplete, cbFunc);
       expect(
-          testCH.messageProcessorRegistry
+          testCHNS.messageProcessorRegistry
               .containsKey(MqttMessageType.publishComplete),
           isTrue);
       expect(
-          testCH.messageProcessorRegistry[MqttMessageType.publishComplete],
+          testCHNS.messageProcessorRegistry[MqttMessageType.publishComplete],
           cbFunc);
     });
     test("Register for publish received messages", () {
-      testCH.registerForMessage(MqttMessageType.publishReceived, cbFunc);
+      testCHNS.registerForMessage(MqttMessageType.publishReceived, cbFunc);
       expect(
-          testCH.messageProcessorRegistry
+          testCHNS.messageProcessorRegistry
               .containsKey(MqttMessageType.publishReceived),
           isTrue);
       expect(
-          testCH.messageProcessorRegistry[MqttMessageType.publishReceived],
+          testCHNS.messageProcessorRegistry[MqttMessageType.publishReceived],
           cbFunc);
     });
     test("Register for publish release messages", () {
-      testCH.registerForMessage(MqttMessageType.publishRelease, cbFunc);
+      testCHNS.registerForMessage(MqttMessageType.publishRelease, cbFunc);
       expect(
-          testCH.messageProcessorRegistry
+          testCHNS.messageProcessorRegistry
               .containsKey(MqttMessageType.publishRelease),
           isTrue);
       expect(
-          testCH.messageProcessorRegistry[MqttMessageType.publishRelease],
+          testCHNS.messageProcessorRegistry[MqttMessageType.publishRelease],
           cbFunc);
     });
   });
 
   group("Publishing", () {
     test("Publish", () {
-      final PublishingManager pm = new PublishingManager(testCH);
+      final PublishingManager pm = new PublishingManager(testCHS);
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -121,6 +124,14 @@ void main() {
           new PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
+      final MqttPublishMessage pubMess = testCHS
+          .sentMessages[0] as MqttPublishMessage;
+      expect(pubMess.header.messageType, MqttMessageType.publish);
+      expect(pubMess.variableHeader.messageIdentifier, 1);
+      expect(pubMess.header.qos, MqttQos.atMostOnce);
+      expect(pubMess.variableHeader.topicName, "A/rawTopic");
+      expect(pubMess.payload.toString(),
+          "Payload: {4 bytes={<116><101><115><116>");
     });
   });
 }
