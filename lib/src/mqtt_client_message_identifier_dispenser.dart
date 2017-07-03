@@ -11,6 +11,8 @@ part of mqtt_client;
 class MessageIdentifierDispenser {
   Map<String, int> _idStorage = new Map<String, int>();
 
+  static const maxMessageIdentifier = 32768;
+
   /// Gets the next message identifier for the specified key.
   int getNextMessageIdentifier(String key) {
     // Only a single id can be dispensed at a time, regardless of the key.
@@ -22,7 +24,7 @@ class MessageIdentifierDispenser {
       retVal = 1;
     } else {
       int nextId = ++_idStorage[key];
-      if (nextId == 32768) {
+      if (nextId == maxMessageIdentifier) {
         // overflow, wrap back to 1.
         nextId = _idStorage[key] = 1;
       }
