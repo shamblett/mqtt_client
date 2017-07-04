@@ -11,7 +11,8 @@ part of mqtt_client;
 class MessageIdentifierDispenser {
   Map<String, int> _idStorage = new Map<String, int>();
 
-  static const maxMessageIdentifier = 32768;
+  /// Maximum message identifier
+  static const int maxMessageIdentifier = 32768;
 
   /// Gets the next message identifier for the specified key.
   int getNextMessageIdentifier(String key) {

@@ -221,5 +221,58 @@ void main() {
           new MqttPublishCompleteMessage().withMessageIdentifier(msgId));
       expect(pm.publishedMessages, isEmpty);
     });
+    test("Publish recieved at most once", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      final int msgId = 1;
+      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      data[0] = 0;
+      data[1] = 1;
+      data[2] = 2;
+      final MqttPublishMessage pubMess = new MqttPublishMessage()
+          .withMessageIdentifier(msgId)
+          .toTopic("A/rawTopic")
+          .withQos(MqttQos.atMostOnce)
+          .publishData(data);
+      pm.handlePublish(pubMess);
+      expect(pm.receivedMessages.containsKey(msgId), isFalse);
+      expect(testCHS.sentMessages.isEmpty, isTrue);
+    });
+    test("Publish recieved at least once", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      final int msgId = 1;
+      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      data[0] = 0;
+      data[1] = 1;
+      data[2] = 2;
+      final MqttPublishMessage pubMess = new MqttPublishMessage()
+          .withMessageIdentifier(msgId)
+          .toTopic("A/rawTopic")
+          .withQos(MqttQos.atLeastOnce)
+          .publishData(data);
+      pm.handlePublish(pubMess);
+      expect(pm.receivedMessages.containsKey(msgId), isFalse);
+      expect(testCHS.sentMessages[0].header.messageType,
+          MqttMessageType.publishAck);
+    });
+    test("Publish recieved exactly once", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      final int msgId = 1;
+      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      data[0] = 0;
+      data[1] = 1;
+      data[2] = 2;
+      final MqttPublishMessage pubMess = new MqttPublishMessage()
+          .withMessageIdentifier(msgId)
+          .toTopic("A/rawTopic")
+          .withQos(MqttQos.exactlyOnce)
+          .publishData(data);
+      pm.handlePublish(pubMess);
+      expect(pm.receivedMessages.containsKey(msgId), isTrue);
+      expect(testCHS.sentMessages[0].header.messageType,
+          MqttMessageType.publishReceived);
+    });
   });
 }
