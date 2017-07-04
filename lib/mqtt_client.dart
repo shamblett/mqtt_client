@@ -64,6 +64,8 @@ part 'src/mqtt_client_ipublishing_manager.dart';
 
 part 'src/mqtt_client_subscription.dart';
 
+part 'src/mqtt_client_subscriptions_manager.dart';
+
 part 'src/mqtt_client_message_identifier_dispenser.dart';
 
 part 'src/dataconvertors/mqtt_client_payload_convertor.dart';
