@@ -8,9 +8,7 @@
 part of mqtt_client;
 
 /// A class that can manage the topic subscription process.
-class SubscriptionsManager extends Object with events.EventDetector {
-  /// Used to synchronize access to subscriptions.
-  bool _subscriptionPadlock = false;
+class SubscriptionsManager {
 
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
@@ -39,6 +37,61 @@ class SubscriptionsManager extends Object with events.EventDetector {
     this
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+  }
+
+  /// Registers a new subscription with the subscription manager.
+  ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
+      MqttQos qos) {
+    ChangeNotifier<MqttReceivedMessage> cn = tryGetExistingSubscription(topic);
+    if (cn == null) {
+      cn = createNewSubscription(topic, qos);
+    }
+    return cn;
+  }
+
+  /// Gets a view on the existing observable, if the subscription already exists.
+  ChangeNotifier<MqttReceivedMessage> tryGetExistingSubscription(String topic) {
+    Subscription retSub = subscriptions[topic];
+    if (retSub == null) {
+      // Search the pending subscriptions
+      for (Subscription sub in pendingSubscriptions.values) {
+        if (sub.topic.rawTopic == topic) {
+          retSub = sub;
+        }
+      }
+    }
+    return retSub != null ? retSub.observable : null;
+  }
+
+  /// Creates a new subscription for the specified topic.
+  ChangeNotifier<MqttReceivedMessage> createNewSubscription(String topic,
+      MqttQos qos) {
+    try {
+      final SubscriptionTopic subscriptionTopic = new SubscriptionTopic(topic);
+      // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
+      final int msgId = messageIdentifierDispenser.getNextMessageIdentifier(
+          "subscriptions");
+      // Create a new observable that is used to yield messages
+      // that arrive for the topic.
+      //TODO ChangeNotifier<MqttReceivedMessage> observable = createObservableForSubscription(subscriptionTopic, msgId);
+      final Subscription sub = new Subscription();
+      sub.topic = subscriptionTopic;
+      sub.qos = qos;
+      sub.messageIdentifier = msgId;
+      sub.createdTime = new DateTime.now();
+      //TODO sub.observable = observable;
+      pendingSubscriptions[sub.messageIdentifier] = sub;
+      // Build a subscribe message for the caller and send it off to the broker.
+      final MqttSubscribeMessage msg = new MqttSubscribeMessage()
+          .withMessageIdentifier(sub.messageIdentifier)
+          .toTopic(sub.topic.rawTopic)
+          .atQos(sub.qos);
+      connectionHandler.sendMessage(msg);
+      //TODO return sub.observable;
+    } catch (Exception) {
+      throw new InvalidTopicException(
+          "from SubscriptionManager::createNewSubscription", topic);
+    }
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.

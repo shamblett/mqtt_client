@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Represents a MQTT message that has been received from a broker.
-class MqttReceivedMessage<T> {
+class MqttReceivedMessage<T> extends ChangeRecord {
   /// The topic the message was received on.
   String topic;
 
