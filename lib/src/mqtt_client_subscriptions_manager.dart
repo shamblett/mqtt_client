@@ -73,13 +73,15 @@ class SubscriptionsManager {
           "subscriptions");
       // Create a new observable that is used to yield messages
       // that arrive for the topic.
-      //TODO ChangeNotifier<MqttReceivedMessage> observable = createObservableForSubscription(subscriptionTopic, msgId);
+      final ChangeNotifier<
+          MqttReceivedMessage> observable = createObservableForSubscription(
+          subscriptionTopic, msgId);
       final Subscription sub = new Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
       sub.messageIdentifier = msgId;
       sub.createdTime = new DateTime.now();
-      //TODO sub.observable = observable;
+      sub.observable = observable;
       pendingSubscriptions[sub.messageIdentifier] = sub;
       // Build a subscribe message for the caller and send it off to the broker.
       final MqttSubscribeMessage msg = new MqttSubscribeMessage()
@@ -87,11 +89,17 @@ class SubscriptionsManager {
           .toTopic(sub.topic.rawTopic)
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
-      //TODO return sub.observable;
+      return sub.observable;
     } catch (Exception) {
       throw new InvalidTopicException(
           "from SubscriptionManager::createNewSubscription", topic);
     }
+  }
+
+  /// Creates an observable for a subscription.
+  ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
+      SubscriptionTopic subscriptionTopic, int msgId) {
+
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
