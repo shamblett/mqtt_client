@@ -274,5 +274,29 @@ void main() {
       expect(testCHS.sentMessages[0].header.messageType,
           MqttMessageType.publishReceived);
     });
+    test("Release recieved exactly once", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      final int msgId = 1;
+      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      data[0] = 0;
+      data[1] = 1;
+      data[2] = 2;
+      final MqttPublishMessage pubMess = new MqttPublishMessage()
+          .withMessageIdentifier(msgId)
+          .toTopic("A/rawTopic")
+          .withQos(MqttQos.exactlyOnce)
+          .publishData(data);
+      pm.handlePublish(pubMess);
+      expect(pm.receivedMessages.containsKey(msgId), isTrue);
+      expect(testCHS.sentMessages[0].header.messageType,
+          MqttMessageType.publishReceived);
+      final MqttPublishReleaseMessage relMess =
+      new MqttPublishReleaseMessage().withMessageIdentifier(msgId);
+      pm.handlePublishRelease(relMess);
+      expect(pm.receivedMessages.containsKey(msgId), isFalse);
+      expect(testCHS.sentMessages[1].header.messageType,
+          MqttMessageType.publishComplete);
+    });
   });
 }
