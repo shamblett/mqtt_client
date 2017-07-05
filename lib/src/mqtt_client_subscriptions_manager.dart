@@ -124,12 +124,55 @@ class SubscriptionsManager extends events.EventDetector {
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
   /// Returns true, always.
   bool confirmSubscription(MqttMessage msg) {
+    final MqttSubscribeAckMessage subAck = msg as MqttSubscribeAckMessage;
+    if (pendingSubscriptions
+        .containsKey(subAck.variableHeader.messageIdentifier)) {
+      subscriptions[subAck.variableHeader.topicName] =
+      pendingSubscriptions[subAck.variableHeader.messageIdentifier];
+      pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
+    }
     return true;
   }
 
   /// Cleans up after an unsubscribe message is received from the broker.
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage msg) {
+    final MqttUnsubscribeAckMessage unSubAck = msg as MqttUnsubscribeAckMessage;
+    String subKey;
+    Subscription sub;
+    subscriptions.forEach((String key, Subscription value) {
+      if (value.messageIdentifier ==
+          unSubAck.variableHeader.messageIdentifier) {
+        sub = value;
+        subKey = key;
+      }
+    });
+    // If we have the subscription unsubscribe and remove it
+    if (sub != null) {
+      final msgId = sub.messageIdentifier;
+      final String topic = sub.topic.rawTopic;
+      final MqttUnsubscribeMessage unsubscribeMsg = new MqttUnsubscribeMessage()
+          .withMessageIdentifier(messageIdentifierDispenser
+          .getNextMessageIdentifier("unsubscriptions"))
+          .withMessageIdentifier(msgId)
+          .fromTopic(topic);
+      connectionHandler.sendMessage(unsubscribeMsg);
+      subscriptions.remove(subKey);
+    }
     return true;
+  }
+
+  /// Gets the current status of a subscription.
+  SubscriptionStatus getSubscriptionsStatus(String topic) {
+    SubscriptionStatus status = SubscriptionStatus.doesNotExist;
+    if (subscriptions.containsKey(topic)) {
+      status = SubscriptionStatus.active;
+    }
+    pendingSubscriptions.forEach((int key, Subscription value) {
+      if (value.topic.rawTopic == topic) {
+        status = SubscriptionStatus.pending;
+      }
+    });
+    return status;
   }
 }
