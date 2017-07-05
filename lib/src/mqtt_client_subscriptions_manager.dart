@@ -8,8 +8,7 @@
 part of mqtt_client;
 
 /// A class that can manage the topic subscription process.
-class SubscriptionsManager {
-
+class SubscriptionsManager extends events.EventDetector {
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
   new MessageIdentifierDispenser();
@@ -24,7 +23,11 @@ class SubscriptionsManager {
   IMqttConnectionHandler connectionHandler;
 
   /// Publishing manager used for passing on published messages to subscribers.
-  IPublishingManager publishingManager;
+  PublishingManager publishingManager;
+
+  /// Observable publish messages received map, indexed by topic
+  Map<String, ChangeNotifier<MqttReceivedMessage>> messagesReceived =
+  new Map<String, ChangeNotifier<MqttReceivedMessage>>();
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -37,6 +40,9 @@ class SubscriptionsManager {
     this
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+    // Start listening for published messages
+    this.listen(
+        this.publishingManager, MessageReceived, publishMessageReceived);
   }
 
   /// Registers a new subscription with the subscription manager.
@@ -69,13 +75,12 @@ class SubscriptionsManager {
     try {
       final SubscriptionTopic subscriptionTopic = new SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
-      final int msgId = messageIdentifierDispenser.getNextMessageIdentifier(
-          "subscriptions");
+      final int msgId =
+      messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
       // Create a new observable that is used to yield messages
       // that arrive for the topic.
-      final ChangeNotifier<
-          MqttReceivedMessage> observable = createObservableForSubscription(
-          subscriptionTopic, msgId);
+      final ChangeNotifier<MqttReceivedMessage> observable =
+      createObservableForSubscription(subscriptionTopic, msgId);
       final Subscription sub = new Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
@@ -96,10 +101,24 @@ class SubscriptionsManager {
     }
   }
 
+  /// Publish message received
+  void publishMessageReceived(events.Event<MessageReceived> event) {
+    final String topic = event.data.topic.rawTopic;
+    if (messagesReceived.containsKey(topic)) {
+      final MqttReceivedMessage<MqttMessage> msg =
+      new MqttReceivedMessage<MqttMessage>(topic, event.data.message);
+      messagesReceived[topic].notifyChange(msg);
+    }
+  }
+
   /// Creates an observable for a subscription.
   ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
       SubscriptionTopic subscriptionTopic, int msgId) {
-
+    final String topic = subscriptionTopic.rawTopic;
+    final ChangeNotifier<MqttReceivedMessage> cn =
+    new ChangeNotifier<MqttReceivedMessage>();
+    messagesReceived[topic] = cn;
+    return cn;
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
