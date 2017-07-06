@@ -127,7 +127,11 @@ class SubscriptionsManager extends events.EventDetector {
     final MqttSubscribeAckMessage subAck = msg as MqttSubscribeAckMessage;
     if (pendingSubscriptions
         .containsKey(subAck.variableHeader.messageIdentifier)) {
-      subscriptions[subAck.variableHeader.topicName] =
+      final String topic =
+          pendingSubscriptions[subAck.variableHeader.messageIdentifier]
+              .topic
+              .rawTopic;
+      subscriptions[topic] =
       pendingSubscriptions[subAck.variableHeader.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
     }

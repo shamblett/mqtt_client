@@ -35,5 +35,26 @@ void main() {
       expect(msg.variableHeader.messageIdentifier, 1);
       expect(msg.header.qos, MqttQos.atMostOnce);
     });
+    test("Acknowledged subscription request creates active subscription", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      subs.registerSubscription(topic, qos);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+      expect(msg.variableHeader.messageIdentifier, 1);
+      expect(msg.header.qos, MqttQos.atMostOnce);
+      // Confirm the subscription
+      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage().
+      withMessageIdentifier(1)
+          .addQosGrant(MqttQos.atMostOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+    });
   });
 }
