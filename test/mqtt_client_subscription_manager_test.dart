@@ -143,5 +143,41 @@ void main() {
       expect(msg.header.qos, MqttQos.atMostOnce);
       expect(subs.subscriptions[topic], isNull);
     });
+    test("Unsubscribe with ack", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      subs.registerSubscription(topic, qos);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+      expect(msg.variableHeader.messageIdentifier, 1);
+      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(subs.subscriptions[topic], isNull);
+      // Confirm the subscription
+      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(1)
+          .addQosGrant(MqttQos.atLeastOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+      // Unsubscribe
+      subs.unsubscribe(topic);
+      expect(
+          testCHS.sentMessages[1], new isInstanceOf<MqttUnsubscribeMessage>());
+      final MqttUnsubscribeMessage unSub = testCHS.sentMessages[1];
+      expect(unSub.variableHeader.messageIdentifier, 1);
+      expect(unSub.payload.subscriptions.length, 1);
+      expect(unSub.payload.subscriptions[0], topic);
+      // Unsubscribe ack
+      final MqttUnsubscribeAckMessage unsubAck =
+      new MqttUnsubscribeAckMessage().withMessageIdentifier(1);
+      subs.confirmUnsubscribe(unsubAck);
+      expect(
+          subs.getSubscriptionsStatus(topic), SubscriptionStatus.doesNotExist);
+    });
   });
 }

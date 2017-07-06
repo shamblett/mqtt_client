@@ -121,6 +121,16 @@ class SubscriptionsManager extends events.EventDetector {
     return cn;
   }
 
+  /// Unsubscribe from a topic
+  void unsubscribe(String topic) {
+    final MqttUnsubscribeMessage unsubscribeMsg = new MqttUnsubscribeMessage()
+        .withMessageIdentifier(messageIdentifierDispenser
+        .getNextMessageIdentifier("unsubscriptions"))
+        .fromTopic(topic);
+    connectionHandler.sendMessage(unsubscribeMsg);
+    messagesReceived[topic].unobserved();
+  }
+
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
   /// Returns true, always.
   bool confirmSubscription(MqttMessage msg) {
@@ -151,16 +161,8 @@ class SubscriptionsManager extends events.EventDetector {
         subKey = key;
       }
     });
-    // If we have the subscription unsubscribe and remove it
+    // If we have the subscription remove it
     if (sub != null) {
-      final msgId = sub.messageIdentifier;
-      final String topic = sub.topic.rawTopic;
-      final MqttUnsubscribeMessage unsubscribeMsg = new MqttUnsubscribeMessage()
-          .withMessageIdentifier(messageIdentifierDispenser
-          .getNextMessageIdentifier("unsubscriptions"))
-          .withMessageIdentifier(msgId)
-          .fromTopic(topic);
-      connectionHandler.sendMessage(unsubscribeMsg);
       subscriptions.remove(subKey);
     }
     return true;
