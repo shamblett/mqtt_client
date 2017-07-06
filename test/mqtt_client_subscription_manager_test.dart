@@ -50,11 +50,98 @@ void main() {
       expect(msg.variableHeader.messageIdentifier, 1);
       expect(msg.header.qos, MqttQos.atMostOnce);
       // Confirm the subscription
-      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage().
-      withMessageIdentifier(1)
-          .addQosGrant(MqttQos.atMostOnce);
+      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(1)
+          .addQosGrant(MqttQos.atLeastOnce);
       subs.confirmSubscription(subAckMsg);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+    });
+    test(
+        "Acknowledged subscription request for no pending subscription is ignored",
+            () {
+          testCHS.sentMessages.clear();
+          final PublishingManager pm = new PublishingManager(testCHS);
+          const String topic = "testtopic";
+          const MqttQos qos = MqttQos.atLeastOnce;
+          final SubscriptionsManager subs = new SubscriptionsManager(
+              testCHS, pm);
+          subs.registerSubscription(topic, qos);
+          expect(
+              subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+          expect(testCHS.sentMessages[0],
+              new isInstanceOf<MqttSubscribeMessage>());
+          final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+          expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+          expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+          expect(msg.variableHeader.messageIdentifier, 1);
+          expect(msg.header.qos, MqttQos.atMostOnce);
+          // Confirm the subscription
+          final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
+              .withMessageIdentifier(2)
+              .addQosGrant(MqttQos.atLeastOnce);
+          subs.confirmSubscription(subAckMsg);
+          expect(
+              subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+        });
+    test("Get subscription with valid topic returns subscription", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      subs.registerSubscription(topic, qos);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+      expect(msg.variableHeader.messageIdentifier, 1);
+      expect(msg.header.qos, MqttQos.atMostOnce);
+      // Confirm the subscription
+      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(1)
+          .addQosGrant(MqttQos.atLeastOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+      expect(subs.subscriptions[topic], new isInstanceOf<Subscription>());
+    });
+    test("Get subscription with invalid topic returns null", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      subs.registerSubscription(topic, qos);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+      expect(msg.variableHeader.messageIdentifier, 1);
+      expect(msg.header.qos, MqttQos.atMostOnce);
+      // Confirm the subscription
+      final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
+          .withMessageIdentifier(1)
+          .addQosGrant(MqttQos.atLeastOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+      expect(subs.subscriptions["abc_badTopic"], isNull);
+    });
+    test("Get subscription for pending subscription returns null", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      subs.registerSubscription(topic, qos);
+      expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
+      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+      expect(msg.variableHeader.messageIdentifier, 1);
+      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(subs.subscriptions[topic], isNull);
     });
   });
 }
