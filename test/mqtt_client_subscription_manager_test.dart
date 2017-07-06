@@ -8,6 +8,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'mqtt_client_test_connection_handler.dart';
+import 'package:observable/observable.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
 // Mock classes
@@ -178,6 +179,34 @@ void main() {
       subs.confirmUnsubscribe(unsubAck);
       expect(
           subs.getSubscriptionsStatus(topic), SubscriptionStatus.doesNotExist);
+    });
+    test("Change notification", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = new PublishingManager(testCHS);
+      const String topic = "testtopic";
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
+      final ChangeNotifier<MqttReceivedMessage> cn =
+      subs.registerSubscription(topic, qos);
+      // Publish messages on the topic
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      buff[0] = 'd'.codeUnitAt(0);
+      buff[1] = 'e'.codeUnitAt(0);
+      buff[2] = 'a'.codeUnitAt(0);
+      buff[3] = 'd'.codeUnitAt(0);
+      pm.publish(new PublicationTopic("topic"), MqttQos.atMostOnce, buff);
+      buff[0] = 'm'.codeUnitAt(0);
+      buff[1] = 'e'.codeUnitAt(0);
+      buff[2] = 'a'.codeUnitAt(0);
+      buff[3] = 't'.codeUnitAt(0);
+      pm.publish(new PublicationTopic("topic"), MqttQos.atMostOnce, buff);
+      // Listen for the subscriptions
+      final t1 = expectAsync0(() {
+        cn.changes.listen((c) {
+          print("Change notification:: listening ${c.toString()}");
+        });
+      });
+      t1;
     });
   });
 }
