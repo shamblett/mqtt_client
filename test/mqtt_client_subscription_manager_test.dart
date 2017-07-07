@@ -4,7 +4,6 @@
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
-@Timeout(const Duration(seconds: 1))
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
@@ -187,27 +186,36 @@ void main() {
       const String topic = "testtopic";
       StreamSubscription st;
       ChangeNotifier<MqttReceivedMessage> cn;
+      // The subscription receive callback
       void subRec(List<MqttReceivedMessage> c) {
         expect(c[0].topic, topic);
+        print("Change notification:: topic is $topic");
         expect(c[0].payload, new isInstanceOf<MqttPublishMessage>());
         final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
           expect(recMess.variableHeader.messageIdentifier, 1);
+          final String pt = MqttPublishPayload.bytesToStringAsString(
+              recMess.payload.message);
           expect(
-              MqttPublishPayload.bytesToStringAsString(recMess.payload.message),
+              pt,
               "dead");
+          print("Change notification:: payload is $pt");
           expect(recMess.header.qos, MqttQos.atLeastOnce);
           recCount++;
         } else {
           expect(recMess.variableHeader.messageIdentifier, 2);
+          final String pt = MqttPublishPayload.bytesToStringAsString(
+              recMess.payload.message);
           expect(
-              MqttPublishPayload.bytesToStringAsString(recMess.payload.message),
+              pt,
               "meat");
+          print("Change notification:: payload is $pt");
           expect(recMess.header.qos, MqttQos.atMostOnce);
           //Stop listening
           st.cancel();
         }
       }
+      // Wrap the callback
       final t1 = expectAsync1(subRec, count: 2);
       testCHS.sentMessages.clear();
       final PublishingManager pm = new PublishingManager(testCHS);
@@ -215,7 +223,7 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       cn = subs.registerSubscription(topic, qos);
       // Start listening
-      st = cn.changes.listen(subRec);
+      st = cn.changes.listen(t1);
       // Publish messages on the topic
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
       buff[0] = 'd'.codeUnitAt(0);
