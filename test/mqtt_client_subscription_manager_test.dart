@@ -1,10 +1,10 @@
-@Timeout(const Duration(seconds: 1))
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
+@Timeout(const Duration(seconds: 1))
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
@@ -193,18 +193,22 @@ void main() {
         final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
           expect(recMess.variableHeader.messageIdentifier, 1);
-          expect(MqttPublishPayload.bytesToString(recMess.payload.message),
-              "<100><101><97><100>");
+          expect(
+              MqttPublishPayload.bytesToStringAsString(recMess.payload.message),
+              "dead");
           expect(recMess.header.qos, MqttQos.atLeastOnce);
           recCount++;
         } else {
           expect(recMess.variableHeader.messageIdentifier, 2);
-          expect(MqttPublishPayload.bytesToString(recMess.payload.message),
-              "<109><101><97><116>");
+          expect(
+              MqttPublishPayload.bytesToStringAsString(recMess.payload.message),
+              "meat");
           expect(recMess.header.qos, MqttQos.atMostOnce);
+          //Stop listening
+          st.cancel();
         }
       }
-      final t1 = expectAsync1(subRec, count: 1);
+      final t1 = expectAsync1(subRec, count: 2);
       testCHS.sentMessages.clear();
       final PublishingManager pm = new PublishingManager(testCHS);
       const MqttQos qos = MqttQos.atLeastOnce;
@@ -234,8 +238,6 @@ void main() {
           .withMessageIdentifier(2)
           .withQos(MqttQos.atMostOnce);
       pm.handlePublish(pubMess1);
-      //Stop listening
-      st.cancel();
     });
   });
 }
