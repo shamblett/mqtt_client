@@ -29,6 +29,14 @@ void main() {
           "mqtt-client::ConnectionException: The connection must be in the Connected state in "
               "order to perform this operation. Current state is disconnected");
     });
+    test("No Connection", () {
+      final ConnectionState state = ConnectionState.disconnected;
+      final NoConnectionException exception = new NoConnectionException(
+          "the message");
+      expect(
+          exception.toString(),
+          "mqtt-client::NoConnectionException: the message");
+    });
     test("Invalid Header", () {
       final String message = "Corrupt Header Packet";
       final InvalidHeaderException exception =
