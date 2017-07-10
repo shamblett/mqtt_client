@@ -128,7 +128,6 @@ class SubscriptionsManager extends events.EventDetector {
         .getNextMessageIdentifier("unsubscriptions"))
         .fromTopic(topic);
     connectionHandler.sendMessage(unsubscribeMsg);
-    messagesReceived[topic].unobserved();
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.

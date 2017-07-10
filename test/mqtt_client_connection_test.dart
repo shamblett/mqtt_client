@@ -95,7 +95,7 @@ void main() {
       });
       t1();
     });
-    test("Successful response", () async {
+    test("Successful response and disconnect", () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -110,6 +110,8 @@ void main() {
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
+      final ConnectionState state = ch.disconnect();
+      expect(state, ConnectionState.disconnected);
     });
   });
 

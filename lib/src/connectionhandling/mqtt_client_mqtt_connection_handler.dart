@@ -84,20 +84,6 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     sentMessageCallbacks.remove(sentMsgCallback);
   }
 
-  /// Handles the DataAvailable event of the connection control for handling non connection messages
-  void messageDataAvailable(events.Event<MessageDataAvailable> event) {
-    try {
-      // Read the message, and if it's valid, signal to the keepalive so that we don't
-      // spam ping requests at the broker.
-      final MqttMessage msg = MqttMessage.createFrom(event.data.stream);
-      final MessageCallbackFunction callback =
-      messageProcessorRegistry[msg.header.messageType];
-      callback(msg);
-    } catch (InvalidMessageException) {
-      rethrow;
-    }
-  }
-
   /// Handles the Message Available event of the connection control for handling non connection messages
   void messageAvailable(events.Event<MessageAvailable> event) {
     final MessageCallbackFunction callback =

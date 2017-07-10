@@ -30,7 +30,6 @@ void main() {
               "order to perform this operation. Current state is disconnected");
     });
     test("No Connection", () {
-      final ConnectionState state = ConnectionState.disconnected;
       final NoConnectionException exception = new NoConnectionException(
           "the message");
       expect(
