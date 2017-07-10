@@ -517,6 +517,14 @@ void main() {
           "andy111");
       expect((baseMessage as MqttConnectMessage).payload.willTopic, "m");
       expect((baseMessage as MqttConnectMessage).payload.willMessage, "a");
+      (baseMessage as MqttConnectMessage).authenticateAs("Billy", "BillyPass");
+      expect((baseMessage as MqttConnectMessage).payload.username, "Billy");
+      expect((baseMessage as MqttConnectMessage).payload.password, "BillyPass");
+      (baseMessage as MqttConnectMessage).payload.username = "Billy1";
+      (baseMessage as MqttConnectMessage).payload.password = "Billy1Pass";
+      expect((baseMessage as MqttConnectMessage).payload.username, "Billy1");
+      expect(
+          (baseMessage as MqttConnectMessage).payload.password, "Billy1Pass");
     });
     test("Payload - invalid client idenfier length", () {
       // Our test deserialization message, with the following properties. Note this message is not

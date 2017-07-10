@@ -44,7 +44,7 @@ class MqttVariableHeader {
     this.connectFlags = new MqttConnectFlags();
   }
 
-  /// Initializes a new instance of the <see cref="MqttVariableHeader" /> class, populating it with data from a stream.
+  /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
   MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }

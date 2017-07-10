@@ -12,7 +12,7 @@ abstract class MqttPayload {
   /// Initializes a new instance of the MqttPayload class.
   MqttPayload();
 
-  /// Initializes a new instance of the <see cref="MqttPayload" /> class.
+  /// Initializes a new instance of the MqttPayload class.
   MqttPayload.fromMqttByteBuffer(MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }

@@ -7,7 +7,6 @@
 
 library mqtt_client;
 
-import 'dart:typed_data';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -75,8 +74,6 @@ part 'src/dataconvertors/mqtt_client_passthru_payload_convertor.dart';
 part 'src/encoding/mqtt_client_mqtt_encoding.dart';
 
 part 'src/dataconvertors/mqtt_client_ascii_payload_convertor.dart';
-
-part 'src/utility/mqtt_client_byte_stream.dart';
 
 part 'src/utility/mqtt_client_byte_buffer.dart';
 

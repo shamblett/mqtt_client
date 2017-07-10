@@ -494,4 +494,51 @@ void main() {
       expect(raised, isTrue);
     });
   });
+
+  group("Utility", () {
+    test("Byte Buffer", () {
+      final typed.Uint8Buffer uBuff = new typed.Uint8Buffer(10);
+      final typed.Uint8Buffer uBuff1 = new typed.Uint8Buffer(10);
+      final MqttByteBuffer buff = new MqttByteBuffer(uBuff);
+      expect(buff.length, 10);
+      expect(buff.position, 0);
+      int tmp = buff.readByte();
+      tmp = buff.readShort();
+      print(tmp);
+      expect(buff.position, 3);
+      final typed.Uint8Buffer tmpBuff = buff.read(4);
+      expect(tmpBuff.length, 4);
+      expect(buff.position, 7);
+      buff.writeByte(1);
+      buff.writeShort(2);
+      expect(buff.position, 10);
+      buff.write(uBuff);
+      expect(buff.length, 20);
+      expect(buff.position, 20);
+      buff.buffer = null;
+      buff.write(uBuff1);
+      expect(buff.length, 10);
+      expect(buff.position, 10);
+      final List<int> bytes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      final MqttByteBuffer buff1 = new MqttByteBuffer.fromList(bytes);
+      expect(buff1.length, 10);
+      expect(buff1.position, 0);
+      buff1.seek(20);
+      expect(buff1.position, 10);
+    });
+    test("Sleep Async", () async {
+      final DateTime start = new DateTime.now();
+      await MqttUtilities.asyncSleep(1);
+      final DateTime end = new DateTime.now();
+      final Duration difference = end.difference(start);
+      expect(difference.inSeconds, 1);
+    });
+    test("Sleep Sync", () {
+      final DateTime start = new DateTime.now();
+      MqttUtilities.syncSleep(1);
+      final DateTime end = new DateTime.now();
+      final Duration difference = end.difference(start);
+      expect(difference.inSeconds, 1);
+    });
+  });
 }
