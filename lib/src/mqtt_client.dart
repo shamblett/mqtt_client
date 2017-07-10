@@ -61,8 +61,7 @@ class MqttClient {
           .trim()
           .length >
           Constants.recommendedMaxUsernamePasswordLength) {
-        print(
-            "Username length (${username
+        print("Username length (${username
                 .trim()
                 .length}) exceeds the max recommended in the MQTT spec. ");
       }
@@ -72,8 +71,7 @@ class MqttClient {
             .trim()
             .length >
             Constants.recommendedMaxUsernamePasswordLength) {
-      print(
-          "Password length (${ password
+      print("Password length (${ password
               .trim()
               .length}) exceeds the max recommended in the MQTT spec. ");
     }
@@ -124,5 +122,10 @@ class MqttClient {
     } catch (Exception) {
       throw new InvalidTopicException(Exception.toString(), topic);
     }
+  }
+
+  /// Disconnect from the broker
+  ConnectionState disconnect() {
+    return _connectionHandler.disconnect();
   }
 }
