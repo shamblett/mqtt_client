@@ -63,8 +63,6 @@ class MqttVariableHeader {
   }
 
   /// Writes the variable header to the supplied stream.
-  /// This base implementation uses the WriteFlags property that can be
-  /// overridden in subclasses to determine what to read from the variable header.
   /// A subclass can override this method to do completely custom write operations
   /// if required.
   void writeTo(MqttByteBuffer variableHeaderStream) {

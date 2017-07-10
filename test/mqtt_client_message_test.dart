@@ -375,6 +375,36 @@ void main() {
   });
 
   group("Variable header", () {
+    test("Base construction", () {
+      final MqttVariableHeader varHeader = new MqttVariableHeader();
+      varHeader.messageIdentifier = 10;
+      varHeader.keepAlive = 3;
+      varHeader.topicName = "Billy";
+      varHeader.returnCode = MqttConnectReturnCode.identifierRejected;
+      varHeader.connectFlags.cleanStart = true;
+      varHeader.connectFlags.willFlag = true;
+      final typed.Uint8Buffer bBuff = new typed.Uint8Buffer();
+      final MqttByteBuffer byteBuff = new MqttByteBuffer(bBuff);
+      expect(varHeader.length, 0);
+      varHeader.writeTo(byteBuff);
+      print(
+          "Variable header::Base construction: byte buffer ${byteBuff.buffer
+              .toString()}");
+      final MqttVariableHeader varHeader1 = new MqttVariableHeader();
+      byteBuff.seek(0);
+      final int writeLength = varHeader.getWriteLength();
+      expect(writeLength, 22);
+      varHeader1.readFrom(byteBuff);
+      expect(varHeader1.returnCode, MqttConnectReturnCode.identifierRejected);
+      expect(varHeader1.topicName, "Billy");
+      expect(varHeader1.keepAlive, 3);
+      expect(varHeader1.messageIdentifier, 10);
+      expect(varHeader1.protocolVersion, 3);
+      expect(varHeader1.protocolName, "MQIsdp");
+      expect(varHeader1.connectFlags.willQos, MqttQos.reserved1);
+      expect(varHeader1.connectFlags.cleanStart, isTrue);
+      expect(varHeader1.connectFlags.willFlag, isTrue);
+    });
     test("Not enough bytes in string", () {
       final typed.Uint8Buffer tmp = new typed.Uint8Buffer(3);
       tmp[0] = 0;
@@ -388,7 +418,7 @@ void main() {
         expect(
             exception.toString(),
             "Exception: mqtt_client::ByteBuffer: The buffer did not have enough "
-                "bytes for the read operation");
+                "bytes for the read operation length 3, count 2, position 2");
         raised = true;
       }
       expect(raised, isTrue);
@@ -423,7 +453,7 @@ void main() {
         expect(
             exception.toString(),
             "Exception: mqtt_client::ByteBuffer: The buffer did not have enough "
-                "bytes for the read operation");
+                "bytes for the read operation length 1, count 2, position 0");
         raised = true;
       }
       expect(raised, isTrue);

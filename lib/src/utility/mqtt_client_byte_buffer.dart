@@ -67,11 +67,11 @@ class MqttByteBuffer {
   typed.Uint8Buffer read(int count) {
     if ((_length < count) || (_position + count) > _length) {
       throw new Exception(
-          "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation");
+          "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation "
+              "length $_length, count $count, position $_position");
     }
     final typed.Uint8Buffer tmp = new typed.Uint8Buffer();
-    tmp.addAll(_buffer.getRange(
-        _position, _position + count));
+    tmp.addAll(_buffer.getRange(_position, _position + count));
     _position += count;
     final typed.Uint8Buffer tmp2 = new typed.Uint8Buffer();
     tmp2.addAll(tmp);
@@ -147,5 +147,4 @@ class MqttByteBuffer {
     final typed.Uint8Buffer stringBuff = buffer.read(stringLength);
     return enc.getString(stringBuff);
   }
-
 }
