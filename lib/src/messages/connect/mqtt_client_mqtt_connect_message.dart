@@ -86,10 +86,14 @@ class MqttConnectMessage extends MqttMessage {
 
   /// Sets the authentication
   MqttConnectMessage authenticateAs(String username, String password) {
-    this.variableHeader.connectFlags.usernameFlag = username.isNotEmpty;
-    this.variableHeader.connectFlags.passwordFlag = password.isNotEmpty;
-    this.payload.username = username;
-    this.payload.password = password;
+    if (username != null) {
+      this.variableHeader.connectFlags.usernameFlag = username.isNotEmpty;
+      this.payload.username = username;
+    }
+    if (password != null) {
+      this.variableHeader.connectFlags.passwordFlag = password.isNotEmpty;
+      this.payload.password = password;
+    }
     return this;
   }
 

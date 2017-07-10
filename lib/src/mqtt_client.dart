@@ -53,7 +53,7 @@ class MqttClient {
 
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
-  Future<ConnectionState> connect(String username, String password) async {
+  Future<ConnectionState> connect([String username, String password]) async {
     if (username != null) {
       print(
           "Authenticating with username '{$username}' and password '{$password}'");
