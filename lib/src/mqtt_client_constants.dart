@@ -20,4 +20,7 @@ class Constants {
 
   /// The recommended length for usernames and passwords.
   static const int recommendedMaxUsernamePasswordLength = 12;
+
+  /// Default keep alive in seconds
+  static int defaultKeepAlive = 60;
 }
