@@ -38,6 +38,9 @@ class MqttConnection extends Object with events.EventEmitter {
   /// The read wrapper
   ReadWrapper readWrapper;
 
+  /// Indicates if disconnect(onDone) has been requested or not
+  bool _disconnectRequested = false;
+
   /// Default constructor
   MqttConnection();
 
@@ -105,9 +108,12 @@ class MqttConnection extends Object with events.EventEmitter {
 
   /// OnDone listener callback
   void _onDone() {
-    // We should never be done
+    // We should never be done unless requested
     _disconnect();
-    //throw new SocketException("MqttConnection::On Done called, disconnecting.");
+    if (!_disconnectRequested) {
+      throw new SocketException(
+          "MqttConnection::On Done called by broker, disconnecting.");
+    }
   }
 
   /// Disconnects from the message broker
@@ -127,5 +133,11 @@ class MqttConnection extends Object with events.EventEmitter {
     final typed.Uint8Buffer messageBytes = message.read(message.length);
     tcpClient.add(messageBytes.toList());
     _sendPadlock = false;
+  }
+
+  // User reqiested disconenction
+  void disconnect() {
+    _disconnectRequested = true;
+    _onDone();
   }
 }

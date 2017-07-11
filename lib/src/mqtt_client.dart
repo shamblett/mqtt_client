@@ -27,8 +27,7 @@ class MqttClient {
   String clientIdentifier;
 
   /// The Handler that is managing the connection to the remote server.
-  MqttConnectionHandler _connectionHandler =
-  new SynchronousMqttConnectionHandler();
+  MqttConnectionHandler _connectionHandler;
 
   /// The subscriptions manager responsible for tracking subscriptions.
   SubscriptionsManager _subscriptionsManager;
@@ -72,6 +71,7 @@ class MqttClient {
               .trim()
               .length}) exceeds the max recommended in the MQTT spec. ");
     }
+    _connectionHandler = new SynchronousMqttConnectionHandler();
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);
@@ -134,7 +134,11 @@ class MqttClient {
   }
 
   /// Disconnect from the broker
-  ConnectionState disconnect() {
-    return _connectionHandler.disconnect();
+  void disconnect() {
+    _connectionHandler.disconnect();
+    _publishingManager = null;
+    _subscriptionsManager = null;
+    _keepAlive = null;
+    _connectionHandler = null;
   }
 }
