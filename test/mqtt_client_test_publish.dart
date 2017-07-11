@@ -29,7 +29,7 @@ main() async {
   buff[2] = 'l'.codeUnitAt(0);
   buff[3] = 'l'.codeUnitAt(0);
   buff[4] = 'o'.codeUnitAt(0);
-  client.publishMessage(topic, MqttQos.atLeastOnce, buff);
+  client.publishMessage(topic, MqttQos.exactlyOnce, buff);
   print("Sleeping....");
   await MqttUtilities.asyncSleep(10);
   print("Disconnecting");
