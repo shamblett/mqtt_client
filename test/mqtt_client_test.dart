@@ -32,13 +32,12 @@ bool pingServer(String server) {
 
 void main() {
   final bool skipMosquito = pingServer("test.mosquitto.org");
-  test("Mosquitto", () async {
+  test("Mosquitto", () {
     MqttLogger.loggingOn = true;
     final MqttClient client =
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
-    final ConnectionState state = await client.connect();
+    expect(client.connect(), completion(equals(ConnectionState.connected)));
     print("Mosquitto client connected");
-    expect(state, ConnectionState.connected);
     client.disconnect();
     print("Mosquitto client disconnected");
   }, skip: skipMosquito);
