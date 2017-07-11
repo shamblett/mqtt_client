@@ -28,7 +28,7 @@ main() async {
   buff[1] = 'e'.codeUnitAt(0);
   buff[2] = 'l'.codeUnitAt(0);
   buff[3] = 'l'.codeUnitAt(0);
-  buff[4] = '0'.codeUnitAt(0);
+  buff[4] = 'o'.codeUnitAt(0);
   client.publishMessage(topic, MqttQos.atLeastOnce, buff);
   print("Sleeping....");
   await MqttUtilities.asyncSleep(10);
