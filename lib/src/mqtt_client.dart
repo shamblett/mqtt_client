@@ -138,6 +138,7 @@ class MqttClient {
     _connectionHandler.disconnect();
     _publishingManager = null;
     _subscriptionsManager = null;
+    _keepAlive.stop();
     _keepAlive = null;
     _connectionHandler = null;
   }

@@ -79,4 +79,9 @@ class MqttConnectionKeepAlive {
   bool messageSent(MqttMessage msg) {
     return true;
   }
+
+  /// Stop the keep alive process
+  void stop() {
+    pingTimer.cancel();
+  }
 }
