@@ -38,7 +38,7 @@ void main() {
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
     expect(client.connect(), completion(equals(ConnectionState.connected)));
     print("Mosquitto client connected");
-    client.disconnect();
-    print("Mosquitto client disconnected");
+    //client.disconnect();
+    //print("Mosquitto client disconnected");
   }, skip: skipMosquito);
 }
