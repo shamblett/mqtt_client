@@ -14,12 +14,13 @@ main() async {
   // Connect the client
   final MqttClient client =
   new MqttClient("test.mosquitto.org", "SJHMQTTClient");
-  final ConnectionState state = await client.connect();
-  if (state == ConnectionState.connected) {
+  await client.connect();
+  if (client.connectionState == ConnectionState.connected) {
     print("Mosquitto client connected");
   } else {
     print(
-        "ERROR Mosquitto client connection failed - disconnecting, state is $state");
+        "ERROR Mosquitto client connection failed - disconnecting, state is ${client
+            .connectionState}");
     client.disconnect();
   }
   // Subscribe to a known topic
