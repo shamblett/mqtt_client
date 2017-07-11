@@ -20,7 +20,7 @@ import 'package:test/test.dart';
 /// Helper function to ping a server
 Future<bool> pingServer(String server) {
   final Completer completer = new Completer();
-  Process.start('ping', ['-c3']).then((process) {
+  Process.start('ping', ['-c3 $server']).then((process) {
     // Get the exit code from the new process.
     process.exitCode.then((exitCode) {
       if (exitCode == 0) {
@@ -36,7 +36,7 @@ Future<bool> pingServer(String server) {
 
 Future main() async {
   final bool skipMosquito = await pingServer("test.mosquitto.org");
-  test("Mosquito", () async {
+  test("Mosquitto", () async {
     final MqttClient client =
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
     final ConnectionState state = await client.connect();
