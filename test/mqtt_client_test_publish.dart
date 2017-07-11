@@ -25,10 +25,10 @@ main() async {
   final String topic = "Dart/SJH/mqtt_client";
   final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
   buff[0] = 'h'.codeUnitAt(0);
-  buff[0] = 'e'.codeUnitAt(0);
-  buff[0] = 'l'.codeUnitAt(0);
-  buff[0] = 'l'.codeUnitAt(0);
-  buff[0] = '0'.codeUnitAt(0);
+  buff[1] = 'e'.codeUnitAt(0);
+  buff[2] = 'l'.codeUnitAt(0);
+  buff[3] = 'l'.codeUnitAt(0);
+  buff[4] = '0'.codeUnitAt(0);
   client.publishMessage(topic, MqttQos.atLeastOnce, buff);
   print("Sleeping....");
   await MqttUtilities.asyncSleep(10);
