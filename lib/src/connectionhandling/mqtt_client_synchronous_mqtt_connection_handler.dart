@@ -65,8 +65,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
   /// Disconnects the underlying connection object.
   void _performConnectionDisconnect() {
     // Set the connection to disconnected.
-    connectionState = ConnectionState.disconnecting;
-    connection = null;
+    connection.disconnectRequested = true;
     connectionState = ConnectionState.disconnected;
   }
 

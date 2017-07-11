@@ -39,7 +39,7 @@ class MqttConnection extends Object with events.EventEmitter {
   ReadWrapper readWrapper;
 
   /// Indicates if disconnect(onDone) has been requested or not
-  bool _disconnectRequested = false;
+  bool disconnectRequested = false;
 
   /// Default constructor
   MqttConnection();
@@ -110,7 +110,7 @@ class MqttConnection extends Object with events.EventEmitter {
   void _onDone() {
     // We should never be done unless requested
     _disconnect();
-    if (!_disconnectRequested) {
+    if (!disconnectRequested) {
       throw new SocketException(
           "MqttConnection::On Done called by broker, disconnecting.");
     }
@@ -137,7 +137,7 @@ class MqttConnection extends Object with events.EventEmitter {
 
   // User reqiested disconenction
   void disconnect() {
-    _disconnectRequested = true;
+    disconnectRequested = true;
     _onDone();
   }
 }
