@@ -47,6 +47,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
               "The broker is not responding to the connection request message "
               "(Missing Connection Acknowledgement");
     }
+    MqttLogger.log(
+        "SynchronousMqttConnectionHandler::internalConnect exited with state $connectionState");
     return connectionState;
   }
 
