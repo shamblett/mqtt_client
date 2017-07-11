@@ -26,7 +26,7 @@ Future<bool> pingServer(String server) {
       if (exitCode == 0) {
         completer.complete(false);
       } else {
-        print("Server - $server is dead, skipping");
+        print("Server - $server is dead, exit code is $exitCode - skipping");
         completer.complete(true);
       }
     });
@@ -36,14 +36,11 @@ Future<bool> pingServer(String server) {
 
 Future main() async {
   final bool skipMosquito = await pingServer("test.mosquitto.org");
-
-  group("Mosquito", () {
-    test("Base functions", () async {
-      final MqttClient client =
-      new MqttClient("test.mosquitto.org", "SJHMQTTClient");
-      final ConnectionState state = await client.connect();
-      expect(state, ConnectionState.connected);
-      client.disconnect();
-    }, skip: skipMosquito);
-  });
+  test("Mosquito", () async {
+    final MqttClient client =
+    new MqttClient("test.mosquitto.org", "SJHMQTTClient");
+    final ConnectionState state = await client.connect();
+    expect(state, ConnectionState.connected);
+    client.disconnect();
+  }, skip: skipMosquito);
 }
