@@ -107,7 +107,7 @@ class MqttConnection extends Object with events.EventEmitter {
   void _onDone() {
     // We should never be done
     _disconnect();
-    throw new SocketException("MqttConnection::On Done called, disconnecting.");
+    //throw new SocketException("MqttConnection::On Done called, disconnecting.");
   }
 
   /// Disconnects from the message broker
