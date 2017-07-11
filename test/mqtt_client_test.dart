@@ -18,24 +18,20 @@ import 'package:test/test.dart';
 /// is not run, this saves tests being marked as fail when in fact this may not be the case.
 
 /// Helper function to ping a server
-Future<bool> pingServer(String server) {
-  final Completer completer = new Completer();
-  Process.start('ping', ['-c3 $server']).then((process) {
-    // Get the exit code from the new process.
-    process.exitCode.then((exitCode) {
-      if (exitCode == 0) {
-        completer.complete(false);
-      } else {
-        print("Server - $server is dead, exit code is $exitCode - skipping");
-        completer.complete(true);
-      }
-    });
-  });
-  return completer.future;
+bool pingServer(String server) {
+  final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
+  // Get the exit code from the new process.
+  if (result.exitCode == 0) {
+    return false;
+  } else {
+    print("Server - $server is dead, exit code is ${result
+        .exitCode} - skipping");
+    return true;
+  }
 }
 
-Future main() async {
-  final bool skipMosquito = await pingServer("test.mosquitto.org");
+void main() {
+  final bool skipMosquito = pingServer("test.mosquitto.org");
   test("Mosquitto", () async {
     final MqttClient client =
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
