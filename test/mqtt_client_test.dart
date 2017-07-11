@@ -33,6 +33,7 @@ bool pingServer(String server) {
 void main() {
   final bool skipMosquito = pingServer("test.mosquitto.org");
   test("Mosquitto", () async {
+    MqttLogger.loggingOn = true;
     final MqttClient client =
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
     final ConnectionState state = await client.connect();

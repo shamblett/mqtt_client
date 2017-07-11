@@ -22,6 +22,7 @@ class ReadWrapper {
   ReadWrapper() {
     this.messageBytes = new List<int>();
   }
+
   /// The bytes associated with the message being read.
   List<int> messageBytes;
 }
@@ -73,6 +74,7 @@ class MqttConnection extends Object with events.EventEmitter {
 
   /// OnData listener callback
   void _onData(List<int> data) {
+    MqttLogger.log("MqttConnection::_onData");
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
       return;
@@ -86,9 +88,11 @@ class MqttConnection extends Object with events.EventEmitter {
       final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);
       msg = MqttMessage.createFrom(messageStream);
     } catch (exception) {
+      MqttLogger.log("MqttConnection::_ondata - message is not valid");
       messageIsValid = false;
     }
     if (messageIsValid) {
+      MqttLogger.log("MqttConnection::_onData - message received $msg");
       emitEvent(new MessageAvailable(msg));
     }
   }

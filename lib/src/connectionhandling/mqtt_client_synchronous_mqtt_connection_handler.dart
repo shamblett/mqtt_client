@@ -18,12 +18,16 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
     int connectionAttempts = 0;
     do {
       // Initiate the connection
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect entered");
       connectionState = ConnectionState.connecting;
       connection = new MqttConnection();
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       this.listen(connection, MessageAvailable, this.messageAvailable);
       // Transmit the required connection message to the broker.
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect sending connect message");
       sendMessage(connectMessage);
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
       await MqttUtilities.asyncSleep(5);
@@ -31,6 +35,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionState != ConnectionState.connected) {
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect failed");
       throw new NoConnectionException(
           "The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. "
               "The broker is not responding to the connection request message "
@@ -40,6 +46,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
   }
 
   ConnectionState disconnect() {
+    MqttLogger.log("SynchronousMqttConnectionHandler::disconnect");
     // Send a disconnect message to the broker
     connectionState = ConnectionState.disconnecting;
     sendMessage(new MqttDisconnectMessage());
@@ -58,6 +65,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
 
   /// Processes the connect acknowledgement message.
   bool _connectAckProcessor(MqttMessage msg) {
+    MqttLogger.log("SynchronousMqttConnectionHandler::_connectAckProcessor");
     try {
       final MqttConnectAckMessage ackMsg = msg as MqttConnectAckMessage;
       // Drop the connection if our connect request has been rejected.
