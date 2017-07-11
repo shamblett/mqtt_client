@@ -18,8 +18,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
     int connectionAttempts = 0;
     do {
       // Initiate the connection
-      MqttLogger.log(
-          "SynchronousMqttConnectionHandler::internalConnect entered");
+      MqttLogger
+          .log("SynchronousMqttConnectionHandler::internalConnect entered");
       connectionState = ConnectionState.connecting;
       connection = new MqttConnection();
       await connection.connect(hostname, port);
@@ -35,8 +35,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionState != ConnectionState.connected) {
-      MqttLogger.log(
-          "SynchronousMqttConnectionHandler::internalConnect failed");
+      MqttLogger
+          .log("SynchronousMqttConnectionHandler::internalConnect failed");
       throw new NoConnectionException(
           "The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. "
               "The broker is not responding to the connection request message "
@@ -82,6 +82,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
         _performConnectionDisconnect();
       } else {
         // Initialize the keepalive to start the ping based keepalive process.
+        MqttLogger.log(
+            "SynchronousMqttConnectionHandler::_connectAckProcessor - state = connected");
         connectionState = ConnectionState.connected;
       }
     } catch (InvalidMessageException) {
