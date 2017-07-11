@@ -163,6 +163,7 @@ class SubscriptionsManager extends events.EventDetector {
     // If we have the subscription remove it
     if (sub != null) {
       subscriptions.remove(subKey);
+      messagesReceived.remove(subKey);
     }
     return true;
   }

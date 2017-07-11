@@ -51,6 +51,9 @@ class MqttClient {
           ? _connectionHandler.connectionState
           : ConnectionState.disconnected;
 
+  /// The connection message to use to override the default
+  MqttConnectMessage _connectionMessage;
+
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
   Future<ConnectionState> connect([String username, String password]) async {
@@ -85,15 +88,17 @@ class MqttClient {
         this.server, this.port, connectMessage);
   }
 
-  ///  Gets a configured connect message.
-  ///  Returns an MqttConnectMessage that can be used to connect to a message broker.</returns>
+  ///  Gets a pre-configured connect message if one has not been supplied by the user.
+  ///  Returns an MqttConnectMessage that can be used to connect to a message broker
   MqttConnectMessage _getConnectMessage(String username, String password) {
-    final MqttConnectMessage message = new MqttConnectMessage()
-        .withClientIdentifier(clientIdentifier)
-        .keepAliveFor(Constants.defaultKeepAlive)
-        .authenticateAs(username, password)
-        .startClean();
-    return message;
+    if (_connectionMessage == null) {
+      _connectionMessage = new MqttConnectMessage()
+          .withClientIdentifier(clientIdentifier)
+          .keepAliveFor(Constants.defaultKeepAlive)
+          .authenticateAs(username, password)
+          .startClean();
+    }
+    return _connectionMessage;
   }
 
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
@@ -110,7 +115,7 @@ class MqttClient {
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
-  /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.</exception>
+  /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.
   int publishMessage(String topic, MqttQos qualityOfService,
       typed.Uint8Buffer data) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
@@ -122,6 +127,16 @@ class MqttClient {
     } catch (Exception) {
       throw new InvalidTopicException(Exception.toString(), topic);
     }
+  }
+
+  /// Unsubscribe from a topic
+  void unsubscribe(String topic) {
+    _subscriptionsManager.unsubscribe(topic);
+  }
+
+  /// Gets the current status of a subscription.
+  SubscriptionStatus getSubscriptionsStatus(String topic) {
+    return _subscriptionsManager.getSubscriptionsStatus(topic);
   }
 
   /// Disconnect from the broker
