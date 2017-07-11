@@ -31,10 +31,10 @@ main() async {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-    print("Change notification:: payload is $pt for topic $topic");
+    print("Change notification:: payload is <$pt> for topic <$topic>");
   });
   print("Sleeping....");
-  await MqttUtilities.asyncSleep(60);
+  await MqttUtilities.asyncSleep(90);
   print("Disconnecting");
   client.disconnect();
 }
