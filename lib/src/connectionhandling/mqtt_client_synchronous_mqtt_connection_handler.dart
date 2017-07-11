@@ -16,10 +16,11 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
   Future<ConnectionState> internalConnect(String hostname, int port,
       MqttConnectMessage connectMessage) async {
     int connectionAttempts = 0;
+    MqttLogger.log("SynchronousMqttConnectionHandler::internalConnect entered");
     do {
       // Initiate the connection
-      MqttLogger
-          .log("SynchronousMqttConnectionHandler::internalConnect entered");
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts");
       connectionState = ConnectionState.connecting;
       connection = new MqttConnection();
       await connection.connect(hostname, port);
@@ -32,7 +33,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - pre sleep, state = $connectionState");
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
-      //await MqttUtilities.asyncSleep(5);
+      await MqttUtilities.asyncSleep(5);
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionState");
     } while (connectionState != ConnectionState.connected &&
