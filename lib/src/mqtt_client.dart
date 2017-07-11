@@ -13,20 +13,14 @@ class MqttClient {
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   MqttClient(this.server, this.clientIdentifier) {
-    port = Constants.defaultMqttPort;
+    this.port = Constants.defaultMqttPort;
   }
 
   /// Initializes a new instance of the MqttClient class using the supplied Mqtt Port.
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   /// The port to use
-  MqttClient.withPort(this.server, this.clientIdentifier, this.port) {
-    _publishingManager = new PublishingManager(_connectionHandler);
-    _subscriptionsManager =
-    new SubscriptionsManager(_connectionHandler, _publishingManager);
-    _keepAlive = new MqttConnectionKeepAlive(
-        _connectionHandler, Constants.defaultKeepAlive);
-  }
+  MqttClient.withPort(this.server, this.clientIdentifier, this.port);
 
   String server;
   int port;
