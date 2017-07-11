@@ -94,6 +94,7 @@ class MqttConnection extends Object with events.EventEmitter {
     if (messageIsValid) {
       MqttLogger.log("MqttConnection::_onData - message received $msg");
       emitEvent(new MessageAvailable(msg));
+      MqttLogger.log("MqttConnection::_onData - message processed");
     }
   }
 
