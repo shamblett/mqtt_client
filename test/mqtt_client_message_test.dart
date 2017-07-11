@@ -401,7 +401,7 @@ void main() {
       expect(varHeader1.messageIdentifier, 10);
       expect(varHeader1.protocolVersion, 3);
       expect(varHeader1.protocolName, "MQIsdp");
-      expect(varHeader1.connectFlags.willQos, MqttQos.reserved1);
+      expect(varHeader1.connectFlags.willQos, MqttQos.atLeastOnce);
       expect(varHeader1.connectFlags.cleanStart, isTrue);
       expect(varHeader1.connectFlags.willFlag, isTrue);
     });
