@@ -31,6 +31,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       sendMessage(connectMessage);
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
       await MqttUtilities.asyncSleep(5);
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionState");
     } while (connectionState != ConnectionState.connected &&
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
