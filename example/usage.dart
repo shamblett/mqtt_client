@@ -74,6 +74,9 @@ Future<int> main() async {
     print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
   });
 
+  /// Sleep to read the log.....
+  await MqttUtilities.asyncSleep(5);
+
   /// Lets publish to a topic, use a high QOS
   // Publish a known topic
   final String pubTopic = "Dart/Mqtt_client/testtopic";
