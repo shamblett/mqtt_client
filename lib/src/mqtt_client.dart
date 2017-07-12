@@ -45,7 +45,7 @@ class MqttClient {
           : ConnectionState.disconnected;
 
   /// The connection message to use to override the default
-  MqttConnectMessage _connectionMessage;
+  MqttConnectMessage connectionMessage;
 
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
@@ -85,14 +85,14 @@ class MqttClient {
   ///  Gets a pre-configured connect message if one has not been supplied by the user.
   ///  Returns an MqttConnectMessage that can be used to connect to a message broker
   MqttConnectMessage _getConnectMessage(String username, String password) {
-    if (_connectionMessage == null) {
-      _connectionMessage = new MqttConnectMessage()
+    if (connectionMessage == null) {
+      connectionMessage = new MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
     }
-    return _connectionMessage;
+    return connectionMessage;
   }
 
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
