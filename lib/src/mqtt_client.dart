@@ -142,4 +142,12 @@ class MqttClient {
     _keepAlive = null;
     _connectionHandler = null;
   }
+
+  /// Turn on logging, true to start, false to stop
+  void logging(bool on) {
+    MqttLogger.loggingOn = false;
+    if (on) {
+      MqttLogger.loggingOn = true;
+    }
+  }
 }

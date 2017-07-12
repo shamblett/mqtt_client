@@ -4,14 +4,15 @@
  * Date   : 11/07/2017
  * Copyright :  S.Hamblett
  */
+import 'dart:async';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
 
-main() async {
-  MqttLogger.loggingOn = true;
-  // Connect the client
+Future<int> main() async {
+  // Create and connect the client
   final MqttClient client =
   new MqttClient("test.mosquitto.org", "SJHMQTTClient");
+  client.logging(true);
   await client.connect();
   if (client.connectionState == ConnectionState.connected) {
     print("Mosquitto client connected");
@@ -34,4 +35,5 @@ main() async {
   await MqttUtilities.asyncSleep(10);
   print("Disconnecting");
   client.disconnect();
+  return 0;
 }
