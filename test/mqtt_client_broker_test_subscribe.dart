@@ -35,6 +35,8 @@ Future<int> main() async {
   });
   print("Sleeping....");
   await MqttUtilities.asyncSleep(90);
+  print("Unsubscribing");
+  client.unsubscribe(topic);
   print("Disconnecting");
   client.disconnect();
   return 0;
