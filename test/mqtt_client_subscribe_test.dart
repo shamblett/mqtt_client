@@ -77,8 +77,8 @@ void main() {
     MqttLogger.loggingOn = true;
     final MqttClient client =
     new MqttClient("test.mosquitto.org", "SJHMQTTClient");
-    final ConnectionState state = await client.connect();
-    expect(state, ConnectionState.connected);
+    await client.connect();
+    expect(client.connectionState, ConnectionState.connected);
     print("Mosquitto client connected");
     final String topic = "test/hw";
     final ChangeNotifier<MqttReceivedMessage> cn =
