@@ -49,10 +49,10 @@ Future<int> main() async {
 
   /// Check we are connected
   if (client.connectionState == ConnectionState.connected) {
-    print("Mosquitto client connected");
+    print("EXAMPLE::Mosquitto client connected");
   } else {
     print(
-        "ERROR Mosquitto client connection failed - disconnecting, state is ${client
+        "EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client
             .connectionState}");
     client.disconnect();
   }
@@ -71,7 +71,7 @@ Future<int> main() async {
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     /// The payload is a byte buffer, this will be specific to the topic
-    print("Change notification:: payload is <$pt> for topic <$topic>");
+    print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
   });
 
   /// Lets publish to a topic, use a high QOS
@@ -87,11 +87,11 @@ Future<int> main() async {
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
-  print("Sleeping....");
+  print("EXAMPLE::Sleeping....");
   await MqttUtilities.asyncSleep(120);
 
   /// Finally, unsubscribe and exit gracefully
-  print("Unsubscribing");
+  print("EXAMPLE::Unsubscribing");
   client.unsubscribe(topic);
 
   /// Wait for the unsubscribe message from the broker if you wish.
