@@ -27,12 +27,16 @@ Future<int> main() async {
   /// Set logging on if needed, defaults to off
   client.logging(true);
 
+  /// If you intend to use a keep alive value in your connect message that is not the default(60s)
+  /// you must set it here
+  client.keepAlivePeriod = 30;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
       .withClientIdentifier("Mqtt_clientUniqueId")
-      .keepAliveFor(60)
+      .keepAliveFor(30) // Must agree with the keep alive set above
       .withWillTopic("willtopic")
       .withWillQos(MqttQos.atLeastOnce);
   client.connectionMessage = connMess;

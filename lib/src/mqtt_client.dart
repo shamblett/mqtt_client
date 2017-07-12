@@ -35,6 +35,9 @@ class MqttClient {
   /// Handles the connection management while idle.
   MqttConnectionKeepAlive _keepAlive;
 
+  /// Keep alive period, seconds
+  int keepAlivePeriod = Constants.defaultKeepAlive;
+
   /// Handles everything to do with publication management.
   PublishingManager _publishingManager;
 
@@ -76,7 +79,7 @@ class MqttClient {
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);
     _keepAlive = new MqttConnectionKeepAlive(
-        _connectionHandler, Constants.defaultKeepAlive);
+        _connectionHandler, keepAlivePeriod);
     final connectMessage = _getConnectMessage(username, password);
     return await _connectionHandler.connect(
         this.server, this.port, connectMessage);
