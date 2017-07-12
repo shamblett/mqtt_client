@@ -32,7 +32,7 @@ Future<int> main() async {
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
       .withClientIdentifier("Mqtt_clientUniqueId")
-      .keepAliveFor(30)
+      .keepAliveFor(60)
       .withWillTopic("willtopic")
       .withWillQos(MqttQos.atLeastOnce);
   client.connectionMessage = connMess;
