@@ -1,4 +1,6 @@
 # mqtt_client
+[![Build Status](https://travis-ci.org/shamblett/mqtt_client.svg?branch=master)](https://travis-ci.org/shamblett/mqtt_client)
+
 A server side MQTT client for Dart.
 
 The client is an MQTT v3 implementation supporting subscription/publishing at all QOS levels,
