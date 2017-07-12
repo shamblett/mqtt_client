@@ -99,7 +99,7 @@ Future<int> main() async {
 
   /// Wait for the unsubscribe message from the broker if you wish.
   await MqttUtilities.asyncSleep(2);
-  print("Disconnecting");
+  print("EXAMPLE::Disconnecting");
   client.disconnect();
   return 0;
 }
