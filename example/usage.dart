@@ -19,10 +19,10 @@ Future<int> main() async {
   /// client connecting to a MQTT broker. As the word identifier already suggests, it should be unique per broker.
   /// The broker uses it for identifying the client and the current state of the client. If you don’t need a state
   /// to be hold by the broker, in MQTT 3.1.1 you can set an empty ClientId, which results in a connection without any state.
-  /// A condition is that clean session connect flag(below) is true, otherwise the connection will be rejected.
+  /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
   /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
   /// of 1883 is used.
-  final MqttClient client = new MqttClient("test.mosquitto.org", "UniqueCLID");
+  final MqttClient client = new MqttClient("test.mosquitto.org", "");
 
   /// Set logging on if needed, defaults to off
   client.logging(true);
@@ -31,8 +31,8 @@ Future<int> main() async {
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
+      .withClientIdentifier("Mqtt_clientUniqueId")
       .keepAliveFor(30)
-  //.authenticateAs("billy", "billypass")
       .withWillTopic("willtopic")
       .withWillQos(MqttQos.atLeastOnce);
   client.connectionMessage = connMess;

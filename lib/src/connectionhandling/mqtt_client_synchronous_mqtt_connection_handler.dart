@@ -85,6 +85,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
               MqttConnectReturnCode.notAuthorized ||
           ackMsg.variableHeader.returnCode ==
               MqttConnectReturnCode.badUsernameOrPassword) {
+        MqttLogger.log(
+            "SynchronousMqttConnectionHandler::_connectAckProcessor connection rejected");
         _performConnectionDisconnect();
       } else {
         // Initialize the keepalive to start the ping based keepalive process.
