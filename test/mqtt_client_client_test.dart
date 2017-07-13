@@ -17,10 +17,17 @@ import 'package:test/test.dart';
 /// Helper function to ping a server
 bool pingServer(String server) {
   // Not on Travis
-  final String noPing = new String.fromEnvironment('PUB_ENVIRONMENT');
-  if (noPing == "travis") {
-    print("Skipping broker tests, running on travis");
-    return true;
+  final bool isDeclared =
+      const String.fromEnvironment("PUB_ENVIRONMENT") != null;
+  if (isDeclared) {
+    print("PUB_ENVIRONMENT is declared");
+    final String noPing = new String.fromEnvironment('PUB_ENVIRONMENT');
+    if (noPing == "travis") {
+      print("Skipping broker tests, running on travis");
+      return true;
+    } else {
+      print("PUB_ENVIRONMENT is $noPing");
+    }
   }
   final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
   // Get the exit code from the new process.
