@@ -6,8 +6,6 @@
  */
 @TestOn("linux")
 import 'dart:io';
-import 'dart:async';
-import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 
 /// These tests check the mqtt client subscribe/publish functionality against a publicly
