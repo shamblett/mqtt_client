@@ -19,10 +19,10 @@ bool pingServer(String server) {
   // Not on Travis
   final String noPing = new String.fromEnvironment('PUB_ENVIRONMENT');
   if (noPing == "travis") {
-    return false;
+    print("Skipping broker tests, running on travis");
+    return true;
   }
   final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
-  //PUB_ENVIRONMENT
   // Get the exit code from the new process.
   if (result.exitCode == 0) {
     return false;
