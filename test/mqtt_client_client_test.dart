@@ -34,6 +34,7 @@ void main() {
   test("Broker Subscribe", () {
     final ProcessResult result =
     Process.runSync('dart', ['mqtt_client_broker_test_subscribe.dart']);
+    print(result.stdout.toString());
     expect(result.exitCode, 0);
   }, skip: skipTests);
 }
