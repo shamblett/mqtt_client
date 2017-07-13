@@ -16,7 +16,13 @@ import 'package:test/test.dart';
 
 /// Helper function to ping a server
 bool pingServer(String server) {
+  // Not on Travis
+  final String noPing = new String.fromEnvironment('PUB_ENVIRONMENT');
+  if (noPing == "travis") {
+    return false;
+  }
   final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
+  //PUB_ENVIRONMENT
   // Get the exit code from the new process.
   if (result.exitCode == 0) {
     return false;
@@ -30,8 +36,8 @@ bool pingServer(String server) {
 void main() {
   final bool skipTests = pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
-    final ProcessResult result =
-    Process.runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
+    final ProcessResult result = Process
+        .runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
     print("Broker Subscribe::stdout");
     print(result.stdout.toString());
     print("Broker Subscribe::stderr");
@@ -48,5 +54,4 @@ void main() {
     print(result.stderr.toString());
     expect(result.exitCode, 0);
   }, skip: skipTests);
-
 }
