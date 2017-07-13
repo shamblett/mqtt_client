@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/messages/mqtt_client_mqtt_message_factory.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/messages</a> - mqtt_client_mqtt_message_factory.dart<span style="font-size: 80%;"> (source / <a href="mqtt_client_mqtt_message_factory.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntry">31</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Package : mqtt_client
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 15/06/2017
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : part of mqtt_client;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : /// Factory for generating instances of MQTT Messages
+<span class="lineNum">      11 </span>            : class MqttMessageFactory {
+<span class="lineNum">      12 </span>            :   /// Gets an instance of an MqttMessage based on the message type requested.
+<span class="lineNum">      13 </span>            :   static MqttMessage getMessage(MqttHeader header,
+<span class="lineNum">      14 </span>            :       MqttByteBuffer messageStream) {
+<span class="lineNum">      15 </span>            :     MqttMessage message;
+<span class="lineNum">      16 </span><span class="lineCov">          2 :     switch (header.messageType) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">          2 :       case MqttMessageType.connect:</span>
+<span class="lineNum">      18 </span><span class="lineCov">          2 :         message = new MqttConnectMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      19 </span>            :         break;
+<span class="lineNum">      20 </span><span class="lineCov">          2 :       case MqttMessageType.connectAck:</span>
+<span class="lineNum">      21 </span>            :         message =
+<span class="lineNum">      22 </span><span class="lineCov">          2 :         new MqttConnectAckMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      23 </span>            :         break;
+<span class="lineNum">      24 </span><span class="lineCov">          2 :       case MqttMessageType.publish:</span>
+<span class="lineNum">      25 </span><span class="lineCov">          1 :         message = new MqttPublishMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      26 </span>            :         break;
+<span class="lineNum">      27 </span><span class="lineCov">          2 :       case MqttMessageType.publishAck:</span>
+<span class="lineNum">      28 </span>            :         message =
+<span class="lineNum">      29 </span><span class="lineCov">          1 :         new MqttPublishAckMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      30 </span>            :         break;
+<span class="lineNum">      31 </span><span class="lineCov">          2 :       case MqttMessageType.publishComplete:</span>
+<span class="lineNum">      32 </span>            :         message =
+<span class="lineNum">      33 </span><span class="lineCov">          1 :         new MqttPublishCompleteMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      34 </span>            :         break;
+<span class="lineNum">      35 </span><span class="lineCov">          2 :       case MqttMessageType.publishReceived:</span>
+<span class="lineNum">      36 </span>            :         message =
+<span class="lineNum">      37 </span><span class="lineCov">          1 :         new MqttPublishReceivedMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      38 </span>            :         break;
+<span class="lineNum">      39 </span><span class="lineCov">          2 :       case MqttMessageType.publishRelease:</span>
+<span class="lineNum">      40 </span>            :         message =
+<span class="lineNum">      41 </span><span class="lineCov">          1 :         new MqttPublishReleaseMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      42 </span>            :         break;
+<span class="lineNum">      43 </span><span class="lineCov">          2 :       case MqttMessageType.subscribe:</span>
+<span class="lineNum">      44 </span>            :         message =
+<span class="lineNum">      45 </span><span class="lineCov">          1 :         new MqttSubscribeMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      46 </span>            :         break;
+<span class="lineNum">      47 </span><span class="lineCov">          2 :       case MqttMessageType.subscribeAck:</span>
+<span class="lineNum">      48 </span>            :         message =
+<span class="lineNum">      49 </span><span class="lineCov">          1 :         new MqttSubscribeAckMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      50 </span>            :         break;
+<span class="lineNum">      51 </span><span class="lineCov">          2 :       case MqttMessageType.unsubscribe:</span>
+<span class="lineNum">      52 </span>            :         message =
+<span class="lineNum">      53 </span><span class="lineCov">          1 :         new MqttUnsubscribeMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      54 </span>            :         break;
+<span class="lineNum">      55 </span><span class="lineCov">          2 :       case MqttMessageType.unsubscribeAck:</span>
+<span class="lineNum">      56 </span>            :         message =
+<span class="lineNum">      57 </span><span class="lineCov">          1 :         new MqttUnsubscribeAckMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      58 </span>            :         break;
+<span class="lineNum">      59 </span><span class="lineCov">          2 :       case MqttMessageType.pingRequest:</span>
+<span class="lineNum">      60 </span><span class="lineCov">          2 :         message = new MqttPingRequestMessage.fromHeader(header);</span>
+<span class="lineNum">      61 </span>            :         break;
+<span class="lineNum">      62 </span><span class="lineCov">          2 :       case MqttMessageType.pingResponse:</span>
+<span class="lineNum">      63 </span><span class="lineCov">          2 :         message = new MqttPingResponseMessage.fromHeader(header);</span>
+<span class="lineNum">      64 </span>            :         break;
+<span class="lineNum">      65 </span><span class="lineCov">          2 :       case MqttMessageType.disconnect:</span>
+<span class="lineNum">      66 </span><span class="lineCov">          2 :         message = new MqttDisconnectMessage.fromHeader(header);</span>
+<span class="lineNum">      67 </span>            :         break;
+<span class="lineNum">      68 </span>            :       default:
+<span class="lineNum">      69 </span><span class="lineCov">          1 :         throw new InvalidHeaderException(</span>
+<span class="lineNum">      70 </span>            :             &quot;The Message Type specified ($header.messageType) is not a valid &quot;
+<span class="lineNum">      71 </span><span class="lineCov">          1 :                 &quot;MQTT Message type or currently not supported.&quot;);</span>
+<span class="lineNum">      72 </span>            :     }
+<span class="lineNum">      73 </span>            :     return message;
+<span class="lineNum">      74 </span>            :   }
+<span class="lineNum">      75 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

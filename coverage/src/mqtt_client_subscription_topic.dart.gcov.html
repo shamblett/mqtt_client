@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/mqtt_client_subscription_topic.dart</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - mqtt_client_subscription_topic.dart<span style="font-size: 80%;"> (source / <a href="mqtt_client_subscription_topic.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Package : mqtt_client
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 31/05/2017
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : part of mqtt_client;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : /// Implementation of a Subscription topic that performs additional validations
+<span class="lineNum">      11 </span>            : /// of topics that are subscribed to.
+<span class="lineNum">      12 </span>            : class SubscriptionTopic extends Topic {
+<span class="lineNum">      13 </span>            :   /// Creates a new instance of a rawTopic from a topic string.
+<span class="lineNum">      14 </span>            :   SubscriptionTopic(String rawTopic)
+<span class="lineNum">      15 </span><span class="lineCov">          4 :       : super(rawTopic, [</span>
+<span class="lineNum">      16 </span>            :     Topic.validateMinLength,
+<span class="lineNum">      17 </span>            :     Topic.validateMaxLength,
+<span class="lineNum">      18 </span>            :     _validateMultiWildcard,
+<span class="lineNum">      19 </span>            :     _validateFragments
+<span class="lineNum">      20 </span>            :   ]);
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            :   /// Validates all unique fragments in the topic match the MQTT spec requirements.
+<span class="lineNum">      23 </span>            :   static void _validateFragments(Topic topicInstance) {
+<span class="lineNum">      24 </span>            :     // If any fragment contains a wildcard or a multi wildcard but is greater than
+<span class="lineNum">      25 </span>            :     // 1 character long, then it's an error - wildcards must appear by themselves.
+<span class="lineNum">      26 </span><span class="lineCov">          4 :     final bool invalidFragment = topicInstance.topicFragments.any(</span>
+<span class="lineNum">      27 </span>            :             (String fragment) =&gt;
+<span class="lineNum">      28 </span><span class="lineCov">          2 :         (fragment.contains(Topic.multiWildcard) ||</span>
+<span class="lineNum">      29 </span><span class="lineCov">          2 :             fragment.contains(Topic.wildcard)) &amp;&amp;</span>
+<span class="lineNum">      30 </span><span class="lineCov">          2 :             fragment.length &gt; 1);</span>
+<span class="lineNum">      31 </span>            :     if (invalidFragment) {
+<span class="lineNum">      32 </span><span class="lineCov">          1 :       throw new Exception(</span>
+<span class="lineNum">      33 </span>            :           &quot;mqtt_client::SubscriptionTopic: rawTopic Fragment contains a wildcard but is more than one character long&quot;);
+<span class="lineNum">      34 </span>            :     }
+<span class="lineNum">      35 </span>            :   }
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :   /// Validates the placement of the multi-wildcard character in subscription topics.
+<span class="lineNum">      38 </span>            :   static void _validateMultiWildcard(Topic topicInstance) {
+<span class="lineNum">      39 </span><span class="lineCov">          4 :     if (topicInstance.rawTopic.contains(Topic.multiWildcard) &amp;&amp;</span>
+<span class="lineNum">      40 </span><span class="lineCov">          2 :         !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {</span>
+<span class="lineNum">      41 </span><span class="lineCov">          1 :       throw new Exception(</span>
+<span class="lineNum">      42 </span>            :           &quot;mqtt_client::SubscriptionTopic: The rawTopic wildcard # can only be present at the end of a topic&quot;);
+<span class="lineNum">      43 </span>            :     }
+<span class="lineNum">      44 </span><span class="lineCov">          6 :     if (topicInstance.rawTopic.length &gt; 1 &amp;&amp;</span>
+<span class="lineNum">      45 </span><span class="lineCov">          4 :         topicInstance.rawTopic.endsWith(Topic.multiWildcard) &amp;&amp;</span>
+<span class="lineNum">      46 </span><span class="lineCov">          2 :         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {</span>
+<span class="lineNum">      47 </span><span class="lineCov">          1 :       throw new Exception(</span>
+<span class="lineNum">      48 </span>            :           &quot;mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must &quot;
+<span class="lineNum">      49 </span>            :               &quot;be immediately preceeded by a the rawTopic separator /&quot;);
+<span class="lineNum">      50 </span>            :     }
+<span class="lineNum">      51 </span>            :   }
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            :   /// Checks if the rawTopic matches the supplied rawTopic using the MQTT rawTopic matching rules.
+<span class="lineNum">      54 </span>            :   /// Returns true if the rawTopic matches based on the MQTT rawTopic matching rules, otherwise false.
+<span class="lineNum">      55 </span>            :   bool matches(PublicationTopic matcheeTopic) {
+<span class="lineNum">      56 </span>            :     // If the left rawTopic is just a multi wildcard then we have a match without
+<span class="lineNum">      57 </span>            :     // needing to check any further.
+<span class="lineNum">      58 </span><span class="lineCov">          2 :     if (this.rawTopic == Topic.multiWildcard) {</span>
+<span class="lineNum">      59 </span>            :       return true;
+<span class="lineNum">      60 </span>            :     }
+<span class="lineNum">      61 </span>            :     // If the topics are an exact match, bail early with a cheap comparison
+<span class="lineNum">      62 </span><span class="lineCov">          3 :     if (this.rawTopic == matcheeTopic.rawTopic) {</span>
+<span class="lineNum">      63 </span>            :       return true;
+<span class="lineNum">      64 </span>            :     }
+<span class="lineNum">      65 </span>            :     // no match yet so we need to check each fragment
+<span class="lineNum">      66 </span><span class="lineCov">          4 :     for (int i = 0; i &lt; this.topicFragments.length; i++) {</span>
+<span class="lineNum">      67 </span><span class="lineCov">          2 :       final String lhsFragment = topicFragments[i];</span>
+<span class="lineNum">      68 </span>            :       // If we've reached a multi wildcard in the lhs rawTopic,
+<span class="lineNum">      69 </span>            :       // we have a match.
+<span class="lineNum">      70 </span>            :       // (this is the mqtt spec rule finance matches finance or finance/#)
+<span class="lineNum">      71 </span><span class="lineCov">          1 :       if (lhsFragment == Topic.multiWildcard) {</span>
+<span class="lineNum">      72 </span>            :         return true;
+<span class="lineNum">      73 </span>            :       }
+<span class="lineNum">      74 </span><span class="lineCov">          1 :       final bool isLhsWildcard = lhsFragment == Topic.wildcard;</span>
+<span class="lineNum">      75 </span>            :       // If we've reached a wildcard match but the matchee does not have anything at
+<span class="lineNum">      76 </span>            :       // this fragment level then it's not a match.
+<span class="lineNum">      77 </span>            :       // (this is the mqtt spec rule finance does not match finance/+
+<span class="lineNum">      78 </span><span class="lineCov">          3 :       if (isLhsWildcard &amp;&amp; matcheeTopic.topicFragments.length &lt;= i) {</span>
+<span class="lineNum">      79 </span>            :         return false;
+<span class="lineNum">      80 </span>            :       }
+<span class="lineNum">      81 </span>            :       // if lhs is not a wildcard we need to check whether the
+<span class="lineNum">      82 </span>            :       // two fragments match each other.
+<span class="lineNum">      83 </span>            :       if (!isLhsWildcard) {
+<span class="lineNum">      84 </span><span class="lineCov">          2 :         final String rhsFragment = matcheeTopic.topicFragments[i];</span>
+<span class="lineNum">      85 </span>            :         // If the hs fragment is not wildcard then we need an exact match
+<span class="lineNum">      86 </span><span class="lineCov">          1 :         if (lhsFragment != rhsFragment) {</span>
+<span class="lineNum">      87 </span>            :           return false;
+<span class="lineNum">      88 </span>            :         }
+<span class="lineNum">      89 </span>            :       }
+<span class="lineNum">      90 </span>            :       // If we're at the last fragment of the lhs rawTopic but there are
+<span class="lineNum">      91 </span>            :       // more fragments in the in the matchee then the matchee rawTopic
+<span class="lineNum">      92 </span>            :       // is too specific to be a match.
+<span class="lineNum">      93 </span><span class="lineCov">          4 :       if (i + 1 == this.topicFragments.length &amp;&amp;</span>
+<span class="lineNum">      94 </span><span class="lineCov">          5 :           matcheeTopic.topicFragments.length &gt; this.topicFragments.length) {</span>
+<span class="lineNum">      95 </span>            :         return false;
+<span class="lineNum">      96 </span>            :       }
+<span class="lineNum">      97 </span>            :       // If we're here the current fragment matches so check the next
+<span class="lineNum">      98 </span>            :     }
+<span class="lineNum">      99 </span>            :     // If we exit out of the loop without a return then we have a full match rawTopic/rawTopic which would
+<span class="lineNum">     100 </span>            :     // have been caught by the original exact match check at the top anyway.
+<span class="lineNum">     101 </span>            :     return true;
+<span class="lineNum">     102 </span>            :   }
+<span class="lineNum">     103 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

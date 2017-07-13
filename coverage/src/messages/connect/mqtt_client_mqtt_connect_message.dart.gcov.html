@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/messages/connect/mqtt_client_mqtt_connect_message.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">src/messages/connect</a> - mqtt_client_mqtt_connect_message.dart<span style="font-size: 80%;"> (source / <a href="mqtt_client_mqtt_connect_message.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">34</td>
+            <td class="headerCovTableEntry">34</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Package : mqtt_client
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 31/05/2017
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : part of mqtt_client;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : /// An Mqtt message that is used to initiate a connection to a message broker.
+<span class="lineNum">      11 </span>            : class MqttConnectMessage extends MqttMessage {
+<span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttConnectMessage class.
+<span class="lineNum">      13 </span>            :   /// Only called via the MqttMessage.create operation during processing of an Mqtt message stream.
+<span class="lineNum">      14 </span><span class="lineCov">          2 :   MqttConnectMessage() {</span>
+<span class="lineNum">      15 </span><span class="lineCov">          6 :     this.header = new MqttHeader().asType(MqttMessageType.connect);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          4 :     this.variableHeader = new MqttConnectVariableHeader();</span>
+<span class="lineNum">      17 </span><span class="lineCov">          6 :     this.payload = new MqttConnectPayload(this.variableHeader);</span>
+<span class="lineNum">      18 </span>            :   }
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span>            :   ///  Initializes a new instance of the &lt;see cref=&quot;MqttConnectMessage&quot; /&gt; class.
+<span class="lineNum">      21 </span>            :   MqttConnectMessage.fromByteBuffer(MqttHeader header,
+<span class="lineNum">      22 </span><span class="lineCov">          2 :       MqttByteBuffer messageStream) {</span>
+<span class="lineNum">      23 </span><span class="lineCov">          2 :     this.header = header;</span>
+<span class="lineNum">      24 </span><span class="lineCov">          2 :     readFrom(messageStream);</span>
+<span class="lineNum">      25 </span>            :   }
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            :   /// Sets the name of the protocol to use.
+<span class="lineNum">      28 </span>            :   MqttConnectMessage withProtocolName(String protocolName) {
+<span class="lineNum">      29 </span><span class="lineCov">          2 :     this.variableHeader.protocolName = protocolName;</span>
+<span class="lineNum">      30 </span>            :     return this;
+<span class="lineNum">      31 </span>            :   }
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :   /// Sets the protocol version. (Defaults to v3, the only protcol version supported)
+<span class="lineNum">      34 </span>            :   MqttConnectMessage withProtocolVersion(int protocolVersion) {
+<span class="lineNum">      35 </span><span class="lineCov">          2 :     this.variableHeader.protocolVersion = protocolVersion;</span>
+<span class="lineNum">      36 </span>            :     return this;
+<span class="lineNum">      37 </span>            :   }
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span>            :   /// Sets the startClean flag so that the broker drops any messages that were previously destined for us.
+<span class="lineNum">      40 </span>            :   MqttConnectMessage startClean() {
+<span class="lineNum">      41 </span><span class="lineCov">          3 :     this.variableHeader.connectFlags.cleanStart = true;</span>
+<span class="lineNum">      42 </span>            :     return this;
+<span class="lineNum">      43 </span>            :   }
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span>            :   /// Sets the keep alive period
+<span class="lineNum">      46 </span>            :   MqttConnectMessage keepAliveFor(int keepAliveSeconds) {
+<span class="lineNum">      47 </span><span class="lineCov">          2 :     this.variableHeader.keepAlive = keepAliveSeconds;</span>
+<span class="lineNum">      48 </span>            :     return this;
+<span class="lineNum">      49 </span>            :   }
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :   /// Sets the Will flag of the variable header
+<span class="lineNum">      52 </span>            :   MqttConnectMessage will() {
+<span class="lineNum">      53 </span><span class="lineCov">          3 :     this.variableHeader.connectFlags.willFlag = true;</span>
+<span class="lineNum">      54 </span>            :     return this;
+<span class="lineNum">      55 </span>            :   }
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :   /// Sets the WillQos of the connect flag.
+<span class="lineNum">      58 </span>            :   MqttConnectMessage withWillQos(MqttQos qos) {
+<span class="lineNum">      59 </span><span class="lineCov">          3 :     this.variableHeader.connectFlags.willQos = qos;</span>
+<span class="lineNum">      60 </span>            :     return this;
+<span class="lineNum">      61 </span>            :   }
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            :   /// Sets the WillRetain flag of the Connection Flags
+<span class="lineNum">      64 </span>            :   MqttConnectMessage withWillRetain() {
+<span class="lineNum">      65 </span><span class="lineCov">          3 :     this.variableHeader.connectFlags.willRetain = true;</span>
+<span class="lineNum">      66 </span>            :     return this;
+<span class="lineNum">      67 </span>            :   }
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            :   /// Sets the client identifier of the message.
+<span class="lineNum">      70 </span>            :   MqttConnectMessage withClientIdentifier(String clientIdentifier) {
+<span class="lineNum">      71 </span><span class="lineCov">          4 :     this.payload.clientIdentifier = clientIdentifier;</span>
+<span class="lineNum">      72 </span>            :     return this;
+<span class="lineNum">      73 </span>            :   }
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            :   /// Sets the will message.
+<span class="lineNum">      76 </span>            :   MqttConnectMessage withWillMessage(String willMessage) {
+<span class="lineNum">      77 </span><span class="lineCov">          2 :     this.payload.willMessage = willMessage;</span>
+<span class="lineNum">      78 </span>            :     return this;
+<span class="lineNum">      79 </span>            :   }
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span>            :   /// Sets the Will Topic
+<span class="lineNum">      82 </span>            :   MqttConnectMessage withWillTopic(String willTopic) {
+<span class="lineNum">      83 </span><span class="lineCov">          2 :     this.payload.willTopic = willTopic;</span>
+<span class="lineNum">      84 </span>            :     return this;
+<span class="lineNum">      85 </span>            :   }
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span>            :   /// Sets the authentication
+<span class="lineNum">      88 </span>            :   MqttConnectMessage authenticateAs(String username, String password) {
+<span class="lineNum">      89 </span>            :     if (username != null) {
+<span class="lineNum">      90 </span><span class="lineCov">          4 :       this.variableHeader.connectFlags.usernameFlag = username.isNotEmpty;</span>
+<span class="lineNum">      91 </span><span class="lineCov">          2 :       this.payload.username = username;</span>
+<span class="lineNum">      92 </span>            :     }
+<span class="lineNum">      93 </span>            :     if (password != null) {
+<span class="lineNum">      94 </span><span class="lineCov">          4 :       this.variableHeader.connectFlags.passwordFlag = password.isNotEmpty;</span>
+<span class="lineNum">      95 </span><span class="lineCov">          2 :       this.payload.password = password;</span>
+<span class="lineNum">      96 </span>            :     }
+<span class="lineNum">      97 </span>            :     return this;
+<span class="lineNum">      98 </span>            :   }
+<span class="lineNum">      99 </span>            : 
+<span class="lineNum">     100 </span>            :   /// The variable header contents. Contains extended metadata about the message
+<span class="lineNum">     101 </span>            :   MqttConnectVariableHeader variableHeader;
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span>            :   /// The payload of the Mqtt Message.
+<span class="lineNum">     104 </span>            :   MqttConnectPayload payload;
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span>            :   /// Writes the message to the supplied stream.
+<span class="lineNum">     107 </span>            :   void writeTo(MqttByteBuffer messageStream) {
+<span class="lineNum">     108 </span><span class="lineCov">          4 :     this.header.writeTo(</span>
+<span class="lineNum">     109 </span><span class="lineCov">         10 :         variableHeader.getWriteLength() + payload.getWriteLength(),</span>
+<span class="lineNum">     110 </span>            :         messageStream);
+<span class="lineNum">     111 </span><span class="lineCov">          4 :     this.variableHeader.writeTo(messageStream);</span>
+<span class="lineNum">     112 </span><span class="lineCov">          4 :     this.payload.writeTo(messageStream);</span>
+<span class="lineNum">     113 </span>            :   }
+<span class="lineNum">     114 </span>            : 
+<span class="lineNum">     115 </span>            :   /// Reads a message from the supplied stream.
+<span class="lineNum">     116 </span>            :   void readFrom(MqttByteBuffer messageStream) {
+<span class="lineNum">     117 </span><span class="lineCov">          2 :     this.variableHeader =</span>
+<span class="lineNum">     118 </span><span class="lineCov">          2 :     new MqttConnectVariableHeader.fromByteBuffer(messageStream);</span>
+<span class="lineNum">     119 </span><span class="lineCov">          4 :     this.payload = new MqttConnectPayload.fromByteBuffer(</span>
+<span class="lineNum">     120 </span><span class="lineCov">          2 :         this.variableHeader, messageStream);</span>
+<span class="lineNum">     121 </span>            :   }
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span>            :   String toString() {
+<span class="lineNum">     124 </span><span class="lineCov">          2 :     final StringBuffer sb = new StringBuffer();</span>
+<span class="lineNum">     125 </span><span class="lineCov">          4 :     sb.write(super.toString());</span>
+<span class="lineNum">     126 </span><span class="lineCov">          6 :     sb.writeln(variableHeader.toString());</span>
+<span class="lineNum">     127 </span><span class="lineCov">          6 :     sb.writeln(payload.toString());</span>
+<span class="lineNum">     128 </span><span class="lineCov">          2 :     return sb.toString();</span>
+<span class="lineNum">     129 </span>            :   }
+<span class="lineNum">     130 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

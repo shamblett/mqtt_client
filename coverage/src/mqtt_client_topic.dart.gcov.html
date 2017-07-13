@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/mqtt_client_topic.dart</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">src</a> - mqtt_client_topic.dart<span style="font-size: 80%;"> (source / <a href="mqtt_client_topic.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Package : mqtt_client
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 31/05/2017
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : part of mqtt_client;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : /// Provides the base implementation of an MQTT topic.
+<span class="lineNum">      11 </span>            : abstract class Topic {
+<span class="lineNum">      12 </span>            :   static const String topicSeparator = &quot;/&quot;;
+<span class="lineNum">      13 </span>            :   static const String multiWildcard = &quot;#&quot;;
+<span class="lineNum">      14 </span>            :   static const String multiWildcardValidEnd = topicSeparator + multiWildcard;
+<span class="lineNum">      15 </span>            :   static const String wildcard = &quot;+&quot;;
+<span class="lineNum">      16 </span>            :   static const int maxTopicLength = 65535;
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            :   String rawTopic;
+<span class="lineNum">      19 </span>            :   List&lt;String&gt; topicFragments;
+<span class="lineNum">      20 </span>            : 
+<span class="lineNum">      21 </span>            :   /// Creates a new instance of a rawTopic from a rawTopic string.
+<span class="lineNum">      22 </span>            :   /// rawTopic - The topic to represent.
+<span class="lineNum">      23 </span>            :   /// validations - The validations to run on the rawTopic.
+<span class="lineNum">      24 </span><span class="lineCov">          3 :   Topic(String rawTopic, List&lt;dynamic&gt; validations) {</span>
+<span class="lineNum">      25 </span><span class="lineCov">          3 :     this.rawTopic = rawTopic;</span>
+<span class="lineNum">      26 </span><span class="lineCov">          9 :     this.topicFragments = rawTopic.split(topicSeparator[0]);</span>
+<span class="lineNum">      27 </span>            :     // run all validations
+<span class="lineNum">      28 </span><span class="lineCov">          6 :     for (var validation in validations) {</span>
+<span class="lineNum">      29 </span><span class="lineCov">          3 :       validation(this);</span>
+<span class="lineNum">      30 </span>            :     }
+<span class="lineNum">      31 </span>            :   }
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            :   /// Validates that the topic does not exceed the maximum length.
+<span class="lineNum">      34 </span>            :   /// topicInstance - The instance to check.
+<span class="lineNum">      35 </span>            :   static void validateMaxLength(Topic topicInstance) {
+<span class="lineNum">      36 </span><span class="lineCov">          9 :     if (topicInstance.rawTopic.length &gt; maxTopicLength) {</span>
+<span class="lineNum">      37 </span><span class="lineCov">          1 :       throw new Exception(</span>
+<span class="lineNum">      38 </span>            :           &quot;mqtt_client::Topic: The length of the supplied rawTopic &quot;
+<span class="lineNum">      39 </span><span class="lineCov">          1 :               &quot;(${topicInstance.rawTopic</span>
+<span class="lineNum">      40 </span><span class="lineCov">          2 :               .length}) is longer than the maximum allowable ($maxTopicLength)&quot;);</span>
+<span class="lineNum">      41 </span>            :     }
+<span class="lineNum">      42 </span>            :   }
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span>            :   /// Returns true if there are any wildcards in the specified rawTopic, otherwise false.
+<span class="lineNum">      45 </span>            :   bool get hasWildcards {
+<span class="lineNum">      46 </span><span class="lineCov">          6 :     return this.rawTopic.contains(multiWildcard) ||</span>
+<span class="lineNum">      47 </span><span class="lineCov">          6 :         this.rawTopic.contains(wildcard);</span>
+<span class="lineNum">      48 </span>            :   }
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span>            :   /// Validates that the topic does not fall below the minimum length.
+<span class="lineNum">      51 </span>            :   /// topicInstance - The instance to check.
+<span class="lineNum">      52 </span>            :   static void validateMinLength(Topic topicInstance) {
+<span class="lineNum">      53 </span><span class="lineCov">          6 :     if (topicInstance.rawTopic.isEmpty) {</span>
+<span class="lineNum">      54 </span><span class="lineCov">          1 :       throw new Exception(</span>
+<span class="lineNum">      55 </span>            :           &quot;mqtt_client::Topic: rawTopic must contain at least one character&quot;);
+<span class="lineNum">      56 </span>            :     }
+<span class="lineNum">      57 </span>            :   }
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :   /// Serves as a hash function for a topics.
+<span class="lineNum">      60 </span>            :   @override
+<span class="lineNum">      61 </span>            :   int get hashCode {
+<span class="lineNum">      62 </span><span class="lineCov">          2 :     return this.rawTopic.hashCode;</span>
+<span class="lineNum">      63 </span>            :   }
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span>            :   /// Checks if one topic equals another topic exactly.
+<span class="lineNum">      66 </span>            :   @override
+<span class="lineNum">      67 </span>            :   bool operator ==(Object other) {
+<span class="lineNum">      68 </span>            :     if (identical(this, other)) {
+<span class="lineNum">      69 </span>            :       return true;
+<span class="lineNum">      70 </span>            :     }
+<span class="lineNum">      71 </span><span class="lineCov">          4 :     return other is Topic &amp;&amp; this.rawTopic == other.rawTopic;</span>
+<span class="lineNum">      72 </span>            :   }
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :   /// Returns a String representation of the topic.
+<span class="lineNum">      75 </span>            :   @override
+<span class="lineNum">      76 </span>            :   String toString() {
+<span class="lineNum">      77 </span><span class="lineCov">          2 :     return this.rawTopic;</span>
+<span class="lineNum">      78 </span>            :   }
+<span class="lineNum">      79 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

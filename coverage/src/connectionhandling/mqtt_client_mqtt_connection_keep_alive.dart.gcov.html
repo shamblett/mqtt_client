@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">src/connectionhandling</a> - mqtt_client_mqtt_connection_keep_alive.dart<span style="font-size: 80%;"> (source / <a href="mqtt_client_mqtt_connection_keep_alive.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">24</td>
+            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntryHi">96.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Package : mqtt_client
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 22/06/2017
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett
+<span class="lineNum">       6 </span>            :  */
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : part of mqtt_client;
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : /// Implements keepalive functionality on the Mqtt Connection, ensuring that the connection
+<span class="lineNum">      11 </span>            : /// remains active according to the keepalive seconds setting.
+<span class="lineNum">      12 </span>            : /// This class implements the keepalive by sending an MqttPingRequest to the broker if a message
+<span class="lineNum">      13 </span>            : /// has not been send or received within the keepalive period.
+<span class="lineNum">      14 </span>            : class MqttConnectionKeepAlive {
+<span class="lineNum">      15 </span>            :   /// Initializes a new instance of the MqttConnectionKeepAlive class.
+<span class="lineNum">      16 </span>            :   MqttConnectionKeepAlive(IMqttConnectionHandler connectionHandler,
+<span class="lineNum">      17 </span><span class="lineCov">          1 :       int keepAliveSeconds) {</span>
+<span class="lineNum">      18 </span><span class="lineCov">          1 :     this._connectionHandler = connectionHandler;</span>
+<span class="lineNum">      19 </span><span class="lineCov">          2 :     this.keepAlivePeriod = keepAliveSeconds * 1000;</span>
+<span class="lineNum">      20 </span>            :     // Register for message handling of ping request and response messages.
+<span class="lineNum">      21 </span><span class="lineCov">          1 :     connectionHandler.registerForMessage(</span>
+<span class="lineNum">      22 </span><span class="lineCov">          1 :         MqttMessageType.pingRequest, pingRequestReceived);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          1 :     connectionHandler.registerForMessage(</span>
+<span class="lineNum">      24 </span><span class="lineCov">          1 :         MqttMessageType.pingResponse, pingResponseReceived);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          2 :     connectionHandler.registerForAllSentMessages(messageSent);</span>
+<span class="lineNum">      26 </span>            :     // Start the timer so we do a ping whenever required.
+<span class="lineNum">      27 </span><span class="lineCov">          2 :     pingTimer = new Timer(</span>
+<span class="lineNum">      28 </span><span class="lineCov">          2 :         new Duration(milliseconds: this.keepAlivePeriod),</span>
+<span class="lineNum">      29 </span><span class="lineCov">          1 :         pingRequired);</span>
+<span class="lineNum">      30 </span>            :   }
+<span class="lineNum">      31 </span>            : 
+<span class="lineNum">      32 </span>            :   /// The keep alive period in  milliseconds
+<span class="lineNum">      33 </span>            :   int keepAlivePeriod;
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            :   /// The timer that manages the ping callbacks.
+<span class="lineNum">      36 </span>            :   Timer pingTimer;
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :   IMqttConnectionHandler _connectionHandler;
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            :   /// Used to synchronise shutdown and ping operations.
+<span class="lineNum">      41 </span>            :   bool _shutdownPadlock = false;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :   /// Pings the message broker if there has been no activity for the specified amount of idle time.
+<span class="lineNum">      44 </span>            :   void pingRequired() {
+<span class="lineNum">      45 </span><span class="lineCov">          1 :     if (_shutdownPadlock) {</span>
+<span class="lineNum">      46 </span>            :       return;
+<span class="lineNum">      47 </span>            :     } else {
+<span class="lineNum">      48 </span><span class="lineCov">          1 :       _shutdownPadlock = true;</span>
+<span class="lineNum">      49 </span>            :     }
+<span class="lineNum">      50 </span><span class="lineCov">          1 :     final MqttPingRequestMessage pingMsg = new MqttPingRequestMessage();</span>
+<span class="lineNum">      51 </span><span class="lineCov">          2 :     _connectionHandler.sendMessage(pingMsg);</span>
+<span class="lineNum">      52 </span><span class="lineCov">          2 :     pingTimer = new Timer(</span>
+<span class="lineNum">      53 </span><span class="lineCov">          2 :         new Duration(milliseconds: this.keepAlivePeriod),</span>
+<span class="lineNum">      54 </span><span class="lineCov">          1 :         pingRequired);</span>
+<span class="lineNum">      55 </span><span class="lineCov">          1 :     _shutdownPadlock = false;</span>
+<span class="lineNum">      56 </span>            :   }
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :   /// Signal to the keepalive that a ping request has been received from the message broker.
+<span class="lineNum">      59 </span>            :   /// The effect of calling this method on the keepalive handler is the transmission of a ping response
+<span class="lineNum">      60 </span>            :   /// message to the message broker on the current connection.
+<span class="lineNum">      61 </span>            :   bool pingRequestReceived(MqttMessage pingMsg) {
+<span class="lineNum">      62 </span><span class="lineCov">          1 :     if (_shutdownPadlock) {</span>
+<span class="lineNum">      63 </span>            :       return false;
+<span class="lineNum">      64 </span>            :     } else {
+<span class="lineNum">      65 </span><span class="lineCov">          1 :       _shutdownPadlock = true;</span>
+<span class="lineNum">      66 </span>            :     }
+<span class="lineNum">      67 </span><span class="lineCov">          1 :     final MqttPingResponseMessage pingMsg = new MqttPingResponseMessage();</span>
+<span class="lineNum">      68 </span><span class="lineCov">          2 :     _connectionHandler.sendMessage(pingMsg);</span>
+<span class="lineNum">      69 </span><span class="lineCov">          1 :     _shutdownPadlock = false;</span>
+<span class="lineNum">      70 </span>            :     return true;
+<span class="lineNum">      71 </span>            :   }
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span>            :   /// Processed ping response messages received from a message broker.
+<span class="lineNum">      74 </span>            :   bool pingResponseReceived(MqttMessage pingMsg) {
+<span class="lineNum">      75 </span>            :     return true;
+<span class="lineNum">      76 </span>            :   }
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            :   /// Handles the MessageSent event of the connectionHandler control.
+<span class="lineNum">      79 </span>            :   bool messageSent(MqttMessage msg) {
+<span class="lineNum">      80 </span>            :     return true;
+<span class="lineNum">      81 </span>            :   }
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :   /// Stop the keep alive process
+<span class="lineNum">      84 </span>            :   void stop() {
+<span class="lineNum">      85 </span><span class="lineNoCov">          0 :     pingTimer.cancel();</span>
+<span class="lineNum">      86 </span>            :   }
+<span class="lineNum">      87 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
