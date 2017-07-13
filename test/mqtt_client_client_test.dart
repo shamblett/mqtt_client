@@ -32,7 +32,7 @@ bool pingServer(String server) {
   //final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
   // Get the exit code from the new process.
   //if (result.exitCode == 0) {
-    return false;
+  return true;
   //} else {
     print("Server - $server is dead, exit code is ${result
   //     .exitCode} - skipping");
@@ -41,7 +41,7 @@ bool pingServer(String server) {
 }
 
 void main() {
-  final bool skipTests = pingServer("test.mosquitto.org");
+  final bool skipTests = false; //pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
     final ProcessResult result = Process
         .runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
