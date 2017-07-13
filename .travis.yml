@@ -2,4 +2,9 @@ language: dart
 dart:
   # Install the latest stable release
   - stable
+dart_task:
+  - test: --exclude-tags no-xvfb
+  - test: --tags no-xvfb
+    xvfb: false
+
   
