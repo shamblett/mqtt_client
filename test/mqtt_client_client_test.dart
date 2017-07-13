@@ -33,7 +33,7 @@ void main() {
   final bool skipTests = pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
     final ProcessResult result =
-    Process.runSync('dart', ['mqtt_client_broker_test_subscribe.dart']);
+    Process.runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
     print("Broker Subscribe::stdout");
     print(result.stdout.toString());
     print("Broker Subscribe::stderr");
