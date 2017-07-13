@@ -5,7 +5,7 @@ author: Steve Hamblett <steve.hamblett@linux.com>
 homepage: https://github.com/shamblett/mqtt_client
 
 environment:
-  sdk: ">=1.8.0 <2.0.0"
+  sdk: ">=1.8.0  <2.0.0-dev.infinity"
 
 dependencies:
  typed_data: '>=1.1.3'

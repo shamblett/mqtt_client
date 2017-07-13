@@ -74,6 +74,10 @@ Future<int> main() async {
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
+    /// The above may seem a little convoluted for users only interested in the
+    /// payload, some users however may be interested in the received publish message,
+    /// lets not constrain ourselves yet until the package has been in the wild
+    /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
   });
