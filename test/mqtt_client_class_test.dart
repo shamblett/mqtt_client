@@ -29,19 +29,19 @@ bool pingServer(String server) {
       print("PUB_ENVIRONMENT is $noPing");
     }
   }
-  //final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
-  // Get the exit code from the new process.
-  //if (result.exitCode == 0) {
-  // return true;
-  //} else {
-  //print("Server - $server is dead, exit code is ${result
-  //     .exitCode} - skipping");
-  // return true;
-  //}
+  final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
+  //Get the exit code from the new process.
+  if (result.exitCode == 0) {
+    return false;
+  } else {
+    print("Server - $server is dead, exit code is ${result
+        .exitCode} - skipping");
+    return true;
+  }
 }
 
 void main() {
-  final bool skipTests = true; //pingServer("test.mosquitto.org");
+  final bool skipTests = pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
     final ProcessResult result = Process
         .runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
