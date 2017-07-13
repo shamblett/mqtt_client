@@ -41,7 +41,7 @@ bool pingServer(String server) {
 }
 
 void main() {
-  final bool skipTests = false; //pingServer("test.mosquitto.org");
+  final bool skipTests = true; //pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
     final ProcessResult result = Process
         .runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
