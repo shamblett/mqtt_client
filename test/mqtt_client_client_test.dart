@@ -15,6 +15,8 @@ import 'package:test/test.dart';
 /// The tests are restricted to a linux environment for no other reason than my windows development
 /// box is firewalled and the tests will fail, if you wish to run these tests on Windows please remove
 /// the TestOn annotation. The servers are pinged first just to ensure they are up before the tests are run.
+/// The tests are implemented in such a way as to allow coverage data to be gathered for what are the standalone
+/// client test programs.
 
 /// Helper function to ping a server
 bool pingServer(String server) {
@@ -40,4 +42,15 @@ void main() {
     print(result.stderr.toString());
     expect(result.exitCode, 0);
   }, skip: skipTests);
+
+  test("Broker Publish", () {
+    final ProcessResult result =
+    Process.runSync('dart', ['test/mqtt_client_broker_test_publish.dart']);
+    print("Broker Publish::stdout");
+    print(result.stdout.toString());
+    print("Broker Publish::stderr");
+    print(result.stderr.toString());
+    expect(result.exitCode, 0);
+  }, skip: skipTests);
+
 }
