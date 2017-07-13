@@ -15,8 +15,6 @@ import 'package:test/test.dart';
 /// The tests are restricted to a linux environment for no other reason than my windows development
 /// box is firewalled and the tests will fail, if you wish to run these tests on Windows please remove
 /// the TestOn annotation. The servers are pinged first just to ensure they are up before the tests are run.
-/// The tests are implemented in such a way as to allow coverage data to be gathered for what are the standalone
-/// client test programs.
 
 /// Helper function to ping a server
 bool pingServer(String server) {
