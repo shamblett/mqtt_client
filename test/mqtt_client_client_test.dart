@@ -32,12 +32,12 @@ bool pingServer(String server) {
   //final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
   // Get the exit code from the new process.
   //if (result.exitCode == 0) {
-  return true;
+  // return true;
   //} else {
-    print("Server - $server is dead, exit code is ${result
+  //print("Server - $server is dead, exit code is ${result
   //     .exitCode} - skipping");
   // return true;
-  }
+  //}
 }
 
 void main() {
