@@ -1,27 +1,16 @@
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
- * Date   : 22/06/2017
+ * Date   : 14/08/2017
  * Copyright :  S.Hamblett
  */
 
 part of mqtt_client;
 
-/// State and logic used to read from the underlying network stream.
-class ReadWrapper {
-  /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
-  ReadWrapper() {
-    this.messageBytes = new List<int>();
-  }
-
-  /// The bytes associated with the message being read.
-  List<int> messageBytes;
-}
-
-/// The MQTT connection class
-class MqttTcpConnection extends Object with events.EventEmitter {
+/// The MQTT connection class for the websocket interface
+class MqttWsConnection extends Object with events.EventEmitter {
   /// The socket that maintains the connection to the MQTT broker.
-  Socket tcpClient;
+  WebSocket wsClient;
 
   /// Sync lock object to ensure that only a single message is sent through the connection handler at once.
   bool _sendPadlock = false;
@@ -33,10 +22,10 @@ class MqttTcpConnection extends Object with events.EventEmitter {
   bool disconnectRequested = false;
 
   /// Default constructor
-  MqttTcpConnection();
+  MqttWsConnection();
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttTcpConnection.fromConnect(String server, int port) {
+  MqttWsConnection.fromConnect(String server, int port) {
     connect(server, port);
   }
 
@@ -45,8 +34,8 @@ class MqttTcpConnection extends Object with events.EventEmitter {
     final Completer completer = new Completer();
     try {
       // Connect and save the socket.
-      Socket.connect(server, port).then((socket) {
-        tcpClient = socket;
+      WebSocket.connect(server).then((socket) {
+        wsClient = socket;
         readWrapper = new ReadWrapper();
         _startListening();
         return completer.complete();
@@ -61,7 +50,7 @@ class MqttTcpConnection extends Object with events.EventEmitter {
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
-    tcpClient.listen(_onData, onError: _onError, onDone: _onDone);
+    wsClient.listen(_onData, onError: _onError, onDone: _onDone);
   }
 
   /// OnData listener callback
@@ -107,8 +96,8 @@ class MqttTcpConnection extends Object with events.EventEmitter {
 
   /// Disconnects from the message broker
   void _disconnect() {
-    if (tcpClient != null) {
-      tcpClient.close();
+    if (wsClient != null) {
+      wsClient.close();
     }
   }
 
@@ -120,11 +109,11 @@ class MqttTcpConnection extends Object with events.EventEmitter {
       _sendPadlock = true;
     }
     final typed.Uint8Buffer messageBytes = message.read(message.length);
-    tcpClient.add(messageBytes.toList());
+    wsClient.add(messageBytes.toList());
     _sendPadlock = false;
   }
 
-  // User reqiested disconenction
+  // User requested disconnection
   void disconnect() {
     disconnectRequested = true;
     _onDone();

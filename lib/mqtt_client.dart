@@ -43,6 +43,8 @@ part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection_han
 
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
+part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
+
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
 
 part 'package:mqtt_client/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';

@@ -9,7 +9,7 @@ part of mqtt_client;
 
 ///  This class provides shared connection functionality to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
-  MqttConnection connection;
+  MqttTcpConnection connection;
 
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =

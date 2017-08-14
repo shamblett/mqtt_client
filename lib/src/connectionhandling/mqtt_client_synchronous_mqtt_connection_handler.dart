@@ -22,7 +22,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts");
       connectionState = ConnectionState.connecting;
-      connection = new MqttConnection();
+      connection = new MqttTcpConnection();
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       this.listen(connection, MessageAvailable, this.messageAvailable);
