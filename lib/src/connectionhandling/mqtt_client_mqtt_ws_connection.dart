@@ -32,9 +32,22 @@ class MqttWsConnection extends Object with events.EventEmitter {
   /// Connect
   Future connect(String server, int port) {
     final Completer completer = new Completer();
+    // Add the port if present
+    Uri uri;
+    try {
+      uri = Uri.parse(server);
+    } catch (FormatException) {
+      final String message =
+          "MqttConnection::The URI supplied for the WS connection is not valid - $server";
+      throw new NoConnectionException(message);
+    }
+    if (port != null) {
+      uri.replace(port: port);
+    }
+    final String uriString = uri.toString();
     try {
       // Connect and save the socket.
-      WebSocket.connect(server).then((socket) {
+      WebSocket.connect(uriString).then((socket) {
         wsClient = socket;
         readWrapper = new ReadWrapper();
         _startListening();
@@ -42,7 +55,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
-          "MqttConnection::The connection to the message broker {$server}:{$port} could not be made.";
+          "MqttConnection::The connection to the message broker {$uriString} could not be made.";
       throw new NoConnectionException(message);
     }
     return completer.future;

@@ -10,6 +10,7 @@ part of mqtt_client;
 /// Connection handler that performs connections and disconnections to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler
     with events.EventDetector {
+  /// Max connection attempts
   static const int maxConnectionAttempts = 3;
 
   /// Synchronously connect to the specific Mqtt Connection.
@@ -22,7 +23,11 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts");
       connectionState = ConnectionState.connecting;
-      connection = new MqttTcpConnection();
+      if (useWebSocket) {
+        connection = new MqttWsConnection();
+      } else {
+        connection = new MqttTcpConnection();
+      }
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       this.listen(connection, MessageAvailable, this.messageAvailable);

@@ -26,6 +26,9 @@ class MqttClient {
   int port;
   String clientIdentifier;
 
+  /// If set use a websocket connection, otherwise use the default TCP one
+  bool useWebSocket = false;
+
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
 
@@ -75,6 +78,9 @@ class MqttClient {
               .length}) exceeds the max recommended in the MQTT spec. ");
     }
     _connectionHandler = new SynchronousMqttConnectionHandler();
+    if (useWebSocket) {
+      _connectionHandler.useWebSocket = true;
+    }
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);

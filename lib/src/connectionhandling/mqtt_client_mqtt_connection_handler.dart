@@ -9,7 +9,7 @@ part of mqtt_client;
 
 ///  This class provides shared connection functionality to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
-  MqttTcpConnection connection;
+  dynamic connection;
 
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
@@ -20,6 +20,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   new List<MessageCallbackFunction>();
 
   ConnectionState connectionState = ConnectionState.disconnected;
+
+  /// Use a websocket rather than TCP
+  bool useWebSocket = false;
 
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
