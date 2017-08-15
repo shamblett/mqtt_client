@@ -10,10 +10,10 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:observable/observable.dart';
 
 Future<int> main() async {
-  // Create and connect the client
+  // Create and connect the client for websocket usage. The scheme must be ws:// otherwise
+  // Dart IO will not create the websocket
   final MqttClient client =
-  new MqttClient("test.mosquitto.org", "SJHMQTTClient");
-  // Use websockets
+  new MqttClient("ws://test.mosquitto.org", "SJHMQTTClient");
   client.useWebSocket = true;
   client.port = 8080;
   client.logging(true);
