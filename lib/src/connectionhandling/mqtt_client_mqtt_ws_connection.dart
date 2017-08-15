@@ -42,7 +42,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
       throw new NoConnectionException(message);
     }
     if (port != null) {
-      uri.replace(port: port);
+      uri = uri.replace(port: port);
     }
     final String uriString = uri.toString();
     try {
