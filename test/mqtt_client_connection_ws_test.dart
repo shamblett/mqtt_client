@@ -67,6 +67,8 @@ void main() {
       final MqttPingRequestMessage prMess = new MqttPingRequestMessage();
       brokerWs.sendMessage(prMess);
       await MqttUtilities.asyncSleep(2);
+      ch.disconnect();
+      ch.close();
     });
   }, skip: false);
 }
