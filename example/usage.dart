@@ -22,7 +22,14 @@ Future<int> main() async {
   /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
   /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
   /// of 1883 is used.
+  /// If you want to use websockets rather than TCPO see below.
   final MqttClient client = new MqttClient("test.mosquitto.org", "");
+
+  /// A websocket URL must start with ws:// or Dart will throw an exception, consult your websocket MQTT broker
+  /// for details.
+  /// To use websockets add the following lines -:
+  /// client.useWebSocket = true;
+  /// client.port = 80;  ( or whatever your WS port is)
 
   /// Set logging on if needed, defaults to off
   client.logging(true);
