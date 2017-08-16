@@ -45,7 +45,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
       uri = uri.replace(port: port);
     }
     final String uriString = uri.toString();
-    MqttLogger.log("MqttWsConnection::_onData");
+    MqttLogger.log("MqttWsConnection:: WS URL is $uriString");
     try {
       // Connect and save the socket.
       WebSocket.connect(uriString).then((socket) {
