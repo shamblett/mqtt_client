@@ -34,11 +34,6 @@ void main() {
               "WS Connection Keep Alive - Successful response - Ping Request received $expectRequest");
           expect(header.messageType, MqttMessageType.pingRequest);
           expectRequest++;
-        } else {
-          print(
-              "WS Connection Keep Alive - Successful response - Ping Response received $expectRequest");
-          expect(header.messageType, MqttMessageType.pingResponse);
-          expectRequest = 0;
         }
       }
 
