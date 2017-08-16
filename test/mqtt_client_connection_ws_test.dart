@@ -17,7 +17,7 @@ void main() {
   final String testClientId = "syncMqttTests";
 
   group("Connection Keep Alive - Mock broker WS", () {
-    test("Successful response", () async {
+    test("Successful response WS", () async {
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
@@ -31,12 +31,12 @@ void main() {
         final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
           print(
-              "Connection Keep Alive - Successful response - Ping Request received $expectRequest");
+              "WS Connection Keep Alive - Successful response - Ping Request received $expectRequest");
           expect(header.messageType, MqttMessageType.pingRequest);
           expectRequest++;
         } else {
           print(
-              "Connection Keep Alive - Successful response - Ping Response received $expectRequest");
+              "WS Connection Keep Alive - Successful response - Ping Response received $expectRequest");
           expect(header.messageType, MqttMessageType.pingResponse);
           expectRequest = 0;
         }
@@ -53,15 +53,16 @@ void main() {
       expect(ch.connectionState, ConnectionState.connected);
       brokerWs.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
-      print("Connection Keep Alive - Successful response - keepealive ms is ${ka
+      print(
+          "WS Connection Keep Alive - Successful response - keepealive ms is ${ka
           .keepAlivePeriod}");
       print(
-          "Connection Keep Alive - Successful response - ping timer active is ${ka
+          "WS Connection Keep Alive - Successful response - ping timer active is ${ka
               .pingTimer.isActive.toString()}");
       final Stopwatch stopwatch = new Stopwatch()
         ..start();
       await MqttUtilities.asyncSleep(10);
-      print("Connection Keep Alive - Successful response - Elapsed time "
+      print("WS Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
       final MqttPingRequestMessage prMess = new MqttPingRequestMessage();
       brokerWs.sendMessage(prMess);
