@@ -38,13 +38,14 @@ class MqttWsConnection extends Object with events.EventEmitter {
       uri = Uri.parse(server);
     } catch (FormatException) {
       final String message =
-          "MqttConnection::The URI supplied for the WS connection is not valid - $server";
+          "MqttWsConnection::The URI supplied for the WS connection is not valid - $server";
       throw new NoConnectionException(message);
     }
     if (port != null) {
       uri = uri.replace(port: port);
     }
     final String uriString = uri.toString();
+    MqttLogger.log("MqttWsConnection::_onData");
     try {
       // Connect and save the socket.
       WebSocket.connect(uriString).then((socket) {
@@ -55,7 +56,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
-          "MqttConnection::The connection to the message broker {$uriString} could not be made.";
+          "MqttWsConnection::The connection to the message broker {$uriString} could not be made.";
       throw new NoConnectionException(message);
     }
     return completer.future;
@@ -68,7 +69,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
 
   /// OnData listener callback
   void _onData(List<int> data) {
-    MqttLogger.log("MqttConnection::_onData");
+    MqttLogger.log("MqttWsConnection::_onData");
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
       return;
@@ -82,13 +83,13 @@ class MqttWsConnection extends Object with events.EventEmitter {
       final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);
       msg = MqttMessage.createFrom(messageStream);
     } catch (exception) {
-      MqttLogger.log("MqttConnection::_ondata - message is not valid");
+      MqttLogger.log("MqttWsConnection::_ondata - message is not valid");
       messageIsValid = false;
     }
     if (messageIsValid) {
-      MqttLogger.log("MqttConnection::_onData - message received $msg");
+      MqttLogger.log("MqttWsConnection::_onData - message received $msg");
       emitEvent(new MessageAvailable(msg));
-      MqttLogger.log("MqttConnection::_onData - message processed");
+      MqttLogger.log("MqttWsConnection::_onData - message processed");
     }
   }
 
@@ -103,7 +104,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
     _disconnect();
     if (!disconnectRequested) {
       throw new SocketException(
-          "MqttConnection::On Done called by broker, disconnecting.");
+          "MqttWsConnection::On Done called by broker, disconnecting.");
     }
   }
 
