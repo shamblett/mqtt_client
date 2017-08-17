@@ -59,9 +59,7 @@ void main() {
       await MqttUtilities.asyncSleep(10);
       print("WS Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
-      final MqttPingRequestMessage prMess = new MqttPingRequestMessage();
-      brokerWs.sendMessage(prMess);
-      await MqttUtilities.asyncSleep(2);
+      ka.stop();
       ch.disconnect();
       ch.close();
     });
