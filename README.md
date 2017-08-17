@@ -12,7 +12,7 @@ publishing/subscribing and not the details of MQTT itself.
 An example of usage can be found in the examples directory, this example is runnable. The test directory
 also contains standalone runnable scripts for subscription and publishing.
 
-The client does not yet support encrypted connections.
+The client supports both TCP and websocket connections but does not yet support encrypted connections.
 
 The code is a port from the C# [nMQTT](https://www.openhub.net/p/nMQTT) client library to Dart.
 
