@@ -133,11 +133,6 @@ void main() {
               "Connection Keep Alive - Successful response - Ping Request received $expectRequest");
           expect(header.messageType, MqttMessageType.pingRequest);
           expectRequest++;
-        } else {
-          print(
-              "Connection Keep Alive - Successful response - Ping Response received $expectRequest");
-          expect(header.messageType, MqttMessageType.pingResponse);
-          expectRequest = 0;
         }
       }
 
@@ -159,12 +154,10 @@ void main() {
       await MqttUtilities.asyncSleep(10);
       print("Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
-      final MqttPingRequestMessage prMess = new MqttPingRequestMessage();
-      broker.sendMessage(prMess);
-      await MqttUtilities.asyncSleep(2);
       ka.stop();
       ch.disconnect();
       ch.close();
+      broker.close();
     });
   }, skip: false);
 }

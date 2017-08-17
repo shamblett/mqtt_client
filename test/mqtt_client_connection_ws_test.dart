@@ -62,6 +62,7 @@ void main() {
       ka.stop();
       ch.disconnect();
       ch.close();
+      brokerWs.close();
     });
   }, skip: false);
 }

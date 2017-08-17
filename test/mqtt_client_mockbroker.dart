@@ -77,6 +77,12 @@ class MockBroker {
     print("MockBroker::sending message bytes ${messBuff.toString()}");
     client.add(messBuff.toList());
   }
+
+  /// Close the broker socket
+  void close() {
+    client.flush();
+    client.destroy();
+  }
 }
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
@@ -143,5 +149,10 @@ class MockBrokerWs {
         .getMessageBytes(msg);
     print("MockBrokerWS::sending message bytes ${messBuff.toString()}");
     _webSocket.add(messBuff.toList());
+  }
+
+  /// Close the broker socket
+  void close() {
+    _webSocket.close();
   }
 }
