@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-07-13</td>
+            <td class="headerValue">2017-08-17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -86,7 +86,7 @@
 <span class="lineNum">      24 </span>            :   MqttHeader header;
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span>            :   /// Initializes a new instance of the MqttMessage class.
-<span class="lineNum">      27 </span><span class="lineCov">          4 :   MqttMessage();</span>
+<span class="lineNum">      27 </span><span class="lineCov">          5 :   MqttMessage();</span>
 <span class="lineNum">      28 </span>            : 
 <span class="lineNum">      29 </span>            :   /// Initializes a new instance of the MqttMessage class.
 <span class="lineNum">      30 </span><span class="lineNoCov">          0 :   MqttMessage.fromHeader(MqttHeader header) {</span>
@@ -96,12 +96,12 @@
 <span class="lineNum">      34 </span>            :   /// Creates a new instance of an MQTT Message based on a raw message stream.
 <span class="lineNum">      35 </span>            :   static MqttMessage createFrom(MqttByteBuffer messageStream) {
 <span class="lineNum">      36 </span>            :     try {
-<span class="lineNum">      37 </span><span class="lineCov">          2 :       MqttHeader header = new MqttHeader();</span>
+<span class="lineNum">      37 </span><span class="lineCov">          3 :       MqttHeader header = new MqttHeader();</span>
 <span class="lineNum">      38 </span>            :       // Pass the input stream sequentially through the component deserialization(create) methods
 <span class="lineNum">      39 </span>            :       // to build a full MqttMessage.
-<span class="lineNum">      40 </span><span class="lineCov">          2 :       header = new MqttHeader.fromByteBuffer(messageStream);</span>
+<span class="lineNum">      40 </span><span class="lineCov">          3 :       header = new MqttHeader.fromByteBuffer(messageStream);</span>
 <span class="lineNum">      41 </span>            :       final MqttMessage message =
-<span class="lineNum">      42 </span><span class="lineCov">          2 :       MqttMessageFactory.getMessage(header, messageStream);</span>
+<span class="lineNum">      42 </span><span class="lineCov">          3 :       MqttMessageFactory.getMessage(header, messageStream);</span>
 <span class="lineNum">      43 </span>            :       return message;
 <span class="lineNum">      44 </span>            :     } catch (InvalidHeaderException) {
 <span class="lineNum">      45 </span><span class="lineCov">          1 :       throw new InvalidMessageException(</span>
@@ -111,18 +111,18 @@
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span>            :   /// Writes the message to the supplied stream.
 <span class="lineNum">      51 </span>            :   void writeTo(MqttByteBuffer messageStream) {
-<span class="lineNum">      52 </span><span class="lineCov">          4 :     header.writeTo(0, messageStream);</span>
+<span class="lineNum">      52 </span><span class="lineCov">          6 :     header.writeTo(0, messageStream);</span>
 <span class="lineNum">      53 </span>            :   }
 <span class="lineNum">      54 </span>            : 
 <span class="lineNum">      55 </span>            :   /// Reads a message from the supplied stream.
 <span class="lineNum">      56 </span>            :   void readFrom(MqttByteBuffer messageStream) {}
 <span class="lineNum">      57 </span>            : 
 <span class="lineNum">      58 </span>            :   String toString() {
-<span class="lineNum">      59 </span><span class="lineCov">          4 :     final StringBuffer sb = new StringBuffer();</span>
-<span class="lineNum">      60 </span><span class="lineCov">          4 :     sb.write(&quot;MQTTMessage of type &quot;);</span>
-<span class="lineNum">      61 </span><span class="lineCov">         16 :     sb.writeln(this.header.messageType.toString());</span>
-<span class="lineNum">      62 </span><span class="lineCov">         12 :     sb.writeln(header.toString());</span>
-<span class="lineNum">      63 </span><span class="lineCov">          4 :     return sb.toString();</span>
+<span class="lineNum">      59 </span><span class="lineCov">          5 :     final StringBuffer sb = new StringBuffer();</span>
+<span class="lineNum">      60 </span><span class="lineCov">          5 :     sb.write(&quot;MQTTMessage of type &quot;);</span>
+<span class="lineNum">      61 </span><span class="lineCov">         20 :     sb.writeln(this.header.messageType.toString());</span>
+<span class="lineNum">      62 </span><span class="lineCov">         15 :     sb.writeln(header.toString());</span>
+<span class="lineNum">      63 </span><span class="lineCov">          5 :     return sb.toString();</span>
 <span class="lineNum">      64 </span>            :   }
 <span class="lineNum">      65 </span>            : }
 </pre>

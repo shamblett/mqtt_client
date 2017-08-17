@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-07-13</td>
+            <td class="headerValue">2017-08-17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -75,57 +75,57 @@
 <span class="lineNum">      13 </span>            :   static MqttMessage getMessage(MqttHeader header,
 <span class="lineNum">      14 </span>            :       MqttByteBuffer messageStream) {
 <span class="lineNum">      15 </span>            :     MqttMessage message;
-<span class="lineNum">      16 </span><span class="lineCov">          2 :     switch (header.messageType) {</span>
-<span class="lineNum">      17 </span><span class="lineCov">          2 :       case MqttMessageType.connect:</span>
-<span class="lineNum">      18 </span><span class="lineCov">          2 :         message = new MqttConnectMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          3 :     switch (header.messageType) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">          3 :       case MqttMessageType.connect:</span>
+<span class="lineNum">      18 </span><span class="lineCov">          3 :         message = new MqttConnectMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      19 </span>            :         break;
-<span class="lineNum">      20 </span><span class="lineCov">          2 :       case MqttMessageType.connectAck:</span>
+<span class="lineNum">      20 </span><span class="lineCov">          3 :       case MqttMessageType.connectAck:</span>
 <span class="lineNum">      21 </span>            :         message =
-<span class="lineNum">      22 </span><span class="lineCov">          2 :         new MqttConnectAckMessage.fromByteBuffer(header, messageStream);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          3 :         new MqttConnectAckMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      23 </span>            :         break;
-<span class="lineNum">      24 </span><span class="lineCov">          2 :       case MqttMessageType.publish:</span>
+<span class="lineNum">      24 </span><span class="lineCov">          3 :       case MqttMessageType.publish:</span>
 <span class="lineNum">      25 </span><span class="lineCov">          1 :         message = new MqttPublishMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      26 </span>            :         break;
-<span class="lineNum">      27 </span><span class="lineCov">          2 :       case MqttMessageType.publishAck:</span>
+<span class="lineNum">      27 </span><span class="lineCov">          3 :       case MqttMessageType.publishAck:</span>
 <span class="lineNum">      28 </span>            :         message =
 <span class="lineNum">      29 </span><span class="lineCov">          1 :         new MqttPublishAckMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      30 </span>            :         break;
-<span class="lineNum">      31 </span><span class="lineCov">          2 :       case MqttMessageType.publishComplete:</span>
+<span class="lineNum">      31 </span><span class="lineCov">          3 :       case MqttMessageType.publishComplete:</span>
 <span class="lineNum">      32 </span>            :         message =
 <span class="lineNum">      33 </span><span class="lineCov">          1 :         new MqttPublishCompleteMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      34 </span>            :         break;
-<span class="lineNum">      35 </span><span class="lineCov">          2 :       case MqttMessageType.publishReceived:</span>
+<span class="lineNum">      35 </span><span class="lineCov">          3 :       case MqttMessageType.publishReceived:</span>
 <span class="lineNum">      36 </span>            :         message =
 <span class="lineNum">      37 </span><span class="lineCov">          1 :         new MqttPublishReceivedMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      38 </span>            :         break;
-<span class="lineNum">      39 </span><span class="lineCov">          2 :       case MqttMessageType.publishRelease:</span>
+<span class="lineNum">      39 </span><span class="lineCov">          3 :       case MqttMessageType.publishRelease:</span>
 <span class="lineNum">      40 </span>            :         message =
 <span class="lineNum">      41 </span><span class="lineCov">          1 :         new MqttPublishReleaseMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      42 </span>            :         break;
-<span class="lineNum">      43 </span><span class="lineCov">          2 :       case MqttMessageType.subscribe:</span>
+<span class="lineNum">      43 </span><span class="lineCov">          3 :       case MqttMessageType.subscribe:</span>
 <span class="lineNum">      44 </span>            :         message =
 <span class="lineNum">      45 </span><span class="lineCov">          1 :         new MqttSubscribeMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      46 </span>            :         break;
-<span class="lineNum">      47 </span><span class="lineCov">          2 :       case MqttMessageType.subscribeAck:</span>
+<span class="lineNum">      47 </span><span class="lineCov">          3 :       case MqttMessageType.subscribeAck:</span>
 <span class="lineNum">      48 </span>            :         message =
 <span class="lineNum">      49 </span><span class="lineCov">          1 :         new MqttSubscribeAckMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      50 </span>            :         break;
-<span class="lineNum">      51 </span><span class="lineCov">          2 :       case MqttMessageType.unsubscribe:</span>
+<span class="lineNum">      51 </span><span class="lineCov">          3 :       case MqttMessageType.unsubscribe:</span>
 <span class="lineNum">      52 </span>            :         message =
 <span class="lineNum">      53 </span><span class="lineCov">          1 :         new MqttUnsubscribeMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      54 </span>            :         break;
-<span class="lineNum">      55 </span><span class="lineCov">          2 :       case MqttMessageType.unsubscribeAck:</span>
+<span class="lineNum">      55 </span><span class="lineCov">          3 :       case MqttMessageType.unsubscribeAck:</span>
 <span class="lineNum">      56 </span>            :         message =
 <span class="lineNum">      57 </span><span class="lineCov">          1 :         new MqttUnsubscribeAckMessage.fromByteBuffer(header, messageStream);</span>
 <span class="lineNum">      58 </span>            :         break;
-<span class="lineNum">      59 </span><span class="lineCov">          2 :       case MqttMessageType.pingRequest:</span>
-<span class="lineNum">      60 </span><span class="lineCov">          2 :         message = new MqttPingRequestMessage.fromHeader(header);</span>
+<span class="lineNum">      59 </span><span class="lineCov">          3 :       case MqttMessageType.pingRequest:</span>
+<span class="lineNum">      60 </span><span class="lineCov">          3 :         message = new MqttPingRequestMessage.fromHeader(header);</span>
 <span class="lineNum">      61 </span>            :         break;
-<span class="lineNum">      62 </span><span class="lineCov">          2 :       case MqttMessageType.pingResponse:</span>
-<span class="lineNum">      63 </span><span class="lineCov">          2 :         message = new MqttPingResponseMessage.fromHeader(header);</span>
+<span class="lineNum">      62 </span><span class="lineCov">          3 :       case MqttMessageType.pingResponse:</span>
+<span class="lineNum">      63 </span><span class="lineCov">          1 :         message = new MqttPingResponseMessage.fromHeader(header);</span>
 <span class="lineNum">      64 </span>            :         break;
-<span class="lineNum">      65 </span><span class="lineCov">          2 :       case MqttMessageType.disconnect:</span>
-<span class="lineNum">      66 </span><span class="lineCov">          2 :         message = new MqttDisconnectMessage.fromHeader(header);</span>
+<span class="lineNum">      65 </span><span class="lineCov">          3 :       case MqttMessageType.disconnect:</span>
+<span class="lineNum">      66 </span><span class="lineCov">          3 :         message = new MqttDisconnectMessage.fromHeader(header);</span>
 <span class="lineNum">      67 </span>            :         break;
 <span class="lineNum">      68 </span>            :       default:
 <span class="lineNum">      69 </span><span class="lineCov">          1 :         throw new InvalidHeaderException(</span>

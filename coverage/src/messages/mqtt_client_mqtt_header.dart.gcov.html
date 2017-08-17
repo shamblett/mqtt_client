@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-07-13</td>
+            <td class="headerValue">2017-08-17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -72,11 +72,11 @@
 <span class="lineNum">      10 </span>            : /// Represents the Fixed Header of an MQTT message.
 <span class="lineNum">      11 </span>            : class MqttHeader {
 <span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttHeader class.
-<span class="lineNum">      13 </span><span class="lineCov">          4 :   MqttHeader();</span>
+<span class="lineNum">      13 </span><span class="lineCov">          5 :   MqttHeader();</span>
 <span class="lineNum">      14 </span>            : 
 <span class="lineNum">      15 </span>            :   /// Initializes a new instance of MqttHeader&quot; based on data contained within the supplied stream.
-<span class="lineNum">      16 </span><span class="lineCov">          2 :   MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {</span>
-<span class="lineNum">      17 </span><span class="lineCov">          2 :     readFrom(headerStream);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          3 :   MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">          3 :     readFrom(headerStream);</span>
 <span class="lineNum">      18 </span>            :   }
 <span class="lineNum">      19 </span>            : 
 <span class="lineNum">      20 </span>            :   /// Backing storage for the payload size.
@@ -111,27 +111,27 @@
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span>            :   /// Writes the header to a supplied stream.
 <span class="lineNum">      51 </span>            :   void writeTo(int messageSize, MqttByteBuffer messageStream) {
-<span class="lineNum">      52 </span><span class="lineCov">          2 :     _messageSize = messageSize;</span>
-<span class="lineNum">      53 </span><span class="lineCov">          2 :     final typed.Uint8Buffer headerBuff = headerBytes();</span>
-<span class="lineNum">      54 </span><span class="lineCov">          2 :     messageStream.write(headerBuff);</span>
+<span class="lineNum">      52 </span><span class="lineCov">          3 :     _messageSize = messageSize;</span>
+<span class="lineNum">      53 </span><span class="lineCov">          3 :     final typed.Uint8Buffer headerBuff = headerBytes();</span>
+<span class="lineNum">      54 </span><span class="lineCov">          3 :     messageStream.write(headerBuff);</span>
 <span class="lineNum">      55 </span>            :   }
 <span class="lineNum">      56 </span>            : 
 <span class="lineNum">      57 </span>            :   /// Creates a new MqttHeader based on a list of bytes.
 <span class="lineNum">      58 </span>            :   void readFrom(MqttByteBuffer headerStream) {
-<span class="lineNum">      59 </span><span class="lineCov">          4 :     if (headerStream.length &lt; 2) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">          6 :     if (headerStream.length &lt; 2) {</span>
 <span class="lineNum">      60 </span><span class="lineCov">          1 :       throw new InvalidHeaderException(</span>
 <span class="lineNum">      61 </span>            :           &quot;The supplied header is invalid. Header must be at least 2 bytes long.&quot;);
 <span class="lineNum">      62 </span>            :     }
-<span class="lineNum">      63 </span><span class="lineCov">          2 :     final int firstHeaderByte = headerStream.readByte();</span>
+<span class="lineNum">      63 </span><span class="lineCov">          3 :     final int firstHeaderByte = headerStream.readByte();</span>
 <span class="lineNum">      64 </span>            :     // Pull out the first byte
-<span class="lineNum">      65 </span><span class="lineCov">          6 :     retain = ((firstHeaderByte &amp; 1) == 1 ? true : false);</span>
-<span class="lineNum">      66 </span><span class="lineCov">          8 :     qos = MqttQos.values[((firstHeaderByte &amp; 6) &gt;&gt; 1)];</span>
-<span class="lineNum">      67 </span><span class="lineCov">          8 :     duplicate = (((firstHeaderByte &amp; 8) &gt;&gt; 3) == 1 ? true : false);</span>
-<span class="lineNum">      68 </span><span class="lineCov">          8 :     messageType = MqttMessageType.values[((firstHeaderByte &amp; 240) &gt;&gt; 4)];</span>
+<span class="lineNum">      65 </span><span class="lineCov">          9 :     retain = ((firstHeaderByte &amp; 1) == 1 ? true : false);</span>
+<span class="lineNum">      66 </span><span class="lineCov">         12 :     qos = MqttQos.values[((firstHeaderByte &amp; 6) &gt;&gt; 1)];</span>
+<span class="lineNum">      67 </span><span class="lineCov">         12 :     duplicate = (((firstHeaderByte &amp; 8) &gt;&gt; 3) == 1 ? true : false);</span>
+<span class="lineNum">      68 </span><span class="lineCov">         12 :     messageType = MqttMessageType.values[((firstHeaderByte &amp; 240) &gt;&gt; 4)];</span>
 <span class="lineNum">      69 </span>            : 
 <span class="lineNum">      70 </span>            :     // Decode the remaining bytes as the remaining/payload size, input param is the 2nd to last byte of the header byte list
 <span class="lineNum">      71 </span>            :     try {
-<span class="lineNum">      72 </span><span class="lineCov">          4 :       _messageSize = readRemainingLength(headerStream);</span>
+<span class="lineNum">      72 </span><span class="lineCov">          6 :       _messageSize = readRemainingLength(headerStream);</span>
 <span class="lineNum">      73 </span>            :     } catch (InvalidPayloadSizeException) {
 <span class="lineNum">      74 </span><span class="lineNoCov">          0 :       throw new InvalidHeaderException(</span>
 <span class="lineNum">      75 </span><span class="lineNoCov">          0 :           &quot;The header being processed contained an invalid size byte pattern.&quot; +</span>
@@ -141,54 +141,54 @@
 <span class="lineNum">      79 </span>            : 
 <span class="lineNum">      80 </span>            :   /// Gets the value of the Mqtt header as a byte array
 <span class="lineNum">      81 </span>            :   typed.Uint8Buffer headerBytes() {
-<span class="lineNum">      82 </span><span class="lineCov">          2 :     final typed.Uint8Buffer headerBytes = new typed.Uint8Buffer();</span>
+<span class="lineNum">      82 </span><span class="lineCov">          3 :     final typed.Uint8Buffer headerBytes = new typed.Uint8Buffer();</span>
 <span class="lineNum">      83 </span>            : 
 <span class="lineNum">      84 </span>            :     // Build the bytes that make up the header. The first byte is a combination of message type, dup,
 <span class="lineNum">      85 </span>            :     // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
-<span class="lineNum">      86 </span><span class="lineCov">          6 :     final int messageTypeLength = messageType.index &lt;&lt; 4;</span>
-<span class="lineNum">      87 </span><span class="lineCov">          4 :     final int duplicateLength = (duplicate ? 1 : 0) &lt;&lt; 3;</span>
-<span class="lineNum">      88 </span><span class="lineCov">          6 :     final int qosLength = qos.index &lt;&lt; 1;</span>
-<span class="lineNum">      89 </span><span class="lineCov">          2 :     final int retainLength = retain ? 1 : 0;</span>
-<span class="lineNum">      90 </span><span class="lineCov">          4 :     final int firstByte = messageTypeLength + duplicateLength +</span>
-<span class="lineNum">      91 </span><span class="lineCov">          2 :         qosLength + retainLength;</span>
-<span class="lineNum">      92 </span><span class="lineCov">          2 :     headerBytes.add(firstByte);</span>
-<span class="lineNum">      93 </span><span class="lineCov">          4 :     headerBytes.addAll(getRemainingLengthBytes());</span>
+<span class="lineNum">      86 </span><span class="lineCov">          9 :     final int messageTypeLength = messageType.index &lt;&lt; 4;</span>
+<span class="lineNum">      87 </span><span class="lineCov">          6 :     final int duplicateLength = (duplicate ? 1 : 0) &lt;&lt; 3;</span>
+<span class="lineNum">      88 </span><span class="lineCov">          9 :     final int qosLength = qos.index &lt;&lt; 1;</span>
+<span class="lineNum">      89 </span><span class="lineCov">          3 :     final int retainLength = retain ? 1 : 0;</span>
+<span class="lineNum">      90 </span><span class="lineCov">          6 :     final int firstByte = messageTypeLength + duplicateLength +</span>
+<span class="lineNum">      91 </span><span class="lineCov">          3 :         qosLength + retainLength;</span>
+<span class="lineNum">      92 </span><span class="lineCov">          3 :     headerBytes.add(firstByte);</span>
+<span class="lineNum">      93 </span><span class="lineCov">          6 :     headerBytes.addAll(getRemainingLengthBytes());</span>
 <span class="lineNum">      94 </span>            :     return headerBytes;
 <span class="lineNum">      95 </span>            :   }
 <span class="lineNum">      96 </span>            : 
 <span class="lineNum">      97 </span>            :   static int readRemainingLength(MqttByteBuffer headerStream) {
-<span class="lineNum">      98 </span><span class="lineCov">          2 :     final typed.Uint8Buffer lengthBytes = readLengthBytes(headerStream);</span>
-<span class="lineNum">      99 </span><span class="lineCov">          2 :     return calculateLength(lengthBytes);</span>
+<span class="lineNum">      98 </span><span class="lineCov">          3 :     final typed.Uint8Buffer lengthBytes = readLengthBytes(headerStream);</span>
+<span class="lineNum">      99 </span><span class="lineCov">          3 :     return calculateLength(lengthBytes);</span>
 <span class="lineNum">     100 </span>            :   }
 <span class="lineNum">     101 </span>            : 
 <span class="lineNum">     102 </span>            :   /// Reads the length bytes of an MqttHeader from the supplied stream.
 <span class="lineNum">     103 </span>            :   static typed.Uint8Buffer readLengthBytes(MqttByteBuffer headerStream) {
-<span class="lineNum">     104 </span><span class="lineCov">          2 :     final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();</span>
+<span class="lineNum">     104 </span><span class="lineCov">          3 :     final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();</span>
 <span class="lineNum">     105 </span>            :     // Read until we've got the entire size, or the 4 byte limit is reached
 <span class="lineNum">     106 </span>            :     int sizeByte;
 <span class="lineNum">     107 </span>            :     int byteCount = 0;
 <span class="lineNum">     108 </span>            :     do {
-<span class="lineNum">     109 </span><span class="lineCov">          2 :       sizeByte = headerStream.readByte();</span>
-<span class="lineNum">     110 </span><span class="lineCov">          2 :       lengthBytes.add(sizeByte);</span>
-<span class="lineNum">     111 </span><span class="lineCov">          8 :     } while (++byteCount &lt;= 4 &amp;&amp; (sizeByte &amp; 0x80) == 0x80);</span>
+<span class="lineNum">     109 </span><span class="lineCov">          3 :       sizeByte = headerStream.readByte();</span>
+<span class="lineNum">     110 </span><span class="lineCov">          3 :       lengthBytes.add(sizeByte);</span>
+<span class="lineNum">     111 </span><span class="lineCov">         12 :     } while (++byteCount &lt;= 4 &amp;&amp; (sizeByte &amp; 0x80) == 0x80);</span>
 <span class="lineNum">     112 </span>            :     return lengthBytes;
 <span class="lineNum">     113 </span>            :   }
 <span class="lineNum">     114 </span>            : 
 <span class="lineNum">     115 </span>            :   /// Calculates and return the bytes that represent the remaining length of the message.
 <span class="lineNum">     116 </span>            :   typed.Uint8Buffer getRemainingLengthBytes() {
-<span class="lineNum">     117 </span><span class="lineCov">          2 :     final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();</span>
-<span class="lineNum">     118 </span><span class="lineCov">          2 :     int payloadCalc = _messageSize;</span>
+<span class="lineNum">     117 </span><span class="lineCov">          3 :     final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();</span>
+<span class="lineNum">     118 </span><span class="lineCov">          3 :     int payloadCalc = _messageSize;</span>
 <span class="lineNum">     119 </span>            : 
 <span class="lineNum">     120 </span>            :     // Generate a byte array based on the message size, splitting it up into
 <span class="lineNum">     121 </span>            :     // 7 bit chunks, with the 8th bit being used to indicate &quot;one more to come&quot;
 <span class="lineNum">     122 </span>            :     do {
-<span class="lineNum">     123 </span><span class="lineCov">          2 :       int nextByteValue = payloadCalc % 128;</span>
-<span class="lineNum">     124 </span><span class="lineCov">          2 :       payloadCalc = (payloadCalc ~/ 128);</span>
-<span class="lineNum">     125 </span><span class="lineCov">          2 :       if (payloadCalc &gt; 0) {</span>
+<span class="lineNum">     123 </span><span class="lineCov">          3 :       int nextByteValue = payloadCalc % 128;</span>
+<span class="lineNum">     124 </span><span class="lineCov">          3 :       payloadCalc = (payloadCalc ~/ 128);</span>
+<span class="lineNum">     125 </span><span class="lineCov">          3 :       if (payloadCalc &gt; 0) {</span>
 <span class="lineNum">     126 </span><span class="lineCov">          1 :         nextByteValue = nextByteValue | 0x80;</span>
 <span class="lineNum">     127 </span>            :       }
-<span class="lineNum">     128 </span><span class="lineCov">          2 :       lengthBytes.add(nextByteValue);</span>
-<span class="lineNum">     129 </span><span class="lineCov">          2 :     } while (payloadCalc &gt; 0);</span>
+<span class="lineNum">     128 </span><span class="lineCov">          3 :       lengthBytes.add(nextByteValue);</span>
+<span class="lineNum">     129 </span><span class="lineCov">          3 :     } while (payloadCalc &gt; 0);</span>
 <span class="lineNum">     130 </span>            : 
 <span class="lineNum">     131 </span>            :     return lengthBytes;
 <span class="lineNum">     132 </span>            :   }
@@ -198,9 +198,9 @@
 <span class="lineNum">     136 </span>            :     var remainingLength = 0;
 <span class="lineNum">     137 </span>            :     var multiplier = 1;
 <span class="lineNum">     138 </span>            : 
-<span class="lineNum">     139 </span><span class="lineCov">          4 :     for (int currentByte in lengthBytes) {</span>
-<span class="lineNum">     140 </span><span class="lineCov">          6 :       remainingLength += (currentByte &amp; 0x7f) * multiplier;</span>
-<span class="lineNum">     141 </span><span class="lineCov">          2 :       multiplier *= 0x80;</span>
+<span class="lineNum">     139 </span><span class="lineCov">          6 :     for (int currentByte in lengthBytes) {</span>
+<span class="lineNum">     140 </span><span class="lineCov">          9 :       remainingLength += (currentByte &amp; 0x7f) * multiplier;</span>
+<span class="lineNum">     141 </span><span class="lineCov">          3 :       multiplier *= 0x80;</span>
 <span class="lineNum">     142 </span>            :     }
 <span class="lineNum">     143 </span>            :     return remainingLength;
 <span class="lineNum">     144 </span>            :   }
@@ -219,7 +219,7 @@
 <span class="lineNum">     157 </span>            : 
 <span class="lineNum">     158 </span>            :   /// Sets the type of the message identified in the header.
 <span class="lineNum">     159 </span>            :   MqttHeader asType(MqttMessageType messageType) {
-<span class="lineNum">     160 </span><span class="lineCov">          4 :     this.messageType = messageType;</span>
+<span class="lineNum">     160 </span><span class="lineCov">          5 :     this.messageType = messageType;</span>
 <span class="lineNum">     161 </span>            :     return this;
 <span class="lineNum">     162 </span>            :   }
 <span class="lineNum">     163 </span>            : 
@@ -230,7 +230,7 @@
 <span class="lineNum">     168 </span>            :   }
 <span class="lineNum">     169 </span>            : 
 <span class="lineNum">     170 </span>            :   String toString() {
-<span class="lineNum">     171 </span><span class="lineCov">         24 :     return &quot;Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize&quot;;</span>
+<span class="lineNum">     171 </span><span class="lineCov">         30 :     return &quot;Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize&quot;;</span>
 <span class="lineNum">     172 </span>            :   }
 <span class="lineNum">     173 </span>            : }
 </pre>

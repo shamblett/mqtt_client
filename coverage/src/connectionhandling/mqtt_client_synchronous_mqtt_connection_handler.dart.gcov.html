@@ -31,13 +31,13 @@
             <td class="headerValue">coverage.lcov</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">37</td>
-            <td class="headerCovTableEntry">44</td>
-            <td class="headerCovTableEntryMed">84.1 %</td>
+            <td class="headerCovTableEntry">39</td>
+            <td class="headerCovTableEntry">46</td>
+            <td class="headerCovTableEntryMed">84.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-07-13</td>
+            <td class="headerValue">2017-08-17</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -72,96 +72,101 @@
 <span class="lineNum">      10 </span>            : /// Connection handler that performs connections and disconnections to the hostname in a synchronous manner.
 <span class="lineNum">      11 </span>            : class SynchronousMqttConnectionHandler extends MqttConnectionHandler
 <span class="lineNum">      12 </span>            :     with events.EventDetector {
-<span class="lineNum">      13 </span>            :   static const int maxConnectionAttempts = 3;
-<span class="lineNum">      14 </span>            : 
-<span class="lineNum">      15 </span>            :   /// Synchronously connect to the specific Mqtt Connection.
-<span class="lineNum">      16 </span>            :   Future&lt;ConnectionState&gt; internalConnect(String hostname, int port,
-<span class="lineNum">      17 </span>            :       MqttConnectMessage connectMessage) async {
-<span class="lineNum">      18 </span>            :     int connectionAttempts = 0;
-<span class="lineNum">      19 </span><span class="lineCov">          1 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::internalConnect entered&quot;);</span>
-<span class="lineNum">      20 </span>            :     do {
-<span class="lineNum">      21 </span>            :       // Initiate the connection
-<span class="lineNum">      22 </span><span class="lineCov">          1 :       MqttLogger.log(</span>
-<span class="lineNum">      23 </span><span class="lineCov">          1 :           &quot;SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts&quot;);</span>
-<span class="lineNum">      24 </span><span class="lineCov">          1 :       connectionState = ConnectionState.connecting;</span>
-<span class="lineNum">      25 </span><span class="lineCov">          2 :       connection = new MqttConnection();</span>
-<span class="lineNum">      26 </span><span class="lineCov">          3 :       await connection.connect(hostname, port);</span>
-<span class="lineNum">      27 </span><span class="lineCov">          2 :       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);</span>
-<span class="lineNum">      28 </span><span class="lineCov">          3 :       this.listen(connection, MessageAvailable, this.messageAvailable);</span>
-<span class="lineNum">      29 </span>            :       // Transmit the required connection message to the broker.
-<span class="lineNum">      30 </span><span class="lineCov">          1 :       MqttLogger.log(</span>
-<span class="lineNum">      31 </span>            :           &quot;SynchronousMqttConnectionHandler::internalConnect sending connect message&quot;);
-<span class="lineNum">      32 </span><span class="lineCov">          1 :       sendMessage(connectMessage);</span>
-<span class="lineNum">      33 </span><span class="lineCov">          1 :       MqttLogger.log(</span>
-<span class="lineNum">      34 </span><span class="lineCov">          2 :           &quot;SynchronousMqttConnectionHandler::internalConnect - pre sleep, state = $connectionState&quot;);</span>
-<span class="lineNum">      35 </span>            :       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
-<span class="lineNum">      36 </span><span class="lineCov">          2 :       await MqttUtilities.asyncSleep(5);</span>
-<span class="lineNum">      37 </span><span class="lineCov">          1 :       MqttLogger.log(</span>
-<span class="lineNum">      38 </span><span class="lineCov">          2 :           &quot;SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionState&quot;);</span>
-<span class="lineNum">      39 </span><span class="lineCov">          2 :     } while (connectionState != ConnectionState.connected &amp;&amp;</span>
-<span class="lineNum">      40 </span><span class="lineNoCov">          0 :         ++connectionAttempts &lt; maxConnectionAttempts);</span>
-<span class="lineNum">      41 </span>            :     // If we've failed to handshake with the broker, throw an exception.
-<span class="lineNum">      42 </span><span class="lineCov">          2 :     if (connectionState != ConnectionState.connected) {</span>
-<span class="lineNum">      43 </span>            :       MqttLogger
-<span class="lineNum">      44 </span><span class="lineNoCov">          0 :           .log(&quot;SynchronousMqttConnectionHandler::internalConnect failed&quot;);</span>
-<span class="lineNum">      45 </span><span class="lineNoCov">          0 :       throw new NoConnectionException(</span>
-<span class="lineNum">      46 </span>            :           &quot;The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. &quot;
-<span class="lineNum">      47 </span>            :               &quot;The broker is not responding to the connection request message &quot;
-<span class="lineNum">      48 </span>            :               &quot;(Missing Connection Acknowledgement&quot;);
-<span class="lineNum">      49 </span>            :     }
-<span class="lineNum">      50 </span><span class="lineCov">          1 :     MqttLogger.log(</span>
-<span class="lineNum">      51 </span><span class="lineCov">          2 :         &quot;SynchronousMqttConnectionHandler::internalConnect exited with state $connectionState&quot;);</span>
-<span class="lineNum">      52 </span><span class="lineCov">          1 :     return connectionState;</span>
-<span class="lineNum">      53 </span><span class="lineNoCov">          0 :   }</span>
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span>            :   ConnectionState disconnect() {
-<span class="lineNum">      56 </span><span class="lineCov">          1 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::disconnect&quot;);</span>
-<span class="lineNum">      57 </span>            :     // Send a disconnect message to the broker
-<span class="lineNum">      58 </span><span class="lineCov">          1 :     connectionState = ConnectionState.disconnecting;</span>
-<span class="lineNum">      59 </span><span class="lineCov">          2 :     sendMessage(new MqttDisconnectMessage());</span>
-<span class="lineNum">      60 </span><span class="lineCov">          1 :     this.ignoreAllEvents();</span>
-<span class="lineNum">      61 </span><span class="lineCov">          1 :     _performConnectionDisconnect();</span>
-<span class="lineNum">      62 </span><span class="lineCov">          1 :     return connectionState = ConnectionState.disconnected;</span>
-<span class="lineNum">      63 </span>            :   }
-<span class="lineNum">      64 </span>            : 
-<span class="lineNum">      65 </span>            :   /// Disconnects the underlying connection object.
-<span class="lineNum">      66 </span>            :   void _performConnectionDisconnect() {
-<span class="lineNum">      67 </span>            :     // Set the connection to disconnected.
-<span class="lineNum">      68 </span><span class="lineCov">          2 :     connection.disconnectRequested = true;</span>
-<span class="lineNum">      69 </span><span class="lineCov">          1 :     connectionState = ConnectionState.disconnected;</span>
-<span class="lineNum">      70 </span>            :   }
-<span class="lineNum">      71 </span>            : 
-<span class="lineNum">      72 </span>            :   /// Processes the connect acknowledgement message.
-<span class="lineNum">      73 </span>            :   bool _connectAckProcessor(MqttMessage msg) {
-<span class="lineNum">      74 </span><span class="lineCov">          1 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::_connectAckProcessor&quot;);</span>
-<span class="lineNum">      75 </span>            :     try {
-<span class="lineNum">      76 </span><span class="lineCov">          1 :       final MqttConnectAckMessage ackMsg = msg as MqttConnectAckMessage;</span>
-<span class="lineNum">      77 </span>            :       // Drop the connection if our connect request has been rejected.
-<span class="lineNum">      78 </span><span class="lineCov">          3 :       if (ackMsg.variableHeader.returnCode ==</span>
-<span class="lineNum">      79 </span>            :           MqttConnectReturnCode.brokerUnavailable ||
-<span class="lineNum">      80 </span><span class="lineCov">          3 :           ackMsg.variableHeader.returnCode ==</span>
-<span class="lineNum">      81 </span>            :               MqttConnectReturnCode.identifierRejected ||
-<span class="lineNum">      82 </span><span class="lineCov">          3 :           ackMsg.variableHeader.returnCode ==</span>
-<span class="lineNum">      83 </span>            :               MqttConnectReturnCode.unacceptedProtocolVersion ||
-<span class="lineNum">      84 </span><span class="lineCov">          3 :           ackMsg.variableHeader.returnCode ==</span>
-<span class="lineNum">      85 </span>            :               MqttConnectReturnCode.notAuthorized ||
-<span class="lineNum">      86 </span><span class="lineCov">          3 :           ackMsg.variableHeader.returnCode ==</span>
-<span class="lineNum">      87 </span>            :               MqttConnectReturnCode.badUsernameOrPassword) {
-<span class="lineNum">      88 </span><span class="lineNoCov">          0 :         MqttLogger.log(</span>
-<span class="lineNum">      89 </span>            :             &quot;SynchronousMqttConnectionHandler::_connectAckProcessor connection rejected&quot;);
-<span class="lineNum">      90 </span><span class="lineNoCov">          0 :         _performConnectionDisconnect();</span>
-<span class="lineNum">      91 </span>            :       } else {
-<span class="lineNum">      92 </span>            :         // Initialize the keepalive to start the ping based keepalive process.
-<span class="lineNum">      93 </span><span class="lineCov">          1 :         MqttLogger.log(</span>
-<span class="lineNum">      94 </span>            :             &quot;SynchronousMqttConnectionHandler::_connectAckProcessor - state = connected&quot;);
-<span class="lineNum">      95 </span><span class="lineCov">          1 :         connectionState = ConnectionState.connected;</span>
-<span class="lineNum">      96 </span>            :       }
-<span class="lineNum">      97 </span>            :     } catch (InvalidMessageException) {
-<span class="lineNum">      98 </span><span class="lineNoCov">          0 :       _performConnectionDisconnect();</span>
-<span class="lineNum">      99 </span>            :     }
-<span class="lineNum">     100 </span>            :     return true;
-<span class="lineNum">     101 </span>            :   }
-<span class="lineNum">     102 </span>            : }
+<span class="lineNum">      13 </span>            :   /// Max connection attempts
+<span class="lineNum">      14 </span>            :   static const int maxConnectionAttempts = 3;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            :   /// Synchronously connect to the specific Mqtt Connection.
+<span class="lineNum">      17 </span>            :   Future&lt;ConnectionState&gt; internalConnect(String hostname, int port,
+<span class="lineNum">      18 </span>            :       MqttConnectMessage connectMessage) async {
+<span class="lineNum">      19 </span>            :     int connectionAttempts = 0;
+<span class="lineNum">      20 </span><span class="lineCov">          2 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::internalConnect entered&quot;);</span>
+<span class="lineNum">      21 </span>            :     do {
+<span class="lineNum">      22 </span>            :       // Initiate the connection
+<span class="lineNum">      23 </span><span class="lineCov">          2 :       MqttLogger.log(</span>
+<span class="lineNum">      24 </span><span class="lineCov">          2 :           &quot;SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts&quot;);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          2 :       connectionState = ConnectionState.connecting;</span>
+<span class="lineNum">      26 </span><span class="lineCov">          2 :       if (useWebSocket) {</span>
+<span class="lineNum">      27 </span><span class="lineCov">          2 :         connection = new MqttWsConnection();</span>
+<span class="lineNum">      28 </span>            :       } else {
+<span class="lineNum">      29 </span><span class="lineCov">          2 :         connection = new MqttTcpConnection();</span>
+<span class="lineNum">      30 </span>            :       }
+<span class="lineNum">      31 </span><span class="lineCov">          6 :       await connection.connect(hostname, port);</span>
+<span class="lineNum">      32 </span><span class="lineCov">          4 :       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          6 :       this.listen(connection, MessageAvailable, this.messageAvailable);</span>
+<span class="lineNum">      34 </span>            :       // Transmit the required connection message to the broker.
+<span class="lineNum">      35 </span><span class="lineCov">          2 :       MqttLogger.log(</span>
+<span class="lineNum">      36 </span>            :           &quot;SynchronousMqttConnectionHandler::internalConnect sending connect message&quot;);
+<span class="lineNum">      37 </span><span class="lineCov">          2 :       sendMessage(connectMessage);</span>
+<span class="lineNum">      38 </span><span class="lineCov">          2 :       MqttLogger.log(</span>
+<span class="lineNum">      39 </span><span class="lineCov">          4 :           &quot;SynchronousMqttConnectionHandler::internalConnect - pre sleep, state = $connectionState&quot;);</span>
+<span class="lineNum">      40 </span>            :       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
+<span class="lineNum">      41 </span><span class="lineCov">          4 :       await MqttUtilities.asyncSleep(5);</span>
+<span class="lineNum">      42 </span><span class="lineCov">          2 :       MqttLogger.log(</span>
+<span class="lineNum">      43 </span><span class="lineCov">          4 :           &quot;SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionState&quot;);</span>
+<span class="lineNum">      44 </span><span class="lineCov">          4 :     } while (connectionState != ConnectionState.connected &amp;&amp;</span>
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :         ++connectionAttempts &lt; maxConnectionAttempts);</span>
+<span class="lineNum">      46 </span>            :     // If we've failed to handshake with the broker, throw an exception.
+<span class="lineNum">      47 </span><span class="lineCov">          4 :     if (connectionState != ConnectionState.connected) {</span>
+<span class="lineNum">      48 </span>            :       MqttLogger
+<span class="lineNum">      49 </span><span class="lineNoCov">          0 :           .log(&quot;SynchronousMqttConnectionHandler::internalConnect failed&quot;);</span>
+<span class="lineNum">      50 </span><span class="lineNoCov">          0 :       throw new NoConnectionException(</span>
+<span class="lineNum">      51 </span>            :           &quot;The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. &quot;
+<span class="lineNum">      52 </span>            :               &quot;The broker is not responding to the connection request message &quot;
+<span class="lineNum">      53 </span>            :               &quot;(Missing Connection Acknowledgement&quot;);
+<span class="lineNum">      54 </span>            :     }
+<span class="lineNum">      55 </span><span class="lineCov">          2 :     MqttLogger.log(</span>
+<span class="lineNum">      56 </span><span class="lineCov">          4 :         &quot;SynchronousMqttConnectionHandler::internalConnect exited with state $connectionState&quot;);</span>
+<span class="lineNum">      57 </span><span class="lineCov">          2 :     return connectionState;</span>
+<span class="lineNum">      58 </span><span class="lineNoCov">          0 :   }</span>
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            :   ConnectionState disconnect() {
+<span class="lineNum">      61 </span><span class="lineCov">          2 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::disconnect&quot;);</span>
+<span class="lineNum">      62 </span>            :     // Send a disconnect message to the broker
+<span class="lineNum">      63 </span><span class="lineCov">          2 :     connectionState = ConnectionState.disconnecting;</span>
+<span class="lineNum">      64 </span><span class="lineCov">          4 :     sendMessage(new MqttDisconnectMessage());</span>
+<span class="lineNum">      65 </span><span class="lineCov">          2 :     this.ignoreAllEvents();</span>
+<span class="lineNum">      66 </span><span class="lineCov">          2 :     _performConnectionDisconnect();</span>
+<span class="lineNum">      67 </span><span class="lineCov">          2 :     return connectionState = ConnectionState.disconnected;</span>
+<span class="lineNum">      68 </span>            :   }
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            :   /// Disconnects the underlying connection object.
+<span class="lineNum">      71 </span>            :   void _performConnectionDisconnect() {
+<span class="lineNum">      72 </span>            :     // Set the connection to disconnected.
+<span class="lineNum">      73 </span><span class="lineCov">          4 :     connection.disconnectRequested = true;</span>
+<span class="lineNum">      74 </span><span class="lineCov">          2 :     connectionState = ConnectionState.disconnected;</span>
+<span class="lineNum">      75 </span>            :   }
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            :   /// Processes the connect acknowledgement message.
+<span class="lineNum">      78 </span>            :   bool _connectAckProcessor(MqttMessage msg) {
+<span class="lineNum">      79 </span><span class="lineCov">          2 :     MqttLogger.log(&quot;SynchronousMqttConnectionHandler::_connectAckProcessor&quot;);</span>
+<span class="lineNum">      80 </span>            :     try {
+<span class="lineNum">      81 </span><span class="lineCov">          2 :       final MqttConnectAckMessage ackMsg = msg as MqttConnectAckMessage;</span>
+<span class="lineNum">      82 </span>            :       // Drop the connection if our connect request has been rejected.
+<span class="lineNum">      83 </span><span class="lineCov">          6 :       if (ackMsg.variableHeader.returnCode ==</span>
+<span class="lineNum">      84 </span>            :           MqttConnectReturnCode.brokerUnavailable ||
+<span class="lineNum">      85 </span><span class="lineCov">          6 :           ackMsg.variableHeader.returnCode ==</span>
+<span class="lineNum">      86 </span>            :               MqttConnectReturnCode.identifierRejected ||
+<span class="lineNum">      87 </span><span class="lineCov">          6 :           ackMsg.variableHeader.returnCode ==</span>
+<span class="lineNum">      88 </span>            :               MqttConnectReturnCode.unacceptedProtocolVersion ||
+<span class="lineNum">      89 </span><span class="lineCov">          6 :           ackMsg.variableHeader.returnCode ==</span>
+<span class="lineNum">      90 </span>            :               MqttConnectReturnCode.notAuthorized ||
+<span class="lineNum">      91 </span><span class="lineCov">          6 :           ackMsg.variableHeader.returnCode ==</span>
+<span class="lineNum">      92 </span>            :               MqttConnectReturnCode.badUsernameOrPassword) {
+<span class="lineNum">      93 </span><span class="lineNoCov">          0 :         MqttLogger.log(</span>
+<span class="lineNum">      94 </span>            :             &quot;SynchronousMqttConnectionHandler::_connectAckProcessor connection rejected&quot;);
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :         _performConnectionDisconnect();</span>
+<span class="lineNum">      96 </span>            :       } else {
+<span class="lineNum">      97 </span>            :         // Initialize the keepalive to start the ping based keepalive process.
+<span class="lineNum">      98 </span><span class="lineCov">          2 :         MqttLogger.log(</span>
+<span class="lineNum">      99 </span>            :             &quot;SynchronousMqttConnectionHandler::_connectAckProcessor - state = connected&quot;);
+<span class="lineNum">     100 </span><span class="lineCov">          2 :         connectionState = ConnectionState.connected;</span>
+<span class="lineNum">     101 </span>            :       }
+<span class="lineNum">     102 </span>            :     } catch (InvalidMessageException) {
+<span class="lineNum">     103 </span><span class="lineNoCov">          0 :       _performConnectionDisconnect();</span>
+<span class="lineNum">     104 </span>            :     }
+<span class="lineNum">     105 </span>            :     return true;
+<span class="lineNum">     106 </span>            :   }
+<span class="lineNum">     107 </span>            : }
 </pre>
       </td>
     </tr>
