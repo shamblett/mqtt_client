@@ -13,8 +13,44 @@ void main() {
   // Test wide variables
   MockBrokerWs brokerWs;
   final String mockBrokerAddressWs = "ws://localhost/ws";
+  final String mockBrokerAddressWsNoScheme = "localhost.com";
+  final String mockBrokerAddressWsBad = "://localhost.com";
   final int mockBrokerPortWs = 8080;
   final String testClientId = "syncMqttTests";
+
+  group("Connection parameters", () {
+    test("Invalid URL", () async {
+      try {
+        final SynchronousMqttConnectionHandler ch =
+        new SynchronousMqttConnectionHandler();
+        ch.useWebSocket = true;
+        await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
+            new MqttConnectMessage().withClientIdentifier(testClientId));
+      } catch (e) {
+        expect(e is NoConnectionException, true);
+        expect(
+            e.toString(),
+            "mqtt-client::NoConnectionException: "
+                "MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com");
+      }
+    });
+
+    test("Invalid URL - bad scheme", () async {
+      try {
+        final SynchronousMqttConnectionHandler ch =
+        new SynchronousMqttConnectionHandler();
+        ch.useWebSocket = true;
+        await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
+            new MqttConnectMessage().withClientIdentifier(testClientId));
+      } catch (e) {
+        expect(e is NoConnectionException, true);
+        expect(
+            e.toString(),
+            "mqtt-client::NoConnectionException: "
+                "MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme");
+      }
+    });
+  }, skip: false);
 
   group("Connection Keep Alive - Mock broker WS", () {
     test("Successful response WS", () async {

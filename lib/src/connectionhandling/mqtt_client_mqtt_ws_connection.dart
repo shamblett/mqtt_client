@@ -41,6 +41,11 @@ class MqttWsConnection extends Object with events.EventEmitter {
           "MqttWsConnection::The URI supplied for the WS connection is not valid - $server";
       throw new NoConnectionException(message);
     }
+    if (uri.scheme != "ws") {
+      final String message =
+          "MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $server";
+      throw new NoConnectionException(message);
+    }
     if (port != null) {
       uri = uri.replace(port: port);
     }
@@ -48,7 +53,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
     MqttLogger.log("MqttWsConnection:: WS URL is $uriString");
     try {
       // Connect and save the socket.
-      WebSocket.connect(uriString).then((socket) {
+      WebSocket.connect(server).then((socket) {
         wsClient = socket;
         readWrapper = new ReadWrapper();
         _startListening();
