@@ -35,19 +35,19 @@ part 'src/exception/mqtt_client_invalid_payload_size_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_connection_state.dart';
+part 'src/connectionhandling/mqtt_client_connection_state.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
+part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart';
+part 'src/connectionhandling/mqtt_client_mqtt_connection_handler.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection.dart';
+part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
+part 'src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
+part 'src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
 
-part 'package:mqtt_client/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';
+part 'src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';
 
 part 'src/mqtt_client_topic.dart';
 
