@@ -53,7 +53,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
     MqttLogger.log("MqttWsConnection:: WS URL is $uriString");
     try {
       // Connect and save the socket.
-      WebSocket.connect(server).then((socket) {
+      WebSocket.connect(uriString).then((socket) {
         wsClient = socket;
         readWrapper = new ReadWrapper();
         _startListening();
@@ -100,6 +100,7 @@ class MqttWsConnection extends Object with events.EventEmitter {
 
   /// OnError listener callback
   void _onError(error) {
+    MqttLogger.log("MqttWsConnection::_onerror - error is $error");
     _disconnect();
   }
 
