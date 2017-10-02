@@ -13,7 +13,7 @@ Future<int> main() async {
   final String url = "mqtt.googleapis.com";
   final int port = 8883;
   final String clientId = "projects/warm-actor-356/locations/europe-west1/registries/home-sensors/devices/dummy-sensor";
-  final String username = "SJH";
+  final String username = "";
   final password = "";
   final MqttClient client =
   new MqttClient("url", clientId);

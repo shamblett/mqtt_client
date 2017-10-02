@@ -49,14 +49,18 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Sends a message to the broker through the current connection.
   void sendMessage(MqttMessage message) {
     MqttLogger.log("MqttConnectionHandler::sendMessage - $message");
-    final typed.Uint8Buffer buff = new typed.Uint8Buffer();
-    final MqttByteBuffer stream = new MqttByteBuffer(buff);
-    message.writeTo(stream);
-    stream.seek(0);
-    connection.send(stream);
-    // Let any registered people know we're doing a message.
-    for (MessageCallbackFunction callback in sentMessageCallbacks) {
-      callback(message);
+    if (connectionState == ConnectionState.connected) {
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
+      final MqttByteBuffer stream = new MqttByteBuffer(buff);
+      message.writeTo(stream);
+      stream.seek(0);
+      connection.send(stream);
+      // Let any registered people know we're doing a message.
+      for (MessageCallbackFunction callback in sentMessageCallbacks) {
+        callback(message);
+      }
+    } else {
+      MqttLogger.log("MqttConnectionHandler::sendMessage - not connected");
     }
   }
 
