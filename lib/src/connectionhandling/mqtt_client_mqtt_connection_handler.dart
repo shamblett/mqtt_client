@@ -49,7 +49,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Sends a message to the broker through the current connection.
   void sendMessage(MqttMessage message) {
     MqttLogger.log("MqttConnectionHandler::sendMessage - $message");
-    if (connectionState == ConnectionState.connected) {
+    if ((connectionState == ConnectionState.connected) ||
+        (connectionState == ConnectionState.connecting)) {
       final typed.Uint8Buffer buff = new typed.Uint8Buffer();
       final MqttByteBuffer stream = new MqttByteBuffer(buff);
       message.writeTo(stream);

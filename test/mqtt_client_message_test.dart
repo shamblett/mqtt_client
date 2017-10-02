@@ -579,7 +579,9 @@ void main() {
         0x00,
         0x1E,
         0x00,
-        0x1C,
+        1053,
+
+        /// greater than 1024
         'a'.codeUnitAt(0),
         'n'.codeUnitAt(0),
         'd'.codeUnitAt(0),
