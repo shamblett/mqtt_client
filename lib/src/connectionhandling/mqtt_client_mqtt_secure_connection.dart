@@ -1,27 +1,16 @@
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
- * Date   : 22/06/2017
+ * Date   : 02/10/2017
  * Copyright :  S.Hamblett
  */
 
 part of mqtt_client;
 
-/// State and logic used to read from the underlying network stream.
-class ReadWrapper {
-  /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
-  ReadWrapper() {
-    this.messageBytes = new List<int>();
-  }
-
-  /// The bytes associated with the message being read.
-  List<int> messageBytes;
-}
-
 /// The MQTT connection class
-class MqttTcpConnection extends Object with events.EventEmitter {
+class MqttSecureConnection extends Object with events.EventEmitter {
   /// The socket that maintains the connection to the MQTT broker.
-  Socket tcpClient;
+  SecureSocket tcpClient;
 
   /// Sync lock object to ensure that only a single message is sent through the connection handler at once.
   bool _sendPadlock = false;
@@ -33,10 +22,10 @@ class MqttTcpConnection extends Object with events.EventEmitter {
   bool disconnectRequested = false;
 
   /// Default constructor
-  MqttTcpConnection();
+  MqttSecureConnection();
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttTcpConnection.fromConnect(String server, int port) {
+  MqttSecureConnection.fromConnect(String server, int port) {
     connect(server, port);
   }
 
@@ -45,15 +34,17 @@ class MqttTcpConnection extends Object with events.EventEmitter {
     final Completer completer = new Completer();
     try {
       // Connect and save the socket.
-      Socket.connect(server, port).then((socket) {
+      SecureSocket.connect(server, port).then((socket) {
         tcpClient = socket;
         readWrapper = new ReadWrapper();
-        _startListening();
-        return completer.complete();
+        SecureSocket.secure(tcpClient).then((tcpClient) {
+          _startListening();
+          return completer.complete();
+        });
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
-          "MqttConnection::The connection to the message broker {$server}:{$port} could not be made.";
+          "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made.";
       throw new NoConnectionException(message);
     }
     return completer.future;
@@ -66,7 +57,7 @@ class MqttTcpConnection extends Object with events.EventEmitter {
 
   /// OnData listener callback
   void _onData(List<int> data) {
-    MqttLogger.log("MqttConnection::_onData");
+    MqttLogger.log("MqttSecureConnection::_onData");
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
       return;
@@ -80,13 +71,13 @@ class MqttTcpConnection extends Object with events.EventEmitter {
       final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);
       msg = MqttMessage.createFrom(messageStream);
     } catch (exception) {
-      MqttLogger.log("MqttConnection::_ondata - message is not valid");
+      MqttLogger.log("MqttSecureConnection::_ondata - message is not valid");
       messageIsValid = false;
     }
     if (messageIsValid) {
-      MqttLogger.log("MqttConnection::_onData - message received $msg");
+      MqttLogger.log("MqttSecureConnection::_onData - message received $msg");
       emitEvent(new MessageAvailable(msg));
-      MqttLogger.log("MqttConnection::_onData - message processed");
+      MqttLogger.log("MqttSecureConnection::_onData - message processed");
     }
   }
 
@@ -101,7 +92,7 @@ class MqttTcpConnection extends Object with events.EventEmitter {
     _disconnect();
     if (!disconnectRequested) {
       throw new SocketException(
-          "MqttConnection::On Done called by broker, disconnecting.");
+          "MqttSecureConnection::On Done called by broker, disconnecting.");
     }
   }
 

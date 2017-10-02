@@ -29,6 +29,9 @@ class MqttClient {
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
 
+  /// If set use a secure connection, note TCP only, not websocket.
+  bool secure = false;
+
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
 
@@ -79,7 +82,12 @@ class MqttClient {
     }
     _connectionHandler = new SynchronousMqttConnectionHandler();
     if (useWebSocket) {
+      _connectionHandler.secure = false;
       _connectionHandler.useWebSocket = true;
+    }
+    if (secure) {
+      _connectionHandler.secure = true;
+      _connectionHandler.useWebSocket = false;
     }
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =

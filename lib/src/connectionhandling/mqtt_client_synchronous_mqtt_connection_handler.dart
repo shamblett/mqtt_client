@@ -25,6 +25,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       connectionState = ConnectionState.connecting;
       if (useWebSocket) {
         connection = new MqttWsConnection();
+      } else if (secure) {
+        connection = new MqttSecureConnection();
       } else {
         connection = new MqttTcpConnection();
       }
