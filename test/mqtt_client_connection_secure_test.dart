@@ -33,6 +33,7 @@ void main() {
   group("Connection Keep Alive - Mock tests", () {
     // Group setup
     final MockCH ch = new MockCH();
+    ch.secure = true;
     final MockKA ka = new MockKA(ch, 3);
     test("Message sent", () {
       final MqttMessage msg = new MqttPingRequestMessage();
@@ -68,6 +69,7 @@ void main() {
     test("Connect to bad host name", () {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
+      ch.secure = true;
       final t1 = expectAsync0(() {
         ch.connect(nonExistantHostName, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -78,6 +80,7 @@ void main() {
     test("Connect invalid port", () {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
+      ch.secure = true;
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, badPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -89,6 +92,7 @@ void main() {
       broker = new MockBrokerSecure();
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
+      ch.secure = true;
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
