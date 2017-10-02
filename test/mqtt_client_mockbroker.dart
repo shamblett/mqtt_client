@@ -185,7 +185,11 @@ class MockBrokerSecure {
   void _connectAccept(SecureSocket clientSocket) {
     print("MockBrokerSecure::connectAccept");
     client = clientSocket;
-    client.listen(_dataArrivedOnConnection);
+    SecureSocket
+        .secureServer(client, SecurityContext.defaultContext)
+        .then((SecureSocket socket) {
+      client.listen(_dataArrivedOnConnection);
+    });
   }
 
   void _dataArrivedOnConnection(List<int> data) {
