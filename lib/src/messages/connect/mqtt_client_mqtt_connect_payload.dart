@@ -29,6 +29,10 @@ class MqttConnectPayload extends MqttPayload {
     if (id.length > Constants.maxClientIdentifierLength) {
       throw new ClientIdentifierException(id);
     }
+    if (id.length > Constants.maxClientIdentifierLengthSpec) {
+      MqttLogger.log(
+          "MqttConnectPayload::Client id exceeds spec value of $Constants.maxClientIdentifierLengthSpec");
+    }
     _clientIdentifier = id;
   }
 
