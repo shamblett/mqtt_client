@@ -53,7 +53,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         context.usePrivateKey(privateKeyFilePath);
       }
       SecureSocket
-          .connect(server, port, context: context)
+          .connect(server, port)
           .then((SecureSocket socket) {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
