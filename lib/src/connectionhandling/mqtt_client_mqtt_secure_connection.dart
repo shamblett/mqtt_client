@@ -50,7 +50,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();
-        SecureSocket.secure(tcpClient).then((tcpClient) {
+        SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
           MqttLogger.log("MqttSecureConnection::connect - start listening");
           _startListening();
           return completer.complete();
