@@ -21,8 +21,11 @@ class MqttSecureConnection extends Object with events.EventEmitter {
   /// Indicates if disconnect(onDone) has been requested or not
   bool disconnectRequested = false;
 
+  /// Trusted certificate file path for use in secure working
+  String trustedCertPath;
+
   /// Default constructor
-  MqttSecureConnection();
+  MqttSecureConnection(this.trustedCertPath);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttSecureConnection.fromConnect(String server, int port) {
@@ -35,7 +38,15 @@ class MqttSecureConnection extends Object with events.EventEmitter {
     MqttLogger.log("MqttSecureConnection::connect");
     try {
       // Connect and save the socket.
-      SecureSocket.connect(server, port).then((SecureSocket socket) {
+      final SecurityContext context = new SecurityContext();
+      if (trustedCertPath != null) {
+        MqttLogger.log(
+            "MqttSecureConnection::connect - trusted cert path is $trustedCertPath");
+        context.setTrustedCertificates(trustedCertPath);
+      }
+      SecureSocket
+          .connect(server, port, context: context)
+          .then((SecureSocket socket) {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();

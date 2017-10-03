@@ -16,9 +16,10 @@ Future<int> main() async {
   final String username = "";
   final password = "";
   final MqttClient client =
-  new MqttClient("url", clientId);
+  new MqttClient(url, clientId);
   client.port = port;
   client.secure = true;
+  client.trustedCertPath = "pem/roots.pem";
   client.logging(true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {

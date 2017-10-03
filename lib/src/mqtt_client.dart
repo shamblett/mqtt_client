@@ -32,6 +32,9 @@ class MqttClient {
   /// If set use a secure connection, note TCP only, not websocket.
   bool secure = false;
 
+  /// Trusted certificate file path for use in secure working
+  String trustedCertPath;
+
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
 
@@ -88,6 +91,7 @@ class MqttClient {
     if (secure) {
       _connectionHandler.secure = true;
       _connectionHandler.useWebSocket = false;
+      _connectionHandler.trustedCertPath = trustedCertPath;
     }
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =

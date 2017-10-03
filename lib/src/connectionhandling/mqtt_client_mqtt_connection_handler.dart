@@ -28,6 +28,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// If set use a secure connection, note TCP only, not websocket.
   bool secure = false;
 
+  /// Trusted certificate file path for use in secure working
+  String trustedCertPath;
+
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
