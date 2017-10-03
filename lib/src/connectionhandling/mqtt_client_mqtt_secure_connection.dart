@@ -34,7 +34,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
     final Completer completer = new Completer();
     try {
       // Connect and save the socket.
-      SecureSocket.connect(server, port).then((socket) {
+      SecureSocket.connect(server, port).then((SecureSocket socket) {
         tcpClient = socket;
         readWrapper = new ReadWrapper();
         SecureSocket.secure(tcpClient).then((tcpClient) {
@@ -52,6 +52,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
+    MqttLogger.log("MqttSecureConnection::_startListening");
     tcpClient.listen(_onData, onError: _onError, onDone: _onDone);
   }
 

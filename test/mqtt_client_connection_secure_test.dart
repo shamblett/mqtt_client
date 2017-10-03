@@ -118,7 +118,7 @@ void main() {
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
     });
-  }, skip: false);
+  }, skip: true);
 
   group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
@@ -165,5 +165,5 @@ void main() {
       ch.close();
       broker.close();
     });
-  }, skip: false);
+  }, skip: true);
 }
