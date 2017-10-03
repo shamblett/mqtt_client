@@ -32,6 +32,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
   /// Connect
   Future connect(String server, int port) {
     final Completer completer = new Completer();
+    MqttLogger.log("MqttSecureConnection::connect");
     try {
       // Connect and save the socket.
       SecureSocket.connect(server, port).then((SecureSocket socket) {
