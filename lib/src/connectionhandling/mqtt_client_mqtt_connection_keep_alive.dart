@@ -48,7 +48,7 @@ class MqttConnectionKeepAlive {
       _shutdownPadlock = true;
     }
     final MqttPingRequestMessage pingMsg = new MqttPingRequestMessage();
-    if (_connectionHandler.connectionState == ConnectionState.disconnected) {
+    if (_connectionHandler.connectionState == ConnectionState.connected) {
       _connectionHandler.sendMessage(pingMsg);
     }
     pingTimer = new Timer(
