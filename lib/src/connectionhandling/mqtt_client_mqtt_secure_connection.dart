@@ -24,8 +24,11 @@ class MqttSecureConnection extends Object with events.EventEmitter {
   /// Trusted certificate file path for use in secure working
   String trustedCertPath;
 
+  /// Private key file path
+  String privateKeyFilePath;
+
   /// Default constructor
-  MqttSecureConnection(this.trustedCertPath);
+  MqttSecureConnection(this.trustedCertPath, this.privateKeyFilePath);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttSecureConnection.fromConnect(String server, int port) {
@@ -43,6 +46,11 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         MqttLogger.log(
             "MqttSecureConnection::connect - trusted cert path is $trustedCertPath");
         context.setTrustedCertificates(trustedCertPath);
+      }
+      if (privateKeyFilePath != null) {
+        MqttLogger.log(
+            "MqttSecureConnection::connect - private key file path is $privateKeyFilePath");
+        context.usePrivateKey(privateKeyFilePath);
       }
       SecureSocket
           .connect(server, port, context: context)

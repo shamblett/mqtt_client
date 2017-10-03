@@ -23,6 +23,7 @@ Future<int> main() async {
       .replaceAll("'", "")
       .substring(11);
   client.trustedCertPath = currDir + "/pem/roots.pem";
+  client.privateKeyFilePath = currDir + "/pem/rsa_private.pem";
   client.logging(true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {
