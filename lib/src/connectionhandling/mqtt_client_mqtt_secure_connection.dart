@@ -41,7 +41,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
     MqttLogger.log("MqttSecureConnection::connect");
     try {
       // Connect and save the socket.
-      final SecurityContext context = new SecurityContext();
+      final SecurityContext context = SecurityContext.defaultContext;
       if (trustedCertPath != null) {
         MqttLogger.log(
             "MqttSecureConnection::connect - trusted cert path is $trustedCertPath");
