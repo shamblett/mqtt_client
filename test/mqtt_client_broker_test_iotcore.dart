@@ -22,7 +22,7 @@ Future<int> main() async {
   client.secure = true;
   final String currDir = Directory.current.toString()
       .replaceAll("'", "")
-      .substring(13);
+      .substring(12);
   client.trustedCertPath = currDir + "/pem/roots.pem";
   client.logging(true);
   await client.connect(username, password);
