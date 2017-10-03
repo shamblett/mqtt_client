@@ -20,7 +20,8 @@ Future<int> main() async {
   new MqttClient(url, clientId);
   client.port = port;
   client.secure = true;
-  client.trustedCertPath = Directory.current.toString() + "/pem/roots.pem";
+  client.trustedCertPath =
+      Directory.current.toString().replaceAll("'", "") + "/pem/roots.pem";
   client.logging(true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {
