@@ -4,6 +4,7 @@
  * Date   : 02/10/2017
  * Copyright :  S.Hamblett
  */
+import 'dart:io';
 import 'dart:async';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
@@ -19,7 +20,7 @@ Future<int> main() async {
   new MqttClient(url, clientId);
   client.port = port;
   client.secure = true;
-  client.trustedCertPath = "pem/roots.pem";
+  client.trustedCertPath = Directory.current.toString() + "pem/roots.pem";
   client.logging(true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {
