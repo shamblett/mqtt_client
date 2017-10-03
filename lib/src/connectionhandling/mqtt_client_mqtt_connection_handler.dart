@@ -19,6 +19,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   List<MessageCallbackFunction> sentMessageCallbacks =
   new List<MessageCallbackFunction>();
 
+  /// Connection state
   ConnectionState connectionState = ConnectionState.disconnected;
 
   /// Use a websocket rather than TCP

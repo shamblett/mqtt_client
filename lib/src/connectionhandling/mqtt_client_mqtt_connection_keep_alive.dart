@@ -25,8 +25,7 @@ class MqttConnectionKeepAlive {
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = new Timer(
-        new Duration(milliseconds: this.keepAlivePeriod),
-        pingRequired);
+        new Duration(milliseconds: this.keepAlivePeriod), pingRequired);
   }
 
   /// The keep alive period in  milliseconds
@@ -35,7 +34,8 @@ class MqttConnectionKeepAlive {
   /// The timer that manages the ping callbacks.
   Timer pingTimer;
 
-  IMqttConnectionHandler _connectionHandler;
+  /// The connection handler
+  MqttConnectionHandler _connectionHandler;
 
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;
@@ -48,10 +48,11 @@ class MqttConnectionKeepAlive {
       _shutdownPadlock = true;
     }
     final MqttPingRequestMessage pingMsg = new MqttPingRequestMessage();
-    _connectionHandler.sendMessage(pingMsg);
+    if (_connectionHandler.connectionState == ConnectionState.disconnected) {
+      _connectionHandler.sendMessage(pingMsg);
+    }
     pingTimer = new Timer(
-        new Duration(milliseconds: this.keepAlivePeriod),
-        pingRequired);
+        new Duration(milliseconds: this.keepAlivePeriod), pingRequired);
     _shutdownPadlock = false;
   }
 
