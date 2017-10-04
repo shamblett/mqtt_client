@@ -52,9 +52,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
             "MqttSecureConnection::connect - private key file path is $privateKeyFilePath");
         context.usePrivateKey(privateKeyFilePath);
       }
-      SecureSocket
-          .connect(server, port)
-          .then((SecureSocket socket) {
+      SecureSocket.connect(server, port).then((SecureSocket socket) {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();
@@ -62,10 +60,10 @@ class MqttSecureConnection extends Object with events.EventEmitter {
           MqttLogger.log("MqttSecureConnection::connect - start listening");
           _startListening();
           return completer.complete();
-        }).catchError((e) {
-          MqttLogger.log(
-              "MqttSecureConnection::fail to secure, error is ${e
+        }).catchError((e, stacktrace) {
+          MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
                   .toString()}");
+          MqttLogger.log(stacktrace.toString());
           _onError(e);
         });
       }).catchError((e) => _onError(e));
@@ -119,6 +117,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
 
   /// OnError listener callback
   void _onError(error) {
+    MqttLogger.log("MqttSecureConnection::_onError");
     _disconnect();
   }
 
