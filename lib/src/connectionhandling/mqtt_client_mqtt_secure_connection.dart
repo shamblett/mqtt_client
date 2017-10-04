@@ -69,12 +69,14 @@ class MqttSecureConnection extends Object with events.EventEmitter {
           _onError(e);
         });
       }).catchError((e) => _onError(e));
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stacktrace) {
+      MqttLogger.log(stacktrace.toString());
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e
           .toString()}";
       throw new NoConnectionException(message);
-    } on HandshakeException catch (e) {
+    } on HandshakeException catch (e, stacktrace) {
+      MqttLogger.log(stacktrace.toString());
       final String message =
           "MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e
           .toString()}";
