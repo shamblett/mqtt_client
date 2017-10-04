@@ -56,11 +56,17 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();
-        SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
-          MqttLogger.log("MqttSecureConnection::connect - start listening");
-          _startListening();
-          return completer.complete();
-        });
+        try {
+          SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
+            MqttLogger.log("MqttSecureConnection::connect - start listening");
+            _startListening();
+            return completer.complete();
+          });
+        } catch (e, stacktrace) {
+          MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
+              .toString()}");
+          MqttLogger.log(stacktrace.toString());
+        }
       });
     } on SocketException catch (e, stacktrace) {
       MqttLogger.log("MqttSecureConnection::fail to connect, error is ${e
@@ -73,7 +79,6 @@ class MqttSecureConnection extends Object with events.EventEmitter {
     } on HandshakeException catch (e, stacktrace) {
       MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
           .toString()}");
-      _onError(e);
       MqttLogger.log(stacktrace.toString());
       final String message =
           "MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e
