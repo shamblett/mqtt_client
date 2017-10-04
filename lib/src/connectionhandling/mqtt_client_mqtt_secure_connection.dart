@@ -56,30 +56,23 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();
-        try {
-          SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
-            MqttLogger.log("MqttSecureConnection::connect - start listening");
-            _startListening();
-            return completer.complete();
-          });
-        } catch (e, stacktrace) {
+        SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
+          MqttLogger.log("MqttSecureConnection::connect - start listening");
+          _startListening();
+          return completer.complete();
+        }).catchError((e, stacktrace) {
           MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
               .toString()}");
           MqttLogger.log(stacktrace.toString());
-        }
-      });
-    } on SocketException catch (e, stacktrace) {
-      MqttLogger.log("MqttSecureConnection::fail to connect, error is ${e
-          .toString()}");
-      MqttLogger.log(stacktrace.toString());
+          _onError(e);
+        });
+      }).catchError((e) => _onError(e));
+    } on SocketException catch (e) {
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e
           .toString()}";
       throw new NoConnectionException(message);
-    } on HandshakeException catch (e, stacktrace) {
-      MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
-          .toString()}");
-      MqttLogger.log(stacktrace.toString());
+    } on HandshakeException catch (e) {
       final String message =
           "MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e
           .toString()}";
@@ -122,7 +115,6 @@ class MqttSecureConnection extends Object with events.EventEmitter {
 
   /// OnError listener callback
   void _onError(error) {
-    MqttLogger.log("MqttSecureConnection::_onError");
     _disconnect();
   }
 
