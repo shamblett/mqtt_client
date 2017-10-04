@@ -62,7 +62,7 @@ class MqttSecureConnection extends Object with events.EventEmitter {
           return completer.complete();
         }).catchError((e) {
           MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
-              .toString()}, OSError is ${e.OSError}, type is ${e.type} ");
+              .toString()}, OSError is ${e.osError}, type is ${e.type} ");
           _onError(e);
         });
       }).catchError((e) => _onError(e));
