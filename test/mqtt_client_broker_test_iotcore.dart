@@ -21,6 +21,9 @@ Future<int> main() async {
   new MqttClient(url, clientId);
   client.port = port;
   client.secure = true;
+  // V3.1.1 for iot-core
+  client.setProtocol(
+      Constants.mqttV311ProtocolVersion, Constants.mqttV311ProtocolName);
   final String currDir = path.current + path.separator;
   //client.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
   client.logging(true);
