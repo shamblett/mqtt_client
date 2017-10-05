@@ -35,8 +35,11 @@ Future<int> main() async {
   }
   // Publish a known topic
   final String topic = "/devices/dummy-sensor/events";
-  final typed.Uint8Buffer buff = new typed.Uint8Buffer(1);
-  buff[0] = 40;
+  final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+  buff[0] = 'a'.codeUnitAt(0);
+  buff[1] = 'b'.codeUnitAt(0);
+  buff[2] = 'c'.codeUnitAt(0);
+  buff[3] = 'd'.codeUnitAt(0);
   client.publishMessage(topic, MqttQos.exactlyOnce, buff);
   print("Sleeping....");
   await MqttUtilities.asyncSleep(10);
