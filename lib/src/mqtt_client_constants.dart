@@ -26,4 +26,11 @@ class Constants {
 
   /// Default keep alive in seconds
   static int defaultKeepAlive = 60;
+
+  /// Protocol variants
+  static const int mqttV31ProtocolVersion = 3;
+  static const String mqttV31ProtocolName = "MQIsdp";
+  static const int mqttV311ProtocolVersion = 4;
+  static const String mqttV311ProtocolName = "MQTT";
+
 }

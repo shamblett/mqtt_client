@@ -19,6 +19,8 @@ part 'src/mqtt_client.dart';
 
 part 'src/mqtt_client_constants.dart';
 
+part 'src/mqtt_client_protocol.dart';
+
 part 'src/mqtt_client_events.dart';
 
 part 'src/exception/mqtt_client_client_identifier_exception.dart';

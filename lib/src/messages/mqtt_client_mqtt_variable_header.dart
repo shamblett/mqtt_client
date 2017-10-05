@@ -39,8 +39,8 @@ class MqttVariableHeader {
 
   /// Initializes a new instance of the MqttVariableHeader class.
   MqttVariableHeader() {
-    this.protocolName = "MQTT";
-    this.protocolVersion = 4; // MQTT 3.1.1
+    this.protocolName = Protocol.name;
+    this.protocolVersion = Protocol.version;
     this.connectFlags = new MqttConnectFlags();
   }
 
