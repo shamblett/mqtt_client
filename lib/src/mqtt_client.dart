@@ -175,4 +175,10 @@ class MqttClient {
       MqttLogger.loggingOn = true;
     }
   }
+
+  /// Set the protocol version
+  void setProtocol(int version, String name) {
+    Protocol.version = version;
+    Protocol.name = name;
+  }
 }
