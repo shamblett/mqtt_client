@@ -6,24 +6,24 @@
  */
 import 'dart:io';
 import 'dart:async';
+import 'package:path/path.dart' as path;
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
   // Create and connect the client
   final String url = "mqtt.googleapis.com";
-  final int port = 8883;
+  final int port = 443;
   final String clientId = "projects/warm-actor-356/locations/europe-west1/registries/home-sensors/devices/dummy-sensor";
   final String username = "unused";
-  final password = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE1MDcwMzQzMzQsImV4cCI6MTUzODU3MDU2OCwiYXVkIjoid2FybS1hY3Rvci0zNTYiLCJzdWIiOiIifQ.FIhwvyj0LS0zyoQ_uendUpMWQEeb5eNg7t4LN9NnVvY";
+  final password = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9."
+      "eyJpYXQiOjE1MDcyMDExMDUsImV4cCI6MTUwNzI0ODAwMCwiYXVkIjoid2FybS1hY3Rvci0zNTYifQ."
+      "Yi2Le8pwSIZw-XWC_nz1fGNmXMCryny3Q1wuZ7gVaFtynAmD89hoEU1gNmSYUw3cWs62JJCQanNDVG_gRoHxqM8ZoPvZsfjmGUTIVlns7EwSqcZ8pCAUGJZz0t87JchKGRVEi_EEAKe1_A2oUP5ifbZEk-NY64KkIGsBSbmQf-c";
   final MqttClient client =
   new MqttClient(url, clientId);
   client.port = port;
   client.secure = true;
-  final String currDir = Directory.current.toString()
-      .replaceAll("'", "")
-      .substring(11);
-  client.trustedCertPath = currDir + "/pem/roots.pem";
-  client.privateKeyFilePath = currDir + "/pem/rsa_private.pem";
+  final String currDir = path.current + path.separator;
+  //client.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
   client.logging(true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {

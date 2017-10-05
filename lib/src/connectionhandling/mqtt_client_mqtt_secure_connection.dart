@@ -56,16 +56,10 @@ class MqttSecureConnection extends Object with events.EventEmitter {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         tcpClient = socket;
         readWrapper = new ReadWrapper();
-        SecureSocket.secure(tcpClient, context: context).then((tcpClient) {
-          MqttLogger.log("MqttSecureConnection::connect - start listening");
-          _startListening();
-          return completer.complete();
-        }).catchError((e) {
-          MqttLogger.log("MqttSecureConnection::fail to secure, error is ${e
-              .toString()}, OSError is ${e.osError}, type is ${e.type} ");
-          _onError(e);
-        });
-      }).catchError((e) => _onError(e));
+        MqttLogger.log("MqttSecureConnection::connect - start listening");
+        _startListening();
+        return completer.complete();
+      });
     } on SocketException catch (e) {
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e
