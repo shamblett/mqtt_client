@@ -84,15 +84,6 @@ void main() {
       });
       t1();
     });
-    test("Connect no connect ack", () {
-      final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
-      final t1 = expectAsync0(() {
-        ch.connect(mockBrokerAddress, mockBrokerPort,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
-      });
-      t1();
-    });
     test("Successful response and disconnect", () async {
       final MockBroker broker = new MockBroker();
 
