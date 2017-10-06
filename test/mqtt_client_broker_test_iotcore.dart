@@ -4,7 +4,7 @@
  * Date   : 02/10/2017
  * Copyright :  S.Hamblett
  */
-import 'dart:io';
+
 import 'dart:async';
 import 'package:path/path.dart' as path;
 import 'package:mqtt_client/mqtt_client.dart';

@@ -11,7 +11,6 @@ import 'mqtt_client_mockbroker.dart';
 
 void main() {
   // Test wide variables
-  MockBrokerWs brokerWs;
   final String mockBrokerAddressWs = "ws://localhost/ws";
   final String mockBrokerAddressWsNoScheme = "localhost.com";
   final String mockBrokerAddressWsBad = "://localhost.com";
@@ -55,7 +54,7 @@ void main() {
   group("Connection Keep Alive - Mock broker WS", () {
     test("Successful response WS", () async {
       int expectRequest = 0;
-
+      final MockBrokerWs brokerWs = new MockBrokerWs();
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -73,7 +72,6 @@ void main() {
         }
       }
 
-      brokerWs = new MockBrokerWs();
       await brokerWs.start();
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
