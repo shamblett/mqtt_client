@@ -81,10 +81,7 @@ class MockBroker {
   }
 
   /// Close the broker socket
-  void close() {
-    client.flush();
-    client.destroy();
-  }
+  void close() {}
 }
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
@@ -226,6 +223,5 @@ class MockBrokerSecure {
   }
 
   /// Close the broker socket
-  void close() {
-  }
+  void close() {}
 }
