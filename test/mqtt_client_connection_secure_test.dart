@@ -147,8 +147,6 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
       ch.secure = true;
-      final String currDir = path.current + path.separator;
-      ch.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
       broker.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -170,5 +168,5 @@ void main() {
       ch.close();
       broker.close();
     });
-  }, skip: true);
+  }, skip: false);
 }
