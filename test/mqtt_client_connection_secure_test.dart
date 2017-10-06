@@ -7,6 +7,7 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client_mockbroker.dart';
 
@@ -111,6 +112,8 @@ void main() {
       new SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandler);
       ch.secure = true;
+      final String currDir = path.current + path.separator;
+      ch.trustedCertPath = currDir + path.join("test", "pem", "localhost.cert");
       await broker.start();
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -118,7 +121,7 @@ void main() {
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
     });
-  }, skip: true);
+  }, skip: false);
 
   group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
@@ -144,6 +147,8 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
       new SynchronousMqttConnectionHandler();
       ch.secure = true;
+      final String currDir = path.current + path.separator;
+      ch.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
       broker.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));

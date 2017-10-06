@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:route/server.dart' show Router;
 
@@ -171,8 +172,13 @@ class MockBrokerSecure {
 
   Future start() {
     final Completer completer = new Completer();
+    final SecurityContext context = SecurityContext.defaultContext;
+    final String currDir = path.current + path.separator;
+    context.useCertificateChain(
+        currDir + path.join("test", "pem", "localhost.cert"));
+    context.usePrivateKey(currDir + path.join("test", "pem", "localhost.key"));
     SecureServerSocket
-        .bind("localhost", brokerPort, SecurityContext.defaultContext)
+        .bind("localhost", brokerPort, context)
         .then((SecureServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
@@ -185,11 +191,7 @@ class MockBrokerSecure {
   void _connectAccept(SecureSocket clientSocket) {
     print("MockBrokerSecure::connectAccept");
     client = clientSocket;
-    SecureSocket
-        .secureServer(client, SecurityContext.defaultContext)
-        .then((SecureSocket socket) {
-      client.listen(_dataArrivedOnConnection);
-    });
+    client.listen(_dataArrivedOnConnection);
   }
 
   void _dataArrivedOnConnection(List<int> data) {
