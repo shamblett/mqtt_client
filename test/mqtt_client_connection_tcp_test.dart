@@ -67,7 +67,7 @@ void main() {
   group("Synchronous MqttConnectionHandler", () {
     test("Connect to bad host name", () {
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+          new SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(nonExistantHostName, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -77,7 +77,7 @@ void main() {
     });
     test("Connect invalid port", () {
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+          new SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, badPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -87,7 +87,7 @@ void main() {
     });
     test("Connect no connect ack", () {
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+          new SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, mockBrokerPort,
             new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -102,7 +102,7 @@ void main() {
       }
 
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+          new SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandler);
       await broker.start();
       await ch.connect(mockBrokerAddress, mockBrokerPort,
@@ -136,7 +136,7 @@ void main() {
       }
 
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+          new SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           new MqttConnectMessage().withClientIdentifier(testClientId));
@@ -148,13 +148,50 @@ void main() {
       print(
           "Connection Keep Alive - Successful response - ping timer active is ${ka
               .pingTimer.isActive.toString()}");
-      final Stopwatch stopwatch = new Stopwatch()
-        ..start();
+      final Stopwatch stopwatch = new Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print("Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
       ka.stop();
-      broker.close();
     });
   }, skip: false);
+
+  group("Client interface Mock broker", () {
+    test("Normal publish", () async {
+      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      broker.setMessageHandler(messageHandlerConnect);
+      final MqttClient client = new MqttClient("localhost", "SJHMQTTClient");
+      client.logging(true);
+      final String username = "unused";
+      print(username);
+      final password = "password";
+      print(password);
+      await client.connect();
+      if (client.connectionState == ConnectionState.connected) {
+        print("Client connected");
+      } else {
+        print("ERROR Client connection failed - disconnecting, state is ${client
+                .connectionState}");
+        client.disconnect();
+      }
+      // Publish a known topic
+      final String topic = "Dart/SJH/mqtt_client";
+      final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
+      buff[0] = 'h'.codeUnitAt(0);
+      buff[1] = 'e'.codeUnitAt(0);
+      buff[2] = 'l'.codeUnitAt(0);
+      buff[3] = 'l'.codeUnitAt(0);
+      buff[4] = 'o'.codeUnitAt(0);
+      client.publishMessage(topic, MqttQos.exactlyOnce, buff);
+      print("Sleeping....");
+      await MqttUtilities.asyncSleep(10);
+      print("Disconnecting");
+      client.disconnect();
+    });
+  });
 }
