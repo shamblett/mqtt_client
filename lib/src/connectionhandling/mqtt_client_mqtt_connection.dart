@@ -18,13 +18,10 @@ class ReadWrapper {
   List<int> messageBytes;
 }
 
-/// The MQTT connection class
-class MqttTcpConnection extends Object with events.EventEmitter {
+/// The MQTT connection base class
+class MqttConnection extends Object with events.EventEmitter {
   /// The socket that maintains the connection to the MQTT broker.
-  Socket tcpClient;
-
-  /// Sync lock object to ensure that only a single message is sent through the connection handler at once.
-  bool _sendPadlock = false;
+  dynamic client;
 
   /// The read wrapper
   ReadWrapper readWrapper;
@@ -33,35 +30,23 @@ class MqttTcpConnection extends Object with events.EventEmitter {
   bool disconnectRequested = false;
 
   /// Default constructor
-  MqttTcpConnection();
+  MqttConnection();
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttTcpConnection.fromConnect(String server, int port) {
+  MqttConnection.fromConnect(String server, int port) {
     connect(server, port);
   }
 
-  /// Connect
+  /// Connect, must be overridden in connection classes
   Future connect(String server, int port) {
     final Completer completer = new Completer();
-    try {
-      // Connect and save the socket.
-      Socket.connect(server, port).then((socket) {
-        tcpClient = socket;
-        readWrapper = new ReadWrapper();
-        _startListening();
-        return completer.complete();
-      }).catchError((e) => _onError(e));
-    } catch (SocketException) {
-      final String message =
-          "MqttConnection::The connection to the message broker {$server}:{$port} could not be made.";
-      throw new NoConnectionException(message);
-    }
     return completer.future;
   }
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
-    tcpClient.listen(_onData, onError: _onError, onDone: _onDone);
+    MqttLogger.log("MqttConnection::_startListening");
+    client.listen(_onData, onError: _onError, onDone: _onDone);
   }
 
   /// OnData listener callback
@@ -107,21 +92,15 @@ class MqttTcpConnection extends Object with events.EventEmitter {
 
   /// Disconnects from the message broker
   void _disconnect() {
-    if (tcpClient != null) {
-      tcpClient.close();
+    if (client != null) {
+      client.close();
     }
   }
 
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
-    if (_sendPadlock) {
-      return;
-    } else {
-      _sendPadlock = true;
-    }
     final typed.Uint8Buffer messageBytes = message.read(message.length);
-    tcpClient.add(messageBytes.toList());
-    _sendPadlock = false;
+    client.add(messageBytes.toList());
   }
 
   // User requested disconnection

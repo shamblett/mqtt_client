@@ -15,7 +15,7 @@ import 'package:typed_data/typed_data.dart' as typed;
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
 
-class MockCON extends Mock implements MqttTcpConnection {}
+class MockCON extends Mock implements MqttNormalConnection {}
 
 final TestConnectionHandlerNoSend testCHNS = new TestConnectionHandlerNoSend();
 final TestConnectionHandlerSend testCHS = new TestConnectionHandlerSend();

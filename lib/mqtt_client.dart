@@ -45,6 +45,8 @@ part 'src/connectionhandling/mqtt_client_mqtt_connection_handler.dart';
 
 part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
+part 'src/connectionhandling/mqtt_client_mqtt_normal_connection.dart';
+
 part 'src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
 
 part 'src/connectionhandling/mqtt_client_mqtt_secure_connection.dart';

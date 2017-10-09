@@ -35,7 +35,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler
       } else {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - insecure TCP selected");
-        connection = new MqttTcpConnection();
+        connection = new MqttNormalConnection();
       }
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
