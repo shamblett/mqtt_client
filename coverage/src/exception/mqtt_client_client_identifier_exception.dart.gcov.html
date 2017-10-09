@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-08-17</td>
+            <td class="headerValue">2017-10-09</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -73,12 +73,12 @@
 <span class="lineNum">      11 </span>            : class ClientIdentifierException implements Exception {
 <span class="lineNum">      12 </span>            :   String _message;
 <span class="lineNum">      13 </span>            : 
-<span class="lineNum">      14 </span><span class="lineCov">          2 :   ClientIdentifierException(String clientIdentifier) {</span>
-<span class="lineNum">      15 </span><span class="lineCov">          2 :     _message =</span>
+<span class="lineNum">      14 </span><span class="lineCov">          1 :   ClientIdentifierException(String clientIdentifier) {</span>
+<span class="lineNum">      15 </span><span class="lineCov">          1 :     _message =</span>
 <span class="lineNum">      16 </span>            :     &quot;mqtt-client::ClientIdentifierException: Client id $clientIdentifier is too long at ${clientIdentifier
-<span class="lineNum">      17 </span><span class="lineCov">          2 :         .length}, &quot;</span>
+<span class="lineNum">      17 </span><span class="lineCov">          1 :         .length}, &quot;</span>
 <span class="lineNum">      18 </span>            :         &quot;Maximum ClientIdentifier length is ${Constants
-<span class="lineNum">      19 </span><span class="lineCov">          2 :         .maxClientIdentifierLength}&quot;;</span>
+<span class="lineNum">      19 </span><span class="lineCov">          1 :         .maxClientIdentifierLength}&quot;;</span>
 <span class="lineNum">      20 </span>            :   }
 <span class="lineNum">      21 </span>            : 
 <span class="lineNum">      22 </span>            :   @override

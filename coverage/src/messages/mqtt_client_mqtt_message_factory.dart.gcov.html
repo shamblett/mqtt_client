@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-08-17</td>
+            <td class="headerValue">2017-10-09</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -121,11 +121,11 @@
 <span class="lineNum">      59 </span><span class="lineCov">          3 :       case MqttMessageType.pingRequest:</span>
 <span class="lineNum">      60 </span><span class="lineCov">          3 :         message = new MqttPingRequestMessage.fromHeader(header);</span>
 <span class="lineNum">      61 </span>            :         break;
-<span class="lineNum">      62 </span><span class="lineCov">          3 :       case MqttMessageType.pingResponse:</span>
+<span class="lineNum">      62 </span><span class="lineCov">          1 :       case MqttMessageType.pingResponse:</span>
 <span class="lineNum">      63 </span><span class="lineCov">          1 :         message = new MqttPingResponseMessage.fromHeader(header);</span>
 <span class="lineNum">      64 </span>            :         break;
-<span class="lineNum">      65 </span><span class="lineCov">          3 :       case MqttMessageType.disconnect:</span>
-<span class="lineNum">      66 </span><span class="lineCov">          3 :         message = new MqttDisconnectMessage.fromHeader(header);</span>
+<span class="lineNum">      65 </span><span class="lineCov">          1 :       case MqttMessageType.disconnect:</span>
+<span class="lineNum">      66 </span><span class="lineCov">          1 :         message = new MqttDisconnectMessage.fromHeader(header);</span>
 <span class="lineNum">      67 </span>            :         break;
 <span class="lineNum">      68 </span>            :       default:
 <span class="lineNum">      69 </span><span class="lineCov">          1 :         throw new InvalidHeaderException(</span>

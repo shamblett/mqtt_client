@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2017-08-17</td>
+            <td class="headerValue">2017-10-09</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -73,10 +73,10 @@
 <span class="lineNum">      11 </span>            : class MqttConnectMessage extends MqttMessage {
 <span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttConnectMessage class.
 <span class="lineNum">      13 </span>            :   /// Only called via the MqttMessage.create operation during processing of an Mqtt message stream.
-<span class="lineNum">      14 </span><span class="lineCov">          3 :   MqttConnectMessage() {</span>
-<span class="lineNum">      15 </span><span class="lineCov">          9 :     this.header = new MqttHeader().asType(MqttMessageType.connect);</span>
-<span class="lineNum">      16 </span><span class="lineCov">          6 :     this.variableHeader = new MqttConnectVariableHeader();</span>
-<span class="lineNum">      17 </span><span class="lineCov">          9 :     this.payload = new MqttConnectPayload(this.variableHeader);</span>
+<span class="lineNum">      14 </span><span class="lineCov">          4 :   MqttConnectMessage() {</span>
+<span class="lineNum">      15 </span><span class="lineCov">         12 :     this.header = new MqttHeader().asType(MqttMessageType.connect);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          8 :     this.variableHeader = new MqttConnectVariableHeader();</span>
+<span class="lineNum">      17 </span><span class="lineCov">         12 :     this.payload = new MqttConnectPayload(this.variableHeader);</span>
 <span class="lineNum">      18 </span>            :   }
 <span class="lineNum">      19 </span>            : 
 <span class="lineNum">      20 </span>            :   ///  Initializes a new instance of the &lt;see cref=&quot;MqttConnectMessage&quot; /&gt; class.
@@ -130,7 +130,7 @@
 <span class="lineNum">      68 </span>            : 
 <span class="lineNum">      69 </span>            :   /// Sets the client identifier of the message.
 <span class="lineNum">      70 </span>            :   MqttConnectMessage withClientIdentifier(String clientIdentifier) {
-<span class="lineNum">      71 </span><span class="lineCov">          6 :     this.payload.clientIdentifier = clientIdentifier;</span>
+<span class="lineNum">      71 </span><span class="lineCov">          8 :     this.payload.clientIdentifier = clientIdentifier;</span>
 <span class="lineNum">      72 </span>            :     return this;
 <span class="lineNum">      73 </span>            :   }
 <span class="lineNum">      74 </span>            : 
