@@ -31,9 +31,9 @@
             <td class="headerValue">coverage.lcov</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">0</td>
             <td class="headerCovTableEntry">2</td>
-            <td class="headerCovTableEntryLo">0.0 %</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
@@ -77,8 +77,8 @@
 <span class="lineNum">      15 </span>            :   /// Log method
 <span class="lineNum">      16 </span>            :   static void log(String message) {
 <span class="lineNum">      17 </span>            :     if (loggingOn) {
-<span class="lineNum">      18 </span><span class="lineNoCov">          0 :       final DateTime now = new DateTime.now();</span>
-<span class="lineNum">      19 </span><span class="lineNoCov">          0 :       print(&quot;$now -- $message&quot;);</span>
+<span class="lineNum">      18 </span><span class="lineCov">          1 :       final DateTime now = new DateTime.now();</span>
+<span class="lineNum">      19 </span><span class="lineCov">          2 :       print(&quot;$now -- $message&quot;);</span>
 <span class="lineNum">      20 </span>            :     }
 <span class="lineNum">      21 </span>            :   }
 <span class="lineNum">      22 </span>            : }

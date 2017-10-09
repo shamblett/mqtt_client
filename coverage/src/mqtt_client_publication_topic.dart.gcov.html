@@ -73,7 +73,7 @@
 <span class="lineNum">      11 </span>            : /// of messages that are published.
 <span class="lineNum">      12 </span>            : class PublicationTopic extends Topic {
 <span class="lineNum">      13 </span>            :   PublicationTopic(String topic)
-<span class="lineNum">      14 </span><span class="lineCov">          6 :       : super(topic, [</span>
+<span class="lineNum">      14 </span><span class="lineCov">          8 :       : super(topic, [</span>
 <span class="lineNum">      15 </span>            :     Topic.validateMinLength,
 <span class="lineNum">      16 </span>            :     Topic.validateMaxLength,
 <span class="lineNum">      17 </span>            :     _validateWildcards
@@ -81,7 +81,7 @@
 <span class="lineNum">      19 </span>            : 
 <span class="lineNum">      20 </span>            :   /// Validates that the topic has no wildcards which are not allowed in publication topics.
 <span class="lineNum">      21 </span>            :   static void _validateWildcards(Topic topicInstance) {
-<span class="lineNum">      22 </span><span class="lineCov">          3 :     if (topicInstance.hasWildcards) {</span>
+<span class="lineNum">      22 </span><span class="lineCov">          4 :     if (topicInstance.hasWildcards) {</span>
 <span class="lineNum">      23 </span><span class="lineCov">          1 :       throw new Exception(</span>
 <span class="lineNum">      24 </span>            :           &quot;mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)&quot;);
 <span class="lineNum">      25 </span>            :     }

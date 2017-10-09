@@ -76,38 +76,38 @@
 <span class="lineNum">      14 </span>            : class MqttEncoding extends Utf8Codec {
 <span class="lineNum">      15 </span>            :   /// Encodes all the characters in the specified string into a sequence of bytes.
 <span class="lineNum">      16 </span>            :   typed.Uint8Buffer getBytes(String s) {
-<span class="lineNum">      17 </span><span class="lineCov">          4 :     _validateString(s);</span>
-<span class="lineNum">      18 </span><span class="lineCov">          4 :     final typed.Uint8Buffer stringBytes = new typed.Uint8Buffer();</span>
-<span class="lineNum">      19 </span><span class="lineCov">         12 :     stringBytes.add(s.length &gt;&gt; 8);</span>
-<span class="lineNum">      20 </span><span class="lineCov">         12 :     stringBytes.add(s.length &amp; 0xFF);</span>
-<span class="lineNum">      21 </span><span class="lineCov">         12 :     stringBytes.addAll(encoder.convert(s));</span>
+<span class="lineNum">      17 </span><span class="lineCov">          5 :     _validateString(s);</span>
+<span class="lineNum">      18 </span><span class="lineCov">          5 :     final typed.Uint8Buffer stringBytes = new typed.Uint8Buffer();</span>
+<span class="lineNum">      19 </span><span class="lineCov">         15 :     stringBytes.add(s.length &gt;&gt; 8);</span>
+<span class="lineNum">      20 </span><span class="lineCov">         15 :     stringBytes.add(s.length &amp; 0xFF);</span>
+<span class="lineNum">      21 </span><span class="lineCov">         15 :     stringBytes.addAll(encoder.convert(s));</span>
 <span class="lineNum">      22 </span>            :     return stringBytes;
 <span class="lineNum">      23 </span>            :   }
 <span class="lineNum">      24 </span>            : 
 <span class="lineNum">      25 </span>            :   /// Decodes the bytes in the specified byte array into a string.
 <span class="lineNum">      26 </span>            :   String getString(typed.Uint8Buffer bytes) {
-<span class="lineNum">      27 </span><span class="lineCov">         12 :     return decoder.convert(bytes.toList());</span>
+<span class="lineNum">      27 </span><span class="lineCov">         15 :     return decoder.convert(bytes.toList());</span>
 <span class="lineNum">      28 </span>            :   }
 <span class="lineNum">      29 </span>            : 
 <span class="lineNum">      30 </span>            :   ///  When overridden in a derived class, calculates the number of characters produced by decoding all the bytes in the specified byte array.
 <span class="lineNum">      31 </span>            :   int getCharCount(typed.Uint8Buffer bytes) {
-<span class="lineNum">      32 </span><span class="lineCov">          8 :     if (bytes.length &lt; 2) {</span>
+<span class="lineNum">      32 </span><span class="lineCov">         10 :     if (bytes.length &lt; 2) {</span>
 <span class="lineNum">      33 </span><span class="lineCov">          1 :       throw new Exception(</span>
 <span class="lineNum">      34 </span>            :           &quot;mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes&quot;);
 <span class="lineNum">      35 </span>            :     }
-<span class="lineNum">      36 </span><span class="lineCov">         16 :     return ((bytes[0] &lt;&lt; 8) + bytes[1]);</span>
+<span class="lineNum">      36 </span><span class="lineCov">         20 :     return ((bytes[0] &lt;&lt; 8) + bytes[1]);</span>
 <span class="lineNum">      37 </span>            :   }
 <span class="lineNum">      38 </span>            : 
 <span class="lineNum">      39 </span>            :   /// Calculates the number of bytes produced by encoding the characters in the specified.
 <span class="lineNum">      40 </span>            :   int getByteCount(String chars) {
-<span class="lineNum">      41 </span><span class="lineCov">          4 :     _validateString(chars);</span>
-<span class="lineNum">      42 </span><span class="lineCov">          8 :     return getBytes(chars).length;</span>
+<span class="lineNum">      41 </span><span class="lineCov">          5 :     _validateString(chars);</span>
+<span class="lineNum">      42 </span><span class="lineCov">         10 :     return getBytes(chars).length;</span>
 <span class="lineNum">      43 </span>            :   }
 <span class="lineNum">      44 </span>            : 
 <span class="lineNum">      45 </span>            :   /// Validates the string to ensure it doesn't contain any characters invalid within the Mqtt string format.
 <span class="lineNum">      46 </span>            :   static void _validateString(String s) {
-<span class="lineNum">      47 </span><span class="lineCov">         12 :     for (int i = 0; i &lt; s.length; i++) {</span>
-<span class="lineNum">      48 </span><span class="lineCov">          8 :       if (s.codeUnitAt(i) &gt; 0x7F) {</span>
+<span class="lineNum">      47 </span><span class="lineCov">         15 :     for (int i = 0; i &lt; s.length; i++) {</span>
+<span class="lineNum">      48 </span><span class="lineCov">         10 :       if (s.codeUnitAt(i) &gt; 0x7F) {</span>
 <span class="lineNum">      49 </span><span class="lineCov">          1 :         throw new Exception(</span>
 <span class="lineNum">      50 </span>            :             &quot;mqtt_client::MQTTEncoding: The input string has extended &quot;
 <span class="lineNum">      51 </span>            :                 &quot;UTF characters, which are not supported&quot;);

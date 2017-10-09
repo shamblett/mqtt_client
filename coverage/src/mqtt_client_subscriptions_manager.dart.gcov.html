@@ -93,18 +93,18 @@
 <span class="lineNum">      31 </span>            : 
 <span class="lineNum">      32 </span>            :   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
 <span class="lineNum">      33 </span>            :   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
-<span class="lineNum">      34 </span><span class="lineCov">          1 :       IPublishingManager publishingManager) {</span>
-<span class="lineNum">      35 </span><span class="lineCov">          1 :     this.connectionHandler = connectionHandler;</span>
-<span class="lineNum">      36 </span><span class="lineCov">          1 :     this.publishingManager = publishingManager;</span>
+<span class="lineNum">      34 </span><span class="lineCov">          2 :       IPublishingManager publishingManager) {</span>
+<span class="lineNum">      35 </span><span class="lineCov">          2 :     this.connectionHandler = connectionHandler;</span>
+<span class="lineNum">      36 </span><span class="lineCov">          2 :     this.publishingManager = publishingManager;</span>
 <span class="lineNum">      37 </span>            :     this
-<span class="lineNum">      38 </span><span class="lineCov">          1 :         .connectionHandler</span>
-<span class="lineNum">      39 </span><span class="lineCov">          2 :         .registerForMessage(MqttMessageType.subscribeAck, confirmSubscription);</span>
+<span class="lineNum">      38 </span><span class="lineCov">          2 :         .connectionHandler</span>
+<span class="lineNum">      39 </span><span class="lineCov">          4 :         .registerForMessage(MqttMessageType.subscribeAck, confirmSubscription);</span>
 <span class="lineNum">      40 </span>            :     this
-<span class="lineNum">      41 </span><span class="lineCov">          1 :         .connectionHandler</span>
-<span class="lineNum">      42 </span><span class="lineCov">          2 :         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);</span>
+<span class="lineNum">      41 </span><span class="lineCov">          2 :         .connectionHandler</span>
+<span class="lineNum">      42 </span><span class="lineCov">          4 :         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);</span>
 <span class="lineNum">      43 </span>            :     // Start listening for published messages
-<span class="lineNum">      44 </span><span class="lineCov">          1 :     this.listen(</span>
-<span class="lineNum">      45 </span><span class="lineCov">          2 :         this.publishingManager, MessageReceived, publishMessageReceived);</span>
+<span class="lineNum">      44 </span><span class="lineCov">          2 :     this.listen(</span>
+<span class="lineNum">      45 </span><span class="lineCov">          4 :         this.publishingManager, MessageReceived, publishMessageReceived);</span>
 <span class="lineNum">      46 </span>            :   }
 <span class="lineNum">      47 </span>            : 
 <span class="lineNum">      48 </span>            :   /// Registers a new subscription with the subscription manager.

@@ -31,9 +31,9 @@
             <td class="headerValue">coverage.lcov</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">18</td>
             <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntryHi">94.7 %</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
@@ -75,49 +75,49 @@
 <span class="lineNum">      13 </span>            :   MqttHeader header;
 <span class="lineNum">      14 </span>            : 
 <span class="lineNum">      15 </span>            :   /// Initializes a new instance of the MqttPublishVariableHeader class.
-<span class="lineNum">      16 </span><span class="lineCov">          3 :   MqttPublishVariableHeader(MqttHeader header) {</span>
-<span class="lineNum">      17 </span><span class="lineCov">          3 :     this.header = header;</span>
+<span class="lineNum">      16 </span><span class="lineCov">          4 :   MqttPublishVariableHeader(MqttHeader header) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">          4 :     this.header = header;</span>
 <span class="lineNum">      18 </span>            :   }
 <span class="lineNum">      19 </span>            : 
 <span class="lineNum">      20 </span>            :   /// Initializes a new instance of the MqttPublishVariableHeader class.
 <span class="lineNum">      21 </span>            :   MqttPublishVariableHeader.fromByteBuffer(MqttHeader header,
-<span class="lineNum">      22 </span><span class="lineCov">          1 :       MqttByteBuffer variableHeaderStream) {</span>
-<span class="lineNum">      23 </span><span class="lineCov">          1 :     this.header = header;</span>
-<span class="lineNum">      24 </span><span class="lineCov">          1 :     readFrom(variableHeaderStream);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          2 :       MqttByteBuffer variableHeaderStream) {</span>
+<span class="lineNum">      23 </span><span class="lineCov">          2 :     this.header = header;</span>
+<span class="lineNum">      24 </span><span class="lineCov">          2 :     readFrom(variableHeaderStream);</span>
 <span class="lineNum">      25 </span>            :   }
 <span class="lineNum">      26 </span>            : 
 <span class="lineNum">      27 </span>            :   /// Creates a variable header from the specified header stream.
 <span class="lineNum">      28 </span>            :   void readFrom(MqttByteBuffer variableHeaderStream) {
-<span class="lineNum">      29 </span><span class="lineCov">          1 :     readTopicName(variableHeaderStream);</span>
-<span class="lineNum">      30 </span><span class="lineCov">          3 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
-<span class="lineNum">      31 </span><span class="lineCov">          3 :         this.header.qos == MqttQos.exactlyOnce) {</span>
-<span class="lineNum">      32 </span><span class="lineNoCov">          0 :       readMessageIdentifier(variableHeaderStream);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          2 :     readTopicName(variableHeaderStream);</span>
+<span class="lineNum">      30 </span><span class="lineCov">          6 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
+<span class="lineNum">      31 </span><span class="lineCov">          6 :         this.header.qos == MqttQos.exactlyOnce) {</span>
+<span class="lineNum">      32 </span><span class="lineCov">          1 :       readMessageIdentifier(variableHeaderStream);</span>
 <span class="lineNum">      33 </span>            :     }
 <span class="lineNum">      34 </span>            :   }
 <span class="lineNum">      35 </span>            : 
 <span class="lineNum">      36 </span>            :   /// Writes the variable header to the supplied stream.
 <span class="lineNum">      37 </span>            :   void writeTo(MqttByteBuffer variableHeaderStream) {
-<span class="lineNum">      38 </span><span class="lineCov">          1 :     writeTopicName(variableHeaderStream);</span>
-<span class="lineNum">      39 </span><span class="lineCov">          3 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
-<span class="lineNum">      40 </span><span class="lineCov">          3 :         this.header.qos == MqttQos.exactlyOnce) {</span>
-<span class="lineNum">      41 </span><span class="lineCov">          1 :       writeMessageIdentifier(variableHeaderStream);</span>
+<span class="lineNum">      38 </span><span class="lineCov">          2 :     writeTopicName(variableHeaderStream);</span>
+<span class="lineNum">      39 </span><span class="lineCov">          6 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
+<span class="lineNum">      40 </span><span class="lineCov">          6 :         this.header.qos == MqttQos.exactlyOnce) {</span>
+<span class="lineNum">      41 </span><span class="lineCov">          2 :       writeMessageIdentifier(variableHeaderStream);</span>
 <span class="lineNum">      42 </span>            :     }
 <span class="lineNum">      43 </span>            :   }
 <span class="lineNum">      44 </span>            : 
 <span class="lineNum">      45 </span>            :   /// Gets the length of the write data when WriteTo will be called.
 <span class="lineNum">      46 </span>            :   int getWriteLength() {
 <span class="lineNum">      47 </span>            :     int headerLength = 0;
-<span class="lineNum">      48 </span><span class="lineCov">          1 :     final MqttEncoding enc = new MqttEncoding();</span>
-<span class="lineNum">      49 </span><span class="lineCov">          3 :     headerLength += enc.getByteCount(topicName);</span>
-<span class="lineNum">      50 </span><span class="lineCov">          3 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
-<span class="lineNum">      51 </span><span class="lineCov">          3 :         this.header.qos == MqttQos.exactlyOnce) {</span>
-<span class="lineNum">      52 </span><span class="lineCov">          1 :       headerLength += 2;</span>
+<span class="lineNum">      48 </span><span class="lineCov">          2 :     final MqttEncoding enc = new MqttEncoding();</span>
+<span class="lineNum">      49 </span><span class="lineCov">          6 :     headerLength += enc.getByteCount(topicName);</span>
+<span class="lineNum">      50 </span><span class="lineCov">          6 :     if (this.header.qos == MqttQos.atLeastOnce ||</span>
+<span class="lineNum">      51 </span><span class="lineCov">          6 :         this.header.qos == MqttQos.exactlyOnce) {</span>
+<span class="lineNum">      52 </span><span class="lineCov">          2 :       headerLength += 2;</span>
 <span class="lineNum">      53 </span>            :     }
 <span class="lineNum">      54 </span>            :     return headerLength;
 <span class="lineNum">      55 </span>            :   }
 <span class="lineNum">      56 </span>            : 
 <span class="lineNum">      57 </span>            :   String toString() {
-<span class="lineNum">      58 </span><span class="lineCov">          8 :     return &quot;Publish Variable Header: TopicName={$topicName}, MessageIdentifier={$messageIdentifier}, VH Length={$length}&quot;;</span>
+<span class="lineNum">      58 </span><span class="lineCov">         12 :     return &quot;Publish Variable Header: TopicName={$topicName}, MessageIdentifier={$messageIdentifier}, VH Length={$length}&quot;;</span>
 <span class="lineNum">      59 </span>            :   }
 <span class="lineNum">      60 </span>            : }
 </pre>

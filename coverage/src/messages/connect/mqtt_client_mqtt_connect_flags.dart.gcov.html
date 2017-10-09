@@ -83,36 +83,36 @@
 <span class="lineNum">      21 </span><span class="lineCov">          6 :   MqttConnectFlags();</span>
 <span class="lineNum">      22 </span>            : 
 <span class="lineNum">      23 </span>            :   /// Initializes a new instance of the &lt;see cref=&quot;MqttConnectFlags&quot; /&gt; class configured as per the supplied stream.
-<span class="lineNum">      24 </span><span class="lineCov">          3 :   MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {</span>
-<span class="lineNum">      25 </span><span class="lineCov">          3 :     readFrom(connectFlagsStream);</span>
+<span class="lineNum">      24 </span><span class="lineCov">          4 :   MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {</span>
+<span class="lineNum">      25 </span><span class="lineCov">          4 :     readFrom(connectFlagsStream);</span>
 <span class="lineNum">      26 </span>            :   }
 <span class="lineNum">      27 </span>            : 
 <span class="lineNum">      28 </span>            :   int connectFlagByte() {
-<span class="lineNum">      29 </span><span class="lineCov">          6 :     return ((reserved1 ? 1 : 0) |</span>
-<span class="lineNum">      30 </span><span class="lineCov">          9 :     (cleanStart ? 1 : 0) &lt;&lt; 1 |</span>
-<span class="lineNum">      31 </span><span class="lineCov">          9 :     (willFlag ? 1 : 0) &lt;&lt; 2 |</span>
-<span class="lineNum">      32 </span><span class="lineCov">         12 :     (willQos.index) &lt;&lt; 3 |</span>
-<span class="lineNum">      33 </span><span class="lineCov">          9 :     (willRetain ? 1 : 0) &lt;&lt; 5 |</span>
-<span class="lineNum">      34 </span><span class="lineCov">          9 :     (passwordFlag ? 1 : 0) &lt;&lt; 6 |</span>
-<span class="lineNum">      35 </span><span class="lineCov">          6 :     (usernameFlag ? 1 : 0) &lt;&lt; 7);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          8 :     return ((reserved1 ? 1 : 0) |</span>
+<span class="lineNum">      30 </span><span class="lineCov">         12 :     (cleanStart ? 1 : 0) &lt;&lt; 1 |</span>
+<span class="lineNum">      31 </span><span class="lineCov">         12 :     (willFlag ? 1 : 0) &lt;&lt; 2 |</span>
+<span class="lineNum">      32 </span><span class="lineCov">         16 :     (willQos.index) &lt;&lt; 3 |</span>
+<span class="lineNum">      33 </span><span class="lineCov">         12 :     (willRetain ? 1 : 0) &lt;&lt; 5 |</span>
+<span class="lineNum">      34 </span><span class="lineCov">         12 :     (passwordFlag ? 1 : 0) &lt;&lt; 6 |</span>
+<span class="lineNum">      35 </span><span class="lineCov">          8 :     (usernameFlag ? 1 : 0) &lt;&lt; 7);</span>
 <span class="lineNum">      36 </span>            :   }
 <span class="lineNum">      37 </span>            : 
 <span class="lineNum">      38 </span>            :   /// Writes the connect flag byte to the supplied stream.
 <span class="lineNum">      39 </span>            :   void writeTo(MqttByteBuffer connectFlagsStream) {
-<span class="lineNum">      40 </span><span class="lineCov">          6 :     connectFlagsStream.writeByte(connectFlagByte());</span>
+<span class="lineNum">      40 </span><span class="lineCov">          8 :     connectFlagsStream.writeByte(connectFlagByte());</span>
 <span class="lineNum">      41 </span>            :   }
 <span class="lineNum">      42 </span>            : 
 <span class="lineNum">      43 </span>            :   /// Reads the connect flags from the underlying stream.
 <span class="lineNum">      44 </span>            :   void readFrom(MqttByteBuffer stream) {
-<span class="lineNum">      45 </span><span class="lineCov">          3 :     final int connectFlagsByte = stream.readByte();</span>
+<span class="lineNum">      45 </span><span class="lineCov">          4 :     final int connectFlagsByte = stream.readByte();</span>
 <span class="lineNum">      46 </span>            : 
-<span class="lineNum">      47 </span><span class="lineCov">          9 :     reserved1 = (connectFlagsByte &amp; 1) == 1;</span>
-<span class="lineNum">      48 </span><span class="lineCov">          9 :     cleanStart = (connectFlagsByte &amp; 2) == 2;</span>
-<span class="lineNum">      49 </span><span class="lineCov">          9 :     willFlag = (connectFlagsByte &amp; 4) == 4;</span>
-<span class="lineNum">      50 </span><span class="lineCov">         12 :     willQos = MqttQos.values[((connectFlagsByte &gt;&gt; 3) &amp; 3)];</span>
-<span class="lineNum">      51 </span><span class="lineCov">          9 :     willRetain = (connectFlagsByte &amp; 32) == 32;</span>
-<span class="lineNum">      52 </span><span class="lineCov">          9 :     passwordFlag = (connectFlagsByte &amp; 64) == 64;</span>
-<span class="lineNum">      53 </span><span class="lineCov">          9 :     usernameFlag = (connectFlagsByte &amp; 128) == 128;</span>
+<span class="lineNum">      47 </span><span class="lineCov">         12 :     reserved1 = (connectFlagsByte &amp; 1) == 1;</span>
+<span class="lineNum">      48 </span><span class="lineCov">         12 :     cleanStart = (connectFlagsByte &amp; 2) == 2;</span>
+<span class="lineNum">      49 </span><span class="lineCov">         12 :     willFlag = (connectFlagsByte &amp; 4) == 4;</span>
+<span class="lineNum">      50 </span><span class="lineCov">         16 :     willQos = MqttQos.values[((connectFlagsByte &gt;&gt; 3) &amp; 3)];</span>
+<span class="lineNum">      51 </span><span class="lineCov">         12 :     willRetain = (connectFlagsByte &amp; 32) == 32;</span>
+<span class="lineNum">      52 </span><span class="lineCov">         12 :     passwordFlag = (connectFlagsByte &amp; 64) == 64;</span>
+<span class="lineNum">      53 </span><span class="lineCov">         12 :     usernameFlag = (connectFlagsByte &amp; 128) == 128;</span>
 <span class="lineNum">      54 </span>            :   }
 <span class="lineNum">      55 </span>            : 
 <span class="lineNum">      56 </span>            :   /// Gets the length of data written when WriteTo is called.
@@ -122,8 +122,8 @@
 <span class="lineNum">      60 </span>            : 
 <span class="lineNum">      61 </span>            :   /// Returns a String that represents the current connect flag settings
 <span class="lineNum">      62 </span>            :   String toString() {
-<span class="lineNum">      63 </span><span class="lineCov">         15 :     return &quot;Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, WillFlag=$willFlag, WillQos=$willQos, &quot; +</span>
-<span class="lineNum">      64 </span><span class="lineCov">         12 :         &quot;WillRetain=$willRetain, PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag&quot;;</span>
+<span class="lineNum">      63 </span><span class="lineCov">         20 :     return &quot;Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, WillFlag=$willFlag, WillQos=$willQos, &quot; +</span>
+<span class="lineNum">      64 </span><span class="lineCov">         16 :         &quot;WillRetain=$willRetain, PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag&quot;;</span>
 <span class="lineNum">      65 </span>            :   }
 <span class="lineNum">      66 </span>            : }
 </pre>

@@ -76,39 +76,39 @@
 <span class="lineNum">      14 </span>            : 
 <span class="lineNum">      15 </span>            :   /// Initializes a new instance of the MqttConnectVariableHeader class.
 <span class="lineNum">      16 </span>            :   MqttConnectVariableHeader.fromByteBuffer(MqttByteBuffer headerStream)
-<span class="lineNum">      17 </span><span class="lineCov">          3 :       : super.fromByteBuffer(headerStream);</span>
+<span class="lineNum">      17 </span><span class="lineCov">          4 :       : super.fromByteBuffer(headerStream);</span>
 <span class="lineNum">      18 </span>            : 
 <span class="lineNum">      19 </span>            :   /// Creates a variable header from the specified header stream.
 <span class="lineNum">      20 </span>            :   void readFrom(MqttByteBuffer variableHeaderStream) {
-<span class="lineNum">      21 </span><span class="lineCov">          3 :     readProtocolName(variableHeaderStream);</span>
-<span class="lineNum">      22 </span><span class="lineCov">          3 :     readProtocolVersion(variableHeaderStream);</span>
-<span class="lineNum">      23 </span><span class="lineCov">          3 :     readConnectFlags(variableHeaderStream);</span>
-<span class="lineNum">      24 </span><span class="lineCov">          3 :     readKeepAlive(variableHeaderStream);</span>
+<span class="lineNum">      21 </span><span class="lineCov">          4 :     readProtocolName(variableHeaderStream);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          4 :     readProtocolVersion(variableHeaderStream);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          4 :     readConnectFlags(variableHeaderStream);</span>
+<span class="lineNum">      24 </span><span class="lineCov">          4 :     readKeepAlive(variableHeaderStream);</span>
 <span class="lineNum">      25 </span>            :   }
 <span class="lineNum">      26 </span>            : 
 <span class="lineNum">      27 </span>            :   /// Writes the variable header to the supplied stream.
 <span class="lineNum">      28 </span>            :   void writeTo(MqttByteBuffer variableHeaderStream) {
-<span class="lineNum">      29 </span><span class="lineCov">          3 :     writeProtocolName(variableHeaderStream);</span>
-<span class="lineNum">      30 </span><span class="lineCov">          3 :     writeProtocolVersion(variableHeaderStream);</span>
-<span class="lineNum">      31 </span><span class="lineCov">          3 :     writeConnectFlags(variableHeaderStream);</span>
-<span class="lineNum">      32 </span><span class="lineCov">          3 :     writeKeepAlive(variableHeaderStream);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          4 :     writeProtocolName(variableHeaderStream);</span>
+<span class="lineNum">      30 </span><span class="lineCov">          4 :     writeProtocolVersion(variableHeaderStream);</span>
+<span class="lineNum">      31 </span><span class="lineCov">          4 :     writeConnectFlags(variableHeaderStream);</span>
+<span class="lineNum">      32 </span><span class="lineCov">          4 :     writeKeepAlive(variableHeaderStream);</span>
 <span class="lineNum">      33 </span>            :   }
 <span class="lineNum">      34 </span>            : 
 <span class="lineNum">      35 </span>            :   /// Gets the length of the write data when WriteTo will be called.
 <span class="lineNum">      36 </span>            :   int getWriteLength() {
 <span class="lineNum">      37 </span>            :     int headerLength = 0;
-<span class="lineNum">      38 </span><span class="lineCov">          3 :     final MqttEncoding enc = new MqttEncoding();</span>
-<span class="lineNum">      39 </span><span class="lineCov">          9 :     headerLength += enc.getByteCount(protocolName);</span>
-<span class="lineNum">      40 </span><span class="lineCov">          3 :     headerLength += 1; // protocolVersion</span>
-<span class="lineNum">      41 </span><span class="lineCov">          6 :     headerLength += MqttConnectFlags.getWriteLength();</span>
-<span class="lineNum">      42 </span><span class="lineCov">          3 :     headerLength += 2; // keepAlive</span>
+<span class="lineNum">      38 </span><span class="lineCov">          4 :     final MqttEncoding enc = new MqttEncoding();</span>
+<span class="lineNum">      39 </span><span class="lineCov">         12 :     headerLength += enc.getByteCount(protocolName);</span>
+<span class="lineNum">      40 </span><span class="lineCov">          4 :     headerLength += 1; // protocolVersion</span>
+<span class="lineNum">      41 </span><span class="lineCov">          8 :     headerLength += MqttConnectFlags.getWriteLength();</span>
+<span class="lineNum">      42 </span><span class="lineCov">          4 :     headerLength += 2; // keepAlive</span>
 <span class="lineNum">      43 </span>            :     return headerLength;
 <span class="lineNum">      44 </span>            :   }
 <span class="lineNum">      45 </span>            : 
 <span class="lineNum">      46 </span>            :   /// toString
 <span class="lineNum">      47 </span>            :   String toString() {
-<span class="lineNum">      48 </span><span class="lineCov">          6 :     return &quot;Connect Variable Header: ProtocolName=$protocolName, ProtocolVersion=$protocolVersion, &quot;</span>
-<span class="lineNum">      49 </span><span class="lineCov">         12 :         &quot;ConnectFlags=${connectFlags.toString()}, KeepAlive=$keepAlive&quot;;</span>
+<span class="lineNum">      48 </span><span class="lineCov">          8 :     return &quot;Connect Variable Header: ProtocolName=$protocolName, ProtocolVersion=$protocolVersion, &quot;</span>
+<span class="lineNum">      49 </span><span class="lineCov">         16 :         &quot;ConnectFlags=${connectFlags.toString()}, KeepAlive=$keepAlive&quot;;</span>
 <span class="lineNum">      50 </span>            :   }
 <span class="lineNum">      51 </span>            : }
 </pre>

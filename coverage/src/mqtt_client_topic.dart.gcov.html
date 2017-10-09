@@ -83,19 +83,19 @@
 <span class="lineNum">      21 </span>            :   /// Creates a new instance of a rawTopic from a rawTopic string.
 <span class="lineNum">      22 </span>            :   /// rawTopic - The topic to represent.
 <span class="lineNum">      23 </span>            :   /// validations - The validations to run on the rawTopic.
-<span class="lineNum">      24 </span><span class="lineCov">          3 :   Topic(String rawTopic, List&lt;dynamic&gt; validations) {</span>
-<span class="lineNum">      25 </span><span class="lineCov">          3 :     this.rawTopic = rawTopic;</span>
-<span class="lineNum">      26 </span><span class="lineCov">          9 :     this.topicFragments = rawTopic.split(topicSeparator[0]);</span>
+<span class="lineNum">      24 </span><span class="lineCov">          4 :   Topic(String rawTopic, List&lt;dynamic&gt; validations) {</span>
+<span class="lineNum">      25 </span><span class="lineCov">          4 :     this.rawTopic = rawTopic;</span>
+<span class="lineNum">      26 </span><span class="lineCov">         12 :     this.topicFragments = rawTopic.split(topicSeparator[0]);</span>
 <span class="lineNum">      27 </span>            :     // run all validations
-<span class="lineNum">      28 </span><span class="lineCov">          6 :     for (var validation in validations) {</span>
-<span class="lineNum">      29 </span><span class="lineCov">          3 :       validation(this);</span>
+<span class="lineNum">      28 </span><span class="lineCov">          8 :     for (var validation in validations) {</span>
+<span class="lineNum">      29 </span><span class="lineCov">          4 :       validation(this);</span>
 <span class="lineNum">      30 </span>            :     }
 <span class="lineNum">      31 </span>            :   }
 <span class="lineNum">      32 </span>            : 
 <span class="lineNum">      33 </span>            :   /// Validates that the topic does not exceed the maximum length.
 <span class="lineNum">      34 </span>            :   /// topicInstance - The instance to check.
 <span class="lineNum">      35 </span>            :   static void validateMaxLength(Topic topicInstance) {
-<span class="lineNum">      36 </span><span class="lineCov">          9 :     if (topicInstance.rawTopic.length &gt; maxTopicLength) {</span>
+<span class="lineNum">      36 </span><span class="lineCov">         12 :     if (topicInstance.rawTopic.length &gt; maxTopicLength) {</span>
 <span class="lineNum">      37 </span><span class="lineCov">          1 :       throw new Exception(</span>
 <span class="lineNum">      38 </span>            :           &quot;mqtt_client::Topic: The length of the supplied rawTopic &quot;
 <span class="lineNum">      39 </span><span class="lineCov">          1 :               &quot;(${topicInstance.rawTopic</span>
@@ -105,14 +105,14 @@
 <span class="lineNum">      43 </span>            : 
 <span class="lineNum">      44 </span>            :   /// Returns true if there are any wildcards in the specified rawTopic, otherwise false.
 <span class="lineNum">      45 </span>            :   bool get hasWildcards {
-<span class="lineNum">      46 </span><span class="lineCov">          6 :     return this.rawTopic.contains(multiWildcard) ||</span>
-<span class="lineNum">      47 </span><span class="lineCov">          6 :         this.rawTopic.contains(wildcard);</span>
+<span class="lineNum">      46 </span><span class="lineCov">          8 :     return this.rawTopic.contains(multiWildcard) ||</span>
+<span class="lineNum">      47 </span><span class="lineCov">          8 :         this.rawTopic.contains(wildcard);</span>
 <span class="lineNum">      48 </span>            :   }
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span>            :   /// Validates that the topic does not fall below the minimum length.
 <span class="lineNum">      51 </span>            :   /// topicInstance - The instance to check.
 <span class="lineNum">      52 </span>            :   static void validateMinLength(Topic topicInstance) {
-<span class="lineNum">      53 </span><span class="lineCov">          6 :     if (topicInstance.rawTopic.isEmpty) {</span>
+<span class="lineNum">      53 </span><span class="lineCov">          8 :     if (topicInstance.rawTopic.isEmpty) {</span>
 <span class="lineNum">      54 </span><span class="lineCov">          1 :       throw new Exception(</span>
 <span class="lineNum">      55 </span>            :           &quot;mqtt_client::Topic: rawTopic must contain at least one character&quot;);
 <span class="lineNum">      56 </span>            :     }
@@ -136,7 +136,7 @@
 <span class="lineNum">      74 </span>            :   /// Returns a String representation of the topic.
 <span class="lineNum">      75 </span>            :   @override
 <span class="lineNum">      76 </span>            :   String toString() {
-<span class="lineNum">      77 </span><span class="lineCov">          2 :     return this.rawTopic;</span>
+<span class="lineNum">      77 </span><span class="lineCov">          3 :     return this.rawTopic;</span>
 <span class="lineNum">      78 </span>            :   }
 <span class="lineNum">      79 </span>            : }
 </pre>

@@ -78,14 +78,14 @@
 <span class="lineNum">      16 </span>            : 
 <span class="lineNum">      17 </span>            :   /// Initializes a new instance of the MqttConnectPayload class.
 <span class="lineNum">      18 </span>            :   MqttConnectPayload.fromByteBuffer(MqttConnectVariableHeader variableHeader,
-<span class="lineNum">      19 </span><span class="lineCov">          3 :       MqttByteBuffer payloadStream) {</span>
-<span class="lineNum">      20 </span><span class="lineCov">          3 :     this.variableHeader = variableHeader;</span>
-<span class="lineNum">      21 </span><span class="lineCov">          3 :     readFrom(payloadStream);</span>
+<span class="lineNum">      19 </span><span class="lineCov">          4 :       MqttByteBuffer payloadStream) {</span>
+<span class="lineNum">      20 </span><span class="lineCov">          4 :     this.variableHeader = variableHeader;</span>
+<span class="lineNum">      21 </span><span class="lineCov">          4 :     readFrom(payloadStream);</span>
 <span class="lineNum">      22 </span>            :   }
 <span class="lineNum">      23 </span>            : 
 <span class="lineNum">      24 </span>            :   String _clientIdentifier = &quot;&quot;;
 <span class="lineNum">      25 </span>            : 
-<span class="lineNum">      26 </span><span class="lineCov">          3 :   String get clientIdentifier =&gt; _clientIdentifier;</span>
+<span class="lineNum">      26 </span><span class="lineCov">          4 :   String get clientIdentifier =&gt; _clientIdentifier;</span>
 <span class="lineNum">      27 </span>            : 
 <span class="lineNum">      28 </span>            :   set clientIdentifier(String id) {
 <span class="lineNum">      29 </span><span class="lineCov">          8 :     if (id.length &gt; Constants.maxClientIdentifierLength) {</span>
@@ -115,46 +115,46 @@
 <span class="lineNum">      53 </span>            : 
 <span class="lineNum">      54 </span>            :   /// Creates a payload from the specified header stream.
 <span class="lineNum">      55 </span>            :   void readFrom(MqttByteBuffer payloadStream) {
-<span class="lineNum">      56 </span><span class="lineCov">          6 :     clientIdentifier = payloadStream.readMqttStringM();</span>
-<span class="lineNum">      57 </span><span class="lineCov">          9 :     if (this.variableHeader.connectFlags.willFlag) {</span>
+<span class="lineNum">      56 </span><span class="lineCov">          8 :     clientIdentifier = payloadStream.readMqttStringM();</span>
+<span class="lineNum">      57 </span><span class="lineCov">         12 :     if (this.variableHeader.connectFlags.willFlag) {</span>
 <span class="lineNum">      58 </span><span class="lineCov">          2 :       willTopic = payloadStream.readMqttStringM();</span>
 <span class="lineNum">      59 </span><span class="lineCov">          2 :       willMessage = payloadStream.readMqttStringM();</span>
 <span class="lineNum">      60 </span>            :     }
-<span class="lineNum">      61 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.usernameFlag) {</span>
+<span class="lineNum">      61 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.usernameFlag) {</span>
 <span class="lineNum">      62 </span><span class="lineNoCov">          0 :       username = payloadStream.readMqttStringM();</span>
 <span class="lineNum">      63 </span>            :     }
-<span class="lineNum">      64 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.passwordFlag) {</span>
+<span class="lineNum">      64 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.passwordFlag) {</span>
 <span class="lineNum">      65 </span><span class="lineNoCov">          0 :       password = payloadStream.readMqttStringM();</span>
 <span class="lineNum">      66 </span>            :     }
 <span class="lineNum">      67 </span>            :   }
 <span class="lineNum">      68 </span>            : 
 <span class="lineNum">      69 </span>            :   /// Writes the connect message payload to the supplied stream.
 <span class="lineNum">      70 </span>            :   void writeTo(MqttByteBuffer payloadStream) {
-<span class="lineNum">      71 </span><span class="lineCov">          6 :     payloadStream.writeMqttStringM(clientIdentifier);</span>
-<span class="lineNum">      72 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.willFlag) {</span>
+<span class="lineNum">      71 </span><span class="lineCov">          8 :     payloadStream.writeMqttStringM(clientIdentifier);</span>
+<span class="lineNum">      72 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.willFlag) {</span>
 <span class="lineNum">      73 </span><span class="lineCov">          2 :       payloadStream.writeMqttStringM(willTopic);</span>
 <span class="lineNum">      74 </span><span class="lineCov">          2 :       payloadStream.writeMqttStringM(willMessage);</span>
 <span class="lineNum">      75 </span>            :     }
-<span class="lineNum">      76 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.usernameFlag) {</span>
+<span class="lineNum">      76 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.usernameFlag) {</span>
 <span class="lineNum">      77 </span><span class="lineNoCov">          0 :       payloadStream.writeMqttStringM(username);</span>
 <span class="lineNum">      78 </span>            :     }
-<span class="lineNum">      79 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.passwordFlag) {</span>
+<span class="lineNum">      79 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.passwordFlag) {</span>
 <span class="lineNum">      80 </span><span class="lineNoCov">          0 :       payloadStream.writeMqttStringM(password);</span>
 <span class="lineNum">      81 </span>            :     }
 <span class="lineNum">      82 </span>            :   }
 <span class="lineNum">      83 </span>            : 
 <span class="lineNum">      84 </span>            :   int getWriteLength() {
 <span class="lineNum">      85 </span>            :     int length = 0;
-<span class="lineNum">      86 </span><span class="lineCov">          3 :     final MqttEncoding enc = new MqttEncoding();</span>
-<span class="lineNum">      87 </span><span class="lineCov">          9 :     length += enc.getByteCount(clientIdentifier);</span>
-<span class="lineNum">      88 </span><span class="lineCov">          9 :     if (this.variableHeader.connectFlags.willFlag) {</span>
+<span class="lineNum">      86 </span><span class="lineCov">          4 :     final MqttEncoding enc = new MqttEncoding();</span>
+<span class="lineNum">      87 </span><span class="lineCov">         12 :     length += enc.getByteCount(clientIdentifier);</span>
+<span class="lineNum">      88 </span><span class="lineCov">         12 :     if (this.variableHeader.connectFlags.willFlag) {</span>
 <span class="lineNum">      89 </span><span class="lineCov">          3 :       length += enc.getByteCount(willTopic);</span>
 <span class="lineNum">      90 </span><span class="lineCov">          3 :       length += enc.getByteCount(willMessage);</span>
 <span class="lineNum">      91 </span>            :     }
-<span class="lineNum">      92 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.usernameFlag) {</span>
+<span class="lineNum">      92 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.usernameFlag) {</span>
 <span class="lineNum">      93 </span><span class="lineNoCov">          0 :       length += enc.getByteCount(username);</span>
 <span class="lineNum">      94 </span>            :     }
-<span class="lineNum">      95 </span><span class="lineCov">          9 :     if (variableHeader.connectFlags.passwordFlag) {</span>
+<span class="lineNum">      95 </span><span class="lineCov">         12 :     if (variableHeader.connectFlags.passwordFlag) {</span>
 <span class="lineNum">      96 </span><span class="lineNoCov">          0 :       length += enc.getByteCount(password);</span>
 <span class="lineNum">      97 </span>            :     }
 <span class="lineNum">      98 </span>            :     return length;

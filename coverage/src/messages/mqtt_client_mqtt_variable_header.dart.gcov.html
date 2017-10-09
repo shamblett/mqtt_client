@@ -107,8 +107,8 @@
 <span class="lineNum">      45 </span>            :   }
 <span class="lineNum">      46 </span>            : 
 <span class="lineNum">      47 </span>            :   /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
-<span class="lineNum">      48 </span><span class="lineCov">          3 :   MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {</span>
-<span class="lineNum">      49 </span><span class="lineCov">          3 :     readFrom(headerStream);</span>
+<span class="lineNum">      48 </span><span class="lineCov">          4 :   MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {</span>
+<span class="lineNum">      49 </span><span class="lineCov">          4 :     readFrom(headerStream);</span>
 <span class="lineNum">      50 </span>            :   }
 <span class="lineNum">      51 </span>            : 
 <span class="lineNum">      52 </span>            :   /// Creates a variable header from the specified header stream.
@@ -155,68 +155,68 @@
 <span class="lineNum">      93 </span>            :   /// Write functions
 <span class="lineNum">      94 </span>            : 
 <span class="lineNum">      95 </span>            :   void writeProtocolName(MqttByteBuffer stream) {
-<span class="lineNum">      96 </span><span class="lineCov">          6 :     MqttByteBuffer.writeMqttString(stream, protocolName);</span>
+<span class="lineNum">      96 </span><span class="lineCov">          8 :     MqttByteBuffer.writeMqttString(stream, protocolName);</span>
 <span class="lineNum">      97 </span>            :   }
 <span class="lineNum">      98 </span>            : 
 <span class="lineNum">      99 </span>            :   void writeProtocolVersion(MqttByteBuffer stream) {
-<span class="lineNum">     100 </span><span class="lineCov">          6 :     stream.writeByte(protocolVersion);</span>
+<span class="lineNum">     100 </span><span class="lineCov">          8 :     stream.writeByte(protocolVersion);</span>
 <span class="lineNum">     101 </span>            :   }
 <span class="lineNum">     102 </span>            : 
 <span class="lineNum">     103 </span>            :   void writeKeepAlive(MqttByteBuffer stream) {
-<span class="lineNum">     104 </span><span class="lineCov">          6 :     stream.writeShort(keepAlive);</span>
+<span class="lineNum">     104 </span><span class="lineCov">          8 :     stream.writeShort(keepAlive);</span>
 <span class="lineNum">     105 </span>            :   }
 <span class="lineNum">     106 </span>            : 
 <span class="lineNum">     107 </span>            :   void writeReturnCode(MqttByteBuffer stream) {
-<span class="lineNum">     108 </span><span class="lineCov">          9 :     stream.writeByte(returnCode.index);</span>
+<span class="lineNum">     108 </span><span class="lineCov">         12 :     stream.writeByte(returnCode.index);</span>
 <span class="lineNum">     109 </span>            :   }
 <span class="lineNum">     110 </span>            : 
 <span class="lineNum">     111 </span>            :   void writeTopicName(MqttByteBuffer stream) {
-<span class="lineNum">     112 </span><span class="lineCov">          3 :     MqttByteBuffer.writeMqttString(stream, topicName.toString());</span>
+<span class="lineNum">     112 </span><span class="lineCov">          6 :     MqttByteBuffer.writeMqttString(stream, topicName.toString());</span>
 <span class="lineNum">     113 </span>            :   }
 <span class="lineNum">     114 </span>            : 
 <span class="lineNum">     115 </span>            :   void writeMessageIdentifier(MqttByteBuffer stream) {
-<span class="lineNum">     116 </span><span class="lineCov">          2 :     stream.writeShort(messageIdentifier);</span>
+<span class="lineNum">     116 </span><span class="lineCov">          4 :     stream.writeShort(messageIdentifier);</span>
 <span class="lineNum">     117 </span>            :   }
 <span class="lineNum">     118 </span>            : 
 <span class="lineNum">     119 </span>            :   void writeConnectFlags(MqttByteBuffer stream) {
-<span class="lineNum">     120 </span><span class="lineCov">          6 :     connectFlags.writeTo(stream);</span>
+<span class="lineNum">     120 </span><span class="lineCov">          8 :     connectFlags.writeTo(stream);</span>
 <span class="lineNum">     121 </span>            :   }
 <span class="lineNum">     122 </span>            : 
 <span class="lineNum">     123 </span>            :   /// Read functions
 <span class="lineNum">     124 </span>            : 
 <span class="lineNum">     125 </span>            :   void readProtocolName(MqttByteBuffer stream) {
-<span class="lineNum">     126 </span><span class="lineCov">          6 :     protocolName = MqttByteBuffer.readMqttString(stream);</span>
-<span class="lineNum">     127 </span><span class="lineCov">         15 :     length += protocolName.length + 2; // 2 for length short at front of string</span>
+<span class="lineNum">     126 </span><span class="lineCov">          8 :     protocolName = MqttByteBuffer.readMqttString(stream);</span>
+<span class="lineNum">     127 </span><span class="lineCov">         20 :     length += protocolName.length + 2; // 2 for length short at front of string</span>
 <span class="lineNum">     128 </span>            :   }
 <span class="lineNum">     129 </span>            : 
 <span class="lineNum">     130 </span>            :   void readProtocolVersion(MqttByteBuffer stream) {
-<span class="lineNum">     131 </span><span class="lineCov">          6 :     protocolVersion = stream.readByte();</span>
-<span class="lineNum">     132 </span><span class="lineCov">          6 :     length++;</span>
+<span class="lineNum">     131 </span><span class="lineCov">          8 :     protocolVersion = stream.readByte();</span>
+<span class="lineNum">     132 </span><span class="lineCov">          8 :     length++;</span>
 <span class="lineNum">     133 </span>            :   }
 <span class="lineNum">     134 </span>            : 
 <span class="lineNum">     135 </span>            :   void readKeepAlive(MqttByteBuffer stream) {
-<span class="lineNum">     136 </span><span class="lineCov">          6 :     keepAlive = stream.readShort();</span>
-<span class="lineNum">     137 </span><span class="lineCov">          6 :     length += 2;</span>
+<span class="lineNum">     136 </span><span class="lineCov">          8 :     keepAlive = stream.readShort();</span>
+<span class="lineNum">     137 </span><span class="lineCov">          8 :     length += 2;</span>
 <span class="lineNum">     138 </span>            :   }
 <span class="lineNum">     139 </span>            : 
 <span class="lineNum">     140 </span>            :   void readReturnCode(MqttByteBuffer stream) {
-<span class="lineNum">     141 </span><span class="lineCov">          9 :     returnCode = MqttConnectReturnCode.values[stream.readByte()];</span>
-<span class="lineNum">     142 </span><span class="lineCov">          6 :     length++;</span>
+<span class="lineNum">     141 </span><span class="lineCov">         12 :     returnCode = MqttConnectReturnCode.values[stream.readByte()];</span>
+<span class="lineNum">     142 </span><span class="lineCov">          8 :     length++;</span>
 <span class="lineNum">     143 </span>            :   }
 <span class="lineNum">     144 </span>            : 
 <span class="lineNum">     145 </span>            :   void readTopicName(MqttByteBuffer stream) {
-<span class="lineNum">     146 </span><span class="lineCov">          2 :     topicName = MqttByteBuffer.readMqttString(stream);</span>
-<span class="lineNum">     147 </span><span class="lineCov">          5 :     length += topicName.length + 2; // 2 for length short at front of string.</span>
+<span class="lineNum">     146 </span><span class="lineCov">          4 :     topicName = MqttByteBuffer.readMqttString(stream);</span>
+<span class="lineNum">     147 </span><span class="lineCov">         10 :     length += topicName.length + 2; // 2 for length short at front of string.</span>
 <span class="lineNum">     148 </span>            :   }
 <span class="lineNum">     149 </span>            : 
 <span class="lineNum">     150 </span>            :   void readMessageIdentifier(MqttByteBuffer stream) {
-<span class="lineNum">     151 </span><span class="lineCov">          2 :     messageIdentifier = stream.readShort();</span>
-<span class="lineNum">     152 </span><span class="lineCov">          2 :     length += 2;</span>
+<span class="lineNum">     151 </span><span class="lineCov">          4 :     messageIdentifier = stream.readShort();</span>
+<span class="lineNum">     152 </span><span class="lineCov">          4 :     length += 2;</span>
 <span class="lineNum">     153 </span>            :   }
 <span class="lineNum">     154 </span>            : 
 <span class="lineNum">     155 </span>            :   void readConnectFlags(MqttByteBuffer stream) {
-<span class="lineNum">     156 </span><span class="lineCov">          6 :     connectFlags = new MqttConnectFlags.fromByteBuffer(stream);</span>
-<span class="lineNum">     157 </span><span class="lineCov">          6 :     length += 1;</span>
+<span class="lineNum">     156 </span><span class="lineCov">          8 :     connectFlags = new MqttConnectFlags.fromByteBuffer(stream);</span>
+<span class="lineNum">     157 </span><span class="lineCov">          8 :     length += 1;</span>
 <span class="lineNum">     158 </span>            :   }
 <span class="lineNum">     159 </span>            : }
 </pre>

@@ -78,16 +78,16 @@
 <span class="lineNum">      16 </span>            :   typed.Uint8Buffer message;
 <span class="lineNum">      17 </span>            : 
 <span class="lineNum">      18 </span>            :   /// Initializes a new instance of the MqttPublishPayload class.
-<span class="lineNum">      19 </span><span class="lineCov">          3 :   MqttPublishPayload() {</span>
-<span class="lineNum">      20 </span><span class="lineCov">          6 :     this.message = new typed.Uint8Buffer();</span>
+<span class="lineNum">      19 </span><span class="lineCov">          4 :   MqttPublishPayload() {</span>
+<span class="lineNum">      20 </span><span class="lineCov">          8 :     this.message = new typed.Uint8Buffer();</span>
 <span class="lineNum">      21 </span>            :   }
 <span class="lineNum">      22 </span>            : 
 <span class="lineNum">      23 </span>            :   /// Initializes a new instance of the MqttPublishPayload class.
 <span class="lineNum">      24 </span>            :   MqttPublishPayload.fromByteBuffer(MqttHeader header,
-<span class="lineNum">      25 </span><span class="lineCov">          1 :       MqttPublishVariableHeader variableHeader, MqttByteBuffer payloadStream) {</span>
-<span class="lineNum">      26 </span><span class="lineCov">          1 :     this.header = header;</span>
-<span class="lineNum">      27 </span><span class="lineCov">          1 :     this.variableHeader = variableHeader;</span>
-<span class="lineNum">      28 </span><span class="lineCov">          1 :     readFrom(payloadStream);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          2 :       MqttPublishVariableHeader variableHeader, MqttByteBuffer payloadStream) {</span>
+<span class="lineNum">      26 </span><span class="lineCov">          2 :     this.header = header;</span>
+<span class="lineNum">      27 </span><span class="lineCov">          2 :     this.variableHeader = variableHeader;</span>
+<span class="lineNum">      28 </span><span class="lineCov">          2 :     readFrom(payloadStream);</span>
 <span class="lineNum">      29 </span>            :   }
 <span class="lineNum">      30 </span>            : 
 <span class="lineNum">      31 </span>            :   /// Creates a payload from the specified header stream.
@@ -95,34 +95,34 @@
 <span class="lineNum">      33 </span>            :     // The payload of the publish message is not a string, just a binary chunk of bytes.
 <span class="lineNum">      34 </span>            :     // The length of the bytes is the length specified in the header, minus any bytes
 <span class="lineNum">      35 </span>            :     // spent in the variable header.
-<span class="lineNum">      36 </span><span class="lineCov">          5 :     final int messageBytes = header.messageSize - variableHeader.length;</span>
-<span class="lineNum">      37 </span><span class="lineCov">          2 :     message = payloadStream.read(messageBytes);</span>
+<span class="lineNum">      36 </span><span class="lineCov">         10 :     final int messageBytes = header.messageSize - variableHeader.length;</span>
+<span class="lineNum">      37 </span><span class="lineCov">          4 :     message = payloadStream.read(messageBytes);</span>
 <span class="lineNum">      38 </span>            :   }
 <span class="lineNum">      39 </span>            : 
 <span class="lineNum">      40 </span>            :   /// Writes the payload to the supplied stream.
 <span class="lineNum">      41 </span>            :   void writeTo(MqttByteBuffer payloadStream) {
-<span class="lineNum">      42 </span><span class="lineCov">          2 :     payloadStream.write(message);</span>
+<span class="lineNum">      42 </span><span class="lineCov">          4 :     payloadStream.write(message);</span>
 <span class="lineNum">      43 </span>            :   }
 <span class="lineNum">      44 </span>            : 
 <span class="lineNum">      45 </span>            :   /// Gets the length of the payload in bytes when written to a stream.
 <span class="lineNum">      46 </span>            :   int getWriteLength() {
-<span class="lineNum">      47 </span><span class="lineCov">          2 :     return message.length;</span>
+<span class="lineNum">      47 </span><span class="lineCov">          4 :     return message.length;</span>
 <span class="lineNum">      48 </span>            :   }
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span>            :   /// Returns a string representation of the payload.
 <span class="lineNum">      51 </span>            :   String toString() {
-<span class="lineNum">      52 </span><span class="lineCov">         10 :     return &quot;Payload: {${message.length} bytes={${bytesToString(message)}&quot;;</span>
+<span class="lineNum">      52 </span><span class="lineCov">         15 :     return &quot;Payload: {${message.length} bytes={${bytesToString(message)}&quot;;</span>
 <span class="lineNum">      53 </span>            :   }
 <span class="lineNum">      54 </span>            : 
 <span class="lineNum">      55 </span>            :   /// Converts an array of bytes to a byte string.
 <span class="lineNum">      56 </span>            :   static String bytesToString(typed.Uint8Buffer message) {
-<span class="lineNum">      57 </span><span class="lineCov">          2 :     final StringBuffer sb = new StringBuffer();</span>
-<span class="lineNum">      58 </span><span class="lineCov">          4 :     for (int b in message) {</span>
-<span class="lineNum">      59 </span><span class="lineCov">          2 :       sb.write('&lt;');</span>
-<span class="lineNum">      60 </span><span class="lineCov">          2 :       sb.write(b);</span>
-<span class="lineNum">      61 </span><span class="lineCov">          2 :       sb.write('&gt;');</span>
+<span class="lineNum">      57 </span><span class="lineCov">          3 :     final StringBuffer sb = new StringBuffer();</span>
+<span class="lineNum">      58 </span><span class="lineCov">          6 :     for (int b in message) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">          3 :       sb.write('&lt;');</span>
+<span class="lineNum">      60 </span><span class="lineCov">          3 :       sb.write(b);</span>
+<span class="lineNum">      61 </span><span class="lineCov">          3 :       sb.write('&gt;');</span>
 <span class="lineNum">      62 </span>            :     }
-<span class="lineNum">      63 </span><span class="lineCov">          2 :     return sb.toString();</span>
+<span class="lineNum">      63 </span><span class="lineCov">          3 :     return sb.toString();</span>
 <span class="lineNum">      64 </span>            :   }
 <span class="lineNum">      65 </span>            : 
 <span class="lineNum">      66 </span>            :   /// Converts an array of bytes to a character string.

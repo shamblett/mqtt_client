@@ -104,7 +104,7 @@
 <span class="lineNum">      42 </span><span class="lineCov">          3 :     final Completer completer = new Completer();</span>
 <span class="lineNum">      43 </span>            :     try {
 <span class="lineNum">      44 </span><span class="lineCov">          6 :       await internalConnect(server, port, message);</span>
-<span class="lineNum">      45 </span><span class="lineCov">          4 :       return completer.complete(this.connectionState);</span>
+<span class="lineNum">      45 </span><span class="lineCov">          6 :       return completer.complete(this.connectionState);</span>
 <span class="lineNum">      46 </span>            :     } catch (ConnectionException) {
 <span class="lineNum">      47 </span><span class="lineCov">          1 :       this.connectionState = ConnectionState.faulted;</span>
 <span class="lineNum">      48 </span>            :       rethrow;
@@ -117,20 +117,20 @@
 <span class="lineNum">      55 </span>            : 
 <span class="lineNum">      56 </span>            :   /// Sends a message to the broker through the current connection.
 <span class="lineNum">      57 </span>            :   void sendMessage(MqttMessage message) {
-<span class="lineNum">      58 </span><span class="lineCov">          4 :     MqttLogger.log(&quot;MqttConnectionHandler::sendMessage - $message&quot;);</span>
-<span class="lineNum">      59 </span><span class="lineCov">          4 :     if ((connectionState == ConnectionState.connected) ||</span>
-<span class="lineNum">      60 </span><span class="lineCov">          4 :         (connectionState == ConnectionState.connecting)) {</span>
-<span class="lineNum">      61 </span><span class="lineCov">          2 :       final typed.Uint8Buffer buff = new typed.Uint8Buffer();</span>
-<span class="lineNum">      62 </span><span class="lineCov">          2 :       final MqttByteBuffer stream = new MqttByteBuffer(buff);</span>
-<span class="lineNum">      63 </span><span class="lineCov">          2 :       message.writeTo(stream);</span>
-<span class="lineNum">      64 </span><span class="lineCov">          2 :       stream.seek(0);</span>
-<span class="lineNum">      65 </span><span class="lineCov">          4 :       connection.send(stream);</span>
+<span class="lineNum">      58 </span><span class="lineCov">          6 :     MqttLogger.log(&quot;MqttConnectionHandler::sendMessage - $message&quot;);</span>
+<span class="lineNum">      59 </span><span class="lineCov">          6 :     if ((connectionState == ConnectionState.connected) ||</span>
+<span class="lineNum">      60 </span><span class="lineCov">          6 :         (connectionState == ConnectionState.connecting)) {</span>
+<span class="lineNum">      61 </span><span class="lineCov">          3 :       final typed.Uint8Buffer buff = new typed.Uint8Buffer();</span>
+<span class="lineNum">      62 </span><span class="lineCov">          3 :       final MqttByteBuffer stream = new MqttByteBuffer(buff);</span>
+<span class="lineNum">      63 </span><span class="lineCov">          3 :       message.writeTo(stream);</span>
+<span class="lineNum">      64 </span><span class="lineCov">          3 :       stream.seek(0);</span>
+<span class="lineNum">      65 </span><span class="lineCov">          6 :       connection.send(stream);</span>
 <span class="lineNum">      66 </span>            :       // Let any registered people know we're doing a message.
-<span class="lineNum">      67 </span><span class="lineCov">          4 :       for (MessageCallbackFunction callback in sentMessageCallbacks) {</span>
-<span class="lineNum">      68 </span><span class="lineCov">          2 :         callback(message);</span>
+<span class="lineNum">      67 </span><span class="lineCov">          6 :       for (MessageCallbackFunction callback in sentMessageCallbacks) {</span>
+<span class="lineNum">      68 </span><span class="lineCov">          3 :         callback(message);</span>
 <span class="lineNum">      69 </span>            :       }
 <span class="lineNum">      70 </span>            :     } else {
-<span class="lineNum">      71 </span><span class="lineCov">          2 :       MqttLogger.log(&quot;MqttConnectionHandler::sendMessage - not connected&quot;);</span>
+<span class="lineNum">      71 </span><span class="lineCov">          3 :       MqttLogger.log(&quot;MqttConnectionHandler::sendMessage - not connected&quot;);</span>
 <span class="lineNum">      72 </span>            :     }
 <span class="lineNum">      73 </span>            :   }
 <span class="lineNum">      74 </span>            : 
@@ -139,15 +139,15 @@
 <span class="lineNum">      77 </span>            : 
 <span class="lineNum">      78 </span>            :   /// Closes the connection to the Mqtt message broker.
 <span class="lineNum">      79 </span>            :   void close() {
-<span class="lineNum">      80 </span><span class="lineCov">          2 :     if (connectionState == ConnectionState.connected) {</span>
-<span class="lineNum">      81 </span><span class="lineCov">          1 :       disconnect();</span>
+<span class="lineNum">      80 </span><span class="lineCov">          4 :     if (connectionState == ConnectionState.connected) {</span>
+<span class="lineNum">      81 </span><span class="lineCov">          2 :       disconnect();</span>
 <span class="lineNum">      82 </span>            :     }
 <span class="lineNum">      83 </span>            :   }
 <span class="lineNum">      84 </span>            : 
 <span class="lineNum">      85 </span>            :   /// Registers for the receipt of messages when they arrive.
 <span class="lineNum">      86 </span>            :   void registerForMessage(MqttMessageType msgType,
 <span class="lineNum">      87 </span>            :       MessageCallbackFunction callback) {
-<span class="lineNum">      88 </span><span class="lineCov">          8 :     messageProcessorRegistry[msgType] = callback;</span>
+<span class="lineNum">      88 </span><span class="lineCov">         10 :     messageProcessorRegistry[msgType] = callback;</span>
 <span class="lineNum">      89 </span>            :   }
 <span class="lineNum">      90 </span>            : 
 <span class="lineNum">      91 </span>            :   /// UnRegisters for the receipt of messages when they arrive.
@@ -157,7 +157,7 @@
 <span class="lineNum">      95 </span>            : 
 <span class="lineNum">      96 </span>            :   /// Registers a callback to be called whenever a message is sent.
 <span class="lineNum">      97 </span>            :   void registerForAllSentMessages(MessageCallbackFunction sentMsgCallback) {
-<span class="lineNum">      98 </span><span class="lineCov">          4 :     sentMessageCallbacks.add(sentMsgCallback);</span>
+<span class="lineNum">      98 </span><span class="lineCov">          6 :     sentMessageCallbacks.add(sentMsgCallback);</span>
 <span class="lineNum">      99 </span>            :   }
 <span class="lineNum">     100 </span>            : 
 <span class="lineNum">     101 </span>            :   /// UnRegisters a callback that is called whenever a message is sent.
@@ -168,8 +168,8 @@
 <span class="lineNum">     106 </span>            :   /// Handles the Message Available event of the connection control for handling non connection messages
 <span class="lineNum">     107 </span>            :   void messageAvailable(events.Event&lt;MessageAvailable&gt; event) {
 <span class="lineNum">     108 </span>            :     final MessageCallbackFunction callback =
-<span class="lineNum">     109 </span><span class="lineCov">         12 :     messageProcessorRegistry[event.data.message.header.messageType];</span>
-<span class="lineNum">     110 </span><span class="lineCov">          6 :     callback(event.data.message);</span>
+<span class="lineNum">     109 </span><span class="lineCov">         18 :     messageProcessorRegistry[event.data.message.header.messageType];</span>
+<span class="lineNum">     110 </span><span class="lineCov">          9 :     callback(event.data.message);</span>
 <span class="lineNum">     111 </span>            :   }
 <span class="lineNum">     112 </span>            : }
 </pre>

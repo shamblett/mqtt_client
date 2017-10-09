@@ -72,24 +72,24 @@
 <span class="lineNum">      10 </span>            : /// Implementation of the variable header for an MQTT ConnectAck message.
 <span class="lineNum">      11 </span>            : class MqttConnectAckVariableHeader extends MqttVariableHeader {
 <span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttConnectVariableHeader class.
-<span class="lineNum">      13 </span><span class="lineCov">          3 :   MqttConnectAckVariableHeader();</span>
+<span class="lineNum">      13 </span><span class="lineCov">          4 :   MqttConnectAckVariableHeader();</span>
 <span class="lineNum">      14 </span>            : 
 <span class="lineNum">      15 </span>            :   /// Initializes a new instance of the MqttConnectVariableHeader class.
 <span class="lineNum">      16 </span>            :   MqttConnectAckVariableHeader.fromByteBuffer(MqttByteBuffer headerStream)
-<span class="lineNum">      17 </span><span class="lineCov">          3 :       : super.fromByteBuffer(headerStream);</span>
+<span class="lineNum">      17 </span><span class="lineCov">          4 :       : super.fromByteBuffer(headerStream);</span>
 <span class="lineNum">      18 </span>            : 
 <span class="lineNum">      19 </span>            :   /// Writes the variable header for an MQTT Connect message to the supplied stream.
 <span class="lineNum">      20 </span>            :   void writeTo(MqttByteBuffer variableHeaderStream) {
 <span class="lineNum">      21 </span>            :     // Unused additional &quot;compression&quot; byte used within the variable header acknowledgement.
-<span class="lineNum">      22 </span><span class="lineCov">          3 :     variableHeaderStream.writeByte(0);</span>
-<span class="lineNum">      23 </span><span class="lineCov">          3 :     writeReturnCode(variableHeaderStream);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          4 :     variableHeaderStream.writeByte(0);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          4 :     writeReturnCode(variableHeaderStream);</span>
 <span class="lineNum">      24 </span>            :   }
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span>            :   /// Creates a variable header from the specified header stream.
 <span class="lineNum">      27 </span>            :   void readFrom(MqttByteBuffer variableHeaderStream) {
 <span class="lineNum">      28 </span>            :     // Unused additional &quot;compression&quot; byte used within the variable header acknowledgement.
-<span class="lineNum">      29 </span><span class="lineCov">          3 :     variableHeaderStream.readByte();</span>
-<span class="lineNum">      30 </span><span class="lineCov">          3 :     readReturnCode(variableHeaderStream);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          4 :     variableHeaderStream.readByte();</span>
+<span class="lineNum">      30 </span><span class="lineCov">          4 :     readReturnCode(variableHeaderStream);</span>
 <span class="lineNum">      31 </span>            :   }
 <span class="lineNum">      32 </span>            : 
 <span class="lineNum">      33 </span>            :   /// Gets the length of the write data when WriteTo will be called.
@@ -101,7 +101,7 @@
 <span class="lineNum">      39 </span>            :   }
 <span class="lineNum">      40 </span>            : 
 <span class="lineNum">      41 </span>            :   String toString() {
-<span class="lineNum">      42 </span><span class="lineCov">          6 :     return &quot;Connect Variable Header: TopicNameCompressionResponse={0}, ReturnCode={$returnCode}&quot;;</span>
+<span class="lineNum">      42 </span><span class="lineCov">          8 :     return &quot;Connect Variable Header: TopicNameCompressionResponse={0}, ReturnCode={$returnCode}&quot;;</span>
 <span class="lineNum">      43 </span>            :   }
 <span class="lineNum">      44 </span>            : }
 </pre>

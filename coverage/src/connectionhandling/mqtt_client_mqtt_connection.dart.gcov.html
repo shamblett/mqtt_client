@@ -72,8 +72,8 @@
 <span class="lineNum">      10 </span>            : /// State and logic used to read from the underlying network stream.
 <span class="lineNum">      11 </span>            : class ReadWrapper {
 <span class="lineNum">      12 </span>            :   /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
-<span class="lineNum">      13 </span><span class="lineCov">          2 :   ReadWrapper() {</span>
-<span class="lineNum">      14 </span><span class="lineCov">          4 :     this.messageBytes = new List&lt;int&gt;();</span>
+<span class="lineNum">      13 </span><span class="lineCov">          3 :   ReadWrapper() {</span>
+<span class="lineNum">      14 </span><span class="lineCov">          6 :     this.messageBytes = new List&lt;int&gt;();</span>
 <span class="lineNum">      15 </span>            :   }
 <span class="lineNum">      16 </span>            : 
 <span class="lineNum">      17 </span>            :   /// The bytes associated with the message being read.
@@ -107,33 +107,33 @@
 <span class="lineNum">      45 </span>            : 
 <span class="lineNum">      46 </span>            :   /// Create the listening stream subscription and subscribe the callbacks
 <span class="lineNum">      47 </span>            :   void _startListening() {
-<span class="lineNum">      48 </span><span class="lineCov">          2 :     MqttLogger.log(&quot;MqttConnection::_startListening&quot;);</span>
-<span class="lineNum">      49 </span><span class="lineCov">         10 :     client.listen(_onData, onError: _onError, onDone: _onDone);</span>
+<span class="lineNum">      48 </span><span class="lineCov">          3 :     MqttLogger.log(&quot;MqttConnection::_startListening&quot;);</span>
+<span class="lineNum">      49 </span><span class="lineCov">         15 :     client.listen(_onData, onError: _onError, onDone: _onDone);</span>
 <span class="lineNum">      50 </span>            :   }
 <span class="lineNum">      51 </span>            : 
 <span class="lineNum">      52 </span>            :   /// OnData listener callback
 <span class="lineNum">      53 </span>            :   void _onData(List&lt;int&gt; data) {
-<span class="lineNum">      54 </span><span class="lineCov">          2 :     MqttLogger.log(&quot;MqttConnection::_onData&quot;);</span>
+<span class="lineNum">      54 </span><span class="lineCov">          3 :     MqttLogger.log(&quot;MqttConnection::_onData&quot;);</span>
 <span class="lineNum">      55 </span>            :     // Protect against 0 bytes but should never happen.
-<span class="lineNum">      56 </span><span class="lineCov">          4 :     if (data.length == 0) {</span>
+<span class="lineNum">      56 </span><span class="lineCov">          6 :     if (data.length == 0) {</span>
 <span class="lineNum">      57 </span>            :       return;
 <span class="lineNum">      58 </span>            :     }
-<span class="lineNum">      59 </span><span class="lineCov">          6 :     readWrapper.messageBytes.addAll(data);</span>
+<span class="lineNum">      59 </span><span class="lineCov">          9 :     readWrapper.messageBytes.addAll(data);</span>
 <span class="lineNum">      60 </span>            :     // Attempt to create a message, if this works we have a full message
 <span class="lineNum">      61 </span>            :     // if not add the bytes to the read wrapper and wait for more bytes.
 <span class="lineNum">      62 </span>            :     bool messageIsValid = true;
 <span class="lineNum">      63 </span>            :     MqttMessage msg;
 <span class="lineNum">      64 </span>            :     try {
-<span class="lineNum">      65 </span><span class="lineCov">          2 :       final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);</span>
-<span class="lineNum">      66 </span><span class="lineCov">          2 :       msg = MqttMessage.createFrom(messageStream);</span>
+<span class="lineNum">      65 </span><span class="lineCov">          3 :       final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);</span>
+<span class="lineNum">      66 </span><span class="lineCov">          3 :       msg = MqttMessage.createFrom(messageStream);</span>
 <span class="lineNum">      67 </span>            :     } catch (exception) {
 <span class="lineNum">      68 </span><span class="lineNoCov">          0 :       MqttLogger.log(&quot;MqttConnection::_ondata - message is not valid&quot;);</span>
 <span class="lineNum">      69 </span>            :       messageIsValid = false;
 <span class="lineNum">      70 </span>            :     }
 <span class="lineNum">      71 </span>            :     if (messageIsValid) {
-<span class="lineNum">      72 </span><span class="lineCov">          4 :       MqttLogger.log(&quot;MqttConnection::_onData - message received $msg&quot;);</span>
-<span class="lineNum">      73 </span><span class="lineCov">          4 :       emitEvent(new MessageAvailable(msg));</span>
-<span class="lineNum">      74 </span><span class="lineCov">          2 :       MqttLogger.log(&quot;MqttConnection::_onData - message processed&quot;);</span>
+<span class="lineNum">      72 </span><span class="lineCov">          6 :       MqttLogger.log(&quot;MqttConnection::_onData - message received $msg&quot;);</span>
+<span class="lineNum">      73 </span><span class="lineCov">          6 :       emitEvent(new MessageAvailable(msg));</span>
+<span class="lineNum">      74 </span><span class="lineCov">          3 :       MqttLogger.log(&quot;MqttConnection::_onData - message processed&quot;);</span>
 <span class="lineNum">      75 </span>            :     }
 <span class="lineNum">      76 </span>            :   }
 <span class="lineNum">      77 </span>            : 
@@ -161,8 +161,8 @@
 <span class="lineNum">      99 </span>            : 
 <span class="lineNum">     100 </span>            :   /// Sends the message in the stream to the broker.
 <span class="lineNum">     101 </span>            :   void send(MqttByteBuffer message) {
-<span class="lineNum">     102 </span><span class="lineCov">          4 :     final typed.Uint8Buffer messageBytes = message.read(message.length);</span>
-<span class="lineNum">     103 </span><span class="lineCov">          6 :     client.add(messageBytes.toList());</span>
+<span class="lineNum">     102 </span><span class="lineCov">          6 :     final typed.Uint8Buffer messageBytes = message.read(message.length);</span>
+<span class="lineNum">     103 </span><span class="lineCov">          9 :     client.add(messageBytes.toList());</span>
 <span class="lineNum">     104 </span>            :   }
 <span class="lineNum">     105 </span>            : 
 <span class="lineNum">     106 </span>            :   // User requested disconnection

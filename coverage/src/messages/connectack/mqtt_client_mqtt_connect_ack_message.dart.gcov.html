@@ -73,10 +73,10 @@
 <span class="lineNum">      11 </span>            : class MqttConnectAckMessage extends MqttMessage {
 <span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttConnectAckMessage class.
 <span class="lineNum">      13 </span>            :   /// Only called via the MqttMessage.Create operation during processing of an Mqtt message stream.
-<span class="lineNum">      14 </span><span class="lineCov">          3 :   MqttConnectAckMessage() {</span>
-<span class="lineNum">      15 </span><span class="lineCov">          9 :     this.header = new MqttHeader().asType(MqttMessageType.connectAck);</span>
-<span class="lineNum">      16 </span><span class="lineCov">          6 :     this.variableHeader = new MqttConnectAckVariableHeader();</span>
-<span class="lineNum">      17 </span><span class="lineCov">          6 :     this.variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;</span>
+<span class="lineNum">      14 </span><span class="lineCov">          4 :   MqttConnectAckMessage() {</span>
+<span class="lineNum">      15 </span><span class="lineCov">         12 :     this.header = new MqttHeader().asType(MqttMessageType.connectAck);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          8 :     this.variableHeader = new MqttConnectAckVariableHeader();</span>
+<span class="lineNum">      17 </span><span class="lineCov">          8 :     this.variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;</span>
 <span class="lineNum">      18 </span>            :   }
 <span class="lineNum">      19 </span>            : 
 <span class="lineNum">      20 </span>            :   /// Gets or sets the variable header contents. Contains extended metadata about the message
@@ -84,35 +84,35 @@
 <span class="lineNum">      22 </span>            : 
 <span class="lineNum">      23 </span>            :   /// Initializes a new instance of the MqttConnectAckMessage class.
 <span class="lineNum">      24 </span>            :   MqttConnectAckMessage.fromByteBuffer(MqttHeader header,
-<span class="lineNum">      25 </span><span class="lineCov">          3 :       MqttByteBuffer messageStream) {</span>
-<span class="lineNum">      26 </span><span class="lineCov">          3 :     this.header = header;</span>
-<span class="lineNum">      27 </span><span class="lineCov">          3 :     readFrom(messageStream);</span>
+<span class="lineNum">      25 </span><span class="lineCov">          4 :       MqttByteBuffer messageStream) {</span>
+<span class="lineNum">      26 </span><span class="lineCov">          4 :     this.header = header;</span>
+<span class="lineNum">      27 </span><span class="lineCov">          4 :     readFrom(messageStream);</span>
 <span class="lineNum">      28 </span>            :   }
 <span class="lineNum">      29 </span>            : 
 <span class="lineNum">      30 </span>            :   /// Reads a message from the supplied stream.
 <span class="lineNum">      31 </span>            :   void readFrom(MqttByteBuffer messageStream) {
-<span class="lineNum">      32 </span><span class="lineCov">          3 :     super.readFrom(messageStream);</span>
-<span class="lineNum">      33 </span><span class="lineCov">          3 :     this.variableHeader =</span>
-<span class="lineNum">      34 </span><span class="lineCov">          3 :     new MqttConnectAckVariableHeader.fromByteBuffer(messageStream);</span>
+<span class="lineNum">      32 </span><span class="lineCov">          4 :     super.readFrom(messageStream);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          4 :     this.variableHeader =</span>
+<span class="lineNum">      34 </span><span class="lineCov">          4 :     new MqttConnectAckVariableHeader.fromByteBuffer(messageStream);</span>
 <span class="lineNum">      35 </span>            :   }
 <span class="lineNum">      36 </span>            : 
 <span class="lineNum">      37 </span>            :   /// Writes a message to the supplied stream.
 <span class="lineNum">      38 </span>            :   void writeTo(MqttByteBuffer messageStream) {
-<span class="lineNum">      39 </span><span class="lineCov">         12 :     this.header.writeTo(variableHeader.getWriteLength(), messageStream);</span>
-<span class="lineNum">      40 </span><span class="lineCov">          6 :     this.variableHeader.writeTo(messageStream);</span>
+<span class="lineNum">      39 </span><span class="lineCov">         16 :     this.header.writeTo(variableHeader.getWriteLength(), messageStream);</span>
+<span class="lineNum">      40 </span><span class="lineCov">          8 :     this.variableHeader.writeTo(messageStream);</span>
 <span class="lineNum">      41 </span>            :   }
 <span class="lineNum">      42 </span>            : 
 <span class="lineNum">      43 </span>            :   /// Sets the return code of the Variable Header.
 <span class="lineNum">      44 </span>            :   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
-<span class="lineNum">      45 </span><span class="lineCov">          6 :     this.variableHeader.returnCode = returnCode;</span>
+<span class="lineNum">      45 </span><span class="lineCov">          8 :     this.variableHeader.returnCode = returnCode;</span>
 <span class="lineNum">      46 </span>            :     return this;
 <span class="lineNum">      47 </span>            :   }
 <span class="lineNum">      48 </span>            : 
 <span class="lineNum">      49 </span>            :   String toString() {
-<span class="lineNum">      50 </span><span class="lineCov">          3 :     final StringBuffer sb = new StringBuffer();</span>
-<span class="lineNum">      51 </span><span class="lineCov">          6 :     sb.write(super.toString());</span>
-<span class="lineNum">      52 </span><span class="lineCov">          9 :     sb.writeln(variableHeader.toString());</span>
-<span class="lineNum">      53 </span><span class="lineCov">          3 :     return sb.toString();</span>
+<span class="lineNum">      50 </span><span class="lineCov">          4 :     final StringBuffer sb = new StringBuffer();</span>
+<span class="lineNum">      51 </span><span class="lineCov">          8 :     sb.write(super.toString());</span>
+<span class="lineNum">      52 </span><span class="lineCov">         12 :     sb.writeln(variableHeader.toString());</span>
+<span class="lineNum">      53 </span><span class="lineCov">          4 :     return sb.toString();</span>
 <span class="lineNum">      54 </span>            :   }
 <span class="lineNum">      55 </span>            : }
 </pre>

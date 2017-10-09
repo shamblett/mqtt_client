@@ -72,8 +72,8 @@
 <span class="lineNum">      10 </span>            : /// Implementation of an MQTT Disconnect Message.
 <span class="lineNum">      11 </span>            : class MqttDisconnectMessage extends MqttMessage {
 <span class="lineNum">      12 </span>            :   /// Initializes a new instance of the MqttDisconnectMessage class.
-<span class="lineNum">      13 </span><span class="lineCov">          3 :   MqttDisconnectMessage() {</span>
-<span class="lineNum">      14 </span><span class="lineCov">          9 :     this.header = new MqttHeader().asType(MqttMessageType.disconnect);</span>
+<span class="lineNum">      13 </span><span class="lineCov">          4 :   MqttDisconnectMessage() {</span>
+<span class="lineNum">      14 </span><span class="lineCov">         12 :     this.header = new MqttHeader().asType(MqttMessageType.disconnect);</span>
 <span class="lineNum">      15 </span>            :   }
 <span class="lineNum">      16 </span>            : 
 <span class="lineNum">      17 </span>            :   /// Initializes a new instance of the MqttDisconnectMessage class.
@@ -82,9 +82,9 @@
 <span class="lineNum">      20 </span>            :   }
 <span class="lineNum">      21 </span>            : 
 <span class="lineNum">      22 </span>            :   String toString() {
-<span class="lineNum">      23 </span><span class="lineCov">          3 :     final StringBuffer sb = new StringBuffer();</span>
-<span class="lineNum">      24 </span><span class="lineCov">          6 :     sb.write(super.toString());</span>
-<span class="lineNum">      25 </span><span class="lineCov">          3 :     return sb.toString();</span>
+<span class="lineNum">      23 </span><span class="lineCov">          4 :     final StringBuffer sb = new StringBuffer();</span>
+<span class="lineNum">      24 </span><span class="lineCov">          8 :     sb.write(super.toString());</span>
+<span class="lineNum">      25 </span><span class="lineCov">          4 :     return sb.toString();</span>
 <span class="lineNum">      26 </span>            :   }
 <span class="lineNum">      27 </span>            : }
 </pre>
