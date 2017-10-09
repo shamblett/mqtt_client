@@ -10,10 +10,10 @@ to support the different QOS levels and the keep alive mechanism. This allows th
 publishing/subscribing and not the details of MQTT itself.
 
 An example of usage can be found in the examples directory, this example is runnable.  An example is also provided
-showing how to use the client to connect to the mqtt-bridge of Google's iot-core suite. This demonstrates
+showing how to use the client to connect to the mqtt-bridge of Google's IoT-Core suite. This demonstrates
 how to use secure connections and switch MQTT protocols. The test directory also contains standalone runnable scripts for subscription and publishing.
 
-The client supports both TCP and websocket connections along with and secure server side connections.
+The client supports both normal and secure TCP connections and server side websocket connections.
 
 The code is a port from the C# [nMQTT](https://www.openhub.net/p/nMQTT) client library to Dart.
 
