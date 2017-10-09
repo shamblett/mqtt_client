@@ -1,6 +1,7 @@
 # 1.2.0
 Add secure sockets, server side only
 Add ability to select the MQTT protocol between 3.1 and 3.1.1
+A few code and test tidy ups
 
 # 1.1.0
 Add websockets as an alternative network connection
