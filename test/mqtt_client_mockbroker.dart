@@ -223,7 +223,5 @@ class MockBrokerSecure {
   }
 
   /// Close the broker socket
-  void close() {
-    client.destroy();
-  }
+  void close() {}
 }

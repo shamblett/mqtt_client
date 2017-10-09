@@ -111,8 +111,6 @@ void main() {
       expect(ch.connectionState, ConnectionState.connected);
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
-      ch.disconnect();
-      ch.close();
       broker.close();
     });
   }, skip: false);
@@ -158,8 +156,6 @@ void main() {
       print("Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
       ka.stop();
-      ch.disconnect();
-      ch.close();
       broker.close();
     });
   }, skip: false);
