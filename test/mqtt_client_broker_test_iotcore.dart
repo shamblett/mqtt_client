@@ -6,7 +6,8 @@
  */
 
 import 'dart:async';
-import 'package:path/path.dart' as path;
+
+//import 'package:path/path.dart' as path;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
@@ -23,7 +24,7 @@ Future<int> main() async {
   client.secure = true;
   // V3.1.1 for iot-core
   client.setProtocolV311();
-  final String currDir = path.current + path.separator;
+  //final String currDir = path.current + path.separator;
   //client.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
   client.logging(true);
   await client.connect(username, password);
