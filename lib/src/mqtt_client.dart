@@ -176,9 +176,15 @@ class MqttClient {
     }
   }
 
-  /// Set the protocol version
-  void setProtocol(int version, String name) {
-    Protocol.version = version;
-    Protocol.name = name;
+  /// Set the protocol version to V3.1 - default
+  void setProtocolV31() {
+    Protocol.version = Constants.mqttV31ProtocolVersion;
+    Protocol.name = Constants.mqttV31ProtocolName;
+  }
+
+  /// Set the protocol version to V3.1.1
+  void setProtocolV311() {
+    Protocol.version = Constants.mqttV311ProtocolVersion;
+    Protocol.name = Constants.mqttV311ProtocolName;
   }
 }

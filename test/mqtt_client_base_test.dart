@@ -508,6 +508,14 @@ void main() {
   });
 
   group("Utility", () {
+    test("Protocol", () {
+      final MqttClient client = new MqttClient("localhost", "abcd");
+      expect(Protocol.version, Constants.mqttV31ProtocolVersion);
+      expect(Protocol.name, Constants.mqttV31ProtocolName);
+      client.setProtocolV311();
+      expect(Protocol.version, Constants.mqttV311ProtocolVersion);
+      expect(Protocol.name, Constants.mqttV311ProtocolName);
+    });
     test("Byte Buffer", () {
       final typed.Uint8Buffer uBuff = new typed.Uint8Buffer(10);
       final typed.Uint8Buffer uBuff1 = new typed.Uint8Buffer(10);
