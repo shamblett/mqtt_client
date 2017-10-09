@@ -95,7 +95,7 @@ void main() {
       print("WS Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
       ka.stop();
-      brokerWs.close();
+      ch.close();
     });
   }, skip: false);
 }
