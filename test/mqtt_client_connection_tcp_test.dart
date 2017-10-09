@@ -23,6 +23,7 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
 
 void main() {
   // Test wide variables
+  final MockBroker broker = new MockBroker();
   final String mockBrokerAddress = "localhost";
   final int mockBrokerPort = 1883;
   final String testClientId = "syncMqttTests";
@@ -94,8 +95,6 @@ void main() {
       t1();
     });
     test("Successful response and disconnect", () async {
-      final MockBroker broker = new MockBroker();
-
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -118,7 +117,6 @@ void main() {
   group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
       int expectRequest = 0;
-      final MockBroker broker = new MockBroker();
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = new MqttConnectAckMessage()
