@@ -7,6 +7,9 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:typed_data/typed_data.dart' as typed;
+import 'mqtt_client_mockbroker.dart';
+import 'package:path/path.dart' as path;
 
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
@@ -21,6 +24,7 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
 
 void main() {
   // Test wide variables
+  final MockBrokerSecure broker = new MockBrokerSecure();
   final String mockBrokerAddress = "localhost";
   final int mockBrokerPort = 8883;
   final String testClientId = "syncMqttTests";
@@ -86,5 +90,50 @@ void main() {
       t1();
     });
   });
+  group("Connection Keep Alive - Mock broker", () {
+    test("Successful response", () async {
+      int expectRequest = 0;
 
+      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
+        final MqttByteBuffer headerStream = new MqttByteBuffer(messageArrived);
+        final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
+        if (expectRequest <= 3) {
+          print(
+              "Connection Keep Alive - Successful response - Ping Request received $expectRequest");
+          expect(header.messageType, MqttMessageType.pingRequest);
+          expectRequest++;
+        }
+      }
+      broker.start();
+      final SynchronousMqttConnectionHandler ch =
+      new SynchronousMqttConnectionHandler();
+      ch.secure = true;
+      final String currDir = path.current + path.separator;
+      ch.trustedCertPath = currDir + path.join("test", "pem", "localhost.cert");
+      broker.setMessageHandler(messageHandlerConnect);
+      await ch.connect(mockBrokerAddress, mockBrokerPort,
+          new MqttConnectMessage().withClientIdentifier(testClientId));
+      expect(ch.connectionState, ConnectionState.connected);
+      broker.setMessageHandler(messageHandlerPingRequest);
+      final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
+      print("Connection Keep Alive - Successful response - keepealive ms is ${ka
+          .keepAlivePeriod}");
+      print(
+          "Connection Keep Alive - Successful response - ping timer active is ${ka
+              .pingTimer.isActive.toString()}");
+      final Stopwatch stopwatch = new Stopwatch()
+        ..start();
+      await MqttUtilities.asyncSleep(10);
+      print("Connection Keep Alive - Successful response - Elapsed time "
+          "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
+      ka.stop();
+      ch.close();
+    });
+  }, skip: false);
 }
