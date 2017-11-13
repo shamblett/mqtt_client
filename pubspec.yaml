@@ -11,6 +11,7 @@ dependencies:
  typed_data: '>=1.1.3'
  observable: ">=0.20.4+1 <0.21.0"
  eventable: ">=5.2.1 <6.0.0"
+ path: ">=1.4.1"
 
 dev_dependencies:
   test: '^0.12.0'
