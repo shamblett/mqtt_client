@@ -35,7 +35,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
     });
     test("Acknowledged subscription request creates active subscription", () {
       testCHS.sentMessages.clear();
@@ -50,7 +50,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -76,7 +76,7 @@ void main() {
           expect(msg.payload.subscriptions.containsKey(topic), isTrue);
           expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
           expect(msg.variableHeader.messageIdentifier, 1);
-          expect(msg.header.qos, MqttQos.atMostOnce);
+          expect(msg.header.qos, MqttQos.atLeastOnce);
           // Confirm the subscription
           final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
               .withMessageIdentifier(2)
@@ -98,7 +98,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -120,7 +120,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -142,7 +142,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
       expect(subs.subscriptions[topic], isNull);
     });
     test("Unsubscribe with ack", () {
@@ -158,7 +158,7 @@ void main() {
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
       expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atMostOnce);
+      expect(msg.header.qos, MqttQos.atLeastOnce);
       expect(subs.subscriptions[topic], isNull);
       // Confirm the subscription
       final MqttSubscribeAckMessage subAckMsg = new MqttSubscribeAckMessage()
