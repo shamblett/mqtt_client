@@ -40,8 +40,9 @@ Future<int> main() async {
   // if your root cert is already cached on your platform, in which case you'll get a an already cached error.
   final String currDir = path.current + path.separator;
   client.trustedCertPath = currDir + path.join("pem", "roots.pem");
-  // If needed
+  // If needed the private key file path and the optional passphrase
   // client.privateKeyFilePath = "....";
+  // client.privateKeyFilePassphrase = "....";
   // Set the protocol to V3.1.1 for iot-core, if you fail to do this you will receive a connect ack with the response code
   // 0x01 Connection Refused, unacceptable protocol version
   client.setProtocolV311();

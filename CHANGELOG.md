@@ -1,3 +1,6 @@
+#1.3.0
+Fixes for issues 3 and 4
+
 # 1.2.0
 Add secure sockets, server side only
 Add ability to select the MQTT protocol between 3.1 and 3.1.1

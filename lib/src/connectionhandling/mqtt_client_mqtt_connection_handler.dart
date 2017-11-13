@@ -34,6 +34,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Private key file path
   String privateKeyFilePath;
 
+  /// Private key file pass phrase
+  String privateKeyFilePassphrase;
+
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 

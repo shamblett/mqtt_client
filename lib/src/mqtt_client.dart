@@ -38,6 +38,9 @@ class MqttClient {
   /// Private key file path
   String privateKeyFilePath;
 
+  /// Private key file pass phrase
+  String privateKeyFilePassphrase;
+
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
 
@@ -96,6 +99,7 @@ class MqttClient {
       _connectionHandler.useWebSocket = false;
       _connectionHandler.trustedCertPath = trustedCertPath;
       _connectionHandler.privateKeyFilePath = privateKeyFilePath;
+      _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
     }
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =

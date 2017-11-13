@@ -20,6 +20,7 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
     this.header = new MqttHeader().asType(MqttMessageType.subscribe);
+    this.header.qos = MqttQos.atLeastOnce;
     this.variableHeader = new MqttSubscribeVariableHeader();
     this.payload = new MqttSubscribePayload();
   }
@@ -28,6 +29,7 @@ class MqttSubscribeMessage extends MqttMessage {
   MqttSubscribeMessage.fromByteBuffer(MqttHeader header,
       MqttByteBuffer messageStream) {
     this.header = header;
+    this.header.qos = MqttQos.atLeastOnce;
     readFrom(messageStream);
   }
 

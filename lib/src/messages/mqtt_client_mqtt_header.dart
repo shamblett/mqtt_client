@@ -32,12 +32,10 @@ class MqttHeader {
 
   /// Gets or sets a value indicating whether this MQTT message should be retained by the message broker for transmission to new subscribers.
   /// True if message should be retained by the message broker; otherwise, false.
-  /// </value>
   bool retain = false;
 
-  ///     Gets or sets the size of the variable header + payload section of the message.
-  /// <value>The size of the variable header + payload.</value>
-  /// <exception cref="Nmqtt.InvalidPayloadSizeException">The size of the variable header + payload exceeds the maximum allowed size.</exception>
+  /// Gets or sets the size of the variable header + payload section of the message.
+  /// The size of the variable header + payload.
   int get messageSize => _messageSize;
 
   set messageSize(int value) {

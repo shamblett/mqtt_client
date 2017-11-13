@@ -15,8 +15,12 @@ class MqttSecureConnection extends MqttConnection {
   /// Private key file path
   String privateKeyFilePath;
 
+  /// Private keyfile passphrase
+  String privateKeyFilePassphrase;
+
   /// Default constructor
-  MqttSecureConnection(this.trustedCertPath, this.privateKeyFilePath);
+  MqttSecureConnection(this.trustedCertPath, this.privateKeyFilePath,
+      this.privateKeyFilePassphrase);
 
   /// Initializes a new instance of the MqttSecureConnection class.
   MqttSecureConnection.fromConnect(String server, int port) {
@@ -38,7 +42,14 @@ class MqttSecureConnection extends MqttConnection {
       if (privateKeyFilePath != null) {
         MqttLogger.log(
             "MqttSecureConnection::connect - private key file path is $privateKeyFilePath");
-        context.usePrivateKey(privateKeyFilePath);
+        if (privateKeyFilePassphrase != null) {
+          MqttLogger.log(
+              "MqttSecureConnection::connect - private key file passphrase is $privateKeyFilePassphrase");
+          context.usePrivateKey(privateKeyFilePath,
+              password: privateKeyFilePassphrase);
+        } else {
+          context.usePrivateKey(privateKeyFilePath);
+        }
       }
       SecureSocket.connect(server, port).then((SecureSocket socket) {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
