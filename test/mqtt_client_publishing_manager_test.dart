@@ -118,7 +118,7 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff);
+          new PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff, true);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
       final MqttPublishMessage pubMess =
@@ -126,6 +126,7 @@ void main() {
       expect(pubMess.header.messageType, MqttMessageType.publish);
       expect(pubMess.variableHeader.messageIdentifier, 1);
       expect(pubMess.header.qos, MqttQos.atMostOnce);
+      expect(pubMess.header.retain, true);
       expect(pubMess.variableHeader.topicName, "A/rawTopic");
       expect(pubMess.payload.toString(),
           "Payload: {4 bytes={<116><101><115><116>");
@@ -147,6 +148,7 @@ void main() {
       expect(pubMess.header.messageType, MqttMessageType.publish);
       expect(pubMess.variableHeader.messageIdentifier, 1);
       expect(pubMess.header.qos, MqttQos.atLeastOnce);
+      expect(pubMess.header.retain, false);
       expect(pubMess.variableHeader.topicName, "A/rawTopic");
       expect(pubMess.payload.toString(),
           "Payload: {4 bytes={<116><101><115><116>");

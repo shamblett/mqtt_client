@@ -77,6 +77,13 @@ class MqttPublishMessage extends MqttMessage {
     return this;
   }
 
+  /// Set the retain flag on the message
+  void setRetain(bool state) {
+    if ((state != null) && state) {
+      this.header.shouldBeRetained();
+    }
+  }
+
   String toString() {
     final StringBuffer sb = new StringBuffer();
     sb.write(super.toString());

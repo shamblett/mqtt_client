@@ -77,7 +77,8 @@ class PublishingManager extends events.EventEmitter
   /// The message to send.
   /// The message identifier assigned to the message.
   int publish(PublicationTopic topic, MqttQos qualityOfService,
-      typed.Uint8Buffer data) {
+      typed.Uint8Buffer data,
+      [bool retain = false]) {
     final int msgId = messageIdentifierDispenser
         .getNextMessageIdentifier("topic:{$topic.toString()}");
     final MqttPublishMessage msg = new MqttPublishMessage()
@@ -85,6 +86,8 @@ class PublishingManager extends events.EventEmitter
         .withMessageIdentifier(msgId)
         .withQos(qualityOfService)
         .publishData(data);
+    // Retain
+    msg.setRetain(retain);
     // QOS level 1 or 2 messages need to be saved so we can do the ack processes
     if (qualityOfService == MqttQos.atLeastOnce ||
         qualityOfService == MqttQos.exactlyOnce) {

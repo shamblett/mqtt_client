@@ -1,3 +1,6 @@
+#1.4.0
+Fixes for issues 5 and 6
+
 #1.3.0
 Fixes for issues 3 and 4
 

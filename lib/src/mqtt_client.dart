@@ -104,8 +104,8 @@ class MqttClient {
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);
-    _keepAlive = new MqttConnectionKeepAlive(
-        _connectionHandler, keepAlivePeriod);
+    _keepAlive =
+    new MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
     final connectMessage = _getConnectMessage(username, password);
     return await _connectionHandler.connect(
         this.server, this.port, connectMessage);
@@ -140,13 +140,15 @@ class MqttClient {
   /// Returns The message identifer assigned to the message.
   /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.
   int publishMessage(String topic, MqttQos qualityOfService,
-      typed.Uint8Buffer data) {
+      typed.Uint8Buffer data,
+      [retain = false]) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }
     try {
       final PublicationTopic pubTopic = new PublicationTopic(topic);
-      return _publishingManager.publish(pubTopic, qualityOfService, data);
+      return _publishingManager.publish(
+          pubTopic, qualityOfService, data, retain);
     } catch (Exception) {
       throw new InvalidTopicException(Exception.toString(), topic);
     }
