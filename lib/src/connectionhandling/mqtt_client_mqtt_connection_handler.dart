@@ -31,6 +31,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Trusted certificate file path for use in secure working
   String trustedCertPath;
 
+  /// The certificate chain path for secure working.
+  String certificateChainPath;
+
   /// Private key file path
   String privateKeyFilePath;
 

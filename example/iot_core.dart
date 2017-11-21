@@ -43,6 +43,8 @@ Future<int> main() async {
   // If needed the private key file path and the optional passphrase
   // client.privateKeyFilePath = "....";
   // client.privateKeyFilePassphrase = "....";
+  // If needed the certificate chain path
+  // client.certificateChainPath = "....";
   // Set the protocol to V3.1.1 for iot-core, if you fail to do this you will receive a connect ack with the response code
   // 0x01 Connection Refused, unacceptable protocol version
   client.setProtocolV311();

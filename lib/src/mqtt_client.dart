@@ -35,6 +35,9 @@ class MqttClient {
   /// Trusted certificate file path for use in secure working
   String trustedCertPath;
 
+  /// The certificate chain path for secure working.
+  String certificateChainPath;
+
   /// Private key file path
   String privateKeyFilePath;
 
@@ -98,6 +101,7 @@ class MqttClient {
       _connectionHandler.secure = true;
       _connectionHandler.useWebSocket = false;
       _connectionHandler.trustedCertPath = trustedCertPath;
+      _connectionHandler.certificateChainPath = certificateChainPath;
       _connectionHandler.privateKeyFilePath = privateKeyFilePath;
       _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
     }

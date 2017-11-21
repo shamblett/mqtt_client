@@ -12,6 +12,9 @@ class MqttSecureConnection extends MqttConnection {
   /// Trusted certificate file path for use in secure working
   String trustedCertPath;
 
+  /// The certificate chain path for secure working.
+  String certificateChainPath;
+
   /// Private key file path
   String privateKeyFilePath;
 
@@ -20,7 +23,7 @@ class MqttSecureConnection extends MqttConnection {
 
   /// Default constructor
   MqttSecureConnection(this.trustedCertPath, this.privateKeyFilePath,
-      this.privateKeyFilePassphrase);
+      this.certificateChainPath, this.privateKeyFilePassphrase);
 
   /// Initializes a new instance of the MqttSecureConnection class.
   MqttSecureConnection.fromConnect(String server, int port) {
@@ -38,6 +41,11 @@ class MqttSecureConnection extends MqttConnection {
         MqttLogger.log(
             "MqttSecureConnection::connect - trusted cert path is $trustedCertPath");
         context.setTrustedCertificates(trustedCertPath);
+      }
+      if (certificateChainPath != null) {
+        MqttLogger.log(
+            "MqttSecureConnection::connect - certificate chain file path is $certificateChainPath");
+        context.useCertificateChain(certificateChainPath);
       }
       if (privateKeyFilePath != null) {
         MqttLogger.log(
