@@ -29,6 +29,9 @@ class MqttConnection extends Object with events.EventEmitter {
   /// Indicates if disconnect(onDone) has been requested or not
   bool disconnectRequested = false;
 
+  /// Unsolicited disconnection callback
+  DisconnectCallback onDisconnected;
+
   /// Default constructor
   MqttConnection();
 
@@ -85,8 +88,11 @@ class MqttConnection extends Object with events.EventEmitter {
     // We should never be done unless requested
     _disconnect();
     if (!disconnectRequested) {
-      throw new SocketException(
-          "MqttConnection::On Done called by broker, disconnecting.");
+      if (onDisconnected != null) {
+        MqttLogger.log(
+            "MqttConnection::_onDone - calling disconnected callback");
+        onDisconnected;
+      }
     }
   }
 

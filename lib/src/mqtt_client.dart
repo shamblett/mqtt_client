@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+/// The client disconnect callback type
+typedef DisconnectCallback = void Function();
+
 /// A client class for interacting with MQTT Data Packets
 class MqttClient {
   /// Initializes a new instance of the MqttClient class using the default Mqtt Port.
@@ -68,6 +71,9 @@ class MqttClient {
   /// The connection message to use to override the default
   MqttConnectMessage connectionMessage;
 
+  /// Client disconnect callback, called on unsolicited disconnect.
+  DisconnectCallback onDisconnected;
+
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
   Future<ConnectionState> connect([String username, String password]) async {
@@ -105,6 +111,7 @@ class MqttClient {
       _connectionHandler.privateKeyFilePath = privateKeyFilePath;
       _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
     }
+    _connectionHandler.onDisconnected = onDisconnected;
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);

@@ -38,6 +38,9 @@ Future<int> main() async {
   /// you must set it here
   client.keepAlivePeriod = 30;
 
+  /// Add the unsolicited disconnection callback
+  client.onDisconnected = onDisconnected;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
@@ -117,4 +120,9 @@ Future<int> main() async {
   print("EXAMPLE::Disconnecting");
   client.disconnect();
   return 0;
+}
+
+/// The unsolicited disconnect callback
+void onDisconnected() {
+  print("Client unsolicited disconnection");
 }

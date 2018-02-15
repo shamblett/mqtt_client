@@ -1,3 +1,6 @@
+#1.5.0
+Fixes for issue 8, pub suggestions fixed.
+
 #1.4.0
 Fixes for issues 5 and 6
 

@@ -40,6 +40,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Private key file pass phrase
   String privateKeyFilePassphrase;
 
+  /// Unsolicited disconnection callback
+  DisconnectCallback onDisconnected;
+
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
