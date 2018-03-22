@@ -1,13 +1,13 @@
-#1.6.0
+# 1.6.0
 Remove eventable and its dependency on mirrors, replace with event_bus, issue 10
 
-#1.5.0
+# 1.5.0
 Fixes for issue 8, pub suggestions fixed.
 
-#1.4.0
+# 1.4.0
 Fixes for issues 5 and 6
 
-#1.3.0
+# 1.3.0
 Fixes for issues 3 and 4
 
 # 1.2.0
