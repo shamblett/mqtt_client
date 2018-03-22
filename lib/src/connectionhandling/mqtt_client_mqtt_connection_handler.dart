@@ -113,9 +113,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Handles the Message Available event of the connection control for handling non connection messages
-  void messageAvailable(events.Event<MessageAvailable> event) {
+  void messageAvailable(MessageAvailable event) {
     final MessageCallbackFunction callback =
-    messageProcessorRegistry[event.data.message.header.messageType];
-    callback(event.data.message);
+    messageProcessorRegistry[event.message.header.messageType];
+    callback(event.message);
   }
 }

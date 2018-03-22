@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// A class that can manage the topic subscription process.
-class SubscriptionsManager extends events.EventDetector {
+class SubscriptionsManager {
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
   new MessageIdentifierDispenser();
@@ -41,8 +41,7 @@ class SubscriptionsManager extends events.EventDetector {
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages
-    this.listen(
-        this.publishingManager, MessageReceived, publishMessageReceived);
+    clientEventBus.on(MessageReceived).listen(publishMessageReceived);
   }
 
   /// Registers a new subscription with the subscription manager.
@@ -102,11 +101,11 @@ class SubscriptionsManager extends events.EventDetector {
   }
 
   /// Publish message received
-  void publishMessageReceived(events.Event<MessageReceived> event) {
-    final String topic = event.data.topic.rawTopic;
+  void publishMessageReceived(MessageReceived event) {
+    final String topic = event.topic.rawTopic;
     if (messagesReceived.containsKey(topic)) {
       final MqttReceivedMessage<MqttMessage> msg =
-      new MqttReceivedMessage<MqttMessage>(topic, event.data.message);
+      new MqttReceivedMessage<MqttMessage>(topic, event.message);
       messagesReceived[topic].notifyChange(msg);
     }
   }

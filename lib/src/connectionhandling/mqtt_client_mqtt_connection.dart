@@ -19,7 +19,7 @@ class ReadWrapper {
 }
 
 /// The MQTT connection base class
-class MqttConnection extends Object with events.EventEmitter {
+class MqttConnection {
   /// The socket that maintains the connection to the MQTT broker.
   dynamic client;
 
@@ -73,7 +73,7 @@ class MqttConnection extends Object with events.EventEmitter {
     }
     if (messageIsValid) {
       MqttLogger.log("MqttConnection::_onData - message received $msg");
-      emitEvent(new MessageAvailable(msg));
+      clientEventBus.fire(new MessageAvailable(msg));
       MqttLogger.log("MqttConnection::_onData - message processed");
     }
   }

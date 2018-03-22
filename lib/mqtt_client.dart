@@ -12,7 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:observable/observable.dart';
-import 'package:eventable/eventable.dart' as events;
+import 'package:event_bus/event_bus.dart' as events;
 
 /// The mqtt_client package exported interface
 part 'src/mqtt_client.dart';
@@ -166,3 +166,6 @@ part 'src/messages/mqtt_client_mqtt_message_type.dart';
 part 'src/messages/mqtt_client_mqtt_message_factory.dart';
 
 part 'src/messages/mqtt_client_mqtt_payload.dart';
+
+/// The global event bus
+events.EventBus clientEventBus = new events.EventBus();

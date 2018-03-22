@@ -33,7 +33,7 @@ part of mqtt_client;
 ///         Sender --> Publish --> Receiver --> PublishReceived --> Sender --> PublishRelease --> Reciever --> PublishComplete --> Sender
 ///                                                                                                   | v
 ///                                                                                            Message Processor
-class PublishingManager extends events.EventEmitter
+class PublishingManager
     implements IPublishingManager {
   /// Handles dispensing of message ids for messages published to a topic.
   MessageIdentifierDispenser messageIdentifierDispenser =
@@ -119,11 +119,11 @@ class PublishingManager extends events.EventEmitter
       if (pubMsg.header.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
-        emitEvent(new MessageReceived(topic, msg));
+        clientEventBus.fire(new MessageReceived(topic, msg));
       } else if (pubMsg.header.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 require an acknowledgement
         // Send the message for processing to whoever is waiting.
-        emitEvent(new MessageReceived(topic, msg));
+        clientEventBus.fire(new MessageReceived(topic, msg));
         final MqttPublishAckMessage ackMsg = new MqttPublishAckMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(ackMsg);
@@ -159,7 +159,7 @@ class PublishingManager extends events.EventEmitter
         // Send the message for processing to whoever is waiting.
         final PublicationTopic topic =
         new PublicationTopic(pubMsg.variableHeader.topicName);
-        emitEvent(new MessageReceived(topic, pubMsg));
+        clientEventBus.fire(new MessageReceived(topic, pubMsg));
         final MqttPublishCompleteMessage compMsg =
         new MqttPublishCompleteMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
