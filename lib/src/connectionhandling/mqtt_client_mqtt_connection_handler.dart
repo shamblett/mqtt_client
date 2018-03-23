@@ -48,10 +48,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Connect to the specific Mqtt Connection.
   Future connect(String server, int port, MqttConnectMessage message) async {
-    final Completer completer = new Completer();
     try {
       await internalConnect(server, port, message);
-      return completer.complete(this.connectionState);
+      return this.connectionState;
     } catch (ConnectionException) {
       this.connectionState = ConnectionState.faulted;
       rethrow;
@@ -59,7 +58,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Connect to the specific Mqtt Connection.
-  Future<ConnectionState> internalConnect(String hostname, int port,
+  Future internalConnect(String hostname, int port,
       MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.

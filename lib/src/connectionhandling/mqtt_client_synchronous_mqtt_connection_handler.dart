@@ -13,7 +13,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   static const int maxConnectionAttempts = 3;
 
   /// Synchronously connect to the specific Mqtt Connection.
-  Future<ConnectionState> internalConnect(String hostname, int port,
+  Future internalConnect(String hostname, int port,
       MqttConnectMessage connectMessage) async {
     int connectionAttempts = 0;
     MqttLogger.log("SynchronousMqttConnectionHandler::internalConnect entered");
