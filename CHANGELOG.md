@@ -1,3 +1,6 @@
+# 1.6.1
+Update Observable version
+
 # 1.6.0
 Remove eventable and its dependency on mirrors, replace with event_bus, issue 10
 
