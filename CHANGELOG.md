@@ -1,3 +1,6 @@
+# 1.7.0
+Add the payload builder utility.
+
 # 1.6.1
 Update Observable version
 

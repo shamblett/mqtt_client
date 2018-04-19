@@ -62,4 +62,16 @@ class MqttClientPayloadBuilder {
     addHalf(val.codeUnits[0]);
     addHalf(val.codeUnits[1]);
   }
+
+  /// Add a 32 bit double
+  void addHalfDouble(double val) {
+    final Float32List tmp = new Float32List.fromList([val]);
+    _payload.addAll(tmp.buffer.asInt8List());
+  }
+
+  /// Add a 64 bit double
+  void addDouble(double val) {
+    final Float64List tmp = new Float64List.fromList([val]);
+    _payload.addAll(tmp.buffer.asInt8List());
+  }
 }

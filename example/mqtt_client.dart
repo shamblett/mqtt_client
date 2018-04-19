@@ -8,7 +8,6 @@
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:observable/observable.dart';
-import 'package:typed_data/typed_data.dart' as typed;
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -98,13 +97,10 @@ Future<int> main() async {
   /// Lets publish to a topic, use a high QOS
   // Publish a known topic
   final String pubTopic = "Dart/Mqtt_client/testtopic";
-  final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
-  buff[0] = 'h'.codeUnitAt(0);
-  buff[1] = 'e'.codeUnitAt(0);
-  buff[2] = 'l'.codeUnitAt(0);
-  buff[3] = 'l'.codeUnitAt(0);
-  buff[4] = 'o'.codeUnitAt(0);
-  client.publishMessage(pubTopic, MqttQos.exactlyOnce, buff);
+  // Use the payload builder rather than a raw buffer
+  final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+  builder.addString("Hello");
+  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.

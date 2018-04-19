@@ -67,6 +67,7 @@ Future<int> main() async {
   // Troubleshooting tips can be found here https://cloud.google.com/iot/docs/troubleshooting
   // Publish to the topic you have associated with your device
   final String topic = "/devices/dummy-sensor/events";
+  // Use a raw buffer here, see MqttClientPayloadBuilder for payload building assistance.
   final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
   buff[0] = 'a'.codeUnitAt(0);
   buff[1] = 'b'.codeUnitAt(0);

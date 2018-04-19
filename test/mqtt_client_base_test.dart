@@ -664,5 +664,19 @@ void main() {
       expect(builder.length, 4);
       expect(builder.payload.toList(), [0x34, 0xD8, 0x1E, 0xDD]);
     });
+
+    test("Add half double", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addHalfDouble(10000.5);
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), [0, 66, 28, 70]);
+    });
+
+    test("Add double", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addDouble(1.5e43);
+      expect(builder.length, 8);
+      expect(builder.payload.toList(), [91, 150, 146, 56, 33, 134, 229, 72]);
+    });
   });
 }
