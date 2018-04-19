@@ -11,24 +11,22 @@ part of mqtt_client;
 class MqttClientPayloadBuilder {
   typed.Uint8Buffer _payload;
 
-  typed.Uint8Buffer get payload => _payload;
-
-  int get length => _payload.length;
-
   MqttClientPayloadBuilder() {
     _payload = new typed.Uint8Buffer();
   }
+
+  typed.Uint8Buffer get payload => _payload;
+
+  int get length => _payload.length;
 
   /// Add a buffer
   void addBuffer(typed.Uint8Buffer buffer) {
     _payload.addAll(buffer);
   }
 
-  /// Add byte
+  /// Add byte, this will overflow on values > 2**8-1
   void addByte(int val) {
-    final typed.Uint8Buffer tmp = new typed.Uint8Buffer(1);
-    tmp.add(val);
-    _payload.add(tmp.toList()[0]);
+    _payload.add(val);
   }
 
   /// Add a bool, true is 1, false is 0
@@ -36,6 +34,32 @@ class MqttClientPayloadBuilder {
     val ? addByte(1) : addByte(0);
   }
 
-/// Add a halfword, 16 bits
+  /// Add a halfword, 16 bits, this will overflow on values > 2**16-1
+  void addHalf(int val) {
+    final Uint16List tmp = new Uint16List.fromList([val]);
+    _payload.addAll(tmp.buffer.asInt8List());
+  }
 
+  /// Add a word, 32 bits, this will overflow on values > 2**32-1
+  void addWord(int val) {
+    final Uint32List tmp = new Uint32List.fromList([val]);
+    _payload.addAll(tmp.buffer.asInt8List());
+  }
+
+  /// Add a long word, 64 bits or a Dart int
+  void addInt(int val) {
+    final Uint64List tmp = new Uint64List.fromList([val]);
+    _payload.addAll(tmp.buffer.asInt8List());
+  }
+
+  /// Add a UTF8 string
+  void addString(String val) {
+    _payload.addAll(val.codeUnits);
+  }
+
+  /// Add a UTF16 string
+  void addUTF16String(String val) {
+    addHalf(val.codeUnits[0]);
+    addHalf(val.codeUnits[1]);
+  }
 }

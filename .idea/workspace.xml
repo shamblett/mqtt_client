@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mqtt_client.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -18,15 +20,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="mqtt_client_payload_builder.dart" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="mqtt_client_payload_builder.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
-              <folding>
-                <element signature="e#0#155#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="473">
+              <caret line="61" column="15" selection-start-line="61" selection-start-column="15" selection-end-line="61" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mqtt_client_base_test.dart" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/mqtt_client_base_test.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="660" column="32" lean-forward="true" selection-start-line="660" selection-start-column="32" selection-end-line="660" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -63,7 +71,6 @@
         <option value="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart" />
         <option value="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_header.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
-        <option value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_message.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" />
@@ -81,6 +88,7 @@
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart" />
+        <option value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
       </list>
     </option>
   </component>
@@ -93,8 +101,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -120,11 +127,17 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="utility" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -142,32 +155,37 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Dart Test.tests in mqtt_client">
+  <component name="RunManager" selected="Dart Test.Add unicode string in mqtt_client_base_test.dart">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     </configuration>
-    <configuration name="mqtt_client.dart" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/example/mqtt_client.dart" />
-      <option name="workingDirectory" value="$PROJECT_DIR$" />
-    </configuration>
-    <configuration name="tests in mqtt_client" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$" />
-      <option name="scope" value="FOLDER" />
-    </configuration>
-    <configuration name="tests in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+    <configuration name="Add int in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
-      <option name="testName" value="mqtt_client_base_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Add int" />
     </configuration>
-    <configuration name="tests in mqtt_client_connection_tcp_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
-      <option name="testName" value="mqtt_client_connection_tcp_test.dart" />
+    <configuration name="Add string in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Add string" />
     </configuration>
-    <configuration name="tests in mqtt_client_connection_ws_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" />
-      <option name="testName" value="mqtt_client_connection_ws_test.dart" />
+    <configuration name="Add unicode string in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Add unicode string" />
+    </configuration>
+    <configuration name="Add word - overflow in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Add word - overflow" />
+    </configuration>
+    <configuration name="Payload builder in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
+      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
+      <option name="testName" value="Payload builder" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -221,16 +239,19 @@
       <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
     <list>
-      <item itemvalue="Dart Command Line App.mqtt_client.dart" />
-      <item itemvalue="Dart Test.tests in mqtt_client" />
-      <item itemvalue="Dart Test.tests in mqtt_client_connection_tcp_test.dart" />
-      <item itemvalue="Dart Test.tests in mqtt_client_connection_ws_test.dart" />
-      <item itemvalue="Dart Test.tests in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Payload builder in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Add word - overflow in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Add int in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Add string in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Add unicode string in mqtt_client_base_test.dart" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Dart Test.tests in mqtt_client" />
-        <item itemvalue="Dart Test.tests in mqtt_client_base_test.dart" />
+        <item itemvalue="Dart Test.Add unicode string in mqtt_client_base_test.dart" />
+        <item itemvalue="Dart Test.Add string in mqtt_client_base_test.dart" />
+        <item itemvalue="Dart Test.Add int in mqtt_client_base_test.dart" />
+        <item itemvalue="Dart Test.Payload builder in mqtt_client_base_test.dart" />
+        <item itemvalue="Dart Test.Add word - overflow in mqtt_client_base_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -378,39 +399,46 @@
       <option name="project" value="LOCAL" />
       <updated>1524063065406</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Add the payload builder package">
+      <created>1524119322906</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1524119322906</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Successful_response_in_mqtt_client_connection_tcp_test_dart - 2018.03.22 at 09h 07m 03s.xml">
-      <configuration name="Successful response in mqtt_client_connection_tcp_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_string_in_mqtt_client_base_test_dart - 2018.04.19 at 10h 59m 01s.xml">
+      <configuration name="Add string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client - 2018.03.22 at 09h 10m 00s.xml">
-      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 00m 17s.xml">
+      <configuration name="Add string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_connection_tcp_test_dart - 2018.03.22 at 08h 55m 51s.xml">
-      <configuration name="tests in mqtt_client_connection_tcp_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 02m 37s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_connection_tcp_test_dart - 2018.03.22 at 09h 00m 54s.xml">
-      <configuration name="tests in mqtt_client_connection_tcp_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 04m 41s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_connection_tcp_test_dart - 2018.03.22 at 09h 08m 38s.xml">
-      <configuration name="tests in mqtt_client_connection_tcp_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 04m 49s.xml">
+      <configuration name="Add string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_connection_ws_test_dart - 2018.03.22 at 09h 09m 01s.xml">
-      <configuration name="tests in mqtt_client_connection_ws_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 05m 05s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_publishing_manager_test_dart - 2018.03.22 at 08h 55m 14s.xml">
-      <configuration name="tests in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 06m 24s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_subscription_manager_test_dart - 2018.03.22 at 08h 55m 36s.xml">
-      <configuration name="tests in mqtt_client_subscription_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 07m 35s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client_base_test_dart - 2018.04.18 at 14h 16m 44s.xml">
-      <configuration name="tests in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 10m 37s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="tests_in_mqtt_client - 2018.04.18 at 14h 17m 55s.xml">
-      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Add_unicode_string_in_mqtt_client_base_test_dart - 2018.04.19 at 11h 10m 53s.xml">
+      <configuration name="Add unicode string in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -424,36 +452,37 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32911393" />
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5026042" side_tool="true" weight="0.32911393" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49739584" weight="0.32911393" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32911393" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32911393" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32911393" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32911393" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.334375" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.334375" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39978904" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info id="Nl-Palette" order="2" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Properties" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32911393" />
-      <window_info id="Nl-Palette" order="2" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.32911393" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -481,10 +510,31 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="7" />
     </breakpoint-manager>
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>codeUnits</expression-string>
+        <language-id>Dart</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>codeunits</expression-string>
+        <language-id>Dart</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -630,13 +680,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_base_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9605">
-          <caret line="565" column="56" lean-forward="true" selection-start-line="565" selection-start-column="56" selection-end-line="565" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/mqtt_client_broker_test_publish.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -761,26 +804,31 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" lean-forward="true" selection-end-line="8" />
-          <folding>
-            <element signature="e#0#423#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+        <state relative-caret-position="17">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#156#176#0" expanded="true" />
+            <element signature="e#418#446#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-          <folding>
-            <element signature="e#0#155#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="473">
+          <caret line="61" column="15" selection-start-line="61" selection-start-column="15" selection-end-line="61" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_base_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="660" column="32" lean-forward="true" selection-start-line="660" selection-start-column="32" selection-end-line="660" selection-end-column="32" />
         </state>
       </provider>
     </entry>

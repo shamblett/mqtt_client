@@ -574,4 +574,95 @@ void main() {
       expect(difference.inSeconds, 1);
     });
   });
+
+  group("Payload builder", () {
+    test("Construction", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      expect(builder.payload, isNotNull);
+      expect(builder.length, 0);
+    });
+
+    test("Add buffer", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      final typed.Uint8Buffer buffer = new typed.Uint8Buffer()
+        ..addAll([1, 2, 3]);
+      builder.addBuffer(buffer);
+      expect(builder.length, 3);
+      expect(builder.payload, buffer);
+    });
+
+    test("Add byte", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addByte(129);
+      expect(builder.length, 1);
+      expect(builder.payload.toList(), [129]);
+    });
+
+    test("Add byte - overflow", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addByte(300);
+      expect(builder.length, 1);
+      expect(builder.payload.toList(), [44]);
+    });
+
+    test("Add bool", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addBool(true);
+      expect(builder.length, 1);
+      expect(builder.payload.toList(), [1]);
+      builder.addBool(false);
+      expect(builder.length, 2);
+      expect(builder.payload.toList(), [1, 0]);
+    });
+
+    test("Add half", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addHalf(18000);
+      expect(builder.length, 2);
+      expect(builder.payload.toList(), [0x50, 0x46]);
+    });
+
+    test("Add half - overflow", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addHalf(65539);
+      expect(builder.length, 2);
+      expect(builder.payload.toList(), [0x3, 0x00]);
+    });
+
+    test("Add word", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addWord(123456789);
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), [0x15, 0xCD, 0x5B, 0x07]);
+    });
+
+    test("Add word - overflow", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addWord(4294967298);
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), [0x2, 0x00, 0x00, 0x00]);
+    });
+
+    test("Add int", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addInt(123456789030405060708);
+      expect(builder.length, 8);
+      expect(builder.payload.toList(),
+          [0x64, 0xB8, 0xA2, 0x63, 0x85, 0x9F, 0x4E, 0xB1]);
+    });
+
+    test("Add string", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addString("Hello");
+      expect(builder.length, 5);
+      expect(builder.payload.toList(), [72, 101, 108, 108, 111]);
+    });
+
+    test("Add unicode string", () {
+      final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
+      builder.addUTF16String('\u{1D11E}');
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), [0x34, 0xD8, 0x1E, 0xDD]);
+    });
+  });
 }

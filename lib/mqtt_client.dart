@@ -10,6 +10,7 @@ library mqtt_client;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:observable/observable.dart';
 import 'package:event_bus/event_bus.dart' as events;
