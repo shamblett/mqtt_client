@@ -645,10 +645,10 @@ void main() {
 
     test("Add int", () {
       final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
-      builder.addInt(123456789030405060708);
+      builder.addInt(123456789030405);
       expect(builder.length, 8);
       expect(builder.payload.toList(),
-          [0x64, 0xB8, 0xA2, 0x63, 0x85, 0x9F, 0x4E, 0xB1]);
+          [0x05, 0x26, 0x0E, 0x86, 0x48, 0x70, 0x00, 0x00]);
     });
 
     test("Add string", () {
