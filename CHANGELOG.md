@@ -1,3 +1,6 @@
+# 1.7.1
+Issue 10, update Observable version to 'any'
+
 # 1.7.0
 Add the payload builder utility.
 
