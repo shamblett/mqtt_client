@@ -26,8 +26,8 @@ class SubscriptionsManager {
   PublishingManager publishingManager;
 
   /// Observable publish messages received map, indexed by topic
-  Map<String, ChangeNotifier<MqttReceivedMessage>> messagesReceived =
-  new Map<String, ChangeNotifier<MqttReceivedMessage>>();
+  Map<String, observe.ChangeNotifier<MqttReceivedMessage>> messagesReceived =
+  new Map<String, observe.ChangeNotifier<MqttReceivedMessage>>();
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -45,9 +45,10 @@ class SubscriptionsManager {
   }
 
   /// Registers a new subscription with the subscription manager.
-  ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
+  observe.ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
       MqttQos qos) {
-    ChangeNotifier<MqttReceivedMessage> cn = tryGetExistingSubscription(topic);
+    observe.ChangeNotifier<MqttReceivedMessage> cn =
+    tryGetExistingSubscription(topic);
     if (cn == null) {
       cn = createNewSubscription(topic, qos);
     }
@@ -55,7 +56,8 @@ class SubscriptionsManager {
   }
 
   /// Gets a view on the existing observable, if the subscription already exists.
-  ChangeNotifier<MqttReceivedMessage> tryGetExistingSubscription(String topic) {
+  observe.ChangeNotifier<MqttReceivedMessage> tryGetExistingSubscription(
+      String topic) {
     Subscription retSub = subscriptions[topic];
     if (retSub == null) {
       // Search the pending subscriptions
@@ -69,8 +71,8 @@ class SubscriptionsManager {
   }
 
   /// Creates a new subscription for the specified topic.
-  ChangeNotifier<MqttReceivedMessage> createNewSubscription(String topic,
-      MqttQos qos) {
+  observe.ChangeNotifier<MqttReceivedMessage> createNewSubscription(
+      String topic, MqttQos qos) {
     try {
       final SubscriptionTopic subscriptionTopic = new SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
@@ -78,7 +80,7 @@ class SubscriptionsManager {
       messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
       // Create a new observable that is used to yield messages
       // that arrive for the topic.
-      final ChangeNotifier<MqttReceivedMessage> observable =
+      final observe.ChangeNotifier<MqttReceivedMessage> observable =
       createObservableForSubscription(subscriptionTopic, msgId);
       final Subscription sub = new Subscription();
       sub.topic = subscriptionTopic;
@@ -111,11 +113,11 @@ class SubscriptionsManager {
   }
 
   /// Creates an observable for a subscription.
-  ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
+  observe.ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
       SubscriptionTopic subscriptionTopic, int msgId) {
     final String topic = subscriptionTopic.rawTopic;
-    final ChangeNotifier<MqttReceivedMessage> cn =
-    new ChangeNotifier<MqttReceivedMessage>();
+    final observe.ChangeNotifier<MqttReceivedMessage> cn =
+    new observe.ChangeNotifier<MqttReceivedMessage>();
     messagesReceived[topic] = cn;
     return cn;
   }

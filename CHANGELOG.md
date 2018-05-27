@@ -1,3 +1,6 @@
+# 1.7.2
+Issue 10, add library prefix for observable
+
 # 1.7.1
 Issue 10, update Observable version to 'any'
 

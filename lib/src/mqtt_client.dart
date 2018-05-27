@@ -140,7 +140,8 @@ class MqttClient {
   /// The qos level the message was published at.
   /// Returns the change notifier assigned to the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
-  ChangeNotifier<MqttReceivedMessage> listenTo(String topic, MqttQos qosLevel) {
+  observe.ChangeNotifier<MqttReceivedMessage> listenTo(String topic,
+      MqttQos qosLevel) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }
