@@ -128,8 +128,7 @@ class MqttClient {
     if (connectionMessage == null) {
       connectionMessage = new MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
-           // willQos needed even if willFlag is false, MQTT-3.1.2-13:
-           // "If the Will Flag is set to 0, then the Will QoS MUST be set to 0 (0x00)."
+      // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
