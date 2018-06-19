@@ -181,10 +181,10 @@ class MqttClient {
 
   /// Disconnect from the broker
   void disconnect() {
-    _connectionHandler ?? _connectionHandler.disconnect();
+    _connectionHandler?.disconnect();
     _publishingManager = null;
     _subscriptionsManager = null;
-    _keepAlive ?? _keepAlive.stop();
+    _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
   }
