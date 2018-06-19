@@ -74,12 +74,14 @@ class MqttConnectMessage extends MqttMessage {
 
   /// Sets the will message.
   MqttConnectMessage withWillMessage(String willMessage) {
+    will();
     this.payload.willMessage = willMessage;
     return this;
   }
 
   /// Sets the Will Topic
   MqttConnectMessage withWillTopic(String willTopic) {
+    will();
     this.payload.willTopic = willTopic;
     return this;
   }

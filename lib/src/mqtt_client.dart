@@ -128,6 +128,9 @@ class MqttClient {
     if (connectionMessage == null) {
       connectionMessage = new MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
+           // willQos needed even if willFlag is false, MQTT-3.1.2-13:
+           // "If the Will Flag is set to 0, then the Will QoS MUST be set to 0 (0x00)."
+          .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
@@ -178,10 +181,10 @@ class MqttClient {
 
   /// Disconnect from the broker
   void disconnect() {
-    _connectionHandler.disconnect();
+    _connectionHandler?.disconnect();
     _publishingManager = null;
     _subscriptionsManager = null;
-    _keepAlive.stop();
+    _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
   }
