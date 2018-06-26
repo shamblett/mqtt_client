@@ -141,10 +141,9 @@ class MqttClient {
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
-  /// Returns the change notifier assigned to the subscription.
+  /// Returns the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
-  observe.ChangeNotifier<MqttReceivedMessage> listenTo(String topic,
-      MqttQos qosLevel) {
+  Subscription subscribe(String topic, MqttQos qosLevel) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }

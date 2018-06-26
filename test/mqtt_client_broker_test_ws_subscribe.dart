@@ -29,7 +29,7 @@ Future<int> main() async {
   // Subscribe to a known topic
   final String topic = "test/hw";
   final ChangeNotifier<MqttReceivedMessage> cn =
-  client.listenTo(topic, MqttQos.exactlyOnce);
+  client.subscribe(topic, MqttQos.exactlyOnce).observable;
   cn.changes.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
