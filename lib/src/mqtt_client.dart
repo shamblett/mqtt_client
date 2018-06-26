@@ -78,13 +78,12 @@ class MqttClient {
   /// for the purposes of authentication.
   Future connect([String username, String password]) async {
     if (username != null) {
-      print(
-          "Authenticating with username '{$username}' and password '{$password}'");
+      MqttLogger.log("Authenticating with username '{$username}' and password '{$password}'");
       if (username
           .trim()
           .length >
           Constants.recommendedMaxUsernamePasswordLength) {
-        print("Username length (${username
+        MqttLogger.log("Username length (${username
                 .trim()
                 .length}) exceeds the max recommended in the MQTT spec. ");
       }
@@ -94,7 +93,7 @@ class MqttClient {
             .trim()
             .length >
             Constants.recommendedMaxUsernamePasswordLength) {
-      print("Password length (${ password
+      MqttLogger.log("Password length (${ password
               .trim()
               .length}) exceeds the max recommended in the MQTT spec. ");
     }
