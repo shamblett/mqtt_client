@@ -26,8 +26,9 @@ class SubscriptionsManager {
   PublishingManager publishingManager;
 
   /// Observable publish messages received map, indexed by topic
-  Map<String, observe.ChangeNotifier<MqttReceivedMessage>> messagesReceived =
-  new Map<String, observe.ChangeNotifier<MqttReceivedMessage>>();
+  Map<SubscriptionTopic, observe.ChangeNotifier<MqttReceivedMessage>>
+  messagesReceived =
+  new Map<SubscriptionTopic, observe.ChangeNotifier<MqttReceivedMessage>>();
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -47,8 +48,6 @@ class SubscriptionsManager {
   /// Registers a new subscription with the subscription manager.
   observe.ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
       MqttQos qos) {
-    //TODO issue 19 we need to store the whole subscription topic as the key so
-    // we can do a proper match on the publication topic received.
     observe.ChangeNotifier<MqttReceivedMessage> cn =
     tryGetExistingSubscription(topic);
     if (cn == null) {
@@ -107,20 +106,22 @@ class SubscriptionsManager {
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
     final String topic = event.topic.rawTopic;
-    if (messagesReceived.containsKey(topic)) {
-      final MqttReceivedMessage<MqttMessage> msg =
-      new MqttReceivedMessage<MqttMessage>(topic, event.message);
-      messagesReceived[topic].notifyChange(msg);
+    final SubscriptionTopic sub = _findSubscriptionTopic(topic);
+    if (sub != null) {
+      if (sub.matches(event.topic)) {
+        final MqttReceivedMessage<MqttMessage> msg =
+        new MqttReceivedMessage<MqttMessage>(topic, event.message);
+        messagesReceived[topic].notifyChange(msg);
+      }
     }
   }
 
   /// Creates an observable for a subscription.
   observe.ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
       SubscriptionTopic subscriptionTopic, int msgId) {
-    final String topic = subscriptionTopic.rawTopic;
     final observe.ChangeNotifier<MqttReceivedMessage> cn =
     new observe.ChangeNotifier<MqttReceivedMessage>();
-    messagesReceived[topic] = cn;
+    messagesReceived[subscriptionTopic] = cn;
     return cn;
   }
 
@@ -183,5 +184,14 @@ class SubscriptionsManager {
       }
     });
     return status;
+  }
+
+  SubscriptionTopic _findSubscriptionTopic(String topic) {
+    for (SubscriptionTopic key in messagesReceived.keys) {
+      if (key.rawTopic == topic) {
+        return key;
+      }
+    }
+    return null;
   }
 }
