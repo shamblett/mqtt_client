@@ -50,6 +50,7 @@ Future<int> main() async {
       .withWillTopic("willtopic") // If you set this you must set a will message
       .withWillMessage("My Will message")
       .withWillQos(MqttQos.atLeastOnce);
+  print("EXAMPLE::Mosquitto client connecting....");
   client.connectionMessage = connMess;
 
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
@@ -103,7 +104,7 @@ Future<int> main() async {
 
   /// Our topic
   cn1.changes.listen((List<MqttReceivedMessage> c) {
-    final MqttPublishMessage recMess = c[1].payload as MqttPublishMessage;
+    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
