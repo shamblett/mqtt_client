@@ -47,6 +47,8 @@ class SubscriptionsManager {
   /// Registers a new subscription with the subscription manager.
   observe.ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
       MqttQos qos) {
+    //TODO issue 19 we need to store the whole subscription topic as the key so
+    // we can do a proper match on the publication topic received.
     observe.ChangeNotifier<MqttReceivedMessage> cn =
     tryGetExistingSubscription(topic);
     if (cn == null) {
