@@ -4,6 +4,7 @@
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -22,8 +23,8 @@
       <file leaf-file-name="mqtt_client.dart" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="105" column="47" lean-forward="true" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
+            <state relative-caret-position="287">
+              <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
               <folding>
                 <element signature="e#134#154#0" expanded="true" />
               </folding>
@@ -52,8 +53,8 @@
       <file leaf-file-name="mqtt_client.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+            <state relative-caret-position="282">
+              <caret line="149" column="53" selection-start-line="149" selection-start-column="33" selection-end-line="149" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -61,8 +62,8 @@
       <file leaf-file-name="mqtt_client_subscriptions_manager.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-986">
-              <caret line="60" column="16" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="16" />
+            <state relative-caret-position="469">
+              <caret line="50" column="35" lean-forward="true" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -79,8 +80,8 @@
       <file leaf-file-name="mqtt_client_mqtt_connection.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="32" column="20" selection-start-line="32" selection-start-column="2" selection-end-line="32" selection-end-column="20" />
+            <state relative-caret-position="418">
+              <caret line="75" column="16" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -126,6 +127,7 @@
       <find>MessageReceived</find>
       <find>5</find>
       <find>10</find>
+      <find>clientEventBus</find>
     </findStrings>
     <dirStrings>
       <dir>C:\dev\dart\projects\mqtt_client\lib\src</dir>
@@ -171,12 +173,12 @@
         <option value="$PROJECT_DIR$/example/iot_core.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
-        <option value="$PROJECT_DIR$/lib/src/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_flags.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_message_test.dart" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart" />
+        <option value="$PROJECT_DIR$/lib/src/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
       </list>
     </option>
@@ -507,7 +509,21 @@
       <option name="project" value="LOCAL" />
       <updated>1529418423236</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Example updates">
+      <created>1530089926475</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1530089926476</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Example updates">
+      <created>1530093043959</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1530093043959</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -553,7 +569,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
@@ -608,7 +623,8 @@
     <MESSAGE value="Add the payload builder package" />
     <MESSAGE value="Release 1.7.1, issue 10, update Observable to 'any'" />
     <MESSAGE value="Release 1.8.0, pull request 14, will qos setting updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Release 1.8.0, pull request 14, will qos setting updates" />
+    <MESSAGE value="Example updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Example updates" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -879,13 +895,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-986">
-          <caret line="60" column="16" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_constants.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -939,15 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="32" column="20" selection-start-line="32" selection-start-column="2" selection-end-line="32" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+        <state relative-caret-position="418">
+          <caret line="75" column="16" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -958,10 +960,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="149" column="53" selection-start-line="149" selection-start-column="33" selection-end-line="149" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="50" column="35" lean-forward="true" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="105" column="47" lean-forward="true" selection-start-line="105" selection-start-column="47" selection-end-line="105" selection-end-column="47" />
+        <state relative-caret-position="287">
+          <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
           <folding>
             <element signature="e#134#154#0" expanded="true" />
           </folding>

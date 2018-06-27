@@ -113,7 +113,7 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$topic>");
+        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$pubTopic>");
   });
 
   /// Sleep to read the log.....
@@ -124,7 +124,7 @@ Future<int> main() async {
   // Use the payload builder rather than a raw buffer
   print("EXAMPLE::Publishing our topic");
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
-  builder.addString("Hello");
+  builder.addString("Hello from mqtt_client");
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response

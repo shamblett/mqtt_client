@@ -144,7 +144,7 @@ class MqttClient {
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
   observe.ChangeNotifier<MqttReceivedMessage> listenTo(String topic,
       MqttQos qosLevel) {
-    if (_connectionHandler.connectionState != ConnectionState.connected) {
+    if (connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
