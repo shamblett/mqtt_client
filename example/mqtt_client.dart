@@ -32,7 +32,7 @@ Future<int> main() async {
   /// client.port = 80;  ( or whatever your WS port is)
 
   /// Set logging on if needed, defaults to off
-  client.logging(true);
+  client.logging(false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -81,6 +81,10 @@ Future<int> main() async {
   /// Our known topic to publish to
   final String pubTopic = "Dart/Mqtt_client/testtopic";
 
+  /// Subscribe to it
+  final ChangeNotifier<MqttReceivedMessage> cn1 =
+  client.listenTo(pubTopic, MqttQos.exactlyOnce);
+
   /// We get a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic, one for each topic, these are
   /// basically standard Dart streams and can be managed as you wish.
@@ -95,9 +99,21 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
-    if (topic == pubTopic) {
-      print("EXAMPLE: received our topic");
-    }
+  });
+
+  /// Our topic
+  cn1.changes.listen((List<MqttReceivedMessage> c) {
+    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+    final String pt =
+    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+    /// The above may seem a little convoluted for users only interested in the
+    /// payload, some users however may be interested in the received publish message,
+    /// lets not constrain ourselves yet until the package has been in the wild
+    /// for a while.
+    /// The payload is a byte buffer, this will be specific to the topic
+    print(
+        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$topic>");
   });
 
   /// Sleep to read the log.....
