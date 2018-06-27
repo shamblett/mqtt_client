@@ -103,7 +103,7 @@ Future<int> main() async {
 
   /// Our topic
   cn1.changes.listen((List<MqttReceivedMessage> c) {
-    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+    final MqttPublishMessage recMess = c[1].payload as MqttPublishMessage;
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
@@ -122,6 +122,7 @@ Future<int> main() async {
   /// Lets publish to our topic, use a high QOS
 
   // Use the payload builder rather than a raw buffer
+  print("EXAMPLE::Publishing our topic");
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
   builder.addString("Hello");
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
