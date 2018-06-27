@@ -111,7 +111,7 @@ class SubscriptionsManager {
       if (sub.matches(event.topic)) {
         final MqttReceivedMessage<MqttMessage> msg =
         new MqttReceivedMessage<MqttMessage>(topic, event.message);
-        messagesReceived[topic].notifyChange(msg);
+        messagesReceived[sub].notifyChange(msg);
       }
     }
   }
