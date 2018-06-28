@@ -6,6 +6,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:observable/observable.dart';
 
@@ -31,7 +32,7 @@ Future<int> main() async {
   /// client.port = 80;  ( or whatever your WS port is)
 
   /// Set logging on if needed, defaults to off
-  client.logging(true);
+  client.logging(false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -44,10 +45,12 @@ Future<int> main() async {
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
-      .withClientIdentifier("Mqtt_clientUniqueId")
-      .keepAliveFor(30) // Must agree with the keep alive set above
-      .withWillTopic("willtopic")
+      .withClientIdentifier("Mqtt_MyClientUniqueId")
+      .keepAliveFor(30) // Must agree with the keep alive set above or not set
+      .withWillTopic("willtopic") // If you set this you must set a will message
+      .withWillMessage("My Will message")
       .withWillQos(MqttQos.atLeastOnce);
+  print("EXAMPLE::Mosquitto client connecting....");
   client.connectionMessage = connMess;
 
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
@@ -68,11 +71,19 @@ Future<int> main() async {
         "EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client
             .connectionState}");
     client.disconnect();
+    exit(-1);
   }
 
   /// Ok, lets try a subscription
   final String topic = "test/hw";
   final ChangeNotifier<MqttReceivedMessage> cn = client.subscribe(topic, MqttQos.exactlyOnce).observable;
+
+  /// Our known topic to publish to
+  final String pubTopic = "Dart/Mqtt_client/testtopic";
+
+  /// Subscribe to it
+  final ChangeNotifier<MqttReceivedMessage> cn1 =
+  client.listenTo(pubTopic, MqttQos.exactlyOnce);
 
   /// We get a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic, one for each topic, these are
@@ -90,15 +101,30 @@ Future<int> main() async {
     print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
   });
 
+  /// Our topic
+  cn1.changes.listen((List<MqttReceivedMessage> c) {
+    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+    final String pt =
+    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+    /// The above may seem a little convoluted for users only interested in the
+    /// payload, some users however may be interested in the received publish message,
+    /// lets not constrain ourselves yet until the package has been in the wild
+    /// for a while.
+    /// The payload is a byte buffer, this will be specific to the topic
+    print(
+        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$pubTopic>");
+  });
+
   /// Sleep to read the log.....
   await MqttUtilities.asyncSleep(5);
 
-  /// Lets publish to a topic, use a high QOS
-  // Publish a known topic
-  final String pubTopic = "Dart/Mqtt_client/testtopic";
+  /// Lets publish to our topic, use a high QOS
+
   // Use the payload builder rather than a raw buffer
+  print("EXAMPLE::Publishing our topic");
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
-  builder.addString("Hello");
+  builder.addString("Hello from mqtt_client");
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
@@ -119,5 +145,6 @@ Future<int> main() async {
 
 /// The unsolicited disconnect callback
 void onDisconnected() {
-  print("Client unsolicited disconnection");
+  print("OnDisconnected client callback - Client disconnection");
+  exit(-1);
 }

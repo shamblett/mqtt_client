@@ -1,3 +1,6 @@
+# 1.8.0
+Pull request 14, Making library more compliant to work with VerneMQ - explicit setting of will qos.
+
 # 1.7.2
 Issue 10, add library prefix for observable
 

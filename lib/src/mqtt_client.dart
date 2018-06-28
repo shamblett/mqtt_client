@@ -127,8 +127,7 @@ class MqttClient {
     if (connectionMessage == null) {
       connectionMessage = new MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
-           // willQos needed even if willFlag is false, MQTT-3.1.2-13:
-           // "If the Will Flag is set to 0, then the Will QoS MUST be set to 0 (0x00)."
+      // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
@@ -143,7 +142,7 @@ class MqttClient {
   /// Returns the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
   Subscription subscribe(String topic, MqttQos qosLevel) {
-    if (_connectionHandler.connectionState != ConnectionState.connected) {
+    if (connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);

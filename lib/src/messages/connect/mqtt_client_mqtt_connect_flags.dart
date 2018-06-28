@@ -12,7 +12,7 @@ class MqttConnectFlags {
   bool reserved1 = false;
   bool cleanStart = false;
   bool willFlag = false;
-  MqttQos willQos = MqttQos.atLeastOnce;
+  MqttQos willQos = MqttQos.atMostOnce;
   bool willRetain = false;
   bool passwordFlag = false;
   bool usernameFlag = false;
