@@ -1,3 +1,6 @@
+# 1.9.0
+Issue 19, multitopic subscriptions + other more minor updates, API changed on this version.
+
 # 1.8.0
 Pull request 14, Making library more compliant to work with VerneMQ - explicit setting of will qos.
 

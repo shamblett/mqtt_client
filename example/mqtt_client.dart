@@ -75,7 +75,7 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription
-  final String topic = "test/hw";
+  final String topic = "test/hw"; // Not a wildcard topic
   final ChangeNotifier<MqttReceivedMessage> cn = client
       .subscribe(topic, MqttQos.exactlyOnce)
       .observable;
