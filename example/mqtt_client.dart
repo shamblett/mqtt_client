@@ -76,8 +76,7 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription
   final String topic = "test/hw";
-  final ChangeNotifier<MqttReceivedMessage> cn =
-  client.listenTo(topic, MqttQos.exactlyOnce);
+  final ChangeNotifier<MqttReceivedMessage> cn = client.subscribe(topic, MqttQos.exactlyOnce).observable;
 
   /// Our known topic to publish to
   final String pubTopic = "Dart/Mqtt_client/testtopic";
