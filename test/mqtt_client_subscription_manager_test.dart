@@ -221,7 +221,9 @@ void main() {
       final PublishingManager pm = new PublishingManager(testCHS);
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
-      cn = subs.registerSubscription(topic, qos);
+      cn = subs
+          .registerSubscription(topic, qos)
+          .observable;
       // Start listening
       st = cn.changes.listen(t1);
       // Publish messages on the topic

@@ -76,15 +76,18 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription
   final String topic = "test/hw";
-  final ChangeNotifier<MqttReceivedMessage> cn =
-  client.listenTo(topic, MqttQos.exactlyOnce);
+  final ChangeNotifier<MqttReceivedMessage> cn = client
+      .subscribe(topic, MqttQos.exactlyOnce)
+      .observable;
 
   /// Our known topic to publish to
   final String pubTopic = "Dart/Mqtt_client/testtopic";
 
   /// Subscribe to it
   final ChangeNotifier<MqttReceivedMessage> cn1 =
-  client.listenTo(pubTopic, MqttQos.exactlyOnce);
+      client
+          .subscribe(pubTopic, MqttQos.exactlyOnce)
+          .observable;
 
   /// We get a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic, one for each topic, these are

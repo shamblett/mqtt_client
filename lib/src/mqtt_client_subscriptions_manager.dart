@@ -25,9 +25,10 @@ class SubscriptionsManager {
   /// Publishing manager used for passing on published messages to subscribers.
   PublishingManager publishingManager;
 
-  /// Observable publish messages received map, indexed by topic
-  Map<String, observe.ChangeNotifier<MqttReceivedMessage>> messagesReceived =
-  new Map<String, observe.ChangeNotifier<MqttReceivedMessage>>();
+  /// Observable change notifiers, indexed by subscription topic
+  Map<SubscriptionTopic,
+      observe.ChangeNotifier<MqttReceivedMessage>> subscriptionNotifiers =
+  new Map<SubscriptionTopic, observe.ChangeNotifier<MqttReceivedMessage>>();
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -45,12 +46,8 @@ class SubscriptionsManager {
   }
 
   /// Registers a new subscription with the subscription manager.
-  observe.ChangeNotifier<MqttReceivedMessage> registerSubscription(String topic,
-      MqttQos qos) {
-    //TODO issue 19 we need to store the whole subscription topic as the key so
-    // we can do a proper match on the publication topic received.
-    observe.ChangeNotifier<MqttReceivedMessage> cn =
-    tryGetExistingSubscription(topic);
+  Subscription registerSubscription(String topic, MqttQos qos) {
+    var cn = tryGetExistingSubscription(topic);
     if (cn == null) {
       cn = createNewSubscription(topic, qos);
     }
@@ -58,22 +55,21 @@ class SubscriptionsManager {
   }
 
   /// Gets a view on the existing observable, if the subscription already exists.
-  observe.ChangeNotifier<MqttReceivedMessage> tryGetExistingSubscription(
-      String topic) {
-    Subscription retSub = subscriptions[topic];
+  Subscription tryGetExistingSubscription(String topic) {
+    final Subscription retSub = subscriptions[topic];
     if (retSub == null) {
       // Search the pending subscriptions
       for (Subscription sub in pendingSubscriptions.values) {
         if (sub.topic.rawTopic == topic) {
-          retSub = sub;
+          return sub;
         }
       }
     }
-    return retSub != null ? retSub.observable : null;
+    return retSub;
   }
 
   /// Creates a new subscription for the specified topic.
-  observe.ChangeNotifier<MqttReceivedMessage> createNewSubscription(
+  Subscription createNewSubscription(
       String topic, MqttQos qos) {
     try {
       final SubscriptionTopic subscriptionTopic = new SubscriptionTopic(topic);
@@ -97,7 +93,7 @@ class SubscriptionsManager {
           .toTopic(sub.topic.rawTopic)
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
-      return sub.observable;
+      return sub;
     } catch (Exception) {
       throw new InvalidTopicException(
           "from SubscriptionManager::createNewSubscription", topic);
@@ -106,21 +102,22 @@ class SubscriptionsManager {
 
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
-    final String topic = event.topic.rawTopic;
-    if (messagesReceived.containsKey(topic)) {
-      final MqttReceivedMessage<MqttMessage> msg =
-      new MqttReceivedMessage<MqttMessage>(topic, event.message);
-      messagesReceived[topic].notifyChange(msg);
-    }
+    final topic = event.topic;
+    subscriptionNotifiers.forEach((subTopic, notifier) {
+      if (subTopic.matches(topic)) {
+        final msg = new MqttReceivedMessage<MqttMessage>(
+            topic.rawTopic, event.message);
+        notifier.notifyChange(msg);
+      }
+    });
   }
 
   /// Creates an observable for a subscription.
   observe.ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
       SubscriptionTopic subscriptionTopic, int msgId) {
-    final String topic = subscriptionTopic.rawTopic;
     final observe.ChangeNotifier<MqttReceivedMessage> cn =
     new observe.ChangeNotifier<MqttReceivedMessage>();
-    messagesReceived[topic] = cn;
+    subscriptionNotifiers[subscriptionTopic] = cn;
     return cn;
   }
 
@@ -166,7 +163,7 @@ class SubscriptionsManager {
     // If we have the subscription remove it
     if (sub != null) {
       subscriptions.remove(subKey);
-      messagesReceived.remove(subKey);
+      subscriptionNotifiers.remove(sub.topic);
     }
     return true;
   }
