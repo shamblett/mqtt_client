@@ -1,3 +1,6 @@
+# 1.9.1
+Issue 22, don't disconnect if we have no connection established
+
 # 1.9.0
 Issue 19, multitopic subscriptions + other more minor updates, API changed on this version.
 
