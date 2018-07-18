@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Ready for linux testing">
+    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/iot_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/iot_core.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -84,7 +84,6 @@
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
-        <option value="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscription.dart" />
@@ -93,6 +92,7 @@
         <option value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
         <option value="$PROJECT_DIR$/example/iot_core.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
+        <option value="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
       </list>
     </option>
   </component>
@@ -458,7 +458,14 @@
       <option name="project" value="LOCAL" />
       <updated>1531898916263</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Ready for linux testing">
+      <created>1531900010699</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1531900010699</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -560,10 +567,10 @@
     <MESSAGE value="Release 1.8.0, pull request 14, will qos setting updates" />
     <MESSAGE value="Example updates" />
     <MESSAGE value="Remerge changes from gokr" />
-    <MESSAGE value="Ready for linux testing" />
     <MESSAGE value="Issue 22, don't disconnect null connections" />
     <MESSAGE value="Code updates for issue 23, needs testing on linux" />
-    <option name="LAST_COMMIT_MESSAGE" value="Code updates for issue 23, needs testing on linux" />
+    <MESSAGE value="Ready for linux testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ready for linux testing" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -911,8 +918,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/mqtt_client_wildcard.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="9" column="46" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
+        <state relative-caret-position="170">
+          <caret line="72" column="13" lean-forward="true" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
           <folding>
             <element signature="e#134#154#0" expanded="true" />
           </folding>
@@ -921,8 +928,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="93" column="83" selection-start-line="93" selection-start-column="83" selection-end-line="93" selection-end-column="83" />
+        <state relative-caret-position="306">
+          <caret line="98" column="14" lean-forward="true" selection-start-line="97" selection-start-column="4" selection-end-line="99" selection-end-column="14" />
           <folding>
             <element signature="e#134#154#0" expanded="true" />
           </folding>

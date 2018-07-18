@@ -95,8 +95,9 @@ Future<int> main() async {
     /// lets not constrain ourselves yet until the package has been in the wild
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
-    print("EXAMPLE::Change notification:: payload is <$pt> for topic <${c[0]
-        .topic}>");
+    print("EXAMPLE::Change notification:: topic is <${c[0]
+        .topic}>, payload is <-- ${pt} -->");
+    print("");
   });
 
   /// Sleep to read the log.....
