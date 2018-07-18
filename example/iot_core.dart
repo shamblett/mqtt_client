@@ -52,7 +52,7 @@ Future<int> main() async {
   // logging if you wish
   client.logging(true);
   // OK, connect, if your encoded JWT token in the password field cannot be decoded by the corresponding public key attached
-  // to the device or the JWT token is incorrect a conenct ack message will be received with a return code of
+  // to the device or the JWT token is incorrect a connect ack message will be received with a return code of
   // 0x05 Connection Refused, not authorized. If the password field is not set at all the return code may be
   // 0x04 Connection Refused, bad user name or password
   await client.connect(username, password);
