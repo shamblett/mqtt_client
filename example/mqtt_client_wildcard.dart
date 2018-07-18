@@ -73,9 +73,11 @@ Future<int> main() async {
     exit(-1);
   }
 
-  /// Ok, lets try a subscription
+  /// Ok, lets try a subscription or two, note these may change/cease to exist on the broker
   final String topic = "test/#"; // Wildcard topic
   client.subscribe(topic, MqttQos.exactlyOnce);
+  final String topic1 = "ebcon/#"; // Wildcard topic
+  client.subscribe(topic1, MqttQos.exactlyOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
