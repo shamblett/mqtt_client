@@ -1,6 +1,6 @@
-# 1.10.0
+# 2.0.0
 Issue 23, all subscriptions  are now on one client level observable, not on seperate ones per
-subscription
+subscription, this change is NOT backwards compatible
 
 # 1.9.1
 Issue 22, don't disconnect if we have no connection established
