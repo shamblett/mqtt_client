@@ -9,7 +9,6 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'mqtt_client_test_connection_handler.dart';
-import 'package:observable/observable.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
 // Mock classes
@@ -185,7 +184,6 @@ void main() {
       int recCount = 0;
       const String topic = "testtopic";
       StreamSubscription st;
-      ChangeNotifier<MqttReceivedMessage> cn;
       // The subscription receive callback
       void subRec(List<MqttReceivedMessage> c) {
         expect(c[0].topic, topic);
@@ -194,38 +192,33 @@ void main() {
         final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
           expect(recMess.variableHeader.messageIdentifier, 1);
-          final String pt = MqttPublishPayload.bytesToStringAsString(
-              recMess.payload.message);
-          expect(
-              pt,
-              "dead");
+          final String pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          expect(pt, "dead");
           print("Change notification:: payload is $pt");
           expect(recMess.header.qos, MqttQos.atLeastOnce);
           recCount++;
         } else {
           expect(recMess.variableHeader.messageIdentifier, 2);
-          final String pt = MqttPublishPayload.bytesToStringAsString(
-              recMess.payload.message);
-          expect(
-              pt,
-              "meat");
+          final String pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          expect(pt, "meat");
           print("Change notification:: payload is $pt");
           expect(recMess.header.qos, MqttQos.atMostOnce);
           //Stop listening
           st.cancel();
         }
       }
+
       // Wrap the callback
       final t1 = expectAsync1(subRec, count: 2);
       testCHS.sentMessages.clear();
       final PublishingManager pm = new PublishingManager(testCHS);
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
-      cn = subs
-          .registerSubscription(topic, qos)
-          .observable;
+      subs.registerSubscription(topic, qos);
       // Start listening
-      st = cn.changes.listen(t1);
+      st = subs.subscriptionNotifier.changes.listen(t1);
       // Publish messages on the topic
       final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
       buff[0] = 'd'.codeUnitAt(0);

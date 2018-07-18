@@ -8,7 +8,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:observable/observable.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -76,23 +75,17 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription
   final String topic = "test/hw"; // Not a wildcard topic
-  final ChangeNotifier<MqttReceivedMessage> cn = client
-      .subscribe(topic, MqttQos.exactlyOnce)
-      .observable;
+  client.subscribe(topic, MqttQos.exactlyOnce);
 
   /// Our known topic to publish to
   final String pubTopic = "Dart/Mqtt_client/testtopic";
 
   /// Subscribe to it
-  final ChangeNotifier<MqttReceivedMessage> cn1 =
-      client
-          .subscribe(pubTopic, MqttQos.exactlyOnce)
-          .observable;
+  client.subscribe(pubTopic, MqttQos.exactlyOnce);
 
-  /// We get a change notifier object(see the Observable class) which we then listen to to get
-  /// notifications of published updates to each subscribed topic, one for each topic, these are
-  /// basically standard Dart streams and can be managed as you wish.
-  cn.changes.listen((List<MqttReceivedMessage> c) {
+  /// The client has a change notifier object(see the Observable class) which we then listen to to get
+  /// notifications of published updates to each subscribed topic.
+  client.updates.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
@@ -103,21 +96,6 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
-  });
-
-  /// Our topic
-  cn1.changes.listen((List<MqttReceivedMessage> c) {
-    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
-    final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
-    /// The above may seem a little convoluted for users only interested in the
-    /// payload, some users however may be interested in the received publish message,
-    /// lets not constrain ourselves yet until the package has been in the wild
-    /// for a while.
-    /// The payload is a byte buffer, this will be specific to the topic
-    print(
-        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$pubTopic>");
   });
 
   /// Sleep to read the log.....

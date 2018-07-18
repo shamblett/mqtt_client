@@ -7,7 +7,6 @@
 
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:observable/observable.dart';
 
 Future<int> main() async {
   // Create and connect the client for websocket usage. The scheme must be ws:// otherwise
@@ -28,11 +27,8 @@ Future<int> main() async {
   }
   // Subscribe to a known topic
   final String topic = "test/hw";
-  final ChangeNotifier<MqttReceivedMessage> cn =
-      client
-          .subscribe(topic, MqttQos.exactlyOnce)
-          .observable;
-  cn.changes.listen((List<MqttReceivedMessage> c) {
+  client.subscribe(topic, MqttQos.exactlyOnce);
+  client.updates.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
     MqttPublishPayload.bytesToStringAsString(recMess.payload.message);

@@ -8,7 +8,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:observable/observable.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -76,13 +75,11 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription
   final String topic = "test/#"; // Wildcard topic
-  final ChangeNotifier<MqttReceivedMessage> cn =
-      client.subscribe(topic, MqttQos.exactlyOnce).observable;
+  client.subscribe(topic, MqttQos.exactlyOnce);
 
-  /// We get a change notifier object(see the Observable class) which we then listen to to get
-  /// notifications of published updates to each subscribed topic, one for each topic, these are
-  /// basically standard Dart streams and can be managed as you wish.
-  cn.changes.listen((List<MqttReceivedMessage> c) {
+  /// The client has a change notifier object(see the Observable class) which we then listen to to get
+  /// notifications of published updates to each subscribed topic.
+  client.updates.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);

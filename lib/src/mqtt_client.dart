@@ -62,7 +62,7 @@ class MqttClient {
   /// Handles everything to do with publication management.
   PublishingManager _publishingManager;
 
-  /// Gets the current conneciton state of the Mqtt Client.
+  /// Gets the current connection state of the Mqtt Client.
   ConnectionState get connectionState =>
       _connectionHandler != null
           ? _connectionHandler.connectionState
@@ -73,6 +73,9 @@ class MqttClient {
 
   /// Client disconnect callback, called on unsolicited disconnect.
   DisconnectCallback onDisconnected;
+
+  /// The change notifier on which all subscribed topic updates are published to
+  Stream<List<MqttReceivedMessage>> updates;
 
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
@@ -115,6 +118,7 @@ class MqttClient {
     _publishingManager = new PublishingManager(_connectionHandler);
     _subscriptionsManager =
     new SubscriptionsManager(_connectionHandler, _publishingManager);
+    updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive =
     new MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
     final connectMessage = _getConnectMessage(username, password);
