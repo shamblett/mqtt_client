@@ -1,3 +1,6 @@
+# 3.0.0
+Update to Dart 2, major version bump only to create a clean break from Dart 1
+
 # 2.0.0
 Issue 23, all subscriptions  are now on one client level observable, not on seperate ones per
 subscription, this change is NOT backwards compatible

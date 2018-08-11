@@ -2,8 +2,269 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mqtt_client.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mqtt_client.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/coverage.json" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/coverage.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/coverage.lcov" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/coverage.lcov" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/encoding/mqtt_client_mqtt_encoding.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_client_identifier_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_connection_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_header_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_message_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_payload_size_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_invalid_topic_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/exception/mqtt_client_noconnection_exception.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_flags.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/connectack/mqtt_client_mqtt_connect_ack_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_message_factory.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/mqtt_client_mqtt_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishack/mqtt_client_mqtt_publish_ack_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishreceived/mqtt_client_mqtt_publish_received_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/publishrelease/mqtt_client_mqtt_publish_release_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribe/mqtt_client_mqtt_subscribe_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_variable_header.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_events.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_message_identifier_dispenser.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_mqtt_received_message.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publication_topic.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_publishing_manager.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscription_topic.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_subscriptions_manager.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/mqtt_client_topic.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/index-sort-f.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/index-sort-f.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/index-sort-l.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/index-sort-l.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_byte_buffer.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_logger.dart.gcov.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.func-sort-c.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.func-sort-c.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.func.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.func.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.gcov.html" beforeDir="false" afterPath="$PROJECT_DIR$/coverage/src/utility/mqtt_client_utilities.dart.gcov.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -12,14 +273,70 @@
     <ignored path="$PROJECT_DIR$/packages/" />
     <ignored path="$PROJECT_DIR$/test/packages/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-963625216">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.22" value="1" />
+          <entry key="project.open.time.28" value="1" />
+          <entry key="project.opened" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="md" value="1" />
+          <entry key="yaml" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Markdown" value="1" />
+          <entry key="YAML" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="yaml" value="93" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="YAML" value="93" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="3" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor>
+                <markdownNavigatorState />
+              </second_editor>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -91,8 +408,8 @@
         <option value="$PROJECT_DIR$/example/iot_core.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
       </list>
     </option>
   </component>
@@ -105,14 +422,19 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
               <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -123,6 +445,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -141,89 +464,67 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Dart Test.tests in mqtt_client">
+  <component name="RunManager" selected="Dart Test.Add int in mqtt_client_base_test.dart">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="Add int in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
       <option name="testName" value="Add int" />
+      <method v="2" />
     </configuration>
     <configuration name="Payload builder in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
       <option name="testName" value="Payload builder" />
+      <method v="2" />
     </configuration>
     <configuration name="tests in mqtt_client" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$" />
       <option name="scope" value="FOLDER" />
+      <method v="2" />
     </configuration>
     <configuration name="tests in mqtt_client_base_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
       <option name="testName" value="mqtt_client_base_test.dart" />
+      <method v="2" />
     </configuration>
     <configuration name="tests in mqtt_client_message_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_message_test.dart" />
       <option name="testName" value="mqtt_client_message_test.dart" />
+      <method v="2" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="SUITE_NAME" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="GROUP_NAME" />
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="OUTPUT_DIRECTORY" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <option name="USE_DEFAULT_REPORTERS" value="false" />
-      <option name="PROPERTIES_FILE" />
       <properties />
       <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <list>
-      <item itemvalue="Dart Test.Payload builder in mqtt_client_base_test.dart" />
       <item itemvalue="Dart Test.Add int in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.Payload builder in mqtt_client_base_test.dart" />
+      <item itemvalue="Dart Test.tests in mqtt_client" />
       <item itemvalue="Dart Test.tests in mqtt_client_base_test.dart" />
       <item itemvalue="Dart Test.tests in mqtt_client_message_test.dart" />
-      <item itemvalue="Dart Test.tests in mqtt_client" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Dart Test.tests in mqtt_client" />
-        <item itemvalue="Dart Test.tests in mqtt_client_message_test.dart" />
-        <item itemvalue="Dart Test.tests in mqtt_client_base_test.dart" />
-        <item itemvalue="Dart Test.Add int in mqtt_client_base_test.dart" />
-        <item itemvalue="Dart Test.Payload builder in mqtt_client_base_test.dart" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -526,37 +827,38 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="0" width="1360" height="738" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
-      <window_info anchor="bottom" id="Messages" order="7" visible="true" weight="0.32864866" />
-      <window_info anchor="right" id="Palette&#9;" order="3" />
-      <window_info id="Image Layers" order="2" />
-      <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5026042" side_tool="true" weight="0.32911393" />
-      <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49739584" weight="0.32864866" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32864866" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32911393" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32911393" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.334375" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34901366" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info id="UI Designer" order="2" />
-      <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39978904" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info id="Nl-Palette" order="2" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Properties" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Nl-Palette" order="6" />
+      <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32864866" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32864866" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39978904" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.49739584" weight="0.32736155" />
+      <window_info anchor="bottom" id="Messages" order="8" visible="true" weight="0.32736155" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32899022" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5026042" side_tool="true" weight="0.32911393" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.32911393" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Properties" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="8" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -590,11 +892,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Release 1.10.0, incorporates issue 23" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <option name="time" value="8" />
-    </breakpoint-manager>
-  </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
       <expression>
@@ -610,13 +907,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="94" selection-start-line="1" selection-start-column="94" selection-end-line="1" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///mnt/dev-1/Development/google/dart/projects/mqtt_client/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" />
     <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart">
       <provider selected="true" editor-type-id="text-editor">
@@ -715,13 +1005,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/event_bus-0.4.1/lib/event_bus.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="46" column="9" selection-start-line="46" selection-start-column="9" selection-end-line="46" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/event_bus-0.4.1/lib/event_bus.dart" />
     <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1305">
@@ -843,13 +1127,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/observable-0.21.0/lib/src/change_notifier.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="24" column="15" selection-start-line="24" selection-start-column="2" selection-end-line="24" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/observable-0.21.0/lib/src/change_notifier.dart" />
     <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
@@ -875,9 +1153,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="578">
           <caret line="39" column="11" selection-start-line="39" selection-start-column="11" selection-end-line="39" selection-end-column="11" />
-          <folding>
-            <element signature="e#134#154#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -885,9 +1160,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="45" selection-start-line="45" selection-end-line="45" />
-          <folding>
-            <element signature="e#134#154#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -895,9 +1167,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
           <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
-          <folding>
-            <element signature="e#133#153#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -919,44 +1188,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="98" column="14" lean-forward="true" selection-start-line="97" selection-start-column="4" selection-end-line="99" selection-end-column="14" />
-          <folding>
-            <element signature="e#134#154#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/mqtt_client_wildcard.dart">
+    <entry file="file://$PROJECT_DIR$/README.md" />
+    <entry file="file://$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
-          <folding>
-            <element signature="e#134#154#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="270">
+          <caret line="18" column="3" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="34">
-            <caret line="2" column="53" selection-start-line="2" selection-start-column="53" selection-end-line="2" selection-end-column="53" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <first_editor />
+          <second_editor>
+            <markdownNavigatorState />
+          </second_editor>
         </state>
       </provider>
     </entry>
