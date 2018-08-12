@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
-import 'package:route/server.dart' show Router;
 
 typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 
