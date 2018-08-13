@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// The MQTT normal(insecure TCP) connection class
 class MqttNormalConnection extends MqttConnection {
-
   /// Default constructor
   MqttNormalConnection();
 
@@ -20,19 +19,19 @@ class MqttNormalConnection extends MqttConnection {
 
   /// Connect - overridden
   Future connect(String server, int port) {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     try {
       // Connect and save the socket.
       Socket.connect(server, port).then((socket) {
         client = socket;
-        readWrapper = new ReadWrapper();
+        readWrapper = ReadWrapper();
         _startListening();
         return completer.complete();
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
           "MqttNormalConnection::The connection to the message broker {$server}:{$port} could not be made.";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     }
     return completer.future;
   }

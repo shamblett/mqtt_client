@@ -13,7 +13,7 @@ class MqttSubscribeAckPayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of Qos grants, Key is the topic, Value is the qos
-  List<MqttQos> qosGrants = new List<MqttQos>();
+  List<MqttQos> qosGrants = List<MqttQos>();
 
   /// Initializes a new instance of the MqttSubscribeAckPayload class.
   MqttSubscribeAckPayload();
@@ -62,7 +62,7 @@ class MqttSubscribeAckPayload extends MqttPayload {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.writeln("Payload: Qos grants [{${qosGrants.length}}]");
     for (MqttQos value in qosGrants) {
       sb.writeln("{{ Grant={$value} }}");

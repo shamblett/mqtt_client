@@ -87,9 +87,10 @@ class MqttClient {
           .trim()
           .length >
           Constants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log("Username length (${username
-            .trim()
-            .length}) exceeds the max recommended in the MQTT spec. ");
+        MqttLogger.log(
+            "Username length (${username
+                .trim()
+                .length}) exceeds the max recommended in the MQTT spec. ");
       }
     }
     if (password != null &&
@@ -97,11 +98,12 @@ class MqttClient {
             .trim()
             .length >
             Constants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log("Password length (${ password
-          .trim()
-          .length}) exceeds the max recommended in the MQTT spec. ");
+      MqttLogger.log(
+          "Password length (${password
+              .trim()
+              .length}) exceeds the max recommended in the MQTT spec. ");
     }
-    _connectionHandler = new SynchronousMqttConnectionHandler();
+    _connectionHandler = SynchronousMqttConnectionHandler();
     if (useWebSocket) {
       _connectionHandler.secure = false;
       _connectionHandler.useWebSocket = true;
@@ -115,12 +117,11 @@ class MqttClient {
       _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
     }
     _connectionHandler.onDisconnected = onDisconnected;
-    _publishingManager = new PublishingManager(_connectionHandler);
+    _publishingManager = PublishingManager(_connectionHandler);
     _subscriptionsManager =
-    new SubscriptionsManager(_connectionHandler, _publishingManager);
+        SubscriptionsManager(_connectionHandler, _publishingManager);
     updates = _subscriptionsManager.subscriptionNotifier.changes;
-    _keepAlive =
-    new MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
+    _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
     final connectMessage = _getConnectMessage(username, password);
     return await _connectionHandler.connect(
         this.server, this.port, connectMessage);
@@ -130,7 +131,7 @@ class MqttClient {
   ///  Returns an MqttConnectMessage that can be used to connect to a message broker
   MqttConnectMessage _getConnectMessage(String username, String password) {
     if (connectionMessage == null) {
-      connectionMessage = new MqttConnectMessage()
+      connectionMessage = MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
       // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
@@ -148,7 +149,7 @@ class MqttClient {
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
   Subscription subscribe(String topic, MqttQos qosLevel) {
     if (connectionState != ConnectionState.connected) {
-      throw new ConnectionException(_connectionHandler.connectionState);
+      throw ConnectionException(_connectionHandler.connectionState);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
   }
@@ -160,14 +161,14 @@ class MqttClient {
       typed.Uint8Buffer data,
       [bool retain = false]) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
-      throw new ConnectionException(_connectionHandler.connectionState);
+      throw ConnectionException(_connectionHandler.connectionState);
     }
     try {
-      final PublicationTopic pubTopic = new PublicationTopic(topic);
+      final PublicationTopic pubTopic = PublicationTopic(topic);
       return _publishingManager.publish(
           pubTopic, qualityOfService, data, retain);
     } catch (Exception) {
-      throw new InvalidTopicException(Exception.toString(), topic);
+      throw InvalidTopicException(Exception.toString(), topic);
     }
   }
 

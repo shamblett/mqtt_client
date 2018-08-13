@@ -11,13 +11,13 @@ part of mqtt_client;
 class SubscriptionsManager {
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
-  new MessageIdentifierDispenser();
+  MessageIdentifierDispenser();
 
   /// List of confirmed subscriptions, keyed on the topic name.
-  Map<String, Subscription> subscriptions = new Map<String, Subscription>();
+  Map<String, Subscription> subscriptions = Map<String, Subscription>();
 
   /// A list of subscriptions that are pending acknowledgement, keyed on the message identifier.
-  Map<int, Subscription> pendingSubscriptions = new Map<int, Subscription>();
+  Map<int, Subscription> pendingSubscriptions = Map<int, Subscription>();
 
   /// The connection handler that we use to subscribe to subscription acknowledgements.
   IMqttConnectionHandler connectionHandler;
@@ -42,7 +42,7 @@ class SubscriptionsManager {
 
   /// Observable change notifier for all subscribed topics
   final observe.ChangeNotifier<MqttReceivedMessage> _subscriptionNotifier =
-  new observe.ChangeNotifier<MqttReceivedMessage>();
+  observe.ChangeNotifier<MqttReceivedMessage>();
 
   observe.ChangeNotifier<MqttReceivedMessage> get subscriptionNotifier =>
       _subscriptionNotifier;
@@ -73,25 +73,25 @@ class SubscriptionsManager {
   /// Creates a new subscription for the specified topic.
   Subscription createNewSubscription(String topic, MqttQos qos) {
     try {
-      final SubscriptionTopic subscriptionTopic = new SubscriptionTopic(topic);
+      final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
       final int msgId =
       messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
-      final Subscription sub = new Subscription();
+      final Subscription sub = Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
       sub.messageIdentifier = msgId;
-      sub.createdTime = new DateTime.now();
+      sub.createdTime = DateTime.now();
       pendingSubscriptions[sub.messageIdentifier] = sub;
       // Build a subscribe message for the caller and send it off to the broker.
-      final MqttSubscribeMessage msg = new MqttSubscribeMessage()
+      final MqttSubscribeMessage msg = MqttSubscribeMessage()
           .withMessageIdentifier(sub.messageIdentifier)
           .toTopic(sub.topic.rawTopic)
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
       return sub;
     } catch (Exception) {
-      throw new InvalidTopicException(
+      throw InvalidTopicException(
           "from SubscriptionManager::createNewSubscription", topic);
     }
   }
@@ -99,14 +99,13 @@ class SubscriptionsManager {
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
     final topic = event.topic;
-    final msg =
-    new MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
+    final msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
     subscriptionNotifier.notifyChange(msg);
   }
 
   /// Unsubscribe from a topic
   void unsubscribe(String topic) {
-    final MqttUnsubscribeMessage unsubscribeMsg = new MqttUnsubscribeMessage()
+    final MqttUnsubscribeMessage unsubscribeMsg = MqttUnsubscribeMessage()
         .withMessageIdentifier(messageIdentifierDispenser
         .getNextMessageIdentifier("unsubscriptions"))
         .fromTopic(topic);

@@ -19,7 +19,7 @@ class MqttWsConnection extends MqttConnection {
 
   /// Connect - overridden
   Future connect(String server, int port) {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     // Add the port if present
     Uri uri;
     try {
@@ -27,12 +27,12 @@ class MqttWsConnection extends MqttConnection {
     } catch (FormatException) {
       final String message =
           "MqttWsConnection::The URI supplied for the WS connection is not valid - $server";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     }
     if (uri.scheme != "ws") {
       final String message =
           "MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $server";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     }
     if (port != null) {
       uri = uri.replace(port: port);
@@ -43,14 +43,14 @@ class MqttWsConnection extends MqttConnection {
       // Connect and save the socket.
       WebSocket.connect(uriString).then((socket) {
         client = socket;
-        readWrapper = new ReadWrapper();
+        readWrapper = ReadWrapper();
         _startListening();
         return completer.complete();
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
           "MqttWsConnection::The connection to the message broker {$uriString} could not be made.";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     }
     return completer.future;
   }

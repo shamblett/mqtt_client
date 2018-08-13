@@ -12,9 +12,9 @@ class MqttConnectMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectMessage class.
   /// Only called via the MqttMessage.create operation during processing of an Mqtt message stream.
   MqttConnectMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.connect);
-    this.variableHeader = new MqttConnectVariableHeader();
-    this.payload = new MqttConnectPayload(this.variableHeader);
+    this.header = MqttHeader().asType(MqttMessageType.connect);
+    this.variableHeader = MqttConnectVariableHeader();
+    this.payload = MqttConnectPayload(this.variableHeader);
   }
 
   ///  Initializes a new instance of the <see cref="MqttConnectMessage" /> class.
@@ -117,13 +117,13 @@ class MqttConnectMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     this.variableHeader =
-    new MqttConnectVariableHeader.fromByteBuffer(messageStream);
-    this.payload = new MqttConnectPayload.fromByteBuffer(
-        this.variableHeader, messageStream);
+        MqttConnectVariableHeader.fromByteBuffer(messageStream);
+    this.payload =
+        MqttConnectPayload.fromByteBuffer(this.variableHeader, messageStream);
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

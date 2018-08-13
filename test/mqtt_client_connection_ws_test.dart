@@ -24,7 +24,7 @@ bool skipIfTravis() {
 
 void main() {
   // Test wide variables
-  final MockBrokerWs brokerWs = new MockBrokerWs();
+  final MockBrokerWs brokerWs = MockBrokerWs();
   final String mockBrokerAddressWs = "ws://localhost/ws";
   final String mockBrokerAddressWsNoScheme = "localhost.com";
   final String mockBrokerAddressWsBad = "://localhost.com";
@@ -35,10 +35,10 @@ void main() {
     test("Invalid URL", () async {
       try {
         final SynchronousMqttConnectionHandler ch =
-        new SynchronousMqttConnectionHandler();
+        SynchronousMqttConnectionHandler();
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+            MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
         expect(e is NoConnectionException, true);
         expect(
@@ -51,10 +51,10 @@ void main() {
     test("Invalid URL - bad scheme", () async {
       try {
         final SynchronousMqttConnectionHandler ch =
-        new SynchronousMqttConnectionHandler();
+        SynchronousMqttConnectionHandler();
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+            MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
         expect(e is NoConnectionException, true);
         expect(
@@ -70,14 +70,14 @@ void main() {
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
-        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+        final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         brokerWs.sendMessage(ack);
       }
 
       void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
-        final MqttByteBuffer headerStream = new MqttByteBuffer(messageArrived);
-        final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
+        final MqttByteBuffer headerStream = MqttByteBuffer(messageArrived);
+        final MqttHeader header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
           print(
               "WS Connection Keep Alive - Successful response - Ping Request received $expectRequest");
@@ -88,21 +88,21 @@ void main() {
 
       await brokerWs.start();
       final SynchronousMqttConnectionHandler ch =
-      new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       ch.useWebSocket = true;
       brokerWs.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,
-          new MqttConnectMessage().withClientIdentifier(testClientId));
+          MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
       brokerWs.setMessageHandler(messageHandlerPingRequest);
-      final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
+      final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
           "WS Connection Keep Alive - Successful response - keepealive ms is ${ka
               .keepAlivePeriod}");
       print(
           "WS Connection Keep Alive - Successful response - ping timer active is ${ka
               .pingTimer.isActive.toString()}");
-      final Stopwatch stopwatch = new Stopwatch()
+      final Stopwatch stopwatch = Stopwatch()
         ..start();
       await MqttUtilities.asyncSleep(10);
       print("WS Connection Keep Alive - Successful response - Elapsed time "

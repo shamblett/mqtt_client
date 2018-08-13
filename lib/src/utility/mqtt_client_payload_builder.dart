@@ -12,7 +12,7 @@ class MqttClientPayloadBuilder {
   typed.Uint8Buffer _payload;
 
   MqttClientPayloadBuilder() {
-    _payload = new typed.Uint8Buffer();
+    _payload = typed.Uint8Buffer();
   }
 
   typed.Uint8Buffer get payload => _payload;
@@ -36,19 +36,19 @@ class MqttClientPayloadBuilder {
 
   /// Add a halfword, 16 bits, this will overflow on values > 2**16-1
   void addHalf(int val) {
-    final Uint16List tmp = new Uint16List.fromList([val]);
+    final Uint16List tmp = Uint16List.fromList([val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
 
   /// Add a word, 32 bits, this will overflow on values > 2**32-1
   void addWord(int val) {
-    final Uint32List tmp = new Uint32List.fromList([val]);
+    final Uint32List tmp = Uint32List.fromList([val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
 
   /// Add a long word, 64 bits or a Dart int
   void addInt(int val) {
-    final Uint64List tmp = new Uint64List.fromList([val]);
+    final Uint64List tmp = Uint64List.fromList([val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
 
@@ -65,13 +65,13 @@ class MqttClientPayloadBuilder {
 
   /// Add a 32 bit double
   void addHalfDouble(double val) {
-    final Float32List tmp = new Float32List.fromList([val]);
+    final Float32List tmp = Float32List.fromList([val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
 
   /// Add a 64 bit double
   void addDouble(double val) {
-    final Float64List tmp = new Float64List.fromList([val]);
+    final Float64List tmp = Float64List.fromList([val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
 }

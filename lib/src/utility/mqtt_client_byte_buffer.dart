@@ -25,7 +25,7 @@ class MqttByteBuffer {
   }
 
   MqttByteBuffer.fromList(List<int> data) {
-    this._buffer = new typed.Uint8Buffer();
+    this._buffer = typed.Uint8Buffer();
     this._buffer.addAll(data);
     _length = _buffer.length;
   }
@@ -66,14 +66,14 @@ class MqttByteBuffer {
   /// buffer and advances the position within the buffer by the number of bytes read.
   typed.Uint8Buffer read(int count) {
     if ((_length < count) || (_position + count) > _length) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation "
               "length $_length, count $count, position $_position");
     }
-    final typed.Uint8Buffer tmp = new typed.Uint8Buffer();
+    final typed.Uint8Buffer tmp = typed.Uint8Buffer();
     tmp.addAll(_buffer.getRange(_position, _position + count));
     _position += count;
-    final typed.Uint8Buffer tmp2 = new typed.Uint8Buffer();
+    final typed.Uint8Buffer tmp2 = typed.Uint8Buffer();
     tmp2.addAll(tmp);
     return tmp2;
   }
@@ -128,7 +128,7 @@ class MqttByteBuffer {
   /// stringToWrite - The string to write.
   static void writeMqttString(MqttByteBuffer stringStream,
       String stringToWrite) {
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);
   }
@@ -142,7 +142,7 @@ class MqttByteBuffer {
   static String readMqttString(MqttByteBuffer buffer) {
     // Read and check the length
     final typed.Uint8Buffer lengthBytes = buffer.read(2);
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     final int stringLength = enc.getCharCount(lengthBytes);
     final typed.Uint8Buffer stringBuff = buffer.read(stringLength);
     return enc.getString(stringBuff);

@@ -14,8 +14,8 @@ class MqttPublishReceivedMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
   MqttPublishReceivedMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.publishReceived);
-    this.variableHeader = new MqttPublishReceivedVariableHeader();
+    this.header = MqttHeader().asType(MqttMessageType.publishReceived);
+    this.variableHeader = MqttPublishReceivedVariableHeader();
   }
 
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
@@ -23,7 +23,7 @@ class MqttPublishReceivedMessage extends MqttMessage {
       MqttByteBuffer messageStream) {
     this.header = header;
     this.variableHeader =
-    new MqttPublishReceivedVariableHeader.fromByteBuffer(messageStream);
+        MqttPublishReceivedVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
@@ -39,7 +39,7 @@ class MqttPublishReceivedMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

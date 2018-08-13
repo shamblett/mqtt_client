@@ -17,9 +17,9 @@ class MqttPublishMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishMessage class.
   MqttPublishMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.publish);
-    this.variableHeader = new MqttPublishVariableHeader(this.header);
-    this.payload = new MqttPublishPayload();
+    this.header = MqttHeader().asType(MqttMessageType.publish);
+    this.variableHeader = MqttPublishVariableHeader(this.header);
+    this.payload = MqttPublishPayload();
   }
 
   /// Initializes a new instance of the MqttPublishMessage class.
@@ -32,9 +32,9 @@ class MqttPublishMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     super.readFrom(messageStream);
-    this.variableHeader = new MqttPublishVariableHeader.fromByteBuffer(
-        this.header, messageStream);
-    this.payload = new MqttPublishPayload.fromByteBuffer(
+    this.variableHeader =
+        MqttPublishVariableHeader.fromByteBuffer(this.header, messageStream);
+    this.payload = MqttPublishPayload.fromByteBuffer(
         this.header, this.variableHeader, messageStream);
   }
 
@@ -85,7 +85,7 @@ class MqttPublishMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

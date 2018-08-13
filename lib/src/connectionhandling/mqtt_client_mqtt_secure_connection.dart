@@ -32,7 +32,7 @@ class MqttSecureConnection extends MqttConnection {
 
   /// Connect - overridden
   Future connect(String server, int port) {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     MqttLogger.log("MqttSecureConnection::connect");
     try {
       // Connect and save the socket.
@@ -62,7 +62,7 @@ class MqttSecureConnection extends MqttConnection {
       SecureSocket.connect(server, port).then((SecureSocket socket) {
         MqttLogger.log("MqttSecureConnection::connect - securing socket");
         client = socket;
-        readWrapper = new ReadWrapper();
+        readWrapper = ReadWrapper();
         MqttLogger.log("MqttSecureConnection::connect - start listening");
         _startListening();
         return completer.complete();
@@ -71,12 +71,12 @@ class MqttSecureConnection extends MqttConnection {
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e
           .toString()}";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     } on HandshakeException catch (e) {
       final String message =
           "MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e
           .toString()}";
-      throw new NoConnectionException(message);
+      throw NoConnectionException(message);
     }
     return completer.future;
   }

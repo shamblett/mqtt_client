@@ -12,12 +12,12 @@ class MqttUtilities {
   /// Sleep function that allows asynchronous activity to continue.
   /// Time units are seconds
   static Future asyncSleep(int seconds) {
-    return new Future.delayed(new Duration(seconds: seconds));
+    return Future.delayed(Duration(seconds: seconds));
   }
 
   /// Sleep function that block asynchronous activity.
   /// Time units are seconds
   static void syncSleep(int seconds) {
-    sleep(new Duration(seconds: seconds));
+    sleep(Duration(seconds: seconds));
   }
 }

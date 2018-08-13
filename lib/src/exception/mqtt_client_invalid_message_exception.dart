@@ -12,8 +12,7 @@ class InvalidMessageException implements Exception {
   String _message;
 
   InvalidMessageException(String text) {
-    _message =
-    "mqtt-client::InvalidMessageException: $text";
+    _message = "mqtt-client::InvalidMessageException: $text";
   }
 
   @override

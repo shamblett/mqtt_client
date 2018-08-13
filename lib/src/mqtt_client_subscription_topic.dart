@@ -29,7 +29,7 @@ class SubscriptionTopic extends Topic {
             fragment.contains(Topic.wildcard)) &&
             fragment.length > 1);
     if (invalidFragment) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::SubscriptionTopic: rawTopic Fragment contains a wildcard but is more than one character long");
     }
   }
@@ -38,13 +38,13 @@ class SubscriptionTopic extends Topic {
   static void _validateMultiWildcard(Topic topicInstance) {
     if (topicInstance.rawTopic.contains(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::SubscriptionTopic: The rawTopic wildcard # can only be present at the end of a topic");
     }
     if (topicInstance.rawTopic.length > 1 &&
         topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must "
               "be immediately preceeded by a the rawTopic separator /");
     }

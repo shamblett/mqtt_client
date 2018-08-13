@@ -14,8 +14,8 @@ class MqttPublishCompleteMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.publishComplete);
-    this.variableHeader = new MqttPublishCompleteVariableHeader();
+    this.header = MqttHeader().asType(MqttMessageType.publishComplete);
+    this.variableHeader = MqttPublishCompleteVariableHeader();
   }
 
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
@@ -23,7 +23,7 @@ class MqttPublishCompleteMessage extends MqttMessage {
       MqttByteBuffer messageStream) {
     this.header = header;
     this.variableHeader =
-    new MqttPublishCompleteVariableHeader.fromByteBuffer(messageStream);
+        MqttPublishCompleteVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
@@ -39,7 +39,7 @@ class MqttPublishCompleteMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

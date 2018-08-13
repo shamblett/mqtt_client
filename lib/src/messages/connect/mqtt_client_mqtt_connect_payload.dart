@@ -27,7 +27,7 @@ class MqttConnectPayload extends MqttPayload {
 
   set clientIdentifier(String id) {
     if (id.length > Constants.maxClientIdentifierLength) {
-      throw new ClientIdentifierException(id);
+      throw ClientIdentifierException(id);
     }
     if (id.length > Constants.maxClientIdentifierLengthSpec) {
       MqttLogger.log(
@@ -37,7 +37,7 @@ class MqttConnectPayload extends MqttPayload {
     _clientIdentifier = id;
   }
 
-  MqttConnectVariableHeader variableHeader = new MqttConnectVariableHeader();
+  MqttConnectVariableHeader variableHeader = MqttConnectVariableHeader();
   String _username;
 
   String get username => _username;
@@ -83,7 +83,7 @@ class MqttConnectPayload extends MqttPayload {
 
   int getWriteLength() {
     int length = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     length += enc.getByteCount(clientIdentifier);
     if (this.variableHeader.connectFlags.willFlag) {
       length += enc.getByteCount(willTopic);

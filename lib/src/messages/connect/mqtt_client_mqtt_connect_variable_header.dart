@@ -35,7 +35,7 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   /// Gets the length of the write data when WriteTo will be called.
   int getWriteLength() {
     int headerLength = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     headerLength += enc.getByteCount(protocolName);
     headerLength += 1; // protocolVersion
     headerLength += MqttConnectFlags.getWriteLength();

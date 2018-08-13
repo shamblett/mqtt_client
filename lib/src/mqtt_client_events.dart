@@ -32,6 +32,4 @@ class MessageReceived {
   PublicationTopic _topic;
 
   PublicationTopic get topic => _topic;
-
-
 }

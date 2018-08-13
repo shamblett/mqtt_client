@@ -41,7 +41,7 @@ class MqttVariableHeader {
   MqttVariableHeader() {
     this.protocolName = Protocol.name;
     this.protocolVersion = Protocol.version;
-    this.connectFlags = new MqttConnectFlags();
+    this.connectFlags = MqttConnectFlags();
   }
 
   /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
@@ -79,7 +79,7 @@ class MqttVariableHeader {
   /// A subclass that overrides writeTo must also overwrite this method.
   int getWriteLength() {
     int headerLength = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     headerLength += enc.getByteCount(protocolName);
     headerLength += 1; // protocolVersion
     headerLength += MqttConnectFlags.getWriteLength();
@@ -153,7 +153,7 @@ class MqttVariableHeader {
   }
 
   void readConnectFlags(MqttByteBuffer stream) {
-    connectFlags = new MqttConnectFlags.fromByteBuffer(stream);
+    connectFlags = MqttConnectFlags.fromByteBuffer(stream);
     length += 1;
   }
 }

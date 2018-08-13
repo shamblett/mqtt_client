@@ -15,22 +15,20 @@ class MockCH extends Mock implements MqttConnectionHandler {}
 
 class MockCON extends Mock implements MqttNormalConnection {}
 
-final TestConnectionHandlerNoSend testCHNS = new TestConnectionHandlerNoSend();
-final TestConnectionHandlerSend testCHS = new TestConnectionHandlerSend();
+final TestConnectionHandlerNoSend testCHNS = TestConnectionHandlerNoSend();
+final TestConnectionHandlerSend testCHS = TestConnectionHandlerSend();
 
 void main() {
   group("Message Identifier", () {
     test("Numbering starts at 1", () {
-      final MessageIdentifierDispenser dispenser =
-      new MessageIdentifierDispenser();
+      final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       expect(
           dispenser
               .getNextMessageIdentifier("0374a85e-6aeb-4c5a-b7df-afece971c501"),
           1);
     });
     test("Numbering increments by 1", () {
-      final MessageIdentifierDispenser dispenser =
-      new MessageIdentifierDispenser();
+      final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       final int first =
       dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic");
       final int second =
@@ -38,8 +36,7 @@ void main() {
       expect(second, first + 1);
     });
     test("Numbering overflows back to 1", () {
-      final MessageIdentifierDispenser dispenser =
-      new MessageIdentifierDispenser();
+      final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       for (int i = 0;
       i < MessageIdentifierDispenser.maxMessageIdentifier - 1;
       i = dispenser
@@ -53,10 +50,10 @@ void main() {
 
   group("Message registration", () {
     // Group wide
-    final MockCON con = new MockCON();
+    final MockCON con = MockCON();
     var message;
     when(con.send(message)).thenReturn(() => print(message?.toString()));
-    final MockCH ch = new MockCH();
+    final MockCH ch = MockCH();
     testCHNS.connection = con;
     ch.connection = con;
     MessageCallbackFunction cbFunc;
@@ -111,14 +108,14 @@ void main() {
   group("Publishing", () {
     test("Publish at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff, true);
+          PublicationTopic("A/rawTopic"), MqttQos.atMostOnce, buff, true);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
       final MqttPublishMessage pubMess =
@@ -134,14 +131,14 @@ void main() {
 
     test("Publish at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.atLeastOnce, buff);
+      final int msgId =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.atLeastOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final MqttPublishMessage pubMess = pm.publishedMessages[1];
@@ -155,14 +152,14 @@ void main() {
     });
     test("Publish at exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
+      final int msgId =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final MqttPublishMessage pubMess = pm.publishedMessages[1];
@@ -175,63 +172,63 @@ void main() {
     });
     test("Publish consecutive topics", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final int msgId1 = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
-      final int msgId2 = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
+      final int msgId1 =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
+      final int msgId2 =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
       expect(msgId2, msgId1 + 1);
     });
     test("Publish at least once and ack", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.atLeastOnce, buff);
+      final int msgId =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.atLeastOnce, buff);
       expect(msgId, 1);
       pm.handlePublishAcknowledgement(
-          new MqttPublishAckMessage().withMessageIdentifier(msgId));
+          MqttPublishAckMessage().withMessageIdentifier(msgId));
       expect(pm.publishedMessages.containsKey(1), isFalse);
     });
     test("Publish exactly once, release and complete", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(4);
+      final PublishingManager pm = PublishingManager(testCHS);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final int msgId = pm.publish(
-          new PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
+      final int msgId =
+      pm.publish(PublicationTopic("A/rawTopic"), MqttQos.exactlyOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       pm.handlePublishReceived(
-          new MqttPublishReceivedMessage().withMessageIdentifier(msgId));
+          MqttPublishReceivedMessage().withMessageIdentifier(msgId));
       final MqttPublishReleaseMessage pubMessRel =
       testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel.variableHeader.messageIdentifier, msgId);
       pm.handlePublishComplete(
-          new MqttPublishCompleteMessage().withMessageIdentifier(msgId));
+          MqttPublishCompleteMessage().withMessageIdentifier(msgId));
       expect(pm.publishedMessages, isEmpty);
     });
     test("Publish recieved at most once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
+      final PublishingManager pm = PublishingManager(testCHS);
       final int msgId = 1;
-      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
       data[1] = 1;
       data[2] = 2;
-      final MqttPublishMessage pubMess = new MqttPublishMessage()
+      final MqttPublishMessage pubMess = MqttPublishMessage()
           .withMessageIdentifier(msgId)
           .toTopic("A/rawTopic")
           .withQos(MqttQos.atMostOnce)
@@ -242,13 +239,13 @@ void main() {
     });
     test("Publish recieved at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
+      final PublishingManager pm = PublishingManager(testCHS);
       final int msgId = 1;
-      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
       data[1] = 1;
       data[2] = 2;
-      final MqttPublishMessage pubMess = new MqttPublishMessage()
+      final MqttPublishMessage pubMess = MqttPublishMessage()
           .withMessageIdentifier(msgId)
           .toTopic("A/rawTopic")
           .withQos(MqttQos.atLeastOnce)
@@ -260,13 +257,13 @@ void main() {
     });
     test("Publish recieved exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
+      final PublishingManager pm = PublishingManager(testCHS);
       final int msgId = 1;
-      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
       data[1] = 1;
       data[2] = 2;
-      final MqttPublishMessage pubMess = new MqttPublishMessage()
+      final MqttPublishMessage pubMess = MqttPublishMessage()
           .withMessageIdentifier(msgId)
           .toTopic("A/rawTopic")
           .withQos(MqttQos.exactlyOnce)
@@ -278,13 +275,13 @@ void main() {
     });
     test("Release recieved exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = new PublishingManager(testCHS);
+      final PublishingManager pm = PublishingManager(testCHS);
       final int msgId = 1;
-      final typed.Uint8Buffer data = new typed.Uint8Buffer(3);
+      final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
       data[1] = 1;
       data[2] = 2;
-      final MqttPublishMessage pubMess = new MqttPublishMessage()
+      final MqttPublishMessage pubMess = MqttPublishMessage()
           .withMessageIdentifier(msgId)
           .toTopic("A/rawTopic")
           .withQos(MqttQos.exactlyOnce)
@@ -294,7 +291,7 @@ void main() {
       expect(testCHS.sentMessages[0].header.messageType,
           MqttMessageType.publishReceived);
       final MqttPublishReleaseMessage relMess =
-      new MqttPublishReleaseMessage().withMessageIdentifier(msgId);
+      MqttPublishReleaseMessage().withMessageIdentifier(msgId);
       pm.handlePublishRelease(relMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages[1].header.messageType,

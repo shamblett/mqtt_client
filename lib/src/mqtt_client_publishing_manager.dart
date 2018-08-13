@@ -33,22 +33,21 @@ part of mqtt_client;
 ///         Sender --> Publish --> Receiver --> PublishReceived --> Sender --> PublishRelease --> Reciever --> PublishComplete --> Sender
 ///                                                                                                   | v
 ///                                                                                            Message Processor
-class PublishingManager
-    implements IPublishingManager {
+class PublishingManager implements IPublishingManager {
   /// Handles dispensing of message ids for messages published to a topic.
   MessageIdentifierDispenser messageIdentifierDispenser =
-  new MessageIdentifierDispenser();
+  MessageIdentifierDispenser();
 
   /// Stores messages that have been pubished but not yet acknowledged.
   Map<int, MqttPublishMessage> publishedMessages =
-  new Map<int, MqttPublishMessage>();
+  Map<int, MqttPublishMessage>();
 
   /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
   Map<int, MqttPublishMessage> receivedMessages =
-  new Map<int, MqttPublishMessage>();
+  Map<int, MqttPublishMessage>();
 
   /// Stores a cache of data converters used when publishing data to a broker.
-  Map<Type, Object> dataConverters = new Map<Type, Object>();
+  Map<Type, Object> dataConverters = Map<Type, Object>();
 
   /// The current connection handler.
   IMqttConnectionHandler connectionHandler;
@@ -81,7 +80,7 @@ class PublishingManager
       [bool retain = false]) {
     final int msgId = messageIdentifierDispenser
         .getNextMessageIdentifier("topic:{$topic.toString()}");
-    final MqttPublishMessage msg = new MqttPublishMessage()
+    final MqttPublishMessage msg = MqttPublishMessage()
         .toTopic(topic.toString())
         .withMessageIdentifier(msgId)
         .withQos(qualityOfService)
@@ -115,16 +114,16 @@ class PublishingManager
     bool publishSuccess = true;
     try {
       final PublicationTopic topic =
-      new PublicationTopic(pubMsg.variableHeader.topicName);
+      PublicationTopic(pubMsg.variableHeader.topicName);
       if (pubMsg.header.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
-        clientEventBus.fire(new MessageReceived(topic, msg));
+        clientEventBus.fire(MessageReceived(topic, msg));
       } else if (pubMsg.header.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 require an acknowledgement
         // Send the message for processing to whoever is waiting.
-        clientEventBus.fire(new MessageReceived(topic, msg));
-        final MqttPublishAckMessage ackMsg = new MqttPublishAckMessage()
+        clientEventBus.fire(MessageReceived(topic, msg));
+        final MqttPublishAckMessage ackMsg = MqttPublishAckMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(ackMsg);
       } else if (pubMsg.header.qos == MqttQos.exactlyOnce) {
@@ -136,8 +135,7 @@ class PublishingManager
             .containsKey(pubMsg.variableHeader.messageIdentifier)) {
           receivedMessages[pubMsg.variableHeader.messageIdentifier] = pubMsg;
         }
-        final MqttPublishReceivedMessage pubRecv =
-        new MqttPublishReceivedMessage()
+        final MqttPublishReceivedMessage pubRecv = MqttPublishReceivedMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(pubRecv);
       }
@@ -158,10 +156,9 @@ class PublishingManager
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
         final PublicationTopic topic =
-        new PublicationTopic(pubMsg.variableHeader.topicName);
-        clientEventBus.fire(new MessageReceived(topic, pubMsg));
-        final MqttPublishCompleteMessage compMsg =
-        new MqttPublishCompleteMessage()
+        PublicationTopic(pubMsg.variableHeader.topicName);
+        clientEventBus.fire(MessageReceived(topic, pubMsg));
+        final MqttPublishCompleteMessage compMsg = MqttPublishCompleteMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(compMsg);
       }
@@ -192,7 +189,7 @@ class PublishingManager
     // If we've got a matching message, respond with a "ok release it for processing"
     if (publishedMessages
         .containsKey(recvMsg.variableHeader.messageIdentifier)) {
-      final MqttPublishReleaseMessage relMsg = new MqttPublishReleaseMessage()
+      final MqttPublishReleaseMessage relMsg = MqttPublishReleaseMessage()
           .withMessageIdentifier(recvMsg.variableHeader.messageIdentifier);
       connectionHandler.sendMessage(relMsg);
     }

@@ -18,7 +18,7 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
   MqttConnectionKeepAlive ka;
 
   MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
-    ka = new MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
+    ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
 }
 
@@ -36,7 +36,7 @@ bool skipIfTravis() {
 
 void main() {
   // Test wide variables
-  final MockBroker broker = new MockBroker();
+  final MockBroker broker = MockBroker();
   final String mockBrokerAddress = "localhost";
   final int mockBrokerPort = 1883;
   final String testClientId = "syncMqttTests";
@@ -45,23 +45,23 @@ void main() {
 
   group("Connection Keep Alive - Mock tests", () {
     // Group setup
-    final MockCH ch = new MockCH();
-    final MockKA ka = new MockKA(ch, 3);
+    final MockCH ch = MockCH();
+    final MockKA ka = MockKA(ch, 3);
     test("Message sent", () {
-      final MqttMessage msg = new MqttPingRequestMessage();
+      final MqttMessage msg = MqttPingRequestMessage();
       when(ka.messageSent(msg)).thenReturn(ka.ka.messageSent(msg));
       expect(ka.messageSent(msg), isTrue);
       verify(ka.messageSent(msg));
     });
     test("Ping response received", () {
-      final MqttMessage msg = new MqttPingResponseMessage();
+      final MqttMessage msg = MqttPingResponseMessage();
       when(ka.pingResponseReceived(msg))
           .thenReturn(ka.ka.pingResponseReceived(msg));
       expect(ka.pingResponseReceived(msg), isTrue);
       verify(ka.pingResponseReceived(msg));
     });
     test("Ping request received", () {
-      final MqttMessage msg = new MqttPingRequestMessage();
+      final MqttMessage msg = MqttPingRequestMessage();
       when(ka.pingRequestReceived(msg))
           .thenReturn(ka.ka.pingRequestReceived(msg));
       expect(ka.pingRequestReceived(msg), isTrue);
@@ -80,46 +80,46 @@ void main() {
   group("Synchronous MqttConnectionHandler", () {
     test("Connect to bad host name", () {
       final SynchronousMqttConnectionHandler ch =
-          new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(nonExistantHostName, mockBrokerPort,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+            MqttConnectMessage().withClientIdentifier(testClientId));
         expect(ch.connectionState, ConnectionState.disconnected);
       });
       t1();
     });
     test("Connect invalid port", () {
       final SynchronousMqttConnectionHandler ch =
-          new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, badPort,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+            MqttConnectMessage().withClientIdentifier(testClientId));
         expect(ch.connectionState, ConnectionState.disconnected);
       });
       t1();
     });
     test("Connect no connect ack", () {
       final SynchronousMqttConnectionHandler ch =
-          new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, mockBrokerPort,
-            new MqttConnectMessage().withClientIdentifier(testClientId));
+            MqttConnectMessage().withClientIdentifier(testClientId));
       });
       t1();
     });
     test("Successful response and disconnect", () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
-        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+        final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
 
       final SynchronousMqttConnectionHandler ch =
-          new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandler);
       await broker.start();
       await ch.connect(mockBrokerAddress, mockBrokerPort,
-          new MqttConnectMessage().withClientIdentifier(testClientId));
+          MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
@@ -132,14 +132,14 @@ void main() {
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
-        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+        final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
 
       void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
-        final MqttByteBuffer headerStream = new MqttByteBuffer(messageArrived);
-        final MqttHeader header = new MqttHeader.fromByteBuffer(headerStream);
+        final MqttByteBuffer headerStream = MqttByteBuffer(messageArrived);
+        final MqttHeader header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
           print(
               "Connection Keep Alive - Successful response - Ping Request received $expectRequest");
@@ -149,19 +149,21 @@ void main() {
       }
 
       final SynchronousMqttConnectionHandler ch =
-          new SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
-          new MqttConnectMessage().withClientIdentifier(testClientId));
+          MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
       broker.setMessageHandler(messageHandlerPingRequest);
-      final MqttConnectionKeepAlive ka = new MqttConnectionKeepAlive(ch, 2);
-      print("Connection Keep Alive - Successful response - keepealive ms is ${ka
-          .keepAlivePeriod}");
+      final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
+      print(
+          "Connection Keep Alive - Successful response - keepealive ms is ${ka
+              .keepAlivePeriod}");
       print(
           "Connection Keep Alive - Successful response - ping timer active is ${ka
               .pingTimer.isActive.toString()}");
-      final Stopwatch stopwatch = new Stopwatch()..start();
+      final Stopwatch stopwatch = Stopwatch()
+        ..start();
       await MqttUtilities.asyncSleep(10);
       print("Connection Keep Alive - Successful response - Elapsed time "
           "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
@@ -172,13 +174,13 @@ void main() {
   group("Client interface Mock broker", () {
     test("Normal publish", () async {
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
-        final MqttConnectAckMessage ack = new MqttConnectAckMessage()
+        final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
 
       broker.setMessageHandler(messageHandlerConnect);
-      final MqttClient client = new MqttClient("localhost", "SJHMQTTClient");
+      final MqttClient client = MqttClient("localhost", "SJHMQTTClient");
       client.logging(true);
       final String username = "unused";
       print(username);
@@ -188,13 +190,14 @@ void main() {
       if (client.connectionState == ConnectionState.connected) {
         print("Client connected");
       } else {
-        print("ERROR Client connection failed - disconnecting, state is ${client
+        print(
+            "ERROR Client connection failed - disconnecting, state is ${client
                 .connectionState}");
         client.disconnect();
       }
       // Publish a known topic
       final String topic = "Dart/SJH/mqtt_client";
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer(5);
       buff[0] = 'h'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 'l'.codeUnitAt(0);

@@ -19,10 +19,10 @@ class MqttSubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.subscribe);
+    this.header = MqttHeader().asType(MqttMessageType.subscribe);
     this.header.qos = MqttQos.atLeastOnce;
-    this.variableHeader = new MqttSubscribeVariableHeader();
-    this.payload = new MqttSubscribePayload();
+    this.variableHeader = MqttSubscribeVariableHeader();
+    this.payload = MqttSubscribePayload();
   }
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
@@ -45,8 +45,8 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     this.variableHeader =
-    new MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
-    this.payload = new MqttSubscribePayload.fromByteBuffer(
+        MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
+    this.payload = MqttSubscribePayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
@@ -86,7 +86,7 @@ class MqttSubscribeMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

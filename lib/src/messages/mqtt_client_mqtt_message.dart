@@ -34,15 +34,15 @@ class MqttMessage {
   /// Creates a new instance of an MQTT Message based on a raw message stream.
   static MqttMessage createFrom(MqttByteBuffer messageStream) {
     try {
-      MqttHeader header = new MqttHeader();
+      MqttHeader header = MqttHeader();
       // Pass the input stream sequentially through the component deserialization(create) methods
       // to build a full MqttMessage.
-      header = new MqttHeader.fromByteBuffer(messageStream);
+      header = MqttHeader.fromByteBuffer(messageStream);
       final MqttMessage message =
       MqttMessageFactory.getMessage(header, messageStream);
       return message;
     } catch (InvalidHeaderException) {
-      throw new InvalidMessageException(
+      throw InvalidMessageException(
           "The data provided in the message stream was not a valid MQTT Message");
     }
   }
@@ -56,7 +56,7 @@ class MqttMessage {
   void readFrom(MqttByteBuffer messageStream) {}
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write("MQTTMessage of type ");
     sb.writeln(this.header.messageType.toString());
     sb.writeln(header.toString());

@@ -10,8 +10,8 @@ typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 class MessageSerializationHelper {
   /// Invokes the serialization of a message to get an array of bytes that represent the message.
   static typed.Uint8Buffer getMessageBytes(MqttMessage msg) {
-    final typed.Uint8Buffer buff = new typed.Uint8Buffer();
-    final MqttByteBuffer ms = new MqttByteBuffer(buff);
+    final typed.Uint8Buffer buff = typed.Uint8Buffer();
+    final MqttByteBuffer ms = MqttByteBuffer(buff);
     msg.writeTo(ms);
     ms.seek(0);
     final typed.Uint8Buffer msgBytes = ms.read(ms.length);
@@ -27,12 +27,12 @@ class MockBroker {
   MessageHandlerFunction handler;
   Socket client = null;
   MqttByteBuffer networkstream;
-  typed.Uint8Buffer headerBytes = new typed.Uint8Buffer(1);
+  typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
 
   MockBroker();
 
   Future start() {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     ServerSocket.bind("localhost", brokerPort).then((ServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
@@ -50,10 +50,10 @@ class MockBroker {
 
   void _dataArrivedOnConnection(List<int> data) {
     print("MockBroker::data arrived ${data.toString()}");
-    final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
+    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     if (networkstream == null) {
-      networkstream = new MqttByteBuffer(dataBytesBuff);
+      networkstream = MqttByteBuffer(dataBytesBuff);
     } else {
       networkstream.write(dataBytesBuff);
     }
@@ -89,22 +89,22 @@ class MockBrokerWs {
   int port = 8080;
   MessageHandlerFunction handler;
   MqttByteBuffer networkstream;
-  typed.Uint8Buffer headerBytes = new typed.Uint8Buffer(1);
+  typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
   WebSocket _webSocket;
 
   MockBrokerWs();
 
   Future start() {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     HttpServer.bind(InternetAddress.loopbackIPv4, port).then((server) {
       print("Mockbroker WS server is running on "
           "'http://${server.address.address}:$port/'");
-      final router = new Router(server);
+      final router = Router(server);
       // The client will connect using a WebSocket. Upgrade requests to '/ws' and
       // forward them to 'handleWebSocket'.
       router
           .serve('/ws')
-          .transform(new WebSocketTransformer())
+          .transform(WebSocketTransformer())
           .listen(handleWebSocket);
       return completer.complete();
     });
@@ -116,10 +116,10 @@ class MockBrokerWs {
     _webSocket = webSocket;
     webSocket.listen((data) {
       print("MockBrokerWs::data arrived ${data.toString()}");
-      final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
+      final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
       dataBytesBuff.addAll(data);
       if (networkstream == null) {
-        networkstream = new MqttByteBuffer(dataBytesBuff);
+        networkstream = MqttByteBuffer(dataBytesBuff);
       } else {
         networkstream.write(dataBytesBuff);
       }
@@ -162,19 +162,18 @@ class MockBrokerSecure {
   MessageHandlerFunction handler;
   SecureSocket client = null;
   MqttByteBuffer networkstream;
-  typed.Uint8Buffer headerBytes = new typed.Uint8Buffer(1);
+  typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
 
   MockBrokerSecure();
 
   Future start() {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     final SecurityContext context = SecurityContext.defaultContext;
     final String currDir = path.current + path.separator;
     context.useCertificateChain(
         currDir + path.join("test", "pem", "localhost.cert"));
     context.usePrivateKey(currDir + path.join("test", "pem", "localhost.key"));
-    SecureServerSocket
-        .bind("localhost", brokerPort, context)
+    SecureServerSocket.bind("localhost", brokerPort, context)
         .then((SecureServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
@@ -192,10 +191,10 @@ class MockBrokerSecure {
 
   void _dataArrivedOnConnection(List<int> data) {
     print("MockBrokerSecure::data arrived ${data.toString()}");
-    final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
+    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     if (networkstream == null) {
-      networkstream = new MqttByteBuffer(dataBytesBuff);
+      networkstream = MqttByteBuffer(dataBytesBuff);
     } else {
       networkstream.write(dataBytesBuff);
     }

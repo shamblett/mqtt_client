@@ -9,7 +9,7 @@ part of mqtt_client;
 
 /// Message identifier handling
 class MessageIdentifierDispenser {
-  Map<String, int> _idStorage = new Map<String, int>();
+  Map<String, int> _idStorage = Map<String, int>();
 
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;

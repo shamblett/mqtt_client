@@ -13,7 +13,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of subscriptions.
-  List<String> subscriptions = new List<String>();
+  List<String> subscriptions = List<String>();
 
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload();
@@ -49,7 +49,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   /// Gets the length of the payload in bytes when written to a stream.
   int getWriteLength() {
     int length = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     for (String subscription in subscriptions) {
       length += enc.getByteCount(subscription);
     }
@@ -67,7 +67,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.writeln("Payload: Unsubscription [{${subscriptions.length}}]");
     for (String subscription in subscriptions) {
       sb.writeln("{{ Topic={$subscription}}");

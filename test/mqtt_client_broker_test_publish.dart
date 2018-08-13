@@ -10,8 +10,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
   // Create and connect the client
-  final MqttClient client =
-  new MqttClient("iot.eclipse.org", "SJHMQTTClient");
+  final MqttClient client = MqttClient("iot.eclipse.org", "SJHMQTTClient");
   client.logging(true);
   await client.connect();
   if (client.connectionState == ConnectionState.connected) {
@@ -24,7 +23,7 @@ Future<int> main() async {
   }
   // Publish a known topic
   final String topic = "Dart/SJH/mqtt_client";
-  final typed.Uint8Buffer buff = new typed.Uint8Buffer(5);
+  final typed.Uint8Buffer buff = typed.Uint8Buffer(5);
   buff[0] = 'h'.codeUnitAt(0);
   buff[1] = 'e'.codeUnitAt(0);
   buff[2] = 'l'.codeUnitAt(0);

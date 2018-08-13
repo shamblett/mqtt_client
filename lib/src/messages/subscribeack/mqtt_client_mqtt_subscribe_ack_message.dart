@@ -17,9 +17,9 @@ class MqttSubscribeAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
   MqttSubscribeAckMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.subscribeAck);
-    this.variableHeader = new MqttSubscribeAckVariableHeader();
-    this.payload = new MqttSubscribeAckPayload();
+    this.header = MqttHeader().asType(MqttMessageType.subscribeAck);
+    this.variableHeader = MqttSubscribeAckVariableHeader();
+    this.payload = MqttSubscribeAckPayload();
   }
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
@@ -41,8 +41,8 @@ class MqttSubscribeAckMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     this.variableHeader =
-    new MqttSubscribeAckVariableHeader.fromByteBuffer(messageStream);
-    this.payload = new MqttSubscribeAckPayload.fromByteBuffer(
+        MqttSubscribeAckVariableHeader.fromByteBuffer(messageStream);
+    this.payload = MqttSubscribeAckPayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
@@ -59,7 +59,7 @@ class MqttSubscribeAckMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

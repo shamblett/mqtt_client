@@ -11,7 +11,7 @@ part of mqtt_client;
 class ReadWrapper {
   /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
   ReadWrapper() {
-    this.messageBytes = new List<int>();
+    this.messageBytes = List<int>();
   }
 
   /// The bytes associated with the message being read.
@@ -42,7 +42,7 @@ class MqttConnection {
 
   /// Connect, must be overridden in connection classes
   Future connect(String server, int port) {
-    final Completer completer = new Completer();
+    final Completer completer = Completer();
     return completer.future;
   }
 
@@ -65,7 +65,7 @@ class MqttConnection {
     bool messageIsValid = true;
     MqttMessage msg;
     try {
-      final MqttByteBuffer messageStream = new MqttByteBuffer.fromList(data);
+      final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
       msg = MqttMessage.createFrom(messageStream);
     } catch (exception) {
       MqttLogger.log("MqttConnection::_ondata - message is not valid");
@@ -73,7 +73,7 @@ class MqttConnection {
     }
     if (messageIsValid) {
       MqttLogger.log("MqttConnection::_onData - message received $msg");
-      clientEventBus.fire(new MessageAvailable(msg));
+      clientEventBus.fire(MessageAvailable(msg));
       MqttLogger.log("MqttConnection::_onData - message processed");
     }
   }

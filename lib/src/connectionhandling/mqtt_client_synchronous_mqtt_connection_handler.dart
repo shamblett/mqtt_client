@@ -25,16 +25,16 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       if (useWebSocket) {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - websocket selected");
-        connection = new MqttWsConnection();
+        connection = MqttWsConnection();
       } else if (secure) {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - secure selected");
-        connection = new MqttSecureConnection(trustedCertPath,
-            privateKeyFilePath, certificateChainPath, privateKeyFilePassphrase);
+        connection = MqttSecureConnection(trustedCertPath, privateKeyFilePath,
+            certificateChainPath, privateKeyFilePassphrase);
       } else {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - insecure TCP selected");
-        connection = new MqttNormalConnection();
+        connection = MqttNormalConnection();
       }
       connection.onDisconnected = onDisconnected;
 
@@ -56,9 +56,9 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionState != ConnectionState.connected) {
-      MqttLogger
-          .log("SynchronousMqttConnectionHandler::internalConnect failed");
-      throw new NoConnectionException(
+      MqttLogger.log(
+          "SynchronousMqttConnectionHandler::internalConnect failed");
+      throw NoConnectionException(
           "The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. "
               "The broker is not responding to the connection request message "
               "(Missing Connection Acknowledgement");
@@ -72,7 +72,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
     MqttLogger.log("SynchronousMqttConnectionHandler::disconnect");
     // Send a disconnect message to the broker
     connectionState = ConnectionState.disconnecting;
-    sendMessage(new MqttDisconnectMessage());
+    sendMessage(MqttDisconnectMessage());
     _performConnectionDisconnect();
     return connectionState = ConnectionState.disconnected;
   }

@@ -13,7 +13,7 @@ class MqttSubscribePayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of subscriptions, Key is the topic, Value is the qos
-  Map<String, MqttQos> subscriptions = new Map<String, MqttQos>();
+  Map<String, MqttQos> subscriptions = Map<String, MqttQos>();
 
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload();
@@ -52,7 +52,7 @@ class MqttSubscribePayload extends MqttPayload {
   /// Gets the length of the payload in bytes when written to a stream.
   int getWriteLength() {
     int length = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     subscriptions.forEach((String key, MqttQos value) {
       length += enc.getByteCount(key);
       length += 1;
@@ -71,7 +71,7 @@ class MqttSubscribePayload extends MqttPayload {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.writeln("Payload: Subscription [{${subscriptions.length}}]");
     subscriptions.forEach((String key, MqttQos value) {
       sb.writeln("{{ Topic={$key}, Qos={$value} }}");

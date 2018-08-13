@@ -21,7 +21,7 @@ bool pingServer(String server) {
       const String.fromEnvironment("PUB_ENVIRONMENT") != null;
   if (isDeclared) {
     print("PUB_ENVIRONMENT is declared");
-    final String noPing = new String.fromEnvironment('PUB_ENVIRONMENT');
+    final String noPing = String.fromEnvironment('PUB_ENVIRONMENT');
     if (noPing == "travis") {
       print("Skipping broker tests, running on travis");
       return true;
@@ -34,8 +34,8 @@ bool pingServer(String server) {
   if (result.exitCode == 0) {
     return false;
   } else {
-    print("Server - $server is dead, exit code is ${result
-        .exitCode} - skipping");
+    print(
+        "Server - $server is dead, exit code is ${result.exitCode} - skipping");
     return true;
   }
 }
@@ -43,8 +43,8 @@ bool pingServer(String server) {
 void main() {
   final bool skipTests = pingServer("test.mosquitto.org");
   test("Broker Subscribe", () {
-    final ProcessResult result = Process
-        .runSync('dart', ['test/mqtt_client_broker_test_subscribe.dart']);
+    final ProcessResult result = Process.runSync(
+        'dart', ['test/mqtt_client_broker_test_subscribe.dart']);
     print("Broker Subscribe::stdout");
     print(result.stdout.toString());
     print("Broker Subscribe::stderr");

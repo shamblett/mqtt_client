@@ -11,7 +11,7 @@ part of mqtt_client;
 class MqttPingResponseMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPingResponseMessage class.
   MqttPingResponseMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.pingResponse);
+    this.header = MqttHeader().asType(MqttMessageType.pingResponse);
   }
 
   /// Initializes a new instance of the MqttPingResponseMessage class.
@@ -20,7 +20,7 @@ class MqttPingResponseMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     return sb.toString();
   }

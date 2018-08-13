@@ -14,8 +14,8 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
   MqttUnsubscribeAckMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.unsubscribeAck);
-    this.variableHeader = new MqttUnsubscribeAckVariableHeader();
+    this.header = MqttHeader().asType(MqttMessageType.unsubscribeAck);
+    this.variableHeader = MqttUnsubscribeAckVariableHeader();
   }
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
@@ -34,7 +34,7 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     this.variableHeader =
-    new MqttUnsubscribeAckVariableHeader.fromByteBuffer(messageStream);
+        MqttUnsubscribeAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Sets the message identifier on the subscribe message.
@@ -44,7 +44,7 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

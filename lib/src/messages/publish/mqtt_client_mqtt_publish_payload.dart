@@ -17,7 +17,7 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttPublishPayload class.
   MqttPublishPayload() {
-    this.message = new typed.Uint8Buffer();
+    this.message = typed.Uint8Buffer();
   }
 
   /// Initializes a new instance of the MqttPublishPayload class.
@@ -54,7 +54,7 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Converts an array of bytes to a byte string.
   static String bytesToString(typed.Uint8Buffer message) {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     for (int b in message) {
       sb.write('<');
       sb.write(b);
@@ -65,7 +65,7 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Converts an array of bytes to a character string.
   static String bytesToStringAsString(typed.Uint8Buffer message) {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     for (int b in message) {
       sb.writeCharCode(b);
     }

@@ -17,9 +17,9 @@ class MqttUnsubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.unsubscribe);
-    this.variableHeader = new MqttUnsubscribeVariableHeader();
-    this.payload = new MqttUnsubscribePayload();
+    this.header = MqttHeader().asType(MqttMessageType.unsubscribe);
+    this.variableHeader = MqttUnsubscribeVariableHeader();
+    this.payload = MqttUnsubscribePayload();
   }
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
@@ -41,8 +41,8 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {
     this.variableHeader =
-    new MqttUnsubscribeVariableHeader.fromByteBuffer(messageStream);
-    this.payload = new MqttUnsubscribePayload.fromByteBuffer(
+        MqttUnsubscribeVariableHeader.fromByteBuffer(messageStream);
+    this.payload = MqttUnsubscribePayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
@@ -72,7 +72,7 @@ class MqttUnsubscribeMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

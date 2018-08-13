@@ -40,7 +40,7 @@ class MqttHeader {
 
   set messageSize(int value) {
     if (value < 0 || value > Constants.maxMessageSize) {
-      throw new InvalidPayloadSizeException(value, Constants.maxMessageSize);
+      throw InvalidPayloadSizeException(value, Constants.maxMessageSize);
     }
     _messageSize = value;
   }
@@ -55,7 +55,7 @@ class MqttHeader {
   /// Creates a new MqttHeader based on a list of bytes.
   void readFrom(MqttByteBuffer headerStream) {
     if (headerStream.length < 2) {
-      throw new InvalidHeaderException(
+      throw InvalidHeaderException(
           "The supplied header is invalid. Header must be at least 2 bytes long.");
     }
     final int firstHeaderByte = headerStream.readByte();
@@ -69,7 +69,7 @@ class MqttHeader {
     try {
       _messageSize = readRemainingLength(headerStream);
     } catch (InvalidPayloadSizeException) {
-      throw new InvalidHeaderException(
+      throw InvalidHeaderException(
           "The header being processed contained an invalid size byte pattern." +
               "Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.");
     }
@@ -77,7 +77,7 @@ class MqttHeader {
 
   /// Gets the value of the Mqtt header as a byte array
   typed.Uint8Buffer headerBytes() {
-    final typed.Uint8Buffer headerBytes = new typed.Uint8Buffer();
+    final typed.Uint8Buffer headerBytes = typed.Uint8Buffer();
 
     // Build the bytes that make up the header. The first byte is a combination of message type, dup,
     // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
@@ -85,8 +85,8 @@ class MqttHeader {
     final int duplicateLength = (duplicate ? 1 : 0) << 3;
     final int qosLength = qos.index << 1;
     final int retainLength = retain ? 1 : 0;
-    final int firstByte = messageTypeLength + duplicateLength +
-        qosLength + retainLength;
+    final int firstByte =
+        messageTypeLength + duplicateLength + qosLength + retainLength;
     headerBytes.add(firstByte);
     headerBytes.addAll(getRemainingLengthBytes());
     return headerBytes;
@@ -99,7 +99,7 @@ class MqttHeader {
 
   /// Reads the length bytes of an MqttHeader from the supplied stream.
   static typed.Uint8Buffer readLengthBytes(MqttByteBuffer headerStream) {
-    final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();
+    final typed.Uint8Buffer lengthBytes = typed.Uint8Buffer();
     // Read until we've got the entire size, or the 4 byte limit is reached
     int sizeByte;
     int byteCount = 0;
@@ -112,7 +112,7 @@ class MqttHeader {
 
   /// Calculates and return the bytes that represent the remaining length of the message.
   typed.Uint8Buffer getRemainingLengthBytes() {
-    final typed.Uint8Buffer lengthBytes = new typed.Uint8Buffer();
+    final typed.Uint8Buffer lengthBytes = typed.Uint8Buffer();
     int payloadCalc = _messageSize;
 
     // Generate a byte array based on the message size, splitting it up into

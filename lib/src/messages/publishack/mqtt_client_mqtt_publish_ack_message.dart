@@ -14,8 +14,8 @@ class MqttPublishAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishAckMessage class.
   MqttPublishAckMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.publishAck);
-    this.variableHeader = new MqttPublishAckVariableHeader();
+    this.header = MqttHeader().asType(MqttMessageType.publishAck);
+    this.variableHeader = MqttPublishAckVariableHeader();
   }
 
   /// Initializes a new instance of the MqttPublishAckMessage class.
@@ -23,7 +23,7 @@ class MqttPublishAckMessage extends MqttMessage {
       MqttByteBuffer messageStream) {
     this.header = header;
     this.variableHeader =
-    new MqttPublishAckVariableHeader.fromByteBuffer(messageStream);
+        MqttPublishAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
@@ -39,7 +39,7 @@ class MqttPublishAckMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

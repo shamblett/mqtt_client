@@ -12,8 +12,7 @@ class NoConnectionException implements Exception {
   String _message;
 
   NoConnectionException(String message) {
-    _message =
-    "mqtt-client::NoConnectionException: $message";
+    _message = "mqtt-client::NoConnectionException: $message";
   }
 
   @override

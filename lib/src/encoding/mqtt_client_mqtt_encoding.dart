@@ -15,7 +15,7 @@ class MqttEncoding extends Utf8Codec {
   /// Encodes all the characters in the specified string into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);
-    final typed.Uint8Buffer stringBytes = new typed.Uint8Buffer();
+    final typed.Uint8Buffer stringBytes = typed.Uint8Buffer();
     stringBytes.add(s.length >> 8);
     stringBytes.add(s.length & 0xFF);
     stringBytes.addAll(encoder.convert(s));
@@ -30,7 +30,7 @@ class MqttEncoding extends Utf8Codec {
   ///  When overridden in a derived class, calculates the number of characters produced by decoding all the bytes in the specified byte array.
   int getCharCount(typed.Uint8Buffer bytes) {
     if (bytes.length < 2) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes");
     }
     return ((bytes[0] << 8) + bytes[1]);
@@ -46,7 +46,7 @@ class MqttEncoding extends Utf8Codec {
   static void _validateString(String s) {
     for (int i = 0; i < s.length; i++) {
       if (s.codeUnitAt(i) > 0x7F) {
-        throw new Exception(
+        throw Exception(
             "mqtt_client::MQTTEncoding: The input string has extended "
                 "UTF characters, which are not supported");
       }

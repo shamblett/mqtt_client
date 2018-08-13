@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Protocol selection helper class, protocol defaults V3.1
 class Protocol {
-
   /// Version
   static int version = Constants.mqttV31ProtocolVersion;
 

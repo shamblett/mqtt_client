@@ -12,8 +12,8 @@ class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
   /// Only called via the MqttMessage.Create operation during processing of an Mqtt message stream.
   MqttConnectAckMessage() {
-    this.header = new MqttHeader().asType(MqttMessageType.connectAck);
-    this.variableHeader = new MqttConnectAckVariableHeader();
+    this.header = MqttHeader().asType(MqttMessageType.connectAck);
+    this.variableHeader = MqttConnectAckVariableHeader();
     this.variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;
   }
 
@@ -31,7 +31,7 @@ class MqttConnectAckMessage extends MqttMessage {
   void readFrom(MqttByteBuffer messageStream) {
     super.readFrom(messageStream);
     this.variableHeader =
-    new MqttConnectAckVariableHeader.fromByteBuffer(messageStream);
+        MqttConnectAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes a message to the supplied stream.
@@ -47,7 +47,7 @@ class MqttConnectAckMessage extends MqttMessage {
   }
 
   String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

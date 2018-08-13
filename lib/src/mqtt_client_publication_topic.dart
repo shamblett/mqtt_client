@@ -20,7 +20,7 @@ class PublicationTopic extends Topic {
   /// Validates that the topic has no wildcards which are not allowed in publication topics.
   static void _validateWildcards(Topic topicInstance) {
     if (topicInstance.hasWildcards) {
-      throw new Exception(
+      throw Exception(
           "mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
     }
   }

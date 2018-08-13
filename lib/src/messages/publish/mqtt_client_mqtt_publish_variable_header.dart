@@ -45,7 +45,7 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   /// Gets the length of the write data when WriteTo will be called.
   int getWriteLength() {
     int headerLength = 0;
-    final MqttEncoding enc = new MqttEncoding();
+    final MqttEncoding enc = MqttEncoding();
     headerLength += enc.getByteCount(topicName);
     if (this.header.qos == MqttQos.atLeastOnce ||
         this.header.qos == MqttQos.exactlyOnce) {

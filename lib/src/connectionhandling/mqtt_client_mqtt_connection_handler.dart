@@ -13,11 +13,11 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
-  new Map<MqttMessageType, MessageCallbackFunction>();
+  Map<MqttMessageType, MessageCallbackFunction>();
 
   /// Registry of sent message callbacks
   List<MessageCallbackFunction> sentMessageCallbacks =
-  new List<MessageCallbackFunction>();
+  List<MessageCallbackFunction>();
 
   /// Connection state
   ConnectionState connectionState = ConnectionState.disconnected;
@@ -58,16 +58,15 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Connect to the specific Mqtt Connection.
-  Future internalConnect(String hostname, int port,
-      MqttConnectMessage message);
+  Future internalConnect(String hostname, int port, MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.
   void sendMessage(MqttMessage message) {
     MqttLogger.log("MqttConnectionHandler::sendMessage - $message");
     if ((connectionState == ConnectionState.connected) ||
         (connectionState == ConnectionState.connecting)) {
-      final typed.Uint8Buffer buff = new typed.Uint8Buffer();
-      final MqttByteBuffer stream = new MqttByteBuffer(buff);
+      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final MqttByteBuffer stream = MqttByteBuffer(buff);
       message.writeTo(stream);
       stream.seek(0);
       connection.send(stream);
