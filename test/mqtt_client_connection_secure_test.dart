@@ -88,7 +88,7 @@ void main() {
       final t1 = expectAsync0(() {
         ch.connect(nonExistantHostName, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.disconnected);
+        expect(ch.connectionState, ConnectionState.connecting);
       });
       t1();
     });
@@ -99,7 +99,7 @@ void main() {
       final t1 = expectAsync0(() {
         ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.disconnected);
+        expect(ch.connectionState, ConnectionState.connecting);
       });
       t1();
     });
