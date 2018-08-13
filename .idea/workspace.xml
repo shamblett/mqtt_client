@@ -3,81 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Update to Dart 2, incorporates issue 24">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mqtt_client.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_connection_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_connection_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/dataconvertors/mqtt_client_ascii_payload_convertor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/encoding/mqtt_client_mqtt_encoding.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/encoding/mqtt_client_mqtt_encoding.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_client_identifier_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_client_identifier_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_connection_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_connection_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_header_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_header_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_message_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_message_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_payload_size_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_payload_size_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_topic_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_topic_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/exception/mqtt_client_noconnection_exception.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/exception/mqtt_client_noconnection_exception.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_flags.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_flags.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_payload.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_payload.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/connect/mqtt_client_mqtt_connect_variable_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/connectack/mqtt_client_mqtt_connect_ack_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/disconnect/mqtt_client_mqtt_disconnect_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message_factory.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message_factory.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_variable_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_variable_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/pingrequest/mqtt_client_mqtt_ping_request_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/pingresponse/mqtt_client_mqtt_ping_response_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_payload.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_payload.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publish/mqtt_client_mqtt_publish_variable_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publishack/mqtt_client_mqtt_publish_ack_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publishcomplete/mqtt_client_mqtt_publish_complete_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publishreceived/mqtt_client_mqtt_publish_received_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/publishrelease/mqtt_client_mqtt_publish_release_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_payload.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/subscribeack/mqtt_client_mqtt_subscribe_ack_payload.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/unsubscribe/mqtt_client_mqtt_unsubscribe_payload.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_constants.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_events.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_events.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_ipublishing_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_ipublishing_manager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_protocol.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_protocol.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_publication_topic.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_publication_topic.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_subscription_topic.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_subscription_topic.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/mqtt_client_topic.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/mqtt_client_topic.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utility/mqtt_client_byte_buffer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utility/mqtt_client_byte_buffer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utility/mqtt_client_logger.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utility/mqtt_client_logger.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/utility/mqtt_client_utilities.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/utility/mqtt_client_utilities.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_iotcore.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_iotcore.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_publish.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_publish.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_subscribe.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_subscribe.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_publish.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_publish.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_subscribe.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_subscribe.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_class.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_class.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_message_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_message_test.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_test_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_test_connection_handler.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -137,32 +67,41 @@
     <session id="-939909555">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="dart" value="13" />
-          <entry key="yaml" value="1" />
+          <entry key="dart" value="20" />
+          <entry key="yaml" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Dart" value="13" />
-          <entry key="YAML" value="1" />
+          <entry key="Dart" value="20" />
+          <entry key="YAML" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dart" value="10" />
-          <entry key="txt" value="1" />
+          <entry key="dart" value="129" />
+          <entry key="txt" value="2" />
+          <entry key="yaml" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Dart" value="10" />
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Dart" value="129" />
+          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="YAML" value="18" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.opened" value="1" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -206,7 +145,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" />
         <option value="$PROJECT_DIR$/AUTHORS.md" />
         <option value="$PROJECT_DIR$/lib/src/messages/subscribe/mqtt_client_mqtt_subscribe_message.dart" />
@@ -215,7 +153,6 @@
         <option value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart" />
-        <option value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_imqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/lib/mqtt_client.dart" />
@@ -233,11 +170,14 @@
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/analysis_options.yaml" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_message_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
+        <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart" />
+        <option value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
+        <option value="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" />
       </list>
     </option>
@@ -251,6 +191,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -262,13 +204,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534148818665" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534152237940" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -628,7 +568,14 @@
       <option name="project" value="LOCAL" />
       <updated>1534146841910</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Update to Dart 2, incorporates issue 24">
+      <created>1534149070802</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1534149070802</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -675,7 +622,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3379531" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34168443" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -690,7 +637,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
-      <window_info active="true" anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.4969651" visible="true" weight="0.3263041" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.4969651" visible="true" weight="0.3263041" />
       <window_info anchor="bottom" id="Messages" order="8" weight="0.3263041" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32852387" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5021322" side_tool="true" weight="0.32963374" />
@@ -848,13 +795,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="30" column="11" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/mqtt_client_base_test.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1067">
@@ -1001,13 +941,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -1050,16 +983,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_mockbroker.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="94" column="17" lean-forward="true" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -1076,8 +999,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="43" column="7" selection-start-line="43" selection-start-column="7" selection-end-line="43" selection-end-column="7" />
+        <state relative-caret-position="307">
+          <caret line="45" column="18" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -1088,10 +1011,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="66" column="50" lean-forward="true" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
+        <state relative-caret-position="323">
+          <caret line="69" column="50" lean-forward="true" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_mockbroker.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="98" column="18" lean-forward="true" selection-start-line="98" selection-start-column="18" selection-end-line="98" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
         </state>
       </provider>
     </entry>

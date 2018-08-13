@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
+import 'package:shelf_web_socket/shelf_web_socket.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
 
 typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 
@@ -96,17 +98,14 @@ class MockBrokerWs {
 
   Future start() {
     final Completer completer = Completer();
-    HttpServer.bind(InternetAddress.loopbackIPv4, port).then((server) {
-      print("Mockbroker WS server is running on "
-          "'http://${server.address.address}:$port/'");
-      final router = Router(server);
-      // The client will connect using a WebSocket. Upgrade requests to '/ws' and
-      // forward them to 'handleWebSocket'.
-      router
-          .serve('/ws')
-          .transform(WebSocketTransformer())
-          .listen(handleWebSocket);
+    final handler = webSocketHandler((webSocket) {
+      webSocket.listen((message) {
+        webSocket.add("echo $message");
+      });
       return completer.complete();
+    });
+    shelf_io.serve(handler, 'localhost', port).then((server) {
+      print('Serving at ws://${server.address.host}:${server.port}');
     });
     return completer.future;
   }
