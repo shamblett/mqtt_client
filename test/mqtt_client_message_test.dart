@@ -505,7 +505,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Connect - Basic deserialization::" + baseMessage.toString());
       // Check that the message was correctly identified as a connect message.
-      expect(baseMessage, new isInstanceOf<MqttConnectMessage>());
+      expect(baseMessage, const TypeMatcher<MqttConnectMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.duplicate, isFalse);
       expect(baseMessage.header.retain, isFalse);
@@ -673,7 +673,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Connect Ack - Connection accepted::" + baseMessage.toString());
       // Check that the message was correctly identified as a connect ack message.
-      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
       final MqttConnectAckMessage message =
       baseMessage as MqttConnectAckMessage;
       // Validate the message deserialization
@@ -709,7 +709,7 @@ void main() {
       print("Connect Ack - Unacceptable protocol version::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a connect ack message.
-      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
       final MqttConnectAckMessage message =
       baseMessage as MqttConnectAckMessage;
       // Validate the message deserialization
@@ -744,7 +744,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Connect Ack - Identifier rejected::" + baseMessage.toString());
       // Check that the message was correctly identified as a connect ack message.
-      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
       final MqttConnectAckMessage message =
       baseMessage as MqttConnectAckMessage;
       // Validate the message deserialization
@@ -779,7 +779,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Connect Ack - Broker unavailable::" + baseMessage.toString());
       // Check that the message was correctly identified as a connect ack message.
-      expect(baseMessage, new isInstanceOf<MqttConnectAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
       final MqttConnectAckMessage message =
       baseMessage as MqttConnectAckMessage;
       // Validate the message deserialization
@@ -877,7 +877,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Disconnect  - Deserialisation::" + baseMessage.toString());
       // Check that the message was correctly identified as a disconnect message.
-      expect(baseMessage, new isInstanceOf<MqttDisconnectMessage>());
+      expect(baseMessage, const TypeMatcher<MqttDisconnectMessage>());
     });
     test("Serialisation", () {
       final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
@@ -902,7 +902,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Ping Request  - Deserialisation::" + baseMessage.toString());
       // Check that the message was correctly identified as a ping request message.
-      expect(baseMessage, new isInstanceOf<MqttPingRequestMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPingRequestMessage>());
     });
     test("Serialisation", () {
       final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
@@ -927,7 +927,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Ping Response  - Deserialisation::" + baseMessage.toString());
       // Check that the message was correctly identified as a ping response message.
-      expect(baseMessage, new isInstanceOf<MqttPingResponseMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPingResponseMessage>());
     });
     test("Serialisation", () {
       final typed.Uint8Buffer expected = new typed.Uint8Buffer(2);
@@ -971,7 +971,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Publish - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish message.
-      expect(baseMessage, new isInstanceOf<MqttPublishMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.duplicate, isFalse);
       expect(baseMessage.header.retain, isFalse);
@@ -1156,7 +1156,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Publish Ack - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish ack message.
-      expect(baseMessage, new isInstanceOf<MqttPublishAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPublishAckMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.publishAck);
       expect(baseMessage.header.messageSize, 2);
@@ -1202,7 +1202,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Publish Complete - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish complete message.
-      expect(baseMessage, new isInstanceOf<MqttPublishCompleteMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPublishCompleteMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.publishComplete);
       expect(baseMessage.header.messageSize, 2);
@@ -1248,7 +1248,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Publish Received - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish received message.
-      expect(baseMessage, new isInstanceOf<MqttPublishReceivedMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPublishReceivedMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.publishReceived);
       expect(baseMessage.header.messageSize, 2);
@@ -1294,7 +1294,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Publish Release - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish release message.
-      expect(baseMessage, new isInstanceOf<MqttPublishReleaseMessage>());
+      expect(baseMessage, const TypeMatcher<MqttPublishReleaseMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.publishRelease);
       expect(baseMessage.header.messageSize, 2);
@@ -1347,7 +1347,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Subscribe - Single topic::" + baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           1);
       expect(
@@ -1389,7 +1389,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Subscribe - Multi topic::" + baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           2);
       expect(
@@ -1434,7 +1434,7 @@ void main() {
       print("Subscribe - Single topic at least once Qos::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           1);
       expect(
@@ -1477,7 +1477,7 @@ void main() {
       print("Subscribe - Multi topic at least once Qos::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           2);
       expect(
@@ -1522,7 +1522,7 @@ void main() {
       print("Subscribe - Single topic exactly once Qos::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           1);
       expect(
@@ -1565,7 +1565,7 @@ void main() {
       print("Subscribe - Multi topic exactly once Qos::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a subscribe message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
       expect((baseMessage as MqttSubscribeMessage).payload.subscriptions.length,
           2);
       expect(
@@ -1697,7 +1697,7 @@ void main() {
       print(
           "Subscribe Ack - Single Qos at most once::" + baseMessage.toString());
       // Check that the message was correctly identified as a subscribe ack message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       expect(
           (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
       expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
@@ -1714,7 +1714,7 @@ void main() {
       print("Subscribe Ack - Single Qos at least once::" +
           baseMessage.toString());
       // Check that the message was correctly identified as a subscribe ack message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       expect(
           (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
       expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
@@ -1731,7 +1731,7 @@ void main() {
       print(
           "Subscribe Ack - Single Qos exactly once::" + baseMessage.toString());
       // Check that the message was correctly identified as a subscribe ack message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       expect(
           (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
       expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
@@ -1747,7 +1747,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Subscribe Ack - multi Qos::" + baseMessage.toString());
       // Check that the message was correctly identified as a subscribe ack message.
-      expect(baseMessage, new isInstanceOf<MqttSubscribeAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       expect(
           (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 3);
       expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
@@ -1877,7 +1877,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Unsubscribe - Single topic::" + baseMessage.toString());
       // Check that the message was correctly identified as an unsubscribe message.
-      expect(baseMessage, new isInstanceOf<MqttUnsubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
       expect(
           (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
           1);
@@ -1915,7 +1915,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Unsubscribe - Multi topic::" + baseMessage.toString());
       // Check that the message was correctly identified as an unsubscribe message.
-      expect(baseMessage, new isInstanceOf<MqttUnsubscribeMessage>());
+      expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
       expect(
           (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
           2);
@@ -2032,7 +2032,7 @@ void main() {
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print("Unsubscribe Ack - Valid payload::" + baseMessage.toString());
       // Check that the message was correctly identified as a publish release message.
-      expect(baseMessage, new isInstanceOf<MqttUnsubscribeAckMessage>());
+      expect(baseMessage, const TypeMatcher<MqttUnsubscribeAckMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.unsubscribeAck);
       expect(baseMessage.header.messageSize, 2);

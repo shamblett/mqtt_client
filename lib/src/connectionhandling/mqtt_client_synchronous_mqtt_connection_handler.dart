@@ -41,7 +41,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       // Connect
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
-      clientEventBus.on(MessageAvailable).listen(this.messageAvailable);
+      clientEventBus.on<MessageAvailable>().listen(this.messageAvailable);
       // Transmit the required connection message to the broker.
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect sending connect message");

@@ -37,7 +37,7 @@ class SubscriptionsManager {
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages
-    clientEventBus.on(MessageReceived).listen(publishMessageReceived);
+    clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
   }
 
   /// Observable change notifier for all subscribed topics

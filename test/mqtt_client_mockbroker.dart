@@ -96,7 +96,7 @@ class MockBrokerWs {
 
   Future start() {
     final Completer completer = new Completer();
-    HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, port).then((server) {
+    HttpServer.bind(InternetAddress.loopbackIPv4, port).then((server) {
       print("Mockbroker WS server is running on "
           "'http://${server.address.address}:$port/'");
       final router = new Router(server);
@@ -114,7 +114,7 @@ class MockBrokerWs {
   void handleWebSocket(WebSocket webSocket) {
     // Listen for incoming data.
     _webSocket = webSocket;
-    webSocket.listen((List<int> data) {
+    webSocket.listen((data) {
       print("MockBrokerWs::data arrived ${data.toString()}");
       final typed.Uint8Buffer dataBytesBuff = new typed.Uint8Buffer();
       dataBytesBuff.addAll(data);

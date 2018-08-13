@@ -29,7 +29,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -44,7 +45,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -70,7 +72,7 @@ void main() {
           expect(
               subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
           expect(testCHS.sentMessages[0],
-              new isInstanceOf<MqttSubscribeMessage>());
+              const TypeMatcher<MqttSubscribeMessage>());
           final MqttSubscribeMessage msg = testCHS.sentMessages[0];
           expect(msg.payload.subscriptions.containsKey(topic), isTrue);
           expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -92,7 +94,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -104,7 +107,7 @@ void main() {
           .addQosGrant(MqttQos.atLeastOnce);
       subs.confirmSubscription(subAckMsg);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
-      expect(subs.subscriptions[topic], new isInstanceOf<Subscription>());
+      expect(subs.subscriptions[topic], const TypeMatcher<Subscription>());
     });
     test("Get subscription with invalid topic returns null", () {
       testCHS.sentMessages.clear();
@@ -114,7 +117,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -136,7 +140,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -152,7 +157,8 @@ void main() {
       final SubscriptionsManager subs = new SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
-      expect(testCHS.sentMessages[0], new isInstanceOf<MqttSubscribeMessage>());
+      expect(
+          testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
@@ -168,7 +174,7 @@ void main() {
       // Unsubscribe
       subs.unsubscribe(topic);
       expect(
-          testCHS.sentMessages[1], new isInstanceOf<MqttUnsubscribeMessage>());
+          testCHS.sentMessages[1], const TypeMatcher<MqttUnsubscribeMessage>());
       final MqttUnsubscribeMessage unSub = testCHS.sentMessages[1];
       expect(unSub.variableHeader.messageIdentifier, 1);
       expect(unSub.payload.subscriptions.length, 1);
@@ -188,7 +194,7 @@ void main() {
       void subRec(List<MqttReceivedMessage> c) {
         expect(c[0].topic, topic);
         print("Change notification:: topic is $topic");
-        expect(c[0].payload, new isInstanceOf<MqttPublishMessage>());
+        expect(c[0].payload, const TypeMatcher<MqttPublishMessage>());
         final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
           expect(recMess.variableHeader.messageIdentifier, 1);
