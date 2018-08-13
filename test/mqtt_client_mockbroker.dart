@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
-import 'package:shelf_web_socket/shelf_web_socket.dart';
-import 'package:shelf/shelf_io.dart' as shelf_io;
 
 typedef void MessageHandlerFunction(typed.Uint8Buffer message);
 
@@ -96,41 +94,40 @@ class MockBrokerWs {
 
   MockBrokerWs();
 
+  void _handleMessage(dynamic data) {
+    // Listen for incoming data.
+    print("MockBrokerWs::data arrived ${data.toString()}");
+    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
+    dataBytesBuff.addAll(data);
+    if (networkstream == null) {
+      networkstream = MqttByteBuffer(dataBytesBuff);
+    } else {
+      networkstream.write(dataBytesBuff);
+    }
+    networkstream.seek(0);
+    // Assume will have all the data for localhost testing purposes
+    final MqttMessage msg = MqttMessage.createFrom(networkstream);
+    print(msg.toString());
+    handler(networkstream.buffer);
+    networkstream = null;
+  }
+
   Future start() {
     final Completer completer = Completer();
-    final handler = webSocketHandler((webSocket) {
-      webSocket.listen((message) {
-        webSocket.add("echo $message");
+    HttpServer.bind(InternetAddress.loopbackIPv4, port).then((server) {
+      print("Mockbroker WS server is running on "
+          "'http://${server.address.address}:$port/'");
+      server.listen((HttpRequest request) {
+        if (request.uri.path == '/ws') {
+          WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
+            _webSocket = websocket;
+            websocket.listen((message) => _handleMessage(message));
+          });
+        }
       });
       return completer.complete();
     });
-    shelf_io.serve(handler, 'localhost', port).then((server) {
-      print('Serving at ws://${server.address.host}:${server.port}');
-    });
     return completer.future;
-  }
-
-  void handleWebSocket(WebSocket webSocket) {
-    // Listen for incoming data.
-    _webSocket = webSocket;
-    webSocket.listen((data) {
-      print("MockBrokerWs::data arrived ${data.toString()}");
-      final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
-      dataBytesBuff.addAll(data);
-      if (networkstream == null) {
-        networkstream = MqttByteBuffer(dataBytesBuff);
-      } else {
-        networkstream.write(dataBytesBuff);
-      }
-      networkstream.seek(0);
-      // Assume will have all the data for localhost testing purposes
-      final MqttMessage msg = MqttMessage.createFrom(networkstream);
-      print(msg.toString());
-      handler(networkstream.buffer);
-      networkstream = null;
-    }, onError: (error) {
-      print("MockBrokerWs::Bad WebSocket request");
-    });
   }
 
   /// Sets a function that will be passed the next message received by the faked out broker.

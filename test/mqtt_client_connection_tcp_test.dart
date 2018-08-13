@@ -68,8 +68,8 @@ void main() {
       verify(ka.pingRequestReceived(msg));
     });
     test("Ping required", () {
-      when(ka.pingRequired).thenReturn(ka.ka.pingRequired);
-      expect(ka.pingRequired(), isNull);
+      when(ka.pingRequired()).thenReturn(ka.ka.pingRequired());
+      expect(ka.pingRequired(), false);
       verify(ka.pingRequired());
       expect(ka.ka.pingTimer, isNotNull);
       expect(ka.ka.pingTimer.isActive, isTrue);

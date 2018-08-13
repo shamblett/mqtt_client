@@ -49,11 +49,15 @@ class MqttConnection {
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
     MqttLogger.log("MqttConnection::_startListening");
-    client.listen(_onData, onError: _onError, onDone: _onDone);
+    try {
+      client.listen(_onData, onError: _onError, onDone: _onDone);
+    } catch (e) {
+      print("MqttConnection::_startListening - exception raised ${e}");
+    }
   }
 
   /// OnData listener callback
-  void _onData(List<int> data) {
+  void _onData(dynamic data) {
     MqttLogger.log("MqttConnection::_onData");
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
