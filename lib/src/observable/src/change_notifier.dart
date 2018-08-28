@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import 'internal.dart';
 import 'observable.dart';
 import 'records.dart';
 
@@ -54,7 +53,7 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
     List<C> changes;
     if (_scheduled && hasObservers) {
       if (_queue != null) {
-        changes = freezeInDevMode(_queue);
+        changes = _queue;
         _queue = null;
       } else {
         changes = ChangeRecord.any;
