@@ -12,7 +12,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:typed_data/typed_data.dart' as typed;
-import 'package:observable/observable.dart' as observe;
+import 'src/observable/observable.dart' as observe;
 import 'package:event_bus/event_bus.dart' as events;
 
 /// The mqtt_client package exported interface
