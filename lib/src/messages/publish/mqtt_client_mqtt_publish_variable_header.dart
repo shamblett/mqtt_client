@@ -18,8 +18,8 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   }
 
   /// Initializes a new instance of the MqttPublishVariableHeader class.
-  MqttPublishVariableHeader.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer variableHeaderStream) {
+  MqttPublishVariableHeader.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer variableHeaderStream) {
     this.header = header;
     readFrom(variableHeaderStream);
   }

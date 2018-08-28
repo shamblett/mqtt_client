@@ -23,8 +23,8 @@ class MqttSubscribeAckMessage extends MqttMessage {
   }
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
-  MqttSubscribeAckMessage.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  MqttSubscribeAckMessage.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     readFrom(messageStream);
   }

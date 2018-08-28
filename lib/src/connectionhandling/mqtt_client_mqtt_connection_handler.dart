@@ -13,11 +13,11 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
-  Map<MqttMessageType, MessageCallbackFunction>();
+      Map<MqttMessageType, MessageCallbackFunction>();
 
   /// Registry of sent message callbacks
   List<MessageCallbackFunction> sentMessageCallbacks =
-  List<MessageCallbackFunction>();
+      List<MessageCallbackFunction>();
 
   /// Connection state
   ConnectionState connectionState = ConnectionState.disconnected;
@@ -90,8 +90,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Registers for the receipt of messages when they arrive.
-  void registerForMessage(MqttMessageType msgType,
-      MessageCallbackFunction callback) {
+  void registerForMessage(
+      MqttMessageType msgType, MessageCallbackFunction callback) {
     messageProcessorRegistry[msgType] = callback;
   }
 
@@ -113,7 +113,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Handles the Message Available event of the connection control for handling non connection messages
   void messageAvailable(MessageAvailable event) {
     final MessageCallbackFunction callback =
-    messageProcessorRegistry[event.message.header.messageType];
+        messageProcessorRegistry[event.message.header.messageType];
     callback(event.message);
   }
 }

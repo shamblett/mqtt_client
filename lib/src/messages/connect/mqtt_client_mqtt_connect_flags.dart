@@ -27,12 +27,12 @@ class MqttConnectFlags {
 
   int connectFlagByte() {
     return ((reserved1 ? 1 : 0) |
-    (cleanStart ? 1 : 0) << 1 |
-    (willFlag ? 1 : 0) << 2 |
-    (willQos.index) << 3 |
-    (willRetain ? 1 : 0) << 5 |
-    (passwordFlag ? 1 : 0) << 6 |
-    (usernameFlag ? 1 : 0) << 7);
+        (cleanStart ? 1 : 0) << 1 |
+        (willFlag ? 1 : 0) << 2 |
+        (willQos.index) << 3 |
+        (willRetain ? 1 : 0) << 5 |
+        (passwordFlag ? 1 : 0) << 6 |
+        (usernameFlag ? 1 : 0) << 7);
   }
 
   /// Writes the connect flag byte to the supplied stream.

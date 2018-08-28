@@ -15,8 +15,8 @@ class MqttConnectPayload extends MqttPayload {
   }
 
   /// Initializes a new instance of the MqttConnectPayload class.
-  MqttConnectPayload.fromByteBuffer(MqttConnectVariableHeader variableHeader,
-      MqttByteBuffer payloadStream) {
+  MqttConnectPayload.fromByteBuffer(
+      MqttConnectVariableHeader variableHeader, MqttByteBuffer payloadStream) {
     this.variableHeader = variableHeader;
     readFrom(payloadStream);
   }
@@ -31,8 +31,7 @@ class MqttConnectPayload extends MqttPayload {
     }
     if (id.length > Constants.maxClientIdentifierLengthSpec) {
       MqttLogger.log(
-          "MqttConnectPayload::Client id exceeds spec value of ${Constants
-              .maxClientIdentifierLengthSpec}");
+          "MqttConnectPayload::Client id exceeds spec value of ${Constants.maxClientIdentifierLengthSpec}");
     }
     _clientIdentifier = id;
   }

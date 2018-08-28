@@ -10,8 +10,8 @@ part of mqtt_client;
 /// Factory for generating instances of MQTT Messages
 class MqttMessageFactory {
   /// Gets an instance of an MqttMessage based on the message type requested.
-  static MqttMessage getMessage(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  static MqttMessage getMessage(
+      MqttHeader header, MqttByteBuffer messageStream) {
     MqttMessage message;
     switch (header.messageType) {
       case MqttMessageType.connect:
@@ -63,7 +63,7 @@ class MqttMessageFactory {
       default:
         throw InvalidHeaderException(
             "The Message Type specified ($header.messageType) is not a valid "
-                "MQTT Message type or currently not supported.");
+            "MQTT Message type or currently not supported.");
     }
     return message;
   }

@@ -13,20 +13,20 @@ class SubscriptionTopic extends Topic {
   /// Creates a new instance of a rawTopic from a topic string.
   SubscriptionTopic(String rawTopic)
       : super(rawTopic, [
-    Topic.validateMinLength,
-    Topic.validateMaxLength,
-    _validateMultiWildcard,
-    _validateFragments
-  ]);
+          Topic.validateMinLength,
+          Topic.validateMaxLength,
+          _validateMultiWildcard,
+          _validateFragments
+        ]);
 
   /// Validates all unique fragments in the topic match the MQTT spec requirements.
   static void _validateFragments(Topic topicInstance) {
     // If any fragment contains a wildcard or a multi wildcard but is greater than
     // 1 character long, then it's an error - wildcards must appear by themselves.
     final bool invalidFragment = topicInstance.topicFragments.any(
-            (String fragment) =>
-        (fragment.contains(Topic.multiWildcard) ||
-            fragment.contains(Topic.wildcard)) &&
+        (String fragment) =>
+            (fragment.contains(Topic.multiWildcard) ||
+                fragment.contains(Topic.wildcard)) &&
             fragment.length > 1);
     if (invalidFragment) {
       throw Exception(
@@ -46,7 +46,7 @@ class SubscriptionTopic extends Topic {
         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
       throw Exception(
           "mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must "
-              "be immediately preceeded by a the rawTopic separator /");
+          "be immediately preceeded by a the rawTopic separator /");
     }
   }
 

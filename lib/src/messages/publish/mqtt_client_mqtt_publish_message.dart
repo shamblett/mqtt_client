@@ -23,8 +23,8 @@ class MqttPublishMessage extends MqttMessage {
   }
 
   /// Initializes a new instance of the MqttPublishMessage class.
-  MqttPublishMessage.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  MqttPublishMessage.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     readFrom(messageStream);
   }

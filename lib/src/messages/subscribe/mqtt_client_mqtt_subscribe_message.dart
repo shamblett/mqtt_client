@@ -26,8 +26,8 @@ class MqttSubscribeMessage extends MqttMessage {
   }
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
-  MqttSubscribeMessage.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  MqttSubscribeMessage.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     this.header.qos = MqttQos.atLeastOnce;
     readFrom(messageStream);

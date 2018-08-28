@@ -63,10 +63,9 @@ class MqttClient {
   PublishingManager _publishingManager;
 
   /// Gets the current connection state of the Mqtt Client.
-  ConnectionState get connectionState =>
-      _connectionHandler != null
-          ? _connectionHandler.connectionState
-          : ConnectionState.disconnected;
+  ConnectionState get connectionState => _connectionHandler != null
+      ? _connectionHandler.connectionState
+      : ConnectionState.disconnected;
 
   /// The connection message to use to override the default
   MqttConnectMessage connectionMessage;
@@ -83,25 +82,17 @@ class MqttClient {
     if (username != null) {
       MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
-      if (username
-          .trim()
-          .length >
+      if (username.trim().length >
           Constants.recommendedMaxUsernamePasswordLength) {
         MqttLogger.log(
-            "Username length (${username
-                .trim()
-                .length}) exceeds the max recommended in the MQTT spec. ");
+            "Username length (${username.trim().length}) exceeds the max recommended in the MQTT spec. ");
       }
     }
     if (password != null &&
-        password
-            .trim()
-            .length >
+        password.trim().length >
             Constants.recommendedMaxUsernamePasswordLength) {
       MqttLogger.log(
-          "Password length (${password
-              .trim()
-              .length}) exceeds the max recommended in the MQTT spec. ");
+          "Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ");
     }
     _connectionHandler = SynchronousMqttConnectionHandler();
     if (useWebSocket) {
@@ -133,7 +124,7 @@ class MqttClient {
     if (connectionMessage == null) {
       connectionMessage = MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
-      // Explicitly set the will flag
+          // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
@@ -157,8 +148,8 @@ class MqttClient {
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
   /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.
-  int publishMessage(String topic, MqttQos qualityOfService,
-      typed.Uint8Buffer data,
+  int publishMessage(
+      String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       [bool retain = false]) {
     if (_connectionHandler.connectionState != ConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionState);

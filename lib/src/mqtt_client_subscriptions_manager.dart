@@ -11,7 +11,7 @@ part of mqtt_client;
 class SubscriptionsManager {
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
-  MessageIdentifierDispenser();
+      MessageIdentifierDispenser();
 
   /// List of confirmed subscriptions, keyed on the topic name.
   Map<String, Subscription> subscriptions = Map<String, Subscription>();
@@ -42,7 +42,7 @@ class SubscriptionsManager {
 
   /// Observable change notifier for all subscribed topics
   final observe.ChangeNotifier<MqttReceivedMessage> _subscriptionNotifier =
-  observe.ChangeNotifier<MqttReceivedMessage>();
+      observe.ChangeNotifier<MqttReceivedMessage>();
 
   observe.ChangeNotifier<MqttReceivedMessage> get subscriptionNotifier =>
       _subscriptionNotifier;
@@ -76,7 +76,7 @@ class SubscriptionsManager {
       final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
       final int msgId =
-      messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
+          messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
       final Subscription sub = Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
@@ -107,7 +107,7 @@ class SubscriptionsManager {
   void unsubscribe(String topic) {
     final MqttUnsubscribeMessage unsubscribeMsg = MqttUnsubscribeMessage()
         .withMessageIdentifier(messageIdentifierDispenser
-        .getNextMessageIdentifier("unsubscriptions"))
+            .getNextMessageIdentifier("unsubscriptions"))
         .fromTopic(topic);
     connectionHandler.sendMessage(unsubscribeMsg);
   }
@@ -123,7 +123,7 @@ class SubscriptionsManager {
               .topic
               .rawTopic;
       subscriptions[topic] =
-      pendingSubscriptions[subAck.variableHeader.messageIdentifier];
+          pendingSubscriptions[subAck.variableHeader.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
     }
     return true;

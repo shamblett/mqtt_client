@@ -21,7 +21,7 @@ class MessageIdentifierDispenser {
     int retVal = 0;
     if (!_idStorage.containsKey(key)) {
       _idStorage[key] =
-      1; // add a new key, start at 1, 0 is reserved for by MQTT spec for invalid msg.
+          1; // add a new key, start at 1, 0 is reserved for by MQTT spec for invalid msg.
       retVal = 1;
     } else {
       int nextId = ++_idStorage[key];

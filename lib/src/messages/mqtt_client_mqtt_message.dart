@@ -39,7 +39,7 @@ class MqttMessage {
       // to build a full MqttMessage.
       header = MqttHeader.fromByteBuffer(messageStream);
       final MqttMessage message =
-      MqttMessageFactory.getMessage(header, messageStream);
+          MqttMessageFactory.getMessage(header, messageStream);
       return message;
     } catch (InvalidHeaderException) {
       throw InvalidMessageException(

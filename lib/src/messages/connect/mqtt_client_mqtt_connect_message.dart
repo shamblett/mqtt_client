@@ -18,8 +18,8 @@ class MqttConnectMessage extends MqttMessage {
   }
 
   ///  Initializes a new instance of the <see cref="MqttConnectMessage" /> class.
-  MqttConnectMessage.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  MqttConnectMessage.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     readFrom(messageStream);
   }

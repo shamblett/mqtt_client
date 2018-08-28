@@ -13,8 +13,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   static const int maxConnectionAttempts = 3;
 
   /// Synchronously connect to the specific Mqtt Connection.
-  Future internalConnect(String hostname, int port,
-      MqttConnectMessage connectMessage) async {
+  Future internalConnect(
+      String hostname, int port, MqttConnectMessage connectMessage) async {
     int connectionAttempts = 0;
     MqttLogger.log("SynchronousMqttConnectionHandler::internalConnect entered");
     do {
@@ -60,8 +60,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
           "SynchronousMqttConnectionHandler::internalConnect failed");
       throw NoConnectionException(
           "The maximum allowed connection attempts ({$maxConnectionAttempts}) were exceeded. "
-              "The broker is not responding to the connection request message "
-              "(Missing Connection Acknowledgement");
+          "The broker is not responding to the connection request message "
+          "(Missing Connection Acknowledgement");
     }
     MqttLogger.log(
         "SynchronousMqttConnectionHandler::internalConnect exited with state $connectionState");
@@ -91,7 +91,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       final MqttConnectAckMessage ackMsg = msg as MqttConnectAckMessage;
       // Drop the connection if our connect request has been rejected.
       if (ackMsg.variableHeader.returnCode ==
-          MqttConnectReturnCode.brokerUnavailable ||
+              MqttConnectReturnCode.brokerUnavailable ||
           ackMsg.variableHeader.returnCode ==
               MqttConnectReturnCode.identifierRejected ||
           ackMsg.variableHeader.returnCode ==
