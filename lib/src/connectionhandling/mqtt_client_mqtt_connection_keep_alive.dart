@@ -13,8 +13,8 @@ part of mqtt_client;
 /// has not been send or received within the keepalive period.
 class MqttConnectionKeepAlive {
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
-  MqttConnectionKeepAlive(IMqttConnectionHandler connectionHandler,
-      int keepAliveSeconds) {
+  MqttConnectionKeepAlive(
+      IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
     this._connectionHandler = connectionHandler;
     this.keepAlivePeriod = keepAliveSeconds * 1000;
     // Register for message handling of ping request and response messages.

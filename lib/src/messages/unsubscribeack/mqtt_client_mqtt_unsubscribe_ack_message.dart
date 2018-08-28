@@ -19,8 +19,8 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
   }
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
-  MqttUnsubscribeAckMessage.fromByteBuffer(MqttHeader header,
-      MqttByteBuffer messageStream) {
+  MqttUnsubscribeAckMessage.fromByteBuffer(
+      MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     readFrom(messageStream);
   }

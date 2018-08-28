@@ -35,8 +35,7 @@ abstract class Topic {
   static void validateMaxLength(Topic topicInstance) {
     if (topicInstance.rawTopic.length > maxTopicLength) {
       throw Exception("mqtt_client::Topic: The length of the supplied rawTopic "
-          "(${topicInstance.rawTopic
-          .length}) is longer than the maximum allowable ($maxTopicLength)");
+          "(${topicInstance.rawTopic.length}) is longer than the maximum allowable ($maxTopicLength)");
     }
   }
 

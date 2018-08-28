@@ -12,10 +12,10 @@ part of mqtt_client;
 class PublicationTopic extends Topic {
   PublicationTopic(String topic)
       : super(topic, [
-    Topic.validateMinLength,
-    Topic.validateMaxLength,
-    _validateWildcards
-  ]);
+          Topic.validateMinLength,
+          Topic.validateMaxLength,
+          _validateWildcards
+        ]);
 
   /// Validates that the topic has no wildcards which are not allowed in publication topics.
   static void _validateWildcards(Topic topicInstance) {

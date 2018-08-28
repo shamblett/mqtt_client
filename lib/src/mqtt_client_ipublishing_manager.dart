@@ -15,8 +15,8 @@ abstract class IPublishingManager {
   /// The QOS to use when publishing the message.
   /// The message to send.
   /// The message identifier assigned to the message.
-  int publish(PublicationTopic topic, MqttQos qualityOfService,
-      typed.Uint8Buffer data);
+  int publish(
+      PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data);
 
   /// The message received event
   MessageReceived publishEvent;

@@ -68,7 +68,7 @@ class MqttByteBuffer {
     if ((_length < count) || (_position + count) > _length) {
       throw Exception(
           "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation "
-              "length $_length, count $count, position $_position");
+          "length $_length, count $count, position $_position");
     }
     final typed.Uint8Buffer tmp = typed.Uint8Buffer();
     tmp.addAll(_buffer.getRange(_position, _position + count));
@@ -126,8 +126,8 @@ class MqttByteBuffer {
   /// Writes an MQTT string.
   /// stringStream - The stream containing the string to write.
   /// stringToWrite - The string to write.
-  static void writeMqttString(MqttByteBuffer stringStream,
-      String stringToWrite) {
+  static void writeMqttString(
+      MqttByteBuffer stringStream, String stringToWrite) {
     final MqttEncoding enc = MqttEncoding();
     final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);

@@ -19,7 +19,8 @@ class MqttSubscribePayload extends MqttPayload {
   MqttSubscribePayload();
 
   /// Initializes a new instance of the MqttSubscribePayload class.
-  MqttSubscribePayload.fromByteBuffer(MqttHeader header,
+  MqttSubscribePayload.fromByteBuffer(
+      MqttHeader header,
       MqttSubscribeVariableHeader variableHeader,
       MqttByteBuffer payloadStream) {
     this.header = header;
