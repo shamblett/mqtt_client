@@ -65,7 +65,7 @@ class MqttSecureConnection extends MqttConnection {
         readWrapper = ReadWrapper();
         MqttLogger.log("MqttSecureConnection::connect - start listening");
         _startListening();
-        return completer.complete();
+        return;
       }).catchError((e) => _onError(e));
     } on SocketException catch (e) {
       final String message =

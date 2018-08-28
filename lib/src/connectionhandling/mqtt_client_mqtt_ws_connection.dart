@@ -45,7 +45,7 @@ class MqttWsConnection extends MqttConnection {
         client = socket;
         readWrapper = ReadWrapper();
         _startListening();
-        return completer.complete();
+        return;
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =
