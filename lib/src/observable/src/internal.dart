@@ -4,9 +4,10 @@
 
 List<E> freezeInDevMode<E>(List<E> list) {
   if (list == null) return const [];
+  List<E> elist;
   assert(() {
-    list = new List<E>.unmodifiable(list);
+    elist = new List<E>.unmodifiable(list);
     return true;
   }());
-  return list;
+  return elist;
 }
