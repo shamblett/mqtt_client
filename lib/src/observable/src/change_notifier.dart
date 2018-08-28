@@ -51,13 +51,13 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   @override
   @mustCallSuper
   bool deliverChanges() {
-    List<ChangeRecord> changes;
+    List<C> changes;
     if (_scheduled && hasObservers) {
       if (_queue != null) {
         changes = freezeInDevMode(_queue);
         _queue = null;
       } else {
-        changes = ChangeRecord.ANY;
+        changes = ChangeRecord.any;
       }
       _scheduled = false;
       _changes.add(changes);
@@ -73,7 +73,7 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
 
   /// Schedules [change] to be delivered.
   ///
-  /// If [change] is omitted then [ChangeRecord.ANY] will be sent.
+  /// If [change] is omitted then [ChangeRecord.any] will be sent.
   ///
   /// If there are no listeners to [changes], this method does nothing.
   @override
@@ -88,16 +88,5 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
       scheduleMicrotask(deliverChanges);
       _scheduled = true;
     }
-  }
-
-  @Deprecated('Exists to make migrations off Observable easier')
-  @override
-  @protected
-  T notifyPropertyChange<T>(
-    Symbol field,
-    T oldValue,
-    T newValue,
-  ) {
-    throw new UnsupportedError('Not supported by ChangeNotifier');
   }
 }

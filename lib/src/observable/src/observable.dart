@@ -21,9 +21,6 @@ abstract class Observable<C extends ChangeRecord> {
   // To be removed when https://github.com/dart-lang/observable/issues/10
   final ChangeNotifier<C> _delegate = new ChangeNotifier<C>();
 
-  // Whether Observable was not given a type.
-  final bool _isNotGeneric = C == dynamic || C == ChangeRecord;
-
   /// Emits a list of changes when the state of the object changes.
   ///
   /// Changes should produced in order, if significant.
@@ -59,7 +56,7 @@ abstract class Observable<C extends ChangeRecord> {
 
   /// Schedules [change] to be delivered.
   ///
-  /// If [change] is omitted then [ChangeRecord.ANY] will be sent.
+  /// If [change] is omitted then [ChangeRecord.any] will be sent.
   ///
   /// If there are no listeners to [changes], this method does nothing.
   @Deprecated('Use ChangeNotifier instead to have this method available')
