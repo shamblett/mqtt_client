@@ -95,7 +95,7 @@ class MqttConnection {
       if (onDisconnected != null) {
         MqttLogger.log(
             "MqttConnection::_onDone - calling disconnected callback");
-        onDisconnected;
+        onDisconnected();
       }
     }
   }
