@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Update to Dart 2, incorporates issue 24">
+    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issues 27 and 29, pull request 30">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AUTHORS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AUTHORS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/iot_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/iot_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -91,7 +82,7 @@
           <entry key="LICENSE" value="120" />
           <entry key="dart" value="399" />
           <entry key="md" value="89" />
-          <entry key="txt" value="11" />
+          <entry key="txt" value="12" />
           <entry key="yaml" value="19" />
         </counts>
       </usages-collector>
@@ -99,13 +90,13 @@
         <counts>
           <entry key="Dart" value="399" />
           <entry key="Markdown" value="89" />
-          <entry key="PLAIN_TEXT" value="131" />
+          <entry key="PLAIN_TEXT" value="132" />
           <entry key="YAML" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
@@ -236,7 +227,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536158007156" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536158185267" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -646,13 +637,17 @@
       <option name="project" value="LOCAL" />
       <updated>1535450432573</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Issues 27 and 29, pull request 30">
+      <created>1536158200214</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1536158200214</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Successful_response_WS_in_mqtt_client_connection_ws_test_dart - 2018.08.13 at 13h 27m 41s.xml">
-      <configuration name="Successful response WS in mqtt_client_connection_ws_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
     <history-entry file="Successful_response_WS_in_mqtt_client_connection_ws_test_dart - 2018.08.13 at 13h 29m 09s.xml">
       <configuration name="Successful response WS in mqtt_client_connection_ws_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
@@ -680,6 +675,9 @@
     <history-entry file="tests_in_mqtt_client - 2018.08.30 at 07h 54m 04s.xml">
       <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
     </history-entry>
+    <history-entry file="tests_in_mqtt_client - 2018.09.05 at 15h 35m 23s.xml">
+      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -693,7 +691,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3640725" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3640725" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -703,7 +701,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32719395" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32666665" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32666665" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39955604" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -754,7 +752,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="test fixes [skip ci]" />
     <MESSAGE value="Test fixes [skip ci]" />
     <MESSAGE value="Tag for release - 1.2.0" />
     <MESSAGE value="Dont run some tests on Travis" />
@@ -779,7 +776,8 @@
     <MESSAGE value="Ready for linux testing" />
     <MESSAGE value="Release 1.10.0, incorporates issue 23" />
     <MESSAGE value="Update to Dart 2, incorporates issue 24" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update to Dart 2, incorporates issue 24" />
+    <MESSAGE value="Issues 27 and 29, pull request 30" />
+    <option name="LAST_COMMIT_MESSAGE" value="Issues 27 and 29, pull request 30" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1023,6 +1021,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
           <caret line="28" column="29" lean-forward="true" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#1105#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
