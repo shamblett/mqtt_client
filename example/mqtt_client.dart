@@ -95,8 +95,9 @@ Future<int> main() async {
     /// lets not constrain ourselves yet until the package has been in the wild
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
-    print("EXAMPLE::Change notification:: topic is <${c[0]
-        .topic}>, payload is <-- ${pt} -->");
+    print(
+        "EXAMPLE::Change notification:: topic is <${c[0]
+            .topic}>, payload is <-- ${pt} -->");
     print("");
   });
 
@@ -129,6 +130,6 @@ Future<int> main() async {
 
 /// The unsolicited disconnect callback
 void onDisconnected() {
-  print("OnDisconnected client callback - Client disconnection");
+  print("EXAMPLE::OnDisconnected client callback - Client disconnection");
   exit(-1);
 }

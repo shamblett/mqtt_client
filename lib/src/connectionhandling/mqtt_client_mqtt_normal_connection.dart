@@ -26,7 +26,7 @@ class MqttNormalConnection extends MqttConnection {
         client = socket;
         readWrapper = ReadWrapper();
         _startListening();
-        return completer.complete();
+        completer.complete();
       }).catchError((e) => _onError(e));
     } catch (SocketException) {
       final String message =

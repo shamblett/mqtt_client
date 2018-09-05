@@ -1,3 +1,6 @@
+# 3.1.0
+Issues 27 and 29, pull request 30
+
 # 3.0.0
 Update to Dart 2, major version bump only to create a clean break from Dart 1
 
