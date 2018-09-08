@@ -1,4 +1,5 @@
 # See https://www.dartlang.org/tools/private-files.html
+.idea
 
 # Files and directories created by pub
 .packages
