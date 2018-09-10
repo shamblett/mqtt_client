@@ -36,7 +36,7 @@ Future<int> main() async {
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
-  client.keepAlivePeriod = 10;
+  client.keepAlivePeriod = 20;
 
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
@@ -46,7 +46,7 @@ Future<int> main() async {
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
       .withClientIdentifier("Mqtt_MyClientUniqueId")
-      .keepAliveFor(10) // Must agree with the keep alive set above or not set
+      .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic("willtopic") // If you set this you must set a will message
       .withWillMessage("My Will message")
       .startClean() // Non persistent session for testing
@@ -103,11 +103,7 @@ Future<int> main() async {
     print("");
   });
 
-  /// Sleep to read the log.....
-  await MqttUtilities.asyncSleep(5);
-
   /// Lets publish to our topic
-
   // Use the payload builder rather than a raw buffer
   print("EXAMPLE::Publishing our topic");
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
