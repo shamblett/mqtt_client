@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issue 35">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -84,7 +83,7 @@
           <entry key="LICENSE" value="120" />
           <entry key="dart" value="1552" />
           <entry key="md" value="130" />
-          <entry key="txt" value="28" />
+          <entry key="txt" value="29" />
           <entry key="yaml" value="20" />
         </counts>
       </usages-collector>
@@ -92,7 +91,7 @@
         <counts>
           <entry key="Dart" value="1552" />
           <entry key="Markdown" value="130" />
-          <entry key="PLAIN_TEXT" value="148" />
+          <entry key="PLAIN_TEXT" value="149" />
           <entry key="YAML" value="20" />
         </counts>
       </usages-collector>
@@ -225,41 +224,6 @@
               <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
               <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="connectionhandling" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="utility" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -267,7 +231,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536571274745" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536572919251" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -368,13 +332,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1502616045682</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Dont run some tests on Travis">
-      <created>1507557380310</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1507557380310</updated>
     </task>
     <task id="LOCAL-00006" summary="Fixes for issues 3 and 4, 1.3.0 release">
       <created>1510561603044</created>
@@ -712,13 +669,17 @@
       <option name="project" value="LOCAL" />
       <updated>1536570851118</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Issue 35">
+      <created>1536571757675</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1536571757675</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="tests_in_mqtt_client - 2018.09.10 at 07h 42m 57s.xml">
-      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
     <history-entry file="tests_in_mqtt_client - 2018.09.10 at 08h 10m 09s.xml">
       <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
     </history-entry>
@@ -746,6 +707,9 @@
     <history-entry file="tests_in_mqtt_client - 2018.09.10 at 08h 27m 26s.xml">
       <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
     </history-entry>
+    <history-entry file="tests_in_mqtt_client - 2018.09.10 at 10h 46m 03s.xml">
+      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -759,7 +723,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.38113007" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.38113007" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -769,8 +733,8 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32666665" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32666665" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.3988889" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32666665" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3988889" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32899022" />

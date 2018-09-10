@@ -28,7 +28,7 @@ void main() {
   final String mockBrokerAddressWs = "ws://localhost/ws";
   final String mockBrokerAddressWsNoScheme = "localhost.com";
   final String mockBrokerAddressWsBad = "://localhost.com";
-  final int mockBrokerPortWs = 8080;
+  final int mockBrokerPortWs = 8090;
   final String testClientId = "syncMqttTests";
 
   group("Connection parameters", () {
