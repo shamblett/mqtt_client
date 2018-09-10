@@ -117,6 +117,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       _performConnectionDisconnect();
     }
     // Cancel the connect timer;
+    MqttLogger.log(
+        "SynchronousMqttConnectionHandler:: cancelling connect timer");
     _connectTimer.cancel();
     return true;
   }

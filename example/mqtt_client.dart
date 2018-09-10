@@ -49,6 +49,7 @@ Future<int> main() async {
       .keepAliveFor(30) // Must agree with the keep alive set above or not set
       .withWillTopic("willtopic") // If you set this you must set a will message
       .withWillMessage("My Will message")
+      .startClean()
       .withWillQos(MqttQos.atLeastOnce);
   print("EXAMPLE::Mosquitto client connecting....");
   client.connectionMessage = connMess;
@@ -75,14 +76,14 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription
-  final String topic = "test/hw"; // Not a wildcard topic
-  client.subscribe(topic, MqttQos.exactlyOnce);
+  final String topic = "test/lol"; // Not a wildcard topic
+  client.subscribe(topic, MqttQos.atMostOnce);
 
   /// Our known topic to publish to
   final String pubTopic = "Dart/Mqtt_client/testtopic";
 
   /// Subscribe to it
-  client.subscribe(pubTopic, MqttQos.exactlyOnce);
+  client.subscribe(pubTopic, MqttQos.atMostOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
@@ -111,7 +112,7 @@ Future<int> main() async {
   print("EXAMPLE::Publishing our topic");
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
   builder.addString("Hello from mqtt_client");
-  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
+  client.publishMessage(pubTopic, MqttQos.atMostOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.

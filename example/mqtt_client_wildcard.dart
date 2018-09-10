@@ -45,10 +45,11 @@ Future<int> main() async {
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = new MqttConnectMessage()
-      .withClientIdentifier("Mqtt_MyClientUniqueId")
+      .withClientIdentifier("Mqtt_MyClientUniqueIdWildcard")
       .keepAliveFor(30) // Must agree with the keep alive set above or not set
       .withWillTopic("willtopic") // If you set this you must set a will message
       .withWillMessage("My Will message")
+      .startClean()
       .withWillQos(MqttQos.atLeastOnce);
   print("EXAMPLE::Mosquitto client connecting....");
   client.connectionMessage = connMess;
