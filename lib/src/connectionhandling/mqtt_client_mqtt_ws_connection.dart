@@ -29,7 +29,7 @@ class MqttWsConnection extends MqttConnection {
           "MqttWsConnection::The URI supplied for the WS connection is not valid - $server";
       throw NoConnectionException(message);
     }
-    if (uri.scheme != "ws") {
+    if (uri.scheme != "ws" && uri.scheme != "wss") {
       final String message =
           "MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $server";
       throw NoConnectionException(message);
@@ -41,7 +41,8 @@ class MqttWsConnection extends MqttConnection {
     MqttLogger.log("MqttWsConnection:: WS URL is $uriString");
     try {
       // Connect and save the socket.
-      WebSocket.connect(uriString).then((socket) {
+      WebSocket.connect(uriString, protocols: ['mqtt', 'mqttv3.1', 'mqttv3.11'])
+          .then((socket) {
         client = socket;
         readWrapper = ReadWrapper();
         _startListening();

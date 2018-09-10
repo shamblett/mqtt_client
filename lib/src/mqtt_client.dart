@@ -32,7 +32,8 @@ class MqttClient {
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
 
-  /// If set use a secure connection, note TCP only, not websocket.
+  /// If set use a secure connection, note TCP only, do not use for
+  /// secure websockets(wss).
   bool secure = false;
 
   /// Trusted certificate file path for use in secure working

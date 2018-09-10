@@ -24,11 +24,12 @@ Future<int> main() async {
   /// If you want to use websockets rather than TCP see below.
   final MqttClient client = new MqttClient("test.mosquitto.org", "");
 
-  /// A websocket URL must start with ws:// or Dart will throw an exception, consult your websocket MQTT broker
+  /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
   /// for details.
   /// To use websockets add the following lines -:
   /// client.useWebSocket = true;
   /// client.port = 80;  ( or whatever your WS port is)
+  /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
   /// Set logging on if needed, defaults to off
   client.logging(false);
