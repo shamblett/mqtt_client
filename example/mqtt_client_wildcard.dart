@@ -77,9 +77,9 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription or two, note these may change/cease to exist on the broker
   final String topic = "test/#"; // Wildcard topic
-  client.subscribe(topic, MqttQos.exactlyOnce);
+  client.subscribe(topic, MqttQos.atMostOnce);
   final String topic1 = "ebcon/#"; // Wildcard topic
-  client.subscribe(topic1, MqttQos.exactlyOnce);
+  client.subscribe(topic1, MqttQos.atMostOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
@@ -98,9 +98,6 @@ Future<int> main() async {
             .topic}>, payload is <-- ${pt} -->");
     print("");
   });
-
-  /// Sleep to read the log.....
-  await MqttUtilities.asyncSleep(5);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.

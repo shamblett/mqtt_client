@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issue 35">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/iot_core.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/iot_core.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/mqtt_client.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -68,7 +64,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="LICENSE" value="1" />
-          <entry key="dart" value="105" />
+          <entry key="dart" value="106" />
           <entry key="md" value="5" />
           <entry key="yaml" value="9" />
           <entry key="yml" value="1" />
@@ -76,7 +72,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Dart" value="105" />
+          <entry key="Dart" value="106" />
           <entry key="Markdown" value="5" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="YAML" value="10" />
@@ -87,7 +83,7 @@
           <entry key="LICENSE" value="120" />
           <entry key="dart" value="1506" />
           <entry key="md" value="100" />
-          <entry key="txt" value="23" />
+          <entry key="txt" value="24" />
           <entry key="yaml" value="20" />
         </counts>
       </usages-collector>
@@ -95,7 +91,7 @@
         <counts>
           <entry key="Dart" value="1506" />
           <entry key="Markdown" value="100" />
-          <entry key="PLAIN_TEXT" value="143" />
+          <entry key="PLAIN_TEXT" value="144" />
           <entry key="YAML" value="20" />
         </counts>
       </usages-collector>
@@ -114,7 +110,17 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-595">
+              <caret line="64" column="3" lean-forward="true" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -270,7 +276,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536566785378" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536567389285" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -708,7 +714,14 @@
       <option name="project" value="LOCAL" />
       <updated>1536564597161</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Issue 35">
+      <created>1536567127841</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1536567127841</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -754,6 +767,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.38113007" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -1165,7 +1179,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="-595">
           <caret line="64" column="3" lean-forward="true" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
         </state>
       </provider>
