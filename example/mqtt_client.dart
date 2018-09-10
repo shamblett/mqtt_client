@@ -79,12 +79,6 @@ Future<int> main() async {
   final String topic = "test/lol"; // Not a wildcard topic
   client.subscribe(topic, MqttQos.atMostOnce);
 
-  /// Our known topic to publish to
-  final String pubTopic = "Dart/Mqtt_client/testtopic";
-
-  /// Subscribe to it
-  client.subscribe(pubTopic, MqttQos.atMostOnce);
-
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage> c) {
@@ -106,9 +100,15 @@ Future<int> main() async {
   /// Lets publish to our topic
   // Use the payload builder rather than a raw buffer
   print("EXAMPLE::Publishing our topic");
+
+  /// Our known topic to publish to
+  final String pubTopic = "Dart/Mqtt_client/testtopic";
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
   builder.addString("Hello from mqtt_client");
   client.publishMessage(pubTopic, MqttQos.atMostOnce, builder.payload);
+
+  /// Subscribe to it
+  client.subscribe(pubTopic, MqttQos.atMostOnce);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
