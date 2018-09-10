@@ -82,7 +82,7 @@ class MockBroker {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. websocket connection.
 class MockBrokerWs {
-  int port = 8080;
+  int port = 8090;
   MessageHandlerFunction handler;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
