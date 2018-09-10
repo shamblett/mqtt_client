@@ -132,6 +132,9 @@ void main() {
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final MqttByteBuffer headerStream = MqttByteBuffer(messageArrived);
+        final MqttHeader header = MqttHeader.fromByteBuffer(headerStream);
+        expect(header.messageType, MqttMessageType.connect);
         final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -154,8 +157,8 @@ void main() {
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
-      broker.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
+      broker.setMessageHandler(messageHandlerPingRequest);
       print(
           "Connection Keep Alive - Successful response - keepealive ms is ${ka
               .keepAlivePeriod}");

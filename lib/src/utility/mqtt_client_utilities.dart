@@ -21,3 +21,49 @@ class MqttUtilities {
     sleep(Duration(seconds: seconds));
   }
 }
+
+/// Cancelable aysnchronous sleep support class
+class MqttCanellableAsyncSleep {
+  /// Timeout value in milliseconds
+  MqttCanellableAsyncSleep(this._timeout);
+
+  /// Millisecond timeout
+  int _timeout;
+
+  int get timeout => _timeout;
+
+  /// The completer
+  Completer _completer = new Completer();
+
+  /// The timer
+  Timer _timer;
+
+  /// Timer running flag
+  bool _running = false;
+
+  bool get isRunning => _running;
+
+  /// Start the timer
+  Future sleep() {
+    if (!_running) {
+      _timer = new Timer(new Duration(milliseconds: _timeout), _timerCallback);
+      _running = true;
+    }
+    return _completer.future;
+  }
+
+  /// Cancel the timer
+  void cancel() {
+    if (_running) {
+      _timer.cancel();
+      _running = false;
+      _completer.complete();
+    }
+  }
+
+  /// The timer callback
+  void _timerCallback() {
+    _running = false;
+    _completer.complete();
+  }
+}

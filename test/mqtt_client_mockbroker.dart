@@ -52,11 +52,7 @@ class MockBroker {
     print("MockBroker::data arrived ${data.toString()}");
     final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
-    if (networkstream == null) {
-      networkstream = MqttByteBuffer(dataBytesBuff);
-    } else {
-      networkstream.write(dataBytesBuff);
-    }
+    networkstream = MqttByteBuffer(dataBytesBuff);
     networkstream.seek(0);
     // Assume will have all the data for localhost testing purposes
     final MqttMessage msg = MqttMessage.createFrom(networkstream);

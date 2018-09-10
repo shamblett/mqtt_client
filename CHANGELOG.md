@@ -1,5 +1,5 @@
 # 3.2.0
-Issues 32 and xx
+Issues 32 and 35
 
 # 3.1.0
 Issues 27 and 29, pull request 30
