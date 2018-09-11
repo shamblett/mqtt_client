@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issue 35">
+    <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issue 32 bug fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -67,16 +64,16 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="LICENSE" value="1" />
-          <entry key="dart" value="127" />
-          <entry key="md" value="9" />
+          <entry key="dart" value="128" />
+          <entry key="md" value="10" />
           <entry key="yaml" value="12" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Dart" value="127" />
-          <entry key="Markdown" value="9" />
+          <entry key="Dart" value="128" />
+          <entry key="Markdown" value="10" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="YAML" value="13" />
         </counts>
@@ -85,16 +82,16 @@
         <counts>
           <entry key="LICENSE" value="120" />
           <entry key="dart" value="2117" />
-          <entry key="md" value="140" />
-          <entry key="txt" value="32" />
+          <entry key="md" value="143" />
+          <entry key="txt" value="42" />
           <entry key="yaml" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Dart" value="2117" />
-          <entry key="Markdown" value="140" />
-          <entry key="PLAIN_TEXT" value="152" />
+          <entry key="Markdown" value="143" />
+          <entry key="PLAIN_TEXT" value="162" />
           <entry key="YAML" value="21" />
         </counts>
       </usages-collector>
@@ -196,7 +193,6 @@
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" />
@@ -205,6 +201,7 @@
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -234,7 +231,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536656525979" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536659016036" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -337,13 +334,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1502616045682</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Prep for 1.3.0">
-      <created>1510568167362</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1510568167362</updated>
     </task>
     <task id="LOCAL-00010" summary="Issue 6 fix + tests">
       <created>1511256128471</created>
@@ -681,13 +671,17 @@
       <option name="project" value="LOCAL" />
       <updated>1536646785928</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Issue 32 bug fix">
+      <created>1536656604168</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1536656604168</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Cancel_in_mqtt_client_base_test_dart - 2018.09.10 at 11h 54m 55s.xml">
-      <configuration name="Cancel in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
     <history-entry file="Cancel_in_mqtt_client_base_test_dart - 2018.09.10 at 12h 27m 01s.xml">
       <configuration name="Cancel in mqtt_client_base_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
@@ -715,6 +709,9 @@
     <history-entry file="tests_in_mqtt_client - 2018.09.11 at 07h 19m 04s.xml">
       <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
     </history-entry>
+    <history-entry file="tests_in_mqtt_client - 2018.09.11 at 10h 01m 55s.xml">
+      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -728,7 +725,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.38965884" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.38965884" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -738,7 +735,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32666665" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32666665" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32666665" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3988889" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -789,7 +786,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Dont run some tests on Travis" />
     <MESSAGE value="Fixes for issues 3 and 4, 1.3.0 release" />
     <MESSAGE value="Update unit tests - prep for 1.3.0" />
     <MESSAGE value="Prep for 1.3.0" />
@@ -814,7 +810,8 @@
     <MESSAGE value="Issues 27 and 29, pull request 30" />
     <MESSAGE value="Issue 32" />
     <MESSAGE value="Issue 35" />
-    <option name="LAST_COMMIT_MESSAGE" value="Issue 35" />
+    <MESSAGE value="Issue 32 bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Issue 32 bug fix" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1031,16 +1028,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="255">
-            <caret line="15" column="104" selection-start-line="15" selection-start-column="104" selection-end-line="15" selection-end-column="104" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
@@ -1124,13 +1111,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="49" column="25" lean-forward="true" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -1152,6 +1132,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="187">
+            <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="49" column="25" lean-forward="true" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
         </state>
       </provider>
     </entry>

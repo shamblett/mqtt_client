@@ -66,7 +66,10 @@ class MqttSecureConnection extends MqttConnection {
         MqttLogger.log("MqttSecureConnection::connect - start listening");
         _startListening();
         completer.complete();
-      }).catchError((e) => _onError(e));
+      }).catchError((e) {
+        _onError(e);
+        completer.completeError(e);
+      });
     } on SocketException catch (e) {
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e.toString()}";

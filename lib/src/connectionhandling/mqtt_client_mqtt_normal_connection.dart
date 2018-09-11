@@ -27,7 +27,10 @@ class MqttNormalConnection extends MqttConnection {
         readWrapper = ReadWrapper();
         _startListening();
         completer.complete();
-      }).catchError((e) => _onError(e));
+      }).catchError((e) {
+        _onError(e);
+        completer.completeError(e);
+      });
     } catch (SocketException) {
       final String message =
           "MqttNormalConnection::The connection to the message broker {$server}:{$port} could not be made.";
