@@ -5,6 +5,8 @@
  * Copyright :  S.Hamblett
  */
 import 'dart:io';
+import 'dart:async';
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
@@ -673,6 +675,53 @@ void main() {
       builder.addDouble(1.5e43);
       expect(builder.length, 8);
       expect(builder.payload.toList(), [91, 150, 146, 56, 33, 134, 229, 72]);
+    });
+  });
+
+  group("Cancellable async timer", () {
+    test("Normal expiry", () async {
+      final DateTime start = new DateTime.now();
+      final MqttCancellableAsyncSleep sleeper =
+      new MqttCancellableAsyncSleep(200);
+      expect(sleeper.isRunning, false);
+      expect(sleeper.timeout, 200);
+      await sleeper.sleep();
+      expect(sleeper.isRunning, false);
+      final DateTime now = new DateTime.now();
+      expect(
+          start.millisecondsSinceEpoch +
+              new Duration(milliseconds: 200).inMilliseconds <=
+              now.millisecondsSinceEpoch,
+          true);
+      expect(sleeper.isRunning, false);
+    });
+    test("Normal expiry - check", () async {
+      final DateTime start = new DateTime.now();
+      final MqttCancellableAsyncSleep sleeper =
+      new MqttCancellableAsyncSleep(100);
+      await sleeper.sleep();
+      final DateTime now = new DateTime.now();
+      expect(
+          start.millisecondsSinceEpoch +
+              new Duration(milliseconds: 200).inMilliseconds <=
+              now.millisecondsSinceEpoch,
+          false);
+    });
+
+    test("Cancel", () async {
+      final MqttCancellableAsyncSleep sleeper =
+      new MqttCancellableAsyncSleep(200);
+      void action() {
+        sleeper.cancel();
+        expect(sleeper.isRunning, false);
+      }
+
+      final DateTime start = new DateTime.now();
+      Future.delayed(new Duration(milliseconds: 100), action);
+      await sleeper.sleep();
+      final DateTime now = new DateTime.now();
+      expect(now.millisecondsSinceEpoch - start.millisecondsSinceEpoch < 200,
+          true);
     });
   });
 }

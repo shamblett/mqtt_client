@@ -13,7 +13,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   static const int maxConnectionAttempts = 3;
 
   /// The broker connection acknowledgment timer
-  MqttCanellableAsyncSleep _connectTimer;
+  MqttCancellableAsyncSleep _connectTimer;
 
   /// Synchronously connect to the specific Mqtt Connection.
   Future internalConnect(
@@ -42,7 +42,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       connection.onDisconnected = onDisconnected;
 
       // Connect
-      _connectTimer = new MqttCanellableAsyncSleep(5000);
+      _connectTimer = new MqttCancellableAsyncSleep(5000);
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       clientEventBus.on<MessageAvailable>().listen(this.messageAvailable);

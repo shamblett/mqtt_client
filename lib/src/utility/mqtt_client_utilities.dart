@@ -22,10 +22,10 @@ class MqttUtilities {
   }
 }
 
-/// Cancelable aysnchronous sleep support class
-class MqttCanellableAsyncSleep {
+/// Cancellable asynchronous sleep support class
+class MqttCancellableAsyncSleep {
   /// Timeout value in milliseconds
-  MqttCanellableAsyncSleep(this._timeout);
+  MqttCancellableAsyncSleep(this._timeout);
 
   /// Millisecond timeout
   int _timeout;
