@@ -1,3 +1,6 @@
+# 3.2.1
+Issues 32 bug fix
+
 # 3.2.0
 Issues 32 and 35
 

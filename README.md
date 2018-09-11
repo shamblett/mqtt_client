@@ -9,7 +9,7 @@ off the user as possible, connection protocol is handled automatically as are th
 to support the different QOS levels and the keep alive mechanism. This allows the user to concentrate on
 publishing/subscribing and not the details of MQTT itself.
 
-An example of usage can be found in the examples directory, this example is runnable.  An example is also provided
+Examples of usage can be found in the examples directory.  An example is also provided
 showing how to use the client to connect to the mqtt-bridge of Google's IoT-Core suite. This demonstrates
 how to use secure connections and switch MQTT protocols. The test directory also contains standalone runnable scripts for subscription and publishing.
 
