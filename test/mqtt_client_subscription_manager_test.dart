@@ -38,11 +38,18 @@ void main() {
       expect(msg.header.qos, MqttQos.atLeastOnce);
     });
     test("Acknowledged subscription request creates active subscription", () {
+      bool cbCalled = false;
+      void subCallback(String topic) {
+        expect(topic, "testtopic");
+        cbCalled = true;
+      }
+
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      subs.onSubscribed = subCallback;
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
@@ -58,6 +65,7 @@ void main() {
           .addQosGrant(MqttQos.atLeastOnce);
       subs.confirmSubscription(subAckMsg);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.active);
+      expect(cbCalled, isTrue);
     });
     test(
         "Acknowledged subscription request for no pending subscription is ignored",
@@ -150,12 +158,19 @@ void main() {
       expect(subs.subscriptions[topic], isNull);
     });
     test("Unsubscribe with ack", () {
+      bool cbCalled = false;
+      void unsubCallback(String topic) {
+        expect(topic, "testtopic");
+        cbCalled = true;
+      }
+
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
       subs.registerSubscription(topic, qos);
+      subs.onUnsubscribed = unsubCallback;
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
@@ -185,6 +200,7 @@ void main() {
       subs.confirmUnsubscribe(unsubAck);
       expect(
           subs.getSubscriptionsStatus(topic), SubscriptionStatus.doesNotExist);
+      expect(cbCalled, isTrue);
     });
     test("Change notification", () {
       int recCount = 0;

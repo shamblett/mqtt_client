@@ -1,3 +1,6 @@
+# 3.3.0
+Issue 37 onSubscribed and OnUnsubscribed callbacks
+
 # 3.2.1
 Issues 32 bug fix
 

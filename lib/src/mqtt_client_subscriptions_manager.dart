@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+/// Subscribe and Unsubscribe callbacks
+typedef SubscribeCallback = void Function(String topic);
+typedef UnsubscribeCallback = void Function(String topic);
+
 /// A class that can manage the topic subscription process.
 class SubscriptionsManager {
   /// Dispenser used for keeping track of subscription ids
@@ -24,6 +28,10 @@ class SubscriptionsManager {
 
   /// Publishing manager used for passing on published messages to subscribers.
   PublishingManager publishingManager;
+
+  /// Subscribe and Unsubscribe callbacks
+  SubscribeCallback onSubscribed;
+  UnsubscribeCallback onUnsubscribed;
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -116,15 +124,18 @@ class SubscriptionsManager {
   /// Returns true, always.
   bool confirmSubscription(MqttMessage msg) {
     final MqttSubscribeAckMessage subAck = msg as MqttSubscribeAckMessage;
+    String topic;
     if (pendingSubscriptions
         .containsKey(subAck.variableHeader.messageIdentifier)) {
-      final String topic =
-          pendingSubscriptions[subAck.variableHeader.messageIdentifier]
-              .topic
-              .rawTopic;
+      topic = pendingSubscriptions[subAck.variableHeader.messageIdentifier]
+          .topic
+          .rawTopic;
       subscriptions[topic] =
           pendingSubscriptions[subAck.variableHeader.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
+    }
+    if (onSubscribed != null) {
+      onSubscribed(topic);
     }
     return true;
   }
@@ -144,9 +155,11 @@ class SubscriptionsManager {
     });
     // If we have the subscription remove it
     if (sub != null) {
+      if (onUnsubscribed != null) {
+        onUnsubscribed(subKey);
+      }
       subscriptions.remove(subKey);
     }
-
     return true;
   }
 

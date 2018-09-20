@@ -74,6 +74,26 @@ class MqttClient {
   /// Client disconnect callback, called on unsolicited disconnect.
   DisconnectCallback onDisconnected;
 
+  /// Subscribe callback
+  SubscribeCallback _onSubscribed;
+
+  SubscribeCallback get onSubscribed => _onSubscribed;
+
+  set onSubscribed(SubscribeCallback cb) {
+    _onSubscribed = cb;
+    _subscriptionsManager?.onSubscribed = cb;
+  }
+
+  /// Unsubscribe callback
+  UnsubscribeCallback _onUnsubscribed;
+
+  UnsubscribeCallback get onUnsubscribed => _onUnsubscribed;
+
+  set onUnsubscribed(UnsubscribeCallback cb) {
+    _onUnsubscribed = cb;
+    _subscriptionsManager?.onUnsubscribed = cb;
+  }
+
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage>> updates;
 
@@ -112,6 +132,8 @@ class MqttClient {
     _publishingManager = PublishingManager(_connectionHandler);
     _subscriptionsManager =
         SubscriptionsManager(_connectionHandler, _publishingManager);
+    _subscriptionsManager.onSubscribed = onSubscribed;
+    _subscriptionsManager.onUnsubscribed = onUnsubscribed;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
     final connectMessage = _getConnectMessage(username, password);

@@ -41,6 +41,11 @@ Future<int> main() async {
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
 
+  /// Add a subscription callback, there is also an unsubscription callback if you need it.
+  /// You can add these before connection or change them dynamically after connection if
+  /// you wish.
+  client.onSubscribed = onSubscribed;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
@@ -124,6 +129,11 @@ Future<int> main() async {
   print("EXAMPLE::Disconnecting");
   client.disconnect();
   return 0;
+}
+
+/// The subscription callback
+void onSubscribed(String topic) {
+  print("EXAMPLE::Subscription confirmed for topic $topic");
 }
 
 /// The unsolicited disconnect callback
