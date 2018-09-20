@@ -74,7 +74,8 @@ class MqttClient {
   /// Client disconnect callback, called on unsolicited disconnect.
   DisconnectCallback onDisconnected;
 
-  /// Subscribe callback
+  /// Subscribed callback, function returns a void and takes a
+  /// string parameter, the topic that has been subscribed to.
   SubscribeCallback _onSubscribed;
 
   SubscribeCallback get onSubscribed => _onSubscribed;
@@ -84,7 +85,8 @@ class MqttClient {
     _subscriptionsManager?.onSubscribed = cb;
   }
 
-  /// Unsubscribe callback
+  /// Unsubscribed callback, function returns a void and takes a
+  /// string parameter, the topic that has been unsubscribed.
   UnsubscribeCallback _onUnsubscribed;
 
   UnsubscribeCallback get onUnsubscribed => _onUnsubscribed;

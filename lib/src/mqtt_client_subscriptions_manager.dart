@@ -7,7 +7,7 @@
 
 part of mqtt_client;
 
-/// Subscribe and Unsubscribe callbacks
+/// Subscribed and Unsubscribed callback typedefs
 typedef SubscribeCallback = void Function(String topic);
 typedef UnsubscribeCallback = void Function(String topic);
 

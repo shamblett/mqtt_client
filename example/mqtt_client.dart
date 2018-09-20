@@ -41,7 +41,7 @@ Future<int> main() async {
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
 
-  /// Add a subscription callback, there is also an unsubscription callback if you need it.
+  /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
   /// You can add these before connection or change them dynamically after connection if
   /// you wish.
   client.onSubscribed = onSubscribed;
@@ -131,7 +131,7 @@ Future<int> main() async {
   return 0;
 }
 
-/// The subscription callback
+/// The subscribed callback
 void onSubscribed(String topic) {
   print("EXAMPLE::Subscription confirmed for topic $topic");
 }
