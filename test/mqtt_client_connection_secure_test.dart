@@ -102,6 +102,7 @@ void main() {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
+        print(e);
         expect(
             e
                 .toString()
