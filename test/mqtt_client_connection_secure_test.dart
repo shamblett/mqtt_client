@@ -81,27 +81,34 @@ void main() {
   }, skip: false);
 
   group("Synchronous MqttConnectionHandler", () {
-    test("Connect to bad host name", () {
+    test("Connect to bad host name", () async {
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler();
       ch.secure = true;
-      final t1 = expectAsync0(() {
-        ch.connect(nonExistantHostName, mockBrokerPort,
+      try {
+        await ch.connect(nonExistantHostName, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.connecting);
-      });
-      t1();
+      } catch (e) {
+        expect(e.toString().contains("Failed host lookup"), isTrue);
+        expect(e.toString().contains(nonExistantHostName), isTrue);
+      }
+      expect(ch.connectionState, ConnectionState.faulted);
     });
-    test("Connect invalid port", () {
+    test("Connect invalid port", () async {
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler();
       ch.secure = true;
-      final t1 = expectAsync0(() {
-        ch.connect(mockBrokerAddress, badPort,
+      try {
+        await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-        expect(ch.connectionState, ConnectionState.connecting);
-      });
-      t1();
+      } catch (e) {
+        expect(
+            e
+                .toString()
+                .contains("The remote computer refused the network connection"),
+            isTrue);
+      }
+      expect(ch.connectionState, ConnectionState.faulted);
     });
   });
   group("Connection Keep Alive - Mock broker", () {
