@@ -38,7 +38,6 @@ bool skipIfTravis() {
 
 void main() {
   // Test wide variables
-  final MockBrokerSecure broker = MockBrokerSecure();
   final String mockBrokerAddress = "localhost";
   final int mockBrokerPort = 8883;
   final String testClientId = "syncMqttTests";
@@ -102,17 +101,19 @@ void main() {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
-        //TODO fix this on linux expect(
-        //e
-        //      .toString()
-        //      .contains("The remote computer refused the network connection"),
-        //  isTrue);
+        //TODO fix this on linux
+        //expect(
+        //  e
+        //    .toString()
+        //  .contains("The remote computer refused the network connection"),
+        //isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
     });
   });
   group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
+      final MockBrokerSecure broker = MockBrokerSecure();
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
