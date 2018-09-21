@@ -64,8 +64,8 @@ Future<int> main() async {
   /// never send malformed messages.
   try {
     await client.connect();
-  } catch (Exception) {
-    /// Error handling.....
+  } catch (e) {
+    print("EXAMPLE::client exception - $e");
     client.disconnect();
   }
 
