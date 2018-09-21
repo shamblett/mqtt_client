@@ -73,10 +73,12 @@ class MqttSecureConnection extends MqttConnection {
     } on SocketException catch (e) {
       final String message =
           "MqttSecureConnection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e.toString()}";
+      completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
       final String message =
           "MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e.toString()}";
+      completer.completeError(e);
       throw NoConnectionException(message);
     }
     return completer.future;

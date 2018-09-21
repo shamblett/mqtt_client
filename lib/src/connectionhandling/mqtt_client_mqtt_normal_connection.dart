@@ -31,7 +31,8 @@ class MqttNormalConnection extends MqttConnection {
         _onError(e);
         completer.completeError(e);
       });
-    } catch (SocketException) {
+    } catch (e) {
+      completer.completeError(e);
       final String message =
           "MqttNormalConnection::The connection to the message broker {$server}:{$port} could not be made.";
       throw NoConnectionException(message);
