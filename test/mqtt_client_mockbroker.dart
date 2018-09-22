@@ -33,7 +33,8 @@ class MockBroker {
 
   Future start() {
     final Completer completer = Completer();
-    ServerSocket.bind("localhost", brokerPort).then((ServerSocket server) {
+    ServerSocket.bind("localhost", brokerPort, shared: true)
+        .then((ServerSocket server) {
       listener = server;
       listener.listen(_connectAccept);
       print("MockBroker::we are bound");
@@ -57,7 +58,9 @@ class MockBroker {
     // Assume will have all the data for localhost testing purposes
     final MqttMessage msg = MqttMessage.createFrom(networkstream);
     print(msg.toString());
-    handler(networkstream.buffer);
+    if (handler != null) {
+      handler(networkstream.buffer);
+    }
     networkstream = null;
   }
 
@@ -76,7 +79,9 @@ class MockBroker {
   }
 
   /// Close the broker socket
-  void close() {}
+  void close() {
+    client.destroy();
+  }
 }
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the

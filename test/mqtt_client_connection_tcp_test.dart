@@ -96,22 +96,23 @@ void main() {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
-        expect(
-            e
-                .toString()
-                .contains("The remote computer refused the network connection"),
-            isTrue);
+        expect(e.toString().contains("refused"), isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
     });
-    test("Connect no connect ack", () {
+    test("Connect no connect ack", () async {
+      final MockBroker broker = MockBroker();
+      await broker.start();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler();
-      final t1 = expectAsync0(() {
-        ch.connect(mockBrokerAddress, mockBrokerPort,
+      try {
+        await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-      });
-      t1();
+      } catch (e) {
+        expect((e is NoConnectionException), isTrue);
+      }
+      expect(ch.connectionState, ConnectionState.faulted);
+      broker.close();
     });
     test("Successful response and disconnect", () async {
       final MockBroker broker = MockBroker();
