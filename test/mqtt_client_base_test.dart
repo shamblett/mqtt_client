@@ -18,7 +18,7 @@ bool skipIfTravis() {
   final Map<String, String> envVars = Platform.environment;
   if (envVars['TRAVIS'] == 'true') {
     // Skip
-    ret = true;
+    ret = false;
   }
   return ret;
 }

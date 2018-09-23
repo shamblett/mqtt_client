@@ -36,6 +36,7 @@ bool skipIfTravis() {
 
 void main() {
   // Test wide variables
+  final MockBroker broker = MockBroker();
   final String mockBrokerAddress = "localhost";
   final int mockBrokerPort = 1883;
   final String testClientId = "syncMqttTests";
@@ -101,7 +102,6 @@ void main() {
       expect(ch.connectionState, ConnectionState.faulted);
     });
     test("Connect no connect ack", () async {
-      final MockBroker broker = MockBroker();
       await broker.start();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler();
@@ -112,10 +112,8 @@ void main() {
         expect((e is NoConnectionException), isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
-      broker.close();
     });
     test("Successful response and disconnect", () async {
-      final MockBroker broker = MockBroker();
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -125,19 +123,16 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler();
       broker.setMessageHandler(messageHandler);
-      await broker.start();
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
-      broker.close();
     });
   }, skip: skipIfTravis());
 
   group("Connection Keep Alive - Mock broker", () {
     test("Successful response", () async {
-      final MockBroker broker = MockBroker();
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
@@ -185,7 +180,6 @@ void main() {
 
   group("Client interface Mock broker", () {
     test("Normal publish", () async {
-      final MockBroker broker = MockBroker();
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
@@ -221,6 +215,7 @@ void main() {
       await MqttUtilities.asyncSleep(10);
       print("Disconnecting");
       client.disconnect();
+      broker.close();
     });
   }, skip: skipIfTravis());
 }

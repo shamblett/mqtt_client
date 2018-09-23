@@ -31,7 +31,7 @@ bool skipIfTravis() {
   final Map<String, String> envVars = Platform.environment;
   if (envVars['TRAVIS'] == 'true') {
     // Skip
-    ret = true;
+    ret = false;
   }
   return ret;
 }
@@ -101,12 +101,11 @@ void main() {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
-        //TODO fix this on linux
-        //expect(
-        //  e
-        //    .toString()
-        //  .contains("The remote computer refused the network connection"),
-        //isTrue);
+        expect(
+            e
+                .toString()
+                .contains("refused"),
+            isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
     });
