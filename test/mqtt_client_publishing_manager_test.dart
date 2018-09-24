@@ -35,6 +35,15 @@ void main() {
       dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic");
       expect(second, first + 1);
     });
+    test("Numbering starts at 1 different keys", () {
+      final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
+      final int first =
+      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic1");
+      final int second =
+      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic2");
+      expect(first, 1);
+      expect(second, 1);
+    });
     test("Numbering overflows back to 1", () {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       for (int i = 0;
@@ -296,6 +305,32 @@ void main() {
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages[1].header.messageType,
           MqttMessageType.publishComplete);
+    });
+    test("Publish exactly once, interleaved scenario 1", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = PublishingManager(testCHS);
+      final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
+      payload1.addString("test1");
+      final MqttClientPayloadBuilder payload2 = new MqttClientPayloadBuilder();
+      payload2.addString("test2");
+      final int msgId1 =
+      pm.publish(
+          PublicationTopic("topic1"), MqttQos.exactlyOnce, payload1.payload);
+      expect(msgId1, 1);
+      final int msgId2 =
+      pm.publish(
+          PublicationTopic("topic2"), MqttQos.exactlyOnce, payload2.payload);
+      expect(msgId2, 2);
+      expect(pm.publishedMessages.containsKey(msgId1), isTrue);
+      expect(pm.publishedMessages.containsKey(msgId2), isTrue);
+//      pm.handlePublishReceived(
+//          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
+//      final MqttPublishReleaseMessage pubMessRel =
+//      testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+//      expect(pubMessRel.variableHeader.messageIdentifier, msgId1);
+//      pm.handlePublishComplete(
+//          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
+//      expect(pm.publishedMessages, isEmpty);
     });
   });
 }
