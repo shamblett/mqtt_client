@@ -5,7 +5,6 @@
  * Copyright :  S.Hamblett
  */
 
-import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
@@ -22,18 +21,6 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
   MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
-}
-
-/// Don't run some tests on Travis, easier to do this than find out why they
-/// run locally on both windows and linux but not on Travis
-bool skipIfTravis() {
-  bool ret = false;
-  final Map<String, String> envVars = Platform.environment;
-  if (envVars['TRAVIS'] == 'true') {
-    // Skip
-    ret = false;
-  }
-  return ret;
 }
 
 void main() {
@@ -101,11 +88,7 @@ void main() {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
       } catch (e) {
-        expect(
-            e
-                .toString()
-                .contains("refused"),
-            isTrue);
+        expect(e.toString().contains("refused"), isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
     });
@@ -158,5 +141,5 @@ void main() {
       ka.stop();
       ch.close();
     });
-  }, skip: skipIfTravis());
+  }, skip: false);
 }
