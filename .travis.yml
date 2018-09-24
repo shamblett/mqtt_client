@@ -5,5 +5,7 @@ dart:
 dart_task:
   - test: --exclude-tags no-xvfb
     xvfb: false
+branches:
+    only:
+    - master
 
-  
