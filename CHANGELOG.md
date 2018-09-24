@@ -1,3 +1,6 @@
+# 3.3.1
+Issue 38 QOS1 + 2 protocol handling bugs
+
 # 3.3.0
 Issue 37 onSubscribed and OnUnsubscribed callbacks
 

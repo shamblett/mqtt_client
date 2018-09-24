@@ -313,24 +313,32 @@ void main() {
       payload1.addString("test1");
       final MqttClientPayloadBuilder payload2 = new MqttClientPayloadBuilder();
       payload2.addString("test2");
-      final int msgId1 =
-      pm.publish(
+      final int msgId1 = pm.publish(
           PublicationTopic("topic1"), MqttQos.exactlyOnce, payload1.payload);
       expect(msgId1, 1);
-      final int msgId2 =
-      pm.publish(
+      final int msgId2 = pm.publish(
           PublicationTopic("topic2"), MqttQos.exactlyOnce, payload2.payload);
       expect(msgId2, 2);
       expect(pm.publishedMessages.containsKey(msgId1), isTrue);
       expect(pm.publishedMessages.containsKey(msgId2), isTrue);
-//      pm.handlePublishReceived(
-//          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
-//      final MqttPublishReleaseMessage pubMessRel =
-//      testCHS.sentMessages[1] as MqttPublishReleaseMessage;
-//      expect(pubMessRel.variableHeader.messageIdentifier, msgId1);
-//      pm.handlePublishComplete(
-//          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
-//      expect(pm.publishedMessages, isEmpty);
+      expect(pm.publishedMessages.length, 2);
+      testCHS.sentMessages.clear();
+      pm.handlePublishReceived(
+          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
+      pm.handlePublishReceived(
+          MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
+      expect(testCHS.sentMessages.length, 2);
+      final MqttPublishReleaseMessage pubMessRel2 =
+      testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+      expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
+      final MqttPublishReleaseMessage pubMessRel1 =
+      testCHS.sentMessages[0] as MqttPublishReleaseMessage;
+      expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
+      pm.handlePublishComplete(
+          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
+      pm.handlePublishComplete(
+          MqttPublishCompleteMessage().withMessageIdentifier(msgId2));
+      expect(pm.publishedMessages, isEmpty);
     });
   });
 }

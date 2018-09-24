@@ -12,13 +12,13 @@ part of mqtt_client;
 ///         It's probably worth going into a bit of the detail around publishing and Quality of Service levels
 ///         as they are primarily the reason why message publishing has been split out into this class.
 ///
-///         There are 3 different QOS levels. AtMostOnce (0), means that the message, when sent from broker to client, or
+///         There are 3 different QOS levels. QOS0 AtMostOnce(0), means that the message, when sent from broker to client, or
 ///         client to broker, should be delivered at most one time, and it does not matter if the message is
-///         "lost". QOS 2, AtLeastOnce, means that the message should be successfully received by the receiving
+///         "lost". QOS 1, AtLeastOnce(1), means that the message should be successfully received by the receiving
 ///         party at least one time, so requires some sort of acknowledgement so the sender can re-send if the
 ///         receiver does not acknowledge.
 ///
-///         QOS 3 is a bit more complicated as it provides the facility for guaranteed delivery of the message
+///         QOS 2 ExactlyOnce(2) is a bit more complicated as it provides the facility for guaranteed delivery of the message
 ///         exactly one time, no more, no less.
 ///
 ///         Each of these have different message flow between the sender and receiver.</para>
@@ -29,7 +29,7 @@ part of mqtt_client;
 ///                                      |
 ///                                      v
 ///                               Message Processor
-///         QOS 2 - AtLeastOnce
+///         QOS 2 - ExactlyOnce
 ///         Sender --> Publish --> Receiver --> PublishReceived --> Sender --> PublishRelease --> Reciever --> PublishComplete --> Sender
 ///                                                                                                   | v
 ///                                                                                            Message Processor
@@ -55,6 +55,9 @@ class PublishingManager implements IPublishingManager {
   /// Raised when a message has been recieved by the client and the relevant QOS handshake is complete.
   MessageReceived publishEvent;
 
+  /// Publish identifier key
+  static const String publishIdentifierkey = "Publish";
+
   /// Initializes a new instance of the PublishingManager class.
   PublishingManager(IMqttConnectionHandler connectionHandler) {
     this.connectionHandler = connectionHandler;
@@ -79,7 +82,7 @@ class PublishingManager implements IPublishingManager {
       PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       [bool retain = false]) {
     final int msgId = messageIdentifierDispenser
-        .getNextMessageIdentifier("Publish");
+        .getNextMessageIdentifier(publishIdentifierkey);
     final MqttPublishMessage msg = MqttPublishMessage()
         .toTopic(topic.toString())
         .withMessageIdentifier(msgId)

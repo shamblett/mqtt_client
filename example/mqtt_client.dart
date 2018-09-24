@@ -110,10 +110,11 @@ Future<int> main() async {
   final String pubTopic = "Dart/Mqtt_client/testtopic";
   final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
   builder.addString("Hello from mqtt_client");
-  client.publishMessage(pubTopic, MqttQos.atMostOnce, builder.payload);
-
   /// Subscribe to it
-  client.subscribe(pubTopic, MqttQos.atMostOnce);
+  client.subscribe(pubTopic, MqttQos.exactlyOnce);
+
+  /// Publish it
+  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
