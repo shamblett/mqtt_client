@@ -24,6 +24,7 @@ class MqttByteBuffer {
     _length = _buffer.length;
   }
 
+
   MqttByteBuffer.fromList(List<int> data) {
     this._buffer = typed.Uint8Buffer();
     this._buffer.addAll(data);
@@ -34,6 +35,8 @@ class MqttByteBuffer {
 
   int get length => _length;
 
+  int get availableBytes => _length - _position;
+
   typed.Uint8Buffer get buffer => _buffer;
 
   set buffer(typed.Uint8Buffer buff) => _buffer = buff;
@@ -41,6 +44,28 @@ class MqttByteBuffer {
   /// Resets the position to 0
   void reset() {
     _position = 0;
+  }
+
+  void skipBytes(int bytes){
+    _position += bytes;
+  }
+
+  void addAll(List<int> data){
+    this._buffer.addAll(data);
+    _length += data.length;
+  }
+
+  void shrink(){
+    this._buffer.removeRange(0, _position);
+    _length -= _position;
+    _position = 0;
+  }
+
+  bool isMessageAvailable(){
+    if(availableBytes > 0)
+      return true;
+
+    return false;
   }
 
   // Reads a byte from the buffer and advances the position within the buffer by one

@@ -25,6 +25,8 @@ class MqttConnection {
 
   /// The read wrapper
   ReadWrapper readWrapper;
+  ///The read buffer
+  MqttByteBuffer messageStream;
 
   /// Indicates if disconnect(onDone) has been requested or not
   bool disconnectRequested = false;
@@ -63,22 +65,33 @@ class MqttConnection {
     if (data.length == 0) {
       return;
     }
-    readWrapper.messageBytes.addAll(data);
+    //readWrapper.messageBytes.addAll(data);
     // Attempt to create a message, if this works we have a full message
     // if not add the bytes to the read wrapper and wait for more bytes.
-    bool messageIsValid = true;
-    MqttMessage msg;
-    try {
-      final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
-      msg = MqttMessage.createFrom(messageStream);
-    } catch (exception) {
-      MqttLogger.log("MqttConnection::_ondata - message is not valid");
-      messageIsValid = false;
-    }
-    if (messageIsValid) {
-      MqttLogger.log("MqttConnection::_onData - message received $msg");
-      clientEventBus.fire(MessageAvailable(msg));
-      MqttLogger.log("MqttConnection::_onData - message processed");
+    
+    messageStream.addAll(data);
+
+    while(messageStream.isMessageAvailable()){
+      bool messageIsValid = true;
+      MqttMessage msg;
+
+      try {
+        //final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
+        msg = MqttMessage.createFrom(messageStream);
+        if(msg == null)
+          return;
+      } catch (exception) {
+        MqttLogger.log("MqttConnection::_ondata - message is not valid");
+        messageIsValid = false;
+      }
+      if(!messageIsValid)
+        return;
+      if (messageIsValid) {
+        messageStream.shrink();
+        MqttLogger.log("MqttConnection::_onData - message received $msg");
+        clientEventBus.fire(MessageAvailable(msg));
+        MqttLogger.log("MqttConnection::_onData - message processed");
+      }
     }
   }
 

@@ -38,8 +38,19 @@ class MqttMessage {
       // Pass the input stream sequentially through the component deserialization(create) methods
       // to build a full MqttMessage.
       header = MqttHeader.fromByteBuffer(messageStream);
+      //expected position after reading payload
+      int expectedPos = messageStream.position + header.messageSize;
+
+      if(messageStream.availableBytes < header.messageSize){
+        messageStream.reset();
+        return null;
+      }
       final MqttMessage message =
           MqttMessageFactory.getMessage(header, messageStream);
+
+      if(messageStream.position < expectedPos)
+        messageStream.skipBytes(expectedPos - messageStream.position);
+
       return message;
     } catch (InvalidHeaderException) {
       throw InvalidMessageException(
