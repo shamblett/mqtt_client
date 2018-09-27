@@ -33,9 +33,6 @@ class SubscriptionsManager {
   SubscribeCallback onSubscribed;
   UnsubscribeCallback onUnsubscribed;
 
-  /// The Subscriptions identifier key
-  static const String subscriptionsIdentifierKey = "subscriptions";
-
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
       IPublishingManager publishingManager) {
@@ -87,7 +84,7 @@ class SubscriptionsManager {
       final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
       final int msgId = messageIdentifierDispenser
-          .getNextMessageIdentifier(subscriptionsIdentifierKey);
+          .getNextMessageIdentifier();
       final Subscription sub = Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
@@ -118,7 +115,7 @@ class SubscriptionsManager {
   void unsubscribe(String topic) {
     final MqttUnsubscribeMessage unsubscribeMsg = MqttUnsubscribeMessage()
         .withMessageIdentifier(messageIdentifierDispenser
-            .getNextMessageIdentifier("unsubscriptions"))
+        .getNextMessageIdentifier())
         .fromTopic(topic);
     connectionHandler.sendMessage(unsubscribeMsg);
   }

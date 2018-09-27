@@ -22,38 +22,23 @@ void main() {
   group("Message Identifier", () {
     test("Numbering starts at 1", () {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
-      expect(
-          dispenser
-              .getNextMessageIdentifier("0374a85e-6aeb-4c5a-b7df-afece971c501"),
-          1);
+      expect(dispenser.getNextMessageIdentifier(), 1);
     });
     test("Numbering increments by 1", () {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
-      final int first =
-      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic");
-      final int second =
-      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic");
+      final int first = dispenser.getNextMessageIdentifier();
+      final int second = dispenser.getNextMessageIdentifier();
       expect(second, first + 1);
-    });
-    test("Numbering starts at 1 different keys", () {
-      final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
-      final int first =
-      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic1");
-      final int second =
-      dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic2");
-      expect(first, 1);
-      expect(second, 1);
     });
     test("Numbering overflows back to 1", () {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       for (int i = 0;
-      i < MessageIdentifierDispenser.maxMessageIdentifier - 1;
-      i = dispenser
-          .getNextMessageIdentifier("Topic::Sample/My/Topic/Overflow")) {}
+      i == MessageIdentifierDispenser.maxMessageIdentifier;
+      i++) {
+        dispenser.getNextMessageIdentifier();
+      }
       // One more call should overflow us and reset us back to 1.
-      expect(
-          dispenser.getNextMessageIdentifier("Topic::Sample/My/Topic/Overflow"),
-          1);
+      expect(dispenser.getNextMessageIdentifier(), 1);
     });
   });
 
@@ -339,6 +324,50 @@ void main() {
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId2));
       expect(pm.publishedMessages, isEmpty);
+    });
+    test("Publish exactly once, interleaved scenario 2", () {
+      testCHS.sentMessages.clear();
+      final PublishingManager pm = PublishingManager(testCHS);
+      final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
+      payload1.addString("test1");
+      final MqttClientPayloadBuilder payload2 = new MqttClientPayloadBuilder();
+      payload2.addString("test2");
+
+      // Publish 1
+      final int msgId1 = pm.publish(
+          PublicationTopic("topic1"), MqttQos.exactlyOnce, payload1.payload);
+      expect(pm.publishedMessages.length, 1);
+      expect(pm.publishedMessages.containsKey(msgId1), isTrue);
+      expect(msgId1, 1);
+      expect(testCHS.sentMessages.length, 1);
+
+      // PubRel 1
+      pm.handlePublishReceived(
+          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
+      expect(testCHS.sentMessages.length, 2);
+
+      // Publish 2
+      final int msgId2 = pm.publish(
+          PublicationTopic("topic2"), MqttQos.exactlyOnce, payload2.payload);
+      expect(msgId2, 2);
+      expect(pm.publishedMessages.length, 2);
+      expect(pm.publishedMessages.containsKey(msgId2), isTrue);
+
+      // PubRel 2
+      pm.handlePublishReceived(
+          MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
+      expect(testCHS.sentMessages.length, 4);
+      final MqttPublishReleaseMessage pubMessRel1 =
+      testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+      expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
+      final MqttPublishReleaseMessage pubMessRel2 =
+      testCHS.sentMessages[3] as MqttPublishReleaseMessage;
+      expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
+
+      // PubComp 1
+      pm.handlePublishComplete(
+          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
+      expect(pm.publishedMessages.length, 1);
     });
   });
 }

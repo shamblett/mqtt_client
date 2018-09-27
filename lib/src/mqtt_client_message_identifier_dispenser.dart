@@ -9,28 +9,23 @@ part of mqtt_client;
 
 /// Message identifier handling
 class MessageIdentifierDispenser {
-  Map<String, int> _idStorage = Map<String, int>();
-
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;
 
-  /// Gets the next message identifier for the specified key.
-  int getNextMessageIdentifier(String key) {
-    // Only a single id can be dispensed at a time, regardless of the key.
-    // Will revise to per-key locking if it proves bottleneck
-    int retVal = 0;
-    if (!_idStorage.containsKey(key)) {
-      _idStorage[key] =
-          1; // add a new key, start at 1, 0 is reserved for by MQTT spec for invalid msg.
-      retVal = 1;
-    } else {
-      int nextId = ++_idStorage[key];
-      if (nextId == maxMessageIdentifier) {
-        // overflow, wrap back to 1.
-        nextId = _idStorage[key] = 1;
-      }
-      retVal = nextId;
+  /// Minimum message identifier
+  static const int startMessageIdentifier = 1;
+
+  /// Message identifier, zero is forbidden
+  int _mid = 0;
+
+  int get mid => _mid;
+
+  /// Gets the next message identifier
+  int getNextMessageIdentifier() {
+    _mid++;
+    if (_mid == maxMessageIdentifier) {
+      _mid = startMessageIdentifier;
     }
-    return retVal;
+    return mid;
   }
 }
