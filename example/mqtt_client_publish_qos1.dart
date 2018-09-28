@@ -9,8 +9,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
-/// A QOS2 publishing example, two QOS two topics are subscribed to and published in quick succession,
-/// tests QOS2 protocol handling.
+/// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
+/// tests QOS1 protocol handling.
 Future<int> main() async {
   final MqttClient client = new MqttClient("test.mosquitto.org", "");
   client.logging(true);
@@ -47,10 +47,10 @@ Future<int> main() async {
   /// Lets try our subscriptions
   print("EXAMPLE:: <<<< SUBCRIBE 1 >>>>");
   final String topic1 = "SJHTopic1"; // Not a wildcard topic
-  client.subscribe(topic1, MqttQos.exactlyOnce);
+  client.subscribe(topic1, MqttQos.atLeastOnce);
   print("EXAMPLE:: <<<< SUBCRIBE 2 >>>>");
   final String topic2 = "SJHTopic2"; // Not a wildcard topic
-  client.subscribe(topic2, MqttQos.exactlyOnce);
+  client.subscribe(topic2, MqttQos.atLeastOnce);
 
   client.updates.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
@@ -64,12 +64,12 @@ Future<int> main() async {
   final MqttClientPayloadBuilder builder1 = new MqttClientPayloadBuilder();
   builder1.addString("Hello from mqtt_client topic 1");
   print("EXAMPLE:: <<<< PUBLISH 1 >>>>");
-  client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload);
+  client.publishMessage(topic1, MqttQos.atLeastOnce, builder1.payload);
 
   final MqttClientPayloadBuilder builder2 = new MqttClientPayloadBuilder();
   builder2.addString("Hello from mqtt_client topic 2");
   print("EXAMPLE:: <<<< PUBLISH 2 >>>>");
-  client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload);
+  client.publishMessage(topic2, MqttQos.atLeastOnce, builder2.payload);
 
   print("EXAMPLE::Sleeping....");
   await MqttUtilities.asyncSleep(120);
