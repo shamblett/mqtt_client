@@ -18,7 +18,7 @@ Future<int> main() async {
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
   final MqttConnectMessage connMess = new MqttConnectMessage()
-      .withClientIdentifier("Mqtt_MyClientUniqueId")
+      .withClientIdentifier("Mqtt_MyClientUniqueIdQ2")
       .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic("willtopic") // If you set this you must set a will message
       .withWillMessage("My Will message")
