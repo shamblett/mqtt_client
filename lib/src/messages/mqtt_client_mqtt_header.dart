@@ -55,6 +55,7 @@ class MqttHeader {
   /// Creates a new MqttHeader based on a list of bytes.
   void readFrom(MqttByteBuffer headerStream) {
     if (headerStream.length < 2) {
+      headerStream.reset();
       throw InvalidHeaderException(
           "The supplied header is invalid. Header must be at least 2 bytes long.");
     }

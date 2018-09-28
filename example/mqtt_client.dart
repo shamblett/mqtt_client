@@ -112,7 +112,6 @@ Future<int> main() async {
   builder.addString("Hello from mqtt_client");
   /// Subscribe to it
   client.subscribe(pubTopic, MqttQos.exactlyOnce);
-
   /// Publish it
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
