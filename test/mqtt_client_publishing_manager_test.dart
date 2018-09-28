@@ -32,6 +32,7 @@ void main() {
     });
     test("Numbering overflows back to 1", () {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
+      dispenser.reset();
       for (int i = 0;
       i == MessageIdentifierDispenser.maxMessageIdentifier;
       i++) {
@@ -103,6 +104,7 @@ void main() {
     test("Publish at least once", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -131,6 +133,7 @@ void main() {
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
+      pm.messageIdentifierDispenser.reset();
       final int msgId =
       pm.publish(PublicationTopic("A/rawTopic"), MqttQos.atLeastOnce, buff);
       expect(msgId, 1);
@@ -147,6 +150,7 @@ void main() {
     test("Publish at exactly once", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -181,6 +185,7 @@ void main() {
     test("Publish at least once and ack", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -196,6 +201,7 @@ void main() {
     test("Publish exactly once, release and complete", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -294,6 +300,7 @@ void main() {
     test("Publish exactly once, interleaved scenario 1", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
       payload1.addString("test1");
       final MqttClientPayloadBuilder payload2 = new MqttClientPayloadBuilder();
@@ -328,6 +335,7 @@ void main() {
     test("Publish exactly once, interleaved scenario 2", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
       payload1.addString("test1");
       final MqttClientPayloadBuilder payload2 = new MqttClientPayloadBuilder();

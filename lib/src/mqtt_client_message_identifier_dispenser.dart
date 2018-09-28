@@ -21,8 +21,8 @@ class MessageIdentifierDispenser {
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;
 
-  /// Initial value, can't be zero
-  static const int initialValue = 10;
+  /// Initial value
+  static const int initialValue = 0;
 
   /// Minimum message identifier
   static const int startMessageIdentifier = 1;

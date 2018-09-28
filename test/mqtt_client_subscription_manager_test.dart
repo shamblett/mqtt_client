@@ -24,6 +24,7 @@ void main() {
     test("Subscription request creates pending subscription", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -46,6 +47,7 @@ void main() {
 
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -72,6 +74,7 @@ void main() {
             () {
           testCHS.sentMessages.clear();
           final PublishingManager pm = PublishingManager(testCHS);
+          pm.messageIdentifierDispenser.reset();
           const String topic = "testtopic";
           const MqttQos qos = MqttQos.atLeastOnce;
           final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -97,6 +100,7 @@ void main() {
     test("Get subscription with valid topic returns subscription", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -120,6 +124,7 @@ void main() {
     test("Get subscription with invalid topic returns null", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -143,6 +148,7 @@ void main() {
     test("Get subscription for pending subscription returns null", () {
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -166,6 +172,7 @@ void main() {
 
       testCHS.sentMessages.clear();
       final PublishingManager pm = PublishingManager(testCHS);
+      pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
@@ -191,7 +198,7 @@ void main() {
       expect(
           testCHS.sentMessages[1], const TypeMatcher<MqttUnsubscribeMessage>());
       final MqttUnsubscribeMessage unSub = testCHS.sentMessages[1];
-      expect(unSub.variableHeader.messageIdentifier, 1);
+      expect(unSub.variableHeader.messageIdentifier, 2);
       expect(unSub.payload.subscriptions.length, 1);
       expect(unSub.payload.subscriptions[0], topic);
       // Unsubscribe ack
