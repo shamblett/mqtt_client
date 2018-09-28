@@ -39,7 +39,7 @@ class MqttMessage {
       // to build a full MqttMessage.
       header = MqttHeader.fromByteBuffer(messageStream);
       //expected position after reading payload
-      int expectedPos = messageStream.position + header.messageSize;
+      final int expectedPos = messageStream.position + header.messageSize;
 
       if(messageStream.availableBytes < header.messageSize){
         messageStream.reset();
