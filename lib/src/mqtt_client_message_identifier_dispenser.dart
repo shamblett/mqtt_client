@@ -9,8 +9,10 @@ part of mqtt_client;
 
 /// Message identifier handling
 class MessageIdentifierDispenser {
-  static final MessageIdentifierDispenser _singleton =
-  new MessageIdentifierDispenser();
+  static MessageIdentifierDispenser _singleton =
+  new MessageIdentifierDispenser._internal();
+
+  MessageIdentifierDispenser._internal();
 
   factory MessageIdentifierDispenser() {
     return _singleton;
@@ -34,5 +36,10 @@ class MessageIdentifierDispenser {
       _mid = startMessageIdentifier;
     }
     return mid;
+  }
+
+  /// Resets the mid
+  void reset() {
+    _mid = 0;
   }
 }
