@@ -43,7 +43,8 @@ class MqttMessage {
 
       if(messageStream.availableBytes < header.messageSize){
         messageStream.reset();
-        return null;
+        throw InvalidMessageException(
+            "Available bytes is less than the message size");
       }
       final MqttMessage message =
           MqttMessageFactory.getMessage(header, messageStream);
@@ -52,7 +53,7 @@ class MqttMessage {
         messageStream.skipBytes(expectedPos - messageStream.position);
 
       return message;
-    } catch (InvalidHeaderException) {
+    } catch (e) {
       throw InvalidMessageException(
           "The data provided in the message stream was not a valid MQTT Message");
     }

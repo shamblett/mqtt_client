@@ -1,3 +1,6 @@
+# 3.3.2
+Issue 38 QOS1 + 2 protocol handling bugs, Issue 34 Flutter buffers
+
 # 3.3.1
 Issue 38 QOS1 + 2 protocol handling bugs
 

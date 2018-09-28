@@ -3,21 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c3934600-77d9-41a7-806e-19d63effdbd9" name="Default" comment="Issue 38 QOS1 + 2 protocol handling bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_base_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_iotcore.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_iotcore.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_publish.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_publish.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_subscribe.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_subscribe.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_publish.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_publish.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_subscribe.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_broker_test_ws_subscribe.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_class.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_class.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_message_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_message_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/mqtt_client_test_connection_handler.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/mqtt_client_test_connection_handler.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.pub/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -84,59 +70,94 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="LICENSE" value="1" />
-          <entry key="dart" value="189" />
-          <entry key="md" value="14" />
+          <entry key="dart" value="224" />
+          <entry key="md" value="15" />
+          <entry key="txt" value="1" />
           <entry key="yaml" value="15" />
           <entry key="yml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Dart" value="189" />
-          <entry key="Markdown" value="14" />
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Dart" value="224" />
+          <entry key="Markdown" value="15" />
+          <entry key="PLAIN_TEXT" value="2" />
           <entry key="YAML" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="LICENSE" value="120" />
-          <entry key="dart" value="4142" />
+          <entry key="dart" value="5078" />
           <entry key="md" value="226" />
-          <entry key="txt" value="125" />
+          <entry key="txt" value="136" />
           <entry key="yaml" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Dart" value="4142" />
+          <entry key="Dart" value="5078" />
           <entry key="Markdown" value="226" />
-          <entry key="PLAIN_TEXT" value="245" />
+          <entry key="PLAIN_TEXT" value="256" />
           <entry key="YAML" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="17" />
-          <entry key="project.open.time.1" value="5" />
+          <entry key="project.closed" value="20" />
+          <entry key="project.open.time.1" value="6" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="4" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="4" />
+          <entry key="project.open.time.6" value="2" />
+          <entry key="project.open.time.7" value="5" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages">
         <counts>
+          <entry key="git.branch.checkout.local" value="5" />
           <entry key="git.branch.create.new" value="1" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_message_exception.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#460#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_header_exception.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#456#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="244">
+              <caret line="43" column="60" lean-forward="true" selection-start-line="43" selection-start-column="60" selection-end-line="43" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -159,6 +180,7 @@
       <find>&quot;subscriptions&quot;</find>
       <find>skipIfTravis()</find>
       <find>travis</find>
+      <find>MessageIdentifier={2}</find>
     </findStrings>
     <replaceStrings>
       <replace>false</replace>
@@ -216,26 +238,30 @@
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart" />
         <option value="$PROJECT_DIR$/example/mqtt_client_wildcard.dart" />
         <option value="$PROJECT_DIR$/lib/src/utility/mqtt_client_utilities.dart" />
-        <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart" />
-        <option value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
         <option value="$PROJECT_DIR$/lib/src/mqtt_client.dart" />
         <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_mockbroker.dart" />
         <option value="$PROJECT_DIR$/.travis.yml" />
-        <option value="$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart" />
-        <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
-        <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" />
-        <option value="$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart" />
-        <option value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/test/mqtt_client_base_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_secure_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
         <option value="$PROJECT_DIR$/test/mqtt_client_connection_ws_test.dart" />
+        <option value="$PROJECT_DIR$/example/mqtt_client.dart" />
+        <option value="$PROJECT_DIR$/example/mqtt_client_publish.dart" />
+        <option value="$PROJECT_DIR$/example/results.txt" />
+        <option value="$PROJECT_DIR$/example/mqtt_client_publish_qos2.dart" />
+        <option value="$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart" />
+        <option value="$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart" />
+        <option value="$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart" />
+        <option value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
+        <option value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
+        <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart" />
+        <option value="$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart" />
+        <option value="$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart" />
       </list>
     </option>
   </component>
@@ -258,19 +284,36 @@
             <path>
               <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
               <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="exception" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="mqtt_client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="mqtt_client" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537783239299" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538128853179" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
   </component>
@@ -304,34 +347,31 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Connect no connect ack in mqtt_client_connection_tcp_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
-      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Connect no connect ack" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Connect to bad host name in mqtt_client_connection_tcp_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_connection_tcp_test.dart" />
-      <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Connect to bad host name" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Numbering starts at 1 different keys in mqtt_client_publishing_manager_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+    <configuration name="Numbering overflows back to 1 in mqtt_client_publishing_manager_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Numbering starts at 1 different keys" />
+      <option name="testName" value="Numbering overflows back to 1" />
       <method v="2" />
     </configuration>
-    <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
-      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart" />
+    <configuration name="Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
       <option name="scope" value="GROUP_OR_TEST_BY_NAME" />
-      <option name="testName" value="Publish exactly once, interleaved scenario 1" />
+      <option name="testName" value="Unsubscribe with ack" />
       <method v="2" />
     </configuration>
     <configuration name="tests in mqtt_client" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
       <option name="filePath" value="$PROJECT_DIR$" />
       <option name="scope" value="FOLDER" />
-      <option name="testRunnerOptions" value="--concurrency=1" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests in mqtt_client_message_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_message_test.dart" />
+      <option name="testName" value="mqtt_client_message_test.dart" />
+      <method v="2" />
+    </configuration>
+    <configuration name="tests in mqtt_client_subscription_manager_test.dart" type="DartTestRunConfigurationType" factoryName="Dart Test" temporary="true" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart" />
+      <option name="testName" value="mqtt_client_subscription_manager_test.dart" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -349,19 +389,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Dart Test.Numbering overflows back to 1 in mqtt_client_publishing_manager_test.dart" />
+      <item itemvalue="Dart Test.tests in mqtt_client_subscription_manager_test.dart" />
+      <item itemvalue="Dart Test.Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" />
+      <item itemvalue="Dart Test.tests in mqtt_client_message_test.dart" />
       <item itemvalue="Dart Test.tests in mqtt_client" />
-      <item itemvalue="Dart Test.Connect to bad host name in mqtt_client_connection_tcp_test.dart" />
-      <item itemvalue="Dart Test.Connect no connect ack in mqtt_client_connection_tcp_test.dart" />
-      <item itemvalue="Dart Test.Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" />
-      <item itemvalue="Dart Test.Numbering starts at 1 different keys in mqtt_client_publishing_manager_test.dart" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Dart Test.tests in mqtt_client" />
-        <item itemvalue="Dart Test.Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" />
-        <item itemvalue="Dart Test.Numbering starts at 1 different keys in mqtt_client_publishing_manager_test.dart" />
-        <item itemvalue="Dart Test.Connect no connect ack in mqtt_client_connection_tcp_test.dart" />
-        <item itemvalue="Dart Test.Connect to bad host name in mqtt_client_connection_tcp_test.dart" />
+        <item itemvalue="Dart Test.tests in mqtt_client_message_test.dart" />
+        <item itemvalue="Dart Test.Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" />
+        <item itemvalue="Dart Test.tests in mqtt_client_subscription_manager_test.dart" />
+        <item itemvalue="Dart Test.Numbering overflows back to 1 in mqtt_client_publishing_manager_test.dart" />
       </list>
     </recent_temporary>
   </component>
@@ -375,62 +415,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1502616045682</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Add the payload builder package">
-      <created>1524063065406</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1524063065406</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Add the payload builder package">
-      <created>1524119322906</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1524119322906</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Add the payload builder package">
-      <created>1524132854423</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1524132854423</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Add the payload builder package">
-      <created>1524142079942</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1524142079942</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Release 1.7.1, issue 10, update Observable to 'any'">
-      <created>1525072104849</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1525072104849</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Release 1.8.0, pull request 14, will qos setting updates">
-      <created>1529418423236</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1529418423236</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Example updates">
-      <created>1530089926475</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1530089926476</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Example updates">
-      <created>1530093043959</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1530093043959</updated>
     </task>
     <task id="LOCAL-00027" summary="Remerge changes from gokr">
       <created>1530263616896</created>
@@ -719,39 +703,95 @@
       <option name="project" value="LOCAL" />
       <updated>1537781207923</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1537784647645</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1537784647645</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538059490058</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1538059490058</updated>
+    </task>
+    <task id="LOCAL-00070" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538119351123</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1538119351123</updated>
+    </task>
+    <task id="LOCAL-00071" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538120065660</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1538120065660</updated>
+    </task>
+    <task id="LOCAL-00072" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538120404766</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1538120404766</updated>
+    </task>
+    <task id="LOCAL-00073" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538121346350</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1538121346350</updated>
+    </task>
+    <task id="LOCAL-00074" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538125516967</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1538125516967</updated>
+    </task>
+    <task id="LOCAL-00075" summary="Issue 38 QOS1 + 2 protocol handling bugs">
+      <created>1538126743715</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1538126743715</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 09h 59m 13s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="tests_in_mqtt_client_subscription_manager_test_dart - 2018.09.28 at 08h 47m 14s.xml">
+      <configuration name="tests in mqtt_client_subscription_manager_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 12m 14s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Unsubscribe_with_ack_in_mqtt_client_subscription_manager_test_dart - 2018.09.28 at 08h 50m 32s.xml">
+      <configuration name="Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 13m 05s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Unsubscribe_with_ack_in_mqtt_client_subscription_manager_test_dart - 2018.09.28 at 08h 51m 33s.xml">
+      <configuration name="Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 14m 31s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
+    <history-entry file="Unsubscribe_with_ack_in_mqtt_client_subscription_manager_test_dart - 2018.09.28 at 08h 54m 10s.xml">
+      <configuration name="Unsubscribe with ack in mqtt_client_subscription_manager_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 19m 58s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 20m 33s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 22m 00s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 22m 46s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="Publish_exactly_once,_interleaved_scenario_1_in_mqtt_client_publishing_manager_test_dart - 2018.09.24 at 10h 23m 52s.xml">
-      <configuration name="Publish exactly once, interleaved scenario 1 in mqtt_client_publishing_manager_test.dart" configurationId="DartTestRunConfigurationType" />
-    </history-entry>
-    <history-entry file="tests_in_mqtt_client - 2018.09.24 at 10h 28m 27s.xml">
+    <history-entry file="tests_in_mqtt_client - 2018.09.28 at 08h 55m 16s.xml">
       <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_mqtt_client - 2018.09.28 at 09h 10m 00s.xml">
+      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_mqtt_client - 2018.09.28 at 10h 22m 34s.xml">
+      <configuration name="tests in mqtt_client" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Deserialisation_-_payload_too_short_in_mqtt_client_message_test_dart - 2018.09.28 at 10h 26m 46s.xml">
+      <configuration name="Deserialisation - payload too short in mqtt_client_message_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Deserialisation_-_payload_too_short_in_mqtt_client_message_test_dart - 2018.09.28 at 10h 27m 58s.xml">
+      <configuration name="Deserialisation - payload too short in mqtt_client_message_test.dart" configurationId="DartTestRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests_in_mqtt_client_message_test_dart - 2018.09.28 at 10h 58m 35s.xml">
+      <configuration name="tests in mqtt_client_message_test.dart" configurationId="DartTestRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -764,9 +804,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18869936" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19509594" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -784,8 +824,8 @@
       <window_info anchor="bottom" id="Dart Analysis" order="7" sideWeight="0.4968017" weight="0.32444444" />
       <window_info anchor="bottom" id="Messages" order="8" weight="0.32444444" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.32777777" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50319827" side_tool="true" weight="0.32555556" />
-      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4978678" weight="0.32555556" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5026652" side_tool="true" weight="0.32555556" />
+      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.49733475" weight="0.32555556" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -891,29 +931,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../pub-cache/hosted/pub.dartlang.org/event_bus-1.0.1/lib/event_bus.dart" />
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscription.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="10" column="39" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_mqtt_received_message.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="10" column="18" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/observable/src/records.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/observable/src/internal.dart" />
     <entry file="file://$PROJECT_DIR$/lib/src/observable/src/change_notifier.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -993,13 +1010,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md" />
-    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="40" column="62" lean-forward="true" selection-start-line="49" selection-start-column="24" selection-end-line="52" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/messages/unsubscribeack/mqtt_client_mqtt_unsubscribe_ack_message.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -1036,13 +1046,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="31" column="18" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -1054,20 +1057,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="328">
           <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="21" column="6" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="68" column="9" selection-start-line="68" selection-start-column="9" selection-end-line="68" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -1100,86 +1089,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/src/utility/mqtt_client_payload_builder.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#1897#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="23" column="15" lean-forward="true" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_mqtt_qos.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="114" column="16" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="95" column="56" lean-forward="true" selection-start-line="95" selection-start-column="56" selection-end-line="95" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="31" column="27" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/pubspec.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="17">
-            <caret line="1" column="36" lean-forward="true" selection-start-line="1" selection-end-line="1" selection-end-column="40" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_message_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#82643#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5168">
-          <caret line="313" column="6" selection-start-line="313" selection-start-column="6" selection-end-line="313" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2873">
-          <caret line="179" column="33" lean-forward="true" selection-start-line="179" selection-start-column="33" selection-end-line="179" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -1194,9 +1109,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-          <folding>
-            <element signature="e#133#153#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1204,9 +1116,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="16" column="61" lean-forward="true" selection-start-line="16" selection-start-column="61" selection-end-line="16" selection-end-column="61" />
-          <folding>
-            <element signature="e#135#181#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1214,9 +1123,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#134#180#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1224,9 +1130,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#134#180#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1234,6 +1137,134 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="18" column="12" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CHANGELOG.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="17">
+            <caret line="1" column="36" lean-forward="true" selection-start-line="1" selection-end-line="1" selection-end-column="40" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/results.txt" />
+    <entry file="file://$PROJECT_DIR$/example/mqtt_client_publish_qos2.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-220">
+          <caret line="46" column="7" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_subscriptions_manager.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="117" column="40" lean-forward="true" selection-start-line="117" selection-start-column="40" selection-end-line="117" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_subscription_manager_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="200" column="54" selection-start-line="200" selection-start-column="54" selection-end-line="200" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_publishing_manager.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1428">
+          <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_mqtt_qos.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="12" column="2" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/mqtt_client_message_identifier_dispenser.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_publishing_manager_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="344" selection-start-line="344" selection-end-line="344" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/mqtt_client.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="477">
+          <caret line="113" column="50" selection-start-line="113" selection-start-column="50" selection-end-line="113" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_connection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="21" column="6" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_ws_connection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="38" column="5" lean-forward="true" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_secure_connection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="430">
+          <caret line="64" column="36" lean-forward="true" selection-start-line="64" selection-start-column="36" selection-end-line="64" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/connectionhandling/mqtt_client_mqtt_normal_connection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="31" column="18" selection-start-line="31" selection-start-column="18" selection-end-line="31" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/mqtt_client_message_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="1019" column="8" selection-start-line="1019" selection-start-column="8" selection-end-line="1019" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_message_exception.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#460#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/exception/mqtt_client_invalid_header_exception.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#456#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/messages/mqtt_client_mqtt_message.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="43" column="60" lean-forward="true" selection-start-line="43" selection-start-column="60" selection-end-line="43" selection-end-column="60" />
         </state>
       </provider>
     </entry>
