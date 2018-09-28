@@ -72,7 +72,7 @@ Future<int> main() async {
   client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload);
 
   print("EXAMPLE::Sleeping....");
-  await MqttUtilities.asyncSleep(120);
+  await MqttUtilities.asyncSleep(60);
 
   print("EXAMPLE::Unsubscribing");
   client.unsubscribe(topic1);
