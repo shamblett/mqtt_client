@@ -1,3 +1,6 @@
+# 3.3.3
+Issue 26, example code for flutter
+
 # 3.3.2
 Issue 38 QOS1 + 2 protocol handling bugs, Issue 34 Flutter buffers
 

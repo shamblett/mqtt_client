@@ -4,8 +4,8 @@
 #   https://www.dartlang.org/guides/language/analysis-options
 
  analyzer:
-#   exclude:
-#     - path/to/excluded/files/**
+  exclude:
+    - example/flutter_example/**
  linter:
    rules:
 #     # see catalog here: http://dart-lang.github.io/linter/lints/
