@@ -25,6 +25,7 @@ class MqttConnection {
 
   /// The read wrapper
   ReadWrapper readWrapper;
+
   ///The read buffer
   MqttByteBuffer messageStream;
 
@@ -68,24 +69,22 @@ class MqttConnection {
     //readWrapper.messageBytes.addAll(data);
     // Attempt to create a message, if this works we have a full message
     // if not add the bytes to the read wrapper and wait for more bytes.
-    
+
     messageStream.addAll(data);
 
-    while(messageStream.isMessageAvailable()){
+    while (messageStream.isMessageAvailable()) {
       bool messageIsValid = true;
       MqttMessage msg;
 
       try {
         //final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
         msg = MqttMessage.createFrom(messageStream);
-        if(msg == null)
-          return;
+        if (msg == null) return;
       } catch (exception) {
         MqttLogger.log("MqttConnection::_ondata - message is not valid");
         messageIsValid = false;
       }
-      if(!messageIsValid)
-        return;
+      if (!messageIsValid) return;
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log("MqttConnection::_onData - message received $msg");

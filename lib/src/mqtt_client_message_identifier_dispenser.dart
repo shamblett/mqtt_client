@@ -16,7 +16,7 @@ class MessageIdentifierDispenser {
   MessageIdentifierDispenser._internal();
 
   static MessageIdentifierDispenser _singleton =
-  new MessageIdentifierDispenser._internal();
+      new MessageIdentifierDispenser._internal();
 
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;

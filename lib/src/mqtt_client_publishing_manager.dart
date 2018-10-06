@@ -78,8 +78,7 @@ class PublishingManager implements IPublishingManager {
   int publish(
       PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       [bool retain = false]) {
-    final int msgId = messageIdentifierDispenser
-        .getNextMessageIdentifier();
+    final int msgId = messageIdentifierDispenser.getNextMessageIdentifier();
     final MqttPublishMessage msg = MqttPublishMessage()
         .toTopic(topic.toString())
         .withMessageIdentifier(msgId)

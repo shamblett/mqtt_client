@@ -83,8 +83,7 @@ class SubscriptionsManager {
     try {
       final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
       // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
-      final int msgId = messageIdentifierDispenser
-          .getNextMessageIdentifier();
+      final int msgId = messageIdentifierDispenser.getNextMessageIdentifier();
       final Subscription sub = Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos;
@@ -114,8 +113,8 @@ class SubscriptionsManager {
   /// Unsubscribe from a topic
   void unsubscribe(String topic) {
     final MqttUnsubscribeMessage unsubscribeMsg = MqttUnsubscribeMessage()
-        .withMessageIdentifier(messageIdentifierDispenser
-        .getNextMessageIdentifier())
+        .withMessageIdentifier(
+            messageIdentifierDispenser.getNextMessageIdentifier())
         .fromTopic(topic);
     connectionHandler.sendMessage(unsubscribeMsg);
   }

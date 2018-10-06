@@ -41,7 +41,7 @@ class MqttMessage {
       //expected position after reading payload
       final int expectedPos = messageStream.position + header.messageSize;
 
-      if(messageStream.availableBytes < header.messageSize){
+      if (messageStream.availableBytes < header.messageSize) {
         messageStream.reset();
         throw InvalidMessageException(
             "Available bytes is less than the message size");
@@ -49,7 +49,7 @@ class MqttMessage {
       final MqttMessage message =
           MqttMessageFactory.getMessage(header, messageStream);
 
-      if(messageStream.position < expectedPos)
+      if (messageStream.position < expectedPos)
         messageStream.skipBytes(expectedPos - messageStream.position);
 
       return message;
