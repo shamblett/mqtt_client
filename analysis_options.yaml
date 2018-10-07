@@ -5,7 +5,7 @@
 
  analyzer:
   exclude:
-    - example/flutter_example/**
+  - example/flutter/**
  linter:
    rules:
 #     # see catalog here: http://dart-lang.github.io/linter/lints/
