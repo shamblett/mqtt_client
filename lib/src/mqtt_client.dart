@@ -102,6 +102,8 @@ class MqttClient {
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
   Future connect([String username, String password]) async {
+    clientEventBus?.destroy();
+    clientEventBus = events.EventBus();
     if (username != null) {
       MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
@@ -206,6 +208,8 @@ class MqttClient {
     _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
+    clientEventBus?.destroy();
+    clientEventBus = null;
   }
 
   /// Turn on logging, true to start, false to stop

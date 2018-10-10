@@ -88,7 +88,7 @@ class MqttConnection {
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log("MqttConnection::_onData - message received $msg");
-        clientEventBus.fire(MessageAvailable(msg));
+        clientEventBus?.fire(MessageAvailable(msg));
         MqttLogger.log("MqttConnection::_onData - message processed");
       }
     }
@@ -116,13 +116,14 @@ class MqttConnection {
   void _disconnect() {
     if (client != null) {
       client.close();
+      client = null;
     }
   }
 
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final typed.Uint8Buffer messageBytes = message.read(message.length);
-    client.add(messageBytes.toList());
+    client?.add(messageBytes.toList());
   }
 
   // User requested disconnection

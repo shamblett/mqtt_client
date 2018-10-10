@@ -1,3 +1,6 @@
+#3.3.5
+Issue 40, disconnected clients
+
 #3.3.4
 Formatting
 

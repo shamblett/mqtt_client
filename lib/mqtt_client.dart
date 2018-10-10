@@ -171,4 +171,4 @@ part 'src/messages/mqtt_client_mqtt_message_factory.dart';
 part 'src/messages/mqtt_client_mqtt_payload.dart';
 
 /// The global event bus
-events.EventBus clientEventBus = events.EventBus();
+events.EventBus clientEventBus;
