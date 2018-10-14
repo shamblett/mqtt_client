@@ -96,6 +96,9 @@ class MqttClient {
     _subscriptionsManager?.onUnsubscribed = cb;
   }
 
+  /// The event bus
+  events.EventBus clientEventBus;
+
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage>> updates;
 
