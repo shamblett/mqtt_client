@@ -9,6 +9,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client_mockbroker.dart';
+import 'package:event_bus/event_bus.dart' as events;
 
 void main() {
   // Test wide variables
@@ -22,8 +23,9 @@ void main() {
   group("Connection parameters", () {
     test("Invalid URL", () async {
       try {
+        final events.EventBus clientEventBus = new events.EventBus();
         final SynchronousMqttConnectionHandler ch =
-        SynchronousMqttConnectionHandler();
+        SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -38,8 +40,9 @@ void main() {
 
     test("Invalid URL - bad scheme", () async {
       try {
+        final events.EventBus clientEventBus = new events.EventBus();
         final SynchronousMqttConnectionHandler ch =
-        SynchronousMqttConnectionHandler();
+        SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -75,8 +78,9 @@ void main() {
       }
 
       await brokerWs.start();
+      final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler(clientEventBus);
       ch.useWebSocket = true;
       brokerWs.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,

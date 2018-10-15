@@ -11,6 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client_mockbroker.dart';
 import 'package:path/path.dart' as path;
+import 'package:event_bus/event_bus.dart' as events;
 
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
@@ -68,8 +69,9 @@ void main() {
 
   group("Synchronous MqttConnectionHandler", () {
     test("Connect to bad host name", () async {
+      final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
@@ -81,8 +83,9 @@ void main() {
       expect(ch.connectionState, ConnectionState.faulted);
     });
     test("Connect invalid port", () async {
+      final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       try {
         await ch.connect(mockBrokerAddress, badPort,
@@ -116,8 +119,9 @@ void main() {
       }
 
       broker.start();
+      final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler();
+      SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       final String currDir = path.current + path.separator;
       ch.trustedCertPath = currDir + path.join("test", "pem", "localhost.cert");

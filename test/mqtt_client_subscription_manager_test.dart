@@ -10,6 +10,7 @@ import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'mqtt_client_test_connection_handler.dart';
 import 'package:typed_data/typed_data.dart' as typed;
+import 'package:event_bus/event_bus.dart' as events;
 
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
@@ -23,11 +24,13 @@ void main() {
   group("Manager", () {
     test("Subscription request creates pending subscription", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
@@ -46,11 +49,13 @@ void main() {
       }
 
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.onSubscribed = subCallback;
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
@@ -73,11 +78,14 @@ void main() {
         "Acknowledged subscription request for no pending subscription is ignored",
             () {
           testCHS.sentMessages.clear();
-          final PublishingManager pm = PublishingManager(testCHS);
+          final events.EventBus clientEventBus = new events.EventBus();
+          final PublishingManager pm = PublishingManager(
+              testCHS, clientEventBus);
           pm.messageIdentifierDispenser.reset();
           const String topic = "testtopic";
           const MqttQos qos = MqttQos.atLeastOnce;
-          final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+          final SubscriptionsManager subs =
+          SubscriptionsManager(testCHS, pm, clientEventBus);
           subs.registerSubscription(topic, qos);
           expect(
               subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
@@ -99,11 +107,13 @@ void main() {
         });
     test("Get subscription with valid topic returns subscription", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
@@ -123,11 +133,13 @@ void main() {
     });
     test("Get subscription with invalid topic returns null", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
@@ -147,11 +159,13 @@ void main() {
     });
     test("Get subscription for pending subscription returns null", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
       expect(
@@ -171,11 +185,13 @@ void main() {
       }
 
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const String topic = "testtopic";
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       subs.onUnsubscribed = unsubCallback;
       expect(subs.getSubscriptionsStatus(topic), SubscriptionStatus.pending);
@@ -242,9 +258,11 @@ void main() {
       // Wrap the callback
       final t1 = expectAsync1(subRec, count: 2);
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       const MqttQos qos = MqttQos.atLeastOnce;
-      final SubscriptionsManager subs = SubscriptionsManager(testCHS, pm);
+      final SubscriptionsManager subs =
+      SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       // Start listening
       st = subs.subscriptionNotifier.changes.listen(t1);

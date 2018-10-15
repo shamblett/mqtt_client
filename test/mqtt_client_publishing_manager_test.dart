@@ -9,6 +9,7 @@ import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'mqtt_client_test_connection_handler.dart';
 import 'package:typed_data/typed_data.dart' as typed;
+import 'package:event_bus/event_bus.dart' as events;
 
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
@@ -103,7 +104,8 @@ void main() {
   group("Publishing", () {
     test("Publish at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -127,7 +129,8 @@ void main() {
 
     test("Publish at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -149,7 +152,8 @@ void main() {
     });
     test("Publish at exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -170,7 +174,8 @@ void main() {
     });
     test("Publish consecutive topics", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
@@ -184,7 +189,8 @@ void main() {
     });
     test("Publish at least once and ack", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -200,7 +206,8 @@ void main() {
     });
     test("Publish exactly once, release and complete", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -222,7 +229,8 @@ void main() {
     });
     test("Publish recieved at most once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final int msgId = 1;
       final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
@@ -239,7 +247,8 @@ void main() {
     });
     test("Publish recieved at least once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final int msgId = 1;
       final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
@@ -257,7 +266,8 @@ void main() {
     });
     test("Publish recieved exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final int msgId = 1;
       final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
@@ -275,7 +285,8 @@ void main() {
     });
     test("Release recieved exactly once", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       final int msgId = 1;
       final typed.Uint8Buffer data = typed.Uint8Buffer(3);
       data[0] = 0;
@@ -299,7 +310,8 @@ void main() {
     });
     test("Publish exactly once, interleaved scenario 1", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
       payload1.addString("test1");
@@ -334,7 +346,8 @@ void main() {
     });
     test("Publish exactly once, interleaved scenario 2", () {
       testCHS.sentMessages.clear();
-      final PublishingManager pm = PublishingManager(testCHS);
+      final events.EventBus clientEventBus = new events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final MqttClientPayloadBuilder payload1 = new MqttClientPayloadBuilder();
       payload1.addString("test1");
