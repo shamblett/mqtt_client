@@ -33,9 +33,12 @@ class SubscriptionsManager {
   SubscribeCallback onSubscribed;
   UnsubscribeCallback onUnsubscribed;
 
+  /// The event bus
+  events.EventBus _clientEventBus;
+
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
-  SubscriptionsManager(IMqttConnectionHandler connectionHandler,
-      IPublishingManager publishingManager) {
+  SubscriptionsManager(this.connectionHandler,
+      this.publishingManager, this._clientEventBus) {
     this.connectionHandler = connectionHandler;
     this.publishingManager = publishingManager;
     this
@@ -45,7 +48,7 @@ class SubscriptionsManager {
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages
-    clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
+    _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
   }
 
   /// Observable change notifier for all subscribed topics

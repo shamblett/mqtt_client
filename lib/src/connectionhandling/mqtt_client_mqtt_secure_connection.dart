@@ -22,11 +22,17 @@ class MqttSecureConnection extends MqttConnection {
   String privateKeyFilePassphrase;
 
   /// Default constructor
-  MqttSecureConnection(this.trustedCertPath, this.privateKeyFilePath,
-      this.certificateChainPath, this.privateKeyFilePassphrase);
+  MqttSecureConnection(this.trustedCertPath,
+      this.privateKeyFilePath,
+      this.certificateChainPath,
+      this.privateKeyFilePassphrase,
+      events.EventBus eventBus)
+      : super(eventBus);
 
   /// Initializes a new instance of the MqttSecureConnection class.
-  MqttSecureConnection.fromConnect(String server, int port) {
+  MqttSecureConnection.fromConnect(String server, int port,
+      events.EventBus eventBus)
+      : super(eventBus) {
     connect(server, port);
   }
 

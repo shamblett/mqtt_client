@@ -97,7 +97,7 @@ class MqttClient {
   }
 
   /// The event bus
-  events.EventBus clientEventBus;
+  events.EventBus _clientEventBus = new events.EventBus();
 
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage>> updates;
@@ -105,8 +105,6 @@ class MqttClient {
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
   Future connect([String username, String password]) async {
-    clientEventBus?.destroy();
-    clientEventBus = events.EventBus();
     if (username != null) {
       MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
@@ -122,7 +120,7 @@ class MqttClient {
       MqttLogger.log(
           "Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ");
     }
-    _connectionHandler = SynchronousMqttConnectionHandler();
+    _connectionHandler = SynchronousMqttConnectionHandler(_clientEventBus);
     if (useWebSocket) {
       _connectionHandler.secure = false;
       _connectionHandler.useWebSocket = true;
@@ -136,9 +134,9 @@ class MqttClient {
       _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
     }
     _connectionHandler.onDisconnected = onDisconnected;
-    _publishingManager = PublishingManager(_connectionHandler);
-    _subscriptionsManager =
-        SubscriptionsManager(_connectionHandler, _publishingManager);
+    _publishingManager = PublishingManager(_connectionHandler, _clientEventBus);
+    _subscriptionsManager = SubscriptionsManager(
+        _connectionHandler, _publishingManager, _clientEventBus);
     _subscriptionsManager.onSubscribed = onSubscribed;
     _subscriptionsManager.onUnsubscribed = onUnsubscribed;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
@@ -211,8 +209,6 @@ class MqttClient {
     _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
-    clientEventBus?.destroy();
-    clientEventBus = null;
   }
 
   /// Turn on logging, true to start, false to stop

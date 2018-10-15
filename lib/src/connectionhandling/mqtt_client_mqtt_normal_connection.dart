@@ -10,10 +10,12 @@ part of mqtt_client;
 /// The MQTT normal(insecure TCP) connection class
 class MqttNormalConnection extends MqttConnection {
   /// Default constructor
-  MqttNormalConnection();
+  MqttNormalConnection(events.EventBus eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttNormalConnection.fromConnect(String server, int port) {
+  MqttNormalConnection.fromConnect(String server, int port,
+      events.EventBus eventBus)
+      : super(eventBus) {
     connect(server, port);
   }
 

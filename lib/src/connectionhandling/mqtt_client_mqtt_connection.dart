@@ -35,11 +35,14 @@ class MqttConnection {
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
 
+  /// The event bus
+  events.EventBus _clientEventBus;
+
   /// Default constructor
-  MqttConnection();
+  MqttConnection(this._clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttConnection.fromConnect(String server, int port) {
+  MqttConnection.fromConnect(String server, int port, this._clientEventBus) {
     connect(server, port);
   }
 
@@ -88,7 +91,7 @@ class MqttConnection {
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log("MqttConnection::_onData - message received $msg");
-        clientEventBus?.fire(MessageAvailable(msg));
+        _clientEventBus?.fire(MessageAvailable(msg));
         MqttLogger.log("MqttConnection::_onData - message processed");
       }
     }

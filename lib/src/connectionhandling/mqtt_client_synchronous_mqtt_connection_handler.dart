@@ -15,6 +15,12 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   /// The broker connection acknowledgment timer
   MqttCancellableAsyncSleep _connectTimer;
 
+  /// The event bus
+  events.EventBus _clientEventBus;
+
+  /// Initializes a new instance of the MqttConnectionHandler class.
+  SynchronousMqttConnectionHandler(this._clientEventBus);
+
   /// Synchronously connect to the specific Mqtt Connection.
   Future internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
@@ -28,16 +34,16 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       if (useWebSocket) {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - websocket selected");
-        connection = MqttWsConnection();
+        connection = MqttWsConnection(_clientEventBus);
       } else if (secure) {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - secure selected");
         connection = MqttSecureConnection(trustedCertPath, privateKeyFilePath,
-            certificateChainPath, privateKeyFilePassphrase);
+            certificateChainPath, privateKeyFilePassphrase, _clientEventBus);
       } else {
         MqttLogger.log(
             "SynchronousMqttConnectionHandler::internalConnect - insecure TCP selected");
-        connection = MqttNormalConnection();
+        connection = MqttNormalConnection(_clientEventBus);
       }
       connection.onDisconnected = onDisconnected;
 
@@ -45,7 +51,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       _connectTimer = new MqttCancellableAsyncSleep(5000);
       await connection.connect(hostname, port);
       this.registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
-      clientEventBus.on<MessageAvailable>().listen(this.messageAvailable);
+      _clientEventBus.on<MessageAvailable>().listen(this.messageAvailable);
       // Transmit the required connection message to the broker.
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect sending connect message");

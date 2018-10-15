@@ -55,8 +55,11 @@ class PublishingManager implements IPublishingManager {
   /// Raised when a message has been recieved by the client and the relevant QOS handshake is complete.
   MessageReceived publishEvent;
 
+  /// The event bus
+  events.EventBus _clientEventBus;
+
   /// Initializes a new instance of the PublishingManager class.
-  PublishingManager(IMqttConnectionHandler connectionHandler) {
+  PublishingManager(this.connectionHandler, this._clientEventBus) {
     this.connectionHandler = connectionHandler;
     connectionHandler.registerForMessage(
         MqttMessageType.publishAck, handlePublishAcknowledgement);
@@ -117,11 +120,11 @@ class PublishingManager implements IPublishingManager {
       if (pubMsg.header.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
-        clientEventBus.fire(MessageReceived(topic, msg));
+        _clientEventBus.fire(MessageReceived(topic, msg));
       } else if (pubMsg.header.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 require an acknowledgement
         // Send the message for processing to whoever is waiting.
-        clientEventBus.fire(MessageReceived(topic, msg));
+        _clientEventBus.fire(MessageReceived(topic, msg));
         final MqttPublishAckMessage ackMsg = MqttPublishAckMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(ackMsg);
@@ -156,7 +159,7 @@ class PublishingManager implements IPublishingManager {
         // Send the message for processing to whoever is waiting.
         final PublicationTopic topic =
             PublicationTopic(pubMsg.variableHeader.topicName);
-        clientEventBus.fire(MessageReceived(topic, pubMsg));
+        _clientEventBus.fire(MessageReceived(topic, pubMsg));
         final MqttPublishCompleteMessage compMsg = MqttPublishCompleteMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(compMsg);
