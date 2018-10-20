@@ -81,7 +81,7 @@ void main() {
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
       expect(ch.connectionState, ConnectionState.faulted);
-    });
+    }, skip: true);
     test("Connect invalid port", () async {
       final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
