@@ -91,8 +91,13 @@ class MqttConnection {
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log("MqttConnection::_onData - message received $msg");
-        _clientEventBus?.fire(MessageAvailable(msg));
-        MqttLogger.log("MqttConnection::_onData - message processed");
+        if (!_clientEventBus.streamController.isClosed) {
+          _clientEventBus.fire(MessageAvailable(msg));
+          MqttLogger.log("MqttConnection::_onData - message processed");
+        } else {
+          MqttLogger.log(
+              "MqttConnection::_onData - message not processed, disconnecting");
+        }
       }
     }
   }

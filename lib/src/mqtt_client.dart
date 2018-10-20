@@ -209,6 +209,7 @@ class MqttClient {
     _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
+    _clientEventBus.destroy();
   }
 
   /// Turn on logging, true to start, false to stop
