@@ -37,8 +37,8 @@ class SubscriptionsManager {
   events.EventBus _clientEventBus;
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
-  SubscriptionsManager(this.connectionHandler,
-      this.publishingManager, this._clientEventBus) {
+  SubscriptionsManager(this.connectionHandler, this.publishingManager,
+      this._clientEventBus) {
     this.connectionHandler = connectionHandler;
     this.publishingManager = publishingManager;
     this

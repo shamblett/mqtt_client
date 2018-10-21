@@ -169,5 +169,3 @@ part 'src/messages/mqtt_client_mqtt_message_type.dart';
 part 'src/messages/mqtt_client_mqtt_message_factory.dart';
 
 part 'src/messages/mqtt_client_mqtt_payload.dart';
-
-

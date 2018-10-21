@@ -111,6 +111,7 @@ void main() {
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
+
       final events.EventBus clientEventBus = new events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
