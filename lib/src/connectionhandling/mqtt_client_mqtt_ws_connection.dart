@@ -13,8 +13,8 @@ class MqttWsConnection extends MqttConnection {
   MqttWsConnection(events.EventBus eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttWsConnection.fromConnect(String server, int port,
-      events.EventBus eventBus)
+  MqttWsConnection.fromConnect(
+      String server, int port, events.EventBus eventBus)
       : super(eventBus) {
     connect(server, port);
   }

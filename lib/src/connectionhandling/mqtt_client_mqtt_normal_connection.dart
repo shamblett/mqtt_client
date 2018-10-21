@@ -13,8 +13,8 @@ class MqttNormalConnection extends MqttConnection {
   MqttNormalConnection(events.EventBus eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttNormalConnection.fromConnect(String server, int port,
-      events.EventBus eventBus)
+  MqttNormalConnection.fromConnect(
+      String server, int port, events.EventBus eventBus)
       : super(eventBus) {
     connect(server, port);
   }
