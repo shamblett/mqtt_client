@@ -8,7 +8,7 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
-import 'mqtt_client_mockbroker.dart';
+import 'support/mqtt_client_mockbroker.dart';
 import 'package:event_bus/event_bus.dart' as events;
 
 void main() {
