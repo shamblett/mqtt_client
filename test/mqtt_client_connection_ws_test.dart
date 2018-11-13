@@ -85,7 +85,7 @@ void main() {
       brokerWs.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionState, ConnectionState.connected);
+      expect(ch.connectionState.state, ConnectionState.connected);
       brokerWs.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(

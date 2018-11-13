@@ -73,9 +73,10 @@ Future<int> main() async {
   if (client.connectionState == ConnectionState.connected) {
     print("EXAMPLE::Mosquitto client connected");
   } else {
+    /// Use status here rather than state if you also want the broker return code.
     print(
-        "EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client
-            .connectionState}");
+        "EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client
+            .connectionStatus}");
     client.disconnect();
     exit(-1);
   }

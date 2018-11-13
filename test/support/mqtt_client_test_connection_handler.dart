@@ -15,7 +15,7 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   }
 
   ConnectionState disconnect() {
-    return connectionState = ConnectionState.disconnected;
+    return connectionState.state = ConnectionState.disconnected;
   }
 }
 
@@ -29,7 +29,7 @@ class TestConnectionHandlerSend extends MqttConnectionHandler {
   }
 
   ConnectionState disconnect() {
-    return connectionState = ConnectionState.disconnected;
+    return connectionState.state = ConnectionState.disconnected;
   }
 
   void sendMessage(MqttMessage message) {

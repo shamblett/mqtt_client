@@ -78,7 +78,8 @@ void main() {
         expect(e.toString().contains("Failed host lookup"), isTrue);
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
-      expect(ch.connectionState, ConnectionState.faulted);
+      expect(ch.connectionState.state, ConnectionState.faulted);
+      expect(ch.connectionState.returnCode, MqttConnectReturnCode.notAuthorized);
     }, skip: true);
     test("Connect invalid port", () async {
       final events.EventBus clientEventBus = new events.EventBus();
@@ -90,7 +91,8 @@ void main() {
       } catch (e) {
         expect(e.toString().contains("refused"), isTrue);
       }
-      expect(ch.connectionState, ConnectionState.faulted);
+      expect(ch.connectionState.state, ConnectionState.faulted);
+      expect(ch.connectionState.returnCode, MqttConnectReturnCode.notAuthorized);
     });
     test("Connect no connect ack", () async {
       await broker.start();
@@ -103,7 +105,8 @@ void main() {
       } catch (e) {
         expect((e is NoConnectionException), isTrue);
       }
-      expect(ch.connectionState, ConnectionState.faulted);
+      expect(ch.connectionState.state, ConnectionState.faulted);
+      expect(ch.connectionState.returnCode, MqttConnectReturnCode.notAuthorized);
     });
     test("Successful response and disconnect", () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
@@ -118,7 +121,8 @@ void main() {
       broker.setMessageHandler(messageHandler);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionState, ConnectionState.connected);
+      expect(ch.connectionState.state, ConnectionState.connected);
+      expect(ch.connectionState.returnCode, MqttConnectReturnCode.connectionAccepted);
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
     });
@@ -155,6 +159,7 @@ void main() {
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState, ConnectionState.connected);
+      expect(ch.connectionState.returnCode, MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       broker.setMessageHandler(messageHandlerPingRequest);
       print(

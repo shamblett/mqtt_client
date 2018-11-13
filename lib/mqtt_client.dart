@@ -58,6 +58,8 @@ part 'src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dar
 
 part 'src/mqtt_client_topic.dart';
 
+part 'src/mqtt_client_connection_status.dart';
+
 part 'src/mqtt_client_publication_topic.dart';
 
 part 'src/mqtt_client_subscription_topic.dart';
