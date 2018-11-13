@@ -20,7 +20,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       List<MessageCallbackFunction>();
 
   /// Connection state
-  MqttClientConnectionStatus connectionState;
+  MqttClientConnectionStatus connectionState = MqttClientConnectionStatus();
 
   /// Use a websocket rather than TCP
   bool useWebSocket = false;

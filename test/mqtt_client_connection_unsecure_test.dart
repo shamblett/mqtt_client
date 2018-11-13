@@ -35,6 +35,8 @@ void main() {
   group("Connection Keep Alive - Mock tests", () {
     // Group setup
     final MockCH ch = MockCH();
+    when(ch.connectionState).thenReturn(MqttClientConnectionStatus());
+    when(ch.secure).thenReturn(false);
     final MockKA ka = MockKA(ch, 3);
     test("Message sent", () {
       final MqttMessage msg = MqttPingRequestMessage();
@@ -158,7 +160,7 @@ void main() {
       broker.setMessageHandler(messageHandlerConnect);
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionState, ConnectionState.connected);
+      expect(ch.connectionState.state, ConnectionState.connected);
       expect(ch.connectionState.returnCode, MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       broker.setMessageHandler(messageHandlerPingRequest);
