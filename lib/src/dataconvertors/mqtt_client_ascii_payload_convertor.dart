@@ -10,14 +10,16 @@ part of mqtt_client;
 /// Converts string data to and from the MQTT wire format
 class AsciiPayloadConverter implements PayloadConverter<String> {
   /// Processes received data and returns it as a string.
+  @override
   String convertFromBytes(typed.Uint8Buffer messageData) {
-    final Utf8Decoder decoder = Utf8Decoder();
+    const Utf8Decoder decoder = Utf8Decoder();
     return decoder.convert(messageData.toList());
   }
 
   /// Converts sent data from a string to a byte array.
+  @override
   typed.Uint8Buffer convertToBytes(String data) {
-    final Utf8Encoder encoder = Utf8Encoder();
+    const Utf8Encoder encoder = Utf8Encoder();
     final typed.Uint8Buffer buff = typed.Uint8Buffer();
     buff.addAll(encoder.convert(data));
     return buff;

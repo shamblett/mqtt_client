@@ -9,6 +9,7 @@ part of mqtt_client;
 
 ///  This class provides shared connection functionality to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
+  /// The connection
   dynamic connection;
 
   /// Registry of message processors
@@ -47,22 +48,24 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   MqttConnectionHandler();
 
   /// Connect to the specific Mqtt Connection.
-  Future connect(String server, int port, MqttConnectMessage message) async {
+  @override
+  Future<MqttClientConnectionStatus> connect(String server, int port, MqttConnectMessage message) async {
     try {
       await internalConnect(server, port, message);
-      return this.connectionState;
-    } catch (ConnectionException) {
-      this.connectionState.state = ConnectionState.faulted;
+      return connectionState;
+    } on Exception {
+      connectionState.state = ConnectionState.faulted;
       rethrow;
     }
   }
 
   /// Connect to the specific Mqtt Connection.
-  Future internalConnect(String hostname, int port, MqttConnectMessage message);
+  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port, MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.
+  @override
   void sendMessage(MqttMessage message) {
-    MqttLogger.log("MqttConnectionHandler::sendMessage - $message");
+    MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
     if ((connectionState.state == ConnectionState.connected) ||
         (connectionState.state == ConnectionState.connecting)) {
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
@@ -75,7 +78,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
         callback(message);
       }
     } else {
-      MqttLogger.log("MqttConnectionHandler::sendMessage - not connected");
+      MqttLogger.log('MqttConnectionHandler::sendMessage - not connected');
     }
   }
 
@@ -83,6 +86,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   ConnectionState disconnect();
 
   /// Closes the connection to the Mqtt message broker.
+  @override
   void close() {
     if (connectionState.state == ConnectionState.connected) {
       disconnect();
@@ -90,22 +94,26 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Registers for the receipt of messages when they arrive.
+  @override
   void registerForMessage(
       MqttMessageType msgType, MessageCallbackFunction callback) {
     messageProcessorRegistry[msgType] = callback;
   }
 
   /// UnRegisters for the receipt of messages when they arrive.
+  @override
   void unRegisterForMessage(MqttMessageType msgType) {
     messageProcessorRegistry.remove(msgType);
   }
 
   /// Registers a callback to be called whenever a message is sent.
+  @override
   void registerForAllSentMessages(MessageCallbackFunction sentMsgCallback) {
     sentMessageCallbacks.add(sentMsgCallback);
   }
 
   /// UnRegisters a callback that is called whenever a message is sent.
+  @override
   void unRegisterForAllSentMessages(MessageCallbackFunction sentMsgCallback) {
     sentMessageCallbacks.remove(sentMsgCallback);
   }

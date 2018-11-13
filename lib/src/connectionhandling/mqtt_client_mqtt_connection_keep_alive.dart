@@ -15,8 +15,8 @@ class MqttConnectionKeepAlive {
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
   MqttConnectionKeepAlive(
       IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
-    this._connectionHandler = connectionHandler;
-    this.keepAlivePeriod = keepAliveSeconds * 1000;
+    _connectionHandler = connectionHandler;
+    keepAlivePeriod = keepAliveSeconds * 1000;
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
         MqttMessageType.pingRequest, pingRequestReceived);
@@ -25,7 +25,7 @@ class MqttConnectionKeepAlive {
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer =
-        Timer(Duration(milliseconds: this.keepAlivePeriod), pingRequired);
+        Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
   }
 
   /// The keep alive period in  milliseconds
@@ -54,7 +54,7 @@ class MqttConnectionKeepAlive {
       pinged = true;
     }
     pingTimer =
-        Timer(Duration(milliseconds: this.keepAlivePeriod), pingRequired);
+        Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
     _shutdownPadlock = false;
     return pinged;
   }
@@ -75,14 +75,10 @@ class MqttConnectionKeepAlive {
   }
 
   /// Processed ping response messages received from a message broker.
-  bool pingResponseReceived(MqttMessage pingMsg) {
-    return true;
-  }
+  bool pingResponseReceived(MqttMessage pingMsg) => true;
 
   /// Handles the MessageSent event of the connectionHandler control.
-  bool messageSent(MqttMessage msg) {
-    return true;
-  }
+  bool messageSent(MqttMessage msg) => true;
 
   /// Stop the keep alive process
   void stop() {

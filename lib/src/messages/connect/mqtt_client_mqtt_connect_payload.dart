@@ -10,18 +10,15 @@ part of mqtt_client;
 /// Class that contains details related to an MQTT Connect messages payload.
 class MqttConnectPayload extends MqttPayload {
   /// Initializes a new instance of the MqttConnectPayload class.
-  MqttConnectPayload(MqttConnectVariableHeader variableHeader) {
-    this.variableHeader = variableHeader;
-  }
+  MqttConnectPayload(this.variableHeader);
 
   /// Initializes a new instance of the MqttConnectPayload class.
   MqttConnectPayload.fromByteBuffer(
-      MqttConnectVariableHeader variableHeader, MqttByteBuffer payloadStream) {
-    this.variableHeader = variableHeader;
+      this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
 
-  String _clientIdentifier = "";
+  String _clientIdentifier = '';
 
   String get clientIdentifier => _clientIdentifier;
 
@@ -31,7 +28,7 @@ class MqttConnectPayload extends MqttPayload {
     }
     if (id.length > Constants.maxClientIdentifierLengthSpec) {
       MqttLogger.log(
-          "MqttConnectPayload::Client id exceeds spec value of ${Constants.maxClientIdentifierLengthSpec}");
+          'MqttConnectPayload::Client id exceeds spec value of ${Constants.maxClientIdentifierLengthSpec}');
     }
     _clientIdentifier = id;
   }

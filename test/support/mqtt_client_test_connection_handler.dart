@@ -8,7 +8,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'dart:async';
 
 class TestConnectionHandlerNoSend extends MqttConnectionHandler {
-  Future<ConnectionState> internalConnect(String hostname, int port,
+  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port,
       MqttConnectMessage message) {
     final Completer completer = Completer();
     return completer.future;
@@ -22,7 +22,7 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
 class TestConnectionHandlerSend extends MqttConnectionHandler {
   List<MqttMessage> sentMessages = List<MqttMessage>();
 
-  Future<ConnectionState> internalConnect(String hostname, int port,
+  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port,
       MqttConnectMessage message) {
     final Completer completer = Completer();
     return completer.future;

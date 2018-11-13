@@ -14,10 +14,11 @@ class ConnectionException implements Exception {
   /// Length of 'ConnectionException.'
   static const int _classLength = 16;
 
+  /// Construct
   ConnectionException(ConnectionState state) {
     _message =
-        "mqtt-client::ConnectionException: The connection must be in the Connected state in order to perform this operation. "
-        "Current state is ${state.toString().substring(_classLength)}";
+        'mqtt-client::ConnectionException: The connection must be in the Connected state in order to perform this operation. '
+        'Current state is ${state.toString().substring(_classLength)}';
   }
 
   @override

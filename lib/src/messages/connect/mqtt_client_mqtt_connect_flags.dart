@@ -9,31 +9,44 @@ part of mqtt_client;
 
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
+  /// Reserved1
   bool reserved1 = false;
+
+  /// Clean start
   bool cleanStart = false;
+
+  /// Will
   bool willFlag = false;
+
+  /// Will Qos
   MqttQos willQos = MqttQos.atMostOnce;
+
+  /// Will retain
   bool willRetain = false;
+
+  /// Password present
   bool passwordFlag = false;
+
+  /// Username present
   bool usernameFlag = false;
 
-  /// Initializes a new instance of the <see cref="MqttConnectFlags" /> class.
+  /// Initializes a new instance of the MqttConnectFlags class.
   MqttConnectFlags();
 
-  /// Initializes a new instance of the <see cref="MqttConnectFlags" /> class configured as per the supplied stream.
+  /// Initializes a new instance of the MqttConnectFlags class configured as per the supplied stream.
   MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {
     readFrom(connectFlagsStream);
   }
 
-  int connectFlagByte() {
-    return ((reserved1 ? 1 : 0) |
-        (cleanStart ? 1 : 0) << 1 |
-        (willFlag ? 1 : 0) << 2 |
-        (willQos.index) << 3 |
-        (willRetain ? 1 : 0) << 5 |
-        (passwordFlag ? 1 : 0) << 6 |
-        (usernameFlag ? 1 : 0) << 7);
-  }
+  /// Return the connect flag value
+  int connectFlagByte() =>
+      (reserved1 ? 1 : 0) |
+      (cleanStart ? 1 : 0) << 1 |
+      (willFlag ? 1 : 0) << 2 |
+      (willQos.index) << 3 |
+      (willRetain ? 1 : 0) << 5 |
+      (passwordFlag ? 1 : 0) << 6 |
+      (usernameFlag ? 1 : 0) << 7;
 
   /// Writes the connect flag byte to the supplied stream.
   void writeTo(MqttByteBuffer connectFlagsStream) {
@@ -54,13 +67,10 @@ class MqttConnectFlags {
   }
 
   /// Gets the length of data written when WriteTo is called.
-  static int getWriteLength() {
-    return 1;
-  }
+  static int getWriteLength() => 1;
 
   /// Returns a String that represents the current connect flag settings
-  String toString() {
-    return "Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, WillFlag=$willFlag, WillQos=$willQos, " +
-        "WillRetain=$willRetain, PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag";
-  }
+  @override
+  String toString() =>
+      'Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, WillFlag=$willFlag, WillQos=$willQos, WillRetain=$willRetain, PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag';
 }
