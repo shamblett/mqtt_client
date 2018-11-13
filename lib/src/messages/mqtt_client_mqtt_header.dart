@@ -12,7 +12,7 @@ class MqttHeader {
   /// Initializes a new instance of the MqttHeader class.
   MqttHeader();
 
-  /// Initializes a new instance of MqttHeader" based on data contained within the supplied stream.
+  /// Initializes a new instance of MqttHeader' based on data contained within the supplied stream.
   MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }
@@ -57,11 +57,11 @@ class MqttHeader {
     if (headerStream.length < 2) {
       headerStream.reset();
       throw InvalidHeaderException(
-          "The supplied header is invalid. Header must be at least 2 bytes long.");
+          'The supplied header is invalid. Header must be at least 2 bytes long.');
     }
     final int firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
-    retain = ((firstHeaderByte & 1) == 1 ? true : false);
+    retain = (firstHeaderByte & 1) == 1 ? true : false;
     qos = MqttQos.values[((firstHeaderByte & 6) >> 1)];
     duplicate = (((firstHeaderByte & 8) >> 3) == 1 ? true : false);
     messageType = MqttMessageType.values[((firstHeaderByte & 240) >> 4)];
@@ -71,8 +71,8 @@ class MqttHeader {
       _messageSize = readRemainingLength(headerStream);
     } catch (InvalidPayloadSizeException) {
       throw InvalidHeaderException(
-          "The header being processed contained an invalid size byte pattern." +
-              "Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.");
+          'The header being processed contained an invalid size byte pattern.' +
+              'Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
     }
   }
 
@@ -117,7 +117,7 @@ class MqttHeader {
     int payloadCalc = _messageSize;
 
     // Generate a byte array based on the message size, splitting it up into
-    // 7 bit chunks, with the 8th bit being used to indicate "one more to come"
+    // 7 bit chunks, with the 8th bit being used to indicate 'one more to come'
     do {
       int nextByteValue = payloadCalc % 128;
       payloadCalc = (payloadCalc ~/ 128);
@@ -167,6 +167,6 @@ class MqttHeader {
   }
 
   String toString() {
-    return "Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize";
+    return 'Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize';
   }
 }

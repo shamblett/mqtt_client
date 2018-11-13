@@ -17,15 +17,17 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
       : super.fromByteBuffer(headerStream);
 
   /// Writes the variable header for an MQTT Connect message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer variableHeaderStream) {
-    // Unused additional "compression" byte used within the variable header acknowledgement.
+    // Unused additional 'compression' byte used within the variable header acknowledgement.
     variableHeaderStream.writeByte(0);
     writeReturnCode(variableHeaderStream);
   }
 
   /// Creates a variable header from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
-    // Unused additional "compression" byte used within the variable header acknowledgement.
+    // Unused additional 'compression' byte used within the variable header acknowledgement.
     variableHeaderStream.readByte();
     readReturnCode(variableHeaderStream);
   }
@@ -34,11 +36,10 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
   /// This method is overriden by the ConnectAckVariableHeader because the variable header of this
   /// message type, for some reason, contains an extra byte that is not present in the variable
   /// header spec, meaning we have to do some custom serialization and deserialization.
-  int getWriteLength() {
-    return 2;
-  }
+  @override
+  int getWriteLength() => 2;
 
-  String toString() {
-    return "Connect Variable Header: TopicNameCompressionResponse={0}, ReturnCode={$returnCode}";
-  }
+  @override
+  String toString() =>
+      'Connect Variable Header: TopicNameCompressionResponse={0}, ReturnCode={$returnCode}';
 }

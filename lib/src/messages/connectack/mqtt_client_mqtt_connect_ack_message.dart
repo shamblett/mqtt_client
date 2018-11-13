@@ -12,9 +12,9 @@ class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
   /// Only called via the MqttMessage.Create operation during processing of an Mqtt message stream.
   MqttConnectAckMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.connectAck);
-    this.variableHeader = MqttConnectAckVariableHeader();
-    this.variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;
+    header = MqttHeader().asType(MqttMessageType.connectAck);
+    variableHeader = MqttConnectAckVariableHeader();
+    variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;
   }
 
   /// Gets or sets the variable header contents. Contains extended metadata about the message
@@ -28,24 +28,27 @@ class MqttConnectAckMessage extends MqttMessage {
   }
 
   /// Reads a message from the supplied stream.
+  @override
   void readFrom(MqttByteBuffer messageStream) {
     super.readFrom(messageStream);
-    this.variableHeader =
+    variableHeader =
         MqttConnectAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes a message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(variableHeader.getWriteLength(), messageStream);
-    this.variableHeader.writeTo(messageStream);
+    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    variableHeader.writeTo(messageStream);
   }
 
   /// Sets the return code of the Variable Header.
   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
-    this.variableHeader.returnCode = returnCode;
+    variableHeader.returnCode = returnCode;
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

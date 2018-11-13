@@ -20,6 +20,7 @@ class MqttConnectPayload extends MqttPayload {
 
   String _clientIdentifier = '';
 
+  /// Client identifier
   String get clientIdentifier => _clientIdentifier;
 
   set clientIdentifier(String id) {
@@ -33,24 +34,30 @@ class MqttConnectPayload extends MqttPayload {
     _clientIdentifier = id;
   }
 
+  /// Variable header
   MqttConnectVariableHeader variableHeader = MqttConnectVariableHeader();
   String _username;
 
+  /// User name
   String get username => _username;
 
   set username(String name) => _username = name != null ? name.trim() : name;
   String _password;
 
+  /// Password
   String get password => _password;
 
   set password(String pwd) => _password = pwd != null ? pwd.trim() : pwd;
+  /// Will topic
   String willTopic;
+  /// Will message
   String willMessage;
 
   /// Creates a payload from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer payloadStream) {
     clientIdentifier = payloadStream.readMqttStringM();
-    if (this.variableHeader.connectFlags.willFlag) {
+    if (variableHeader.connectFlags.willFlag) {
       willTopic = payloadStream.readMqttStringM();
       willMessage = payloadStream.readMqttStringM();
     }
@@ -63,6 +70,7 @@ class MqttConnectPayload extends MqttPayload {
   }
 
   /// Writes the connect message payload to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer payloadStream) {
     payloadStream.writeMqttStringM(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
@@ -77,11 +85,12 @@ class MqttConnectPayload extends MqttPayload {
     }
   }
 
+  @override
   int getWriteLength() {
     int length = 0;
     final MqttEncoding enc = MqttEncoding();
     length += enc.getByteCount(clientIdentifier);
-    if (this.variableHeader.connectFlags.willFlag) {
+    if (variableHeader.connectFlags.willFlag) {
       length += enc.getByteCount(willTopic);
       length += enc.getByteCount(willMessage);
     }

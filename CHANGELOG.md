@@ -1,5 +1,5 @@
 #3.4.0
-Issue 45, better connection fail reporting
+Issue 45, better connection fail reporting, update linter
 
 #3.3.6
 Formatting

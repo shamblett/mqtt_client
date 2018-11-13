@@ -17,6 +17,7 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
       : super.fromByteBuffer(headerStream);
 
   /// Creates a variable header from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
     readProtocolName(variableHeaderStream);
     readProtocolVersion(variableHeaderStream);
@@ -25,6 +26,7 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   }
 
   /// Writes the variable header to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer variableHeaderStream) {
     writeProtocolName(variableHeaderStream);
     writeProtocolVersion(variableHeaderStream);
@@ -33,6 +35,7 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   }
 
   /// Gets the length of the write data when WriteTo will be called.
+  @override
   int getWriteLength() {
     int headerLength = 0;
     final MqttEncoding enc = MqttEncoding();
@@ -43,9 +46,8 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
     return headerLength;
   }
 
-  /// toString
-  String toString() {
-    return "Connect Variable Header: ProtocolName=$protocolName, ProtocolVersion=$protocolVersion, "
-        "ConnectFlags=${connectFlags.toString()}, KeepAlive=$keepAlive";
-  }
+  @override
+  String toString() =>
+      'Connect Variable Header: ProtocolName=$protocolName, ProtocolVersion=$protocolVersion, '
+      'ConnectFlags=${connectFlags.toString()}, KeepAlive=$keepAlive';
 }

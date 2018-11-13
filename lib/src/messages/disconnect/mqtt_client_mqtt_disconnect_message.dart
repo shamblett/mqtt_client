@@ -11,14 +11,15 @@ part of mqtt_client;
 class MqttDisconnectMessage extends MqttMessage {
   /// Initializes a new instance of the MqttDisconnectMessage class.
   MqttDisconnectMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.disconnect);
+    header = MqttHeader().asType(MqttMessageType.disconnect);
   }
 
   /// Initializes a new instance of the MqttDisconnectMessage class.
   MqttDisconnectMessage.fromHeader(MqttHeader header) {
-    this.header = header;
+    header = header;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());
