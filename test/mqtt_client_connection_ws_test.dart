@@ -83,11 +83,11 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       ch.useWebSocket = true;
-      brokerWs.setMessageHandler(messageHandlerConnect);
+      brokerWs.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState.state, ConnectionState.connected);
-      brokerWs.setMessageHandler(messageHandlerPingRequest);
+      brokerWs.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
           'WS Connection Keep Alive - Successful response - keepealive ms is ${ka

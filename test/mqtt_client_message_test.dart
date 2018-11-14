@@ -1703,46 +1703,49 @@ void main() {
       print('Subscribe Ack - Single Qos at least once::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
+      final MqttSubscribeAckMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
-      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          bm.payload.qosGrants.length, 1);
+      expect(bm.payload.qosGrants[0],
           MqttQos.atLeastOnce);
     });
     test('Deserialisation - Single Qos exactly once', () {
       // Message Specs________________
       // <90><03><00><02><02>
-      final List<int> sampleMessage = [0x90, 0x03, 0x00, 0x02, 0x02];
+      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x02];
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
-          'Subscribe Ack - Single Qos exactly once::' + baseMessage.toString());
+          'Subscribe Ack - Single Qos exactly once::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
+      final MqttSubscribeAckMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 1);
-      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          bm.payload.qosGrants.length, 1);
+      expect(bm.payload.qosGrants[0],
           MqttQos.exactlyOnce);
     });
     test('Deserialisation - Multi Qos', () {
       // Message Specs________________
       // <90><03><00><02><00> <01><02>
-      final List<int> sampleMessage = [0x90, 0x05, 0x00, 0x02, 0x0, 0x01, 0x02];
+      final List<int> sampleMessage = <int>[0x90, 0x05, 0x00, 0x02, 0x0, 0x01, 0x02];
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print('Subscribe Ack - multi Qos::' + baseMessage.toString());
+      print('Subscribe Ack - multi Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
+      final MqttSubscribeAckMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttSubscribeAckMessage).payload.qosGrants.length, 3);
-      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[0],
+          bm.payload.qosGrants.length, 3);
+      expect(bm.payload.qosGrants[0],
           MqttQos.atMostOnce);
-      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[1],
+      expect(bm.payload.qosGrants[1],
           MqttQos.atLeastOnce);
-      expect((baseMessage as MqttSubscribeAckMessage).payload.qosGrants[2],
+      expect(bm.payload.qosGrants[2],
           MqttQos.exactlyOnce);
     });
     test('Serialisation - Single Qos at most once', () {
@@ -1755,7 +1758,7 @@ void main() {
       final MqttMessage msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atMostOnce);
-      print('Subscribe Ack - Single Qos at most once::' + msg.toString());
+      print('Subscribe Ack - Single Qos at most once::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1775,7 +1778,7 @@ void main() {
       final MqttMessage msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atLeastOnce);
-      print('Subscribe Ack - Single Qos at least once::' + msg.toString());
+      print('Subscribe Ack - Single Qos at least once::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1795,7 +1798,7 @@ void main() {
       final MqttMessage msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.exactlyOnce);
-      print('Subscribe Ack - Single Qos exactly once::' + msg.toString());
+      print('Subscribe Ack - Single Qos exactly once::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1819,7 +1822,7 @@ void main() {
           .addQosGrant(MqttQos.atMostOnce)
           .addQosGrant(MqttQos.atLeastOnce)
           .addQosGrant(MqttQos.exactlyOnce);
-      print('Subscribe Ack - Multi QOS::' + msg.toString());
+      print('Subscribe Ack - Multi QOS::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1847,7 +1850,7 @@ void main() {
     test('Deserialisation - Single topic', () {
       // Message Specs________________
       // <A2><08><00><03><00><04>fred (Unsubscribe to topic fred)
-      final List<int> sampleMessage = [
+      final List<int> sampleMessage = <int>[
         0xA2,
         0x08,
         0x00,
@@ -1863,14 +1866,15 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print('Unsubscribe - Single topic::' + baseMessage.toString());
+      print('Unsubscribe - Single topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as an unsubscribe message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
+      final MqttUnsubscribeMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
+          bm.payload.subscriptions.length,
           1);
       expect(
-          (baseMessage as MqttUnsubscribeMessage)
+          bm
               .payload
               .subscriptions
               .contains('fred'),
@@ -1879,7 +1883,7 @@ void main() {
     test('Deserialisation - Multi topic', () {
       // Message Specs________________
       // <A2><0E><00><03><00><04>fred<00><04>mark (Unsubscribe to topic fred, mark)
-      final List<int> sampleMessage = [
+      final List<int> sampleMessage = <int>[
         0xA2,
         0x0E,
         0x00,
@@ -1901,20 +1905,21 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print('Unsubscribe - Multi topic::' + baseMessage.toString());
+      print('Unsubscribe - Multi topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as an unsubscribe message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
+      final MqttUnsubscribeMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttUnsubscribeMessage).payload.subscriptions.length,
+          bm.payload.subscriptions.length,
           2);
       expect(
-          (baseMessage as MqttUnsubscribeMessage)
+          bm
               .payload
               .subscriptions
               .contains('fred'),
           isTrue);
       expect(
-          (baseMessage as MqttUnsubscribeMessage)
+          bm
               .payload
               .subscriptions
               .contains('mark'),
@@ -1937,7 +1942,7 @@ void main() {
           .withMessageIdentifier(3)
           .expectAcknowledgement()
           .isDuplicate();
-      print('Unsubscribe - Single topic::' + msg.toString());
+      print('Unsubscribe - Single topic::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1975,7 +1980,7 @@ void main() {
           .fromTopic('mark')
           .withMessageIdentifier(3)
           .expectAcknowledgement();
-      print('Unubscribe - multi topic::' + msg.toString());
+      print('Unubscribe - multi topic::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -2008,7 +2013,7 @@ void main() {
     test('Deserialisation - Valid payload', () {
       // Message Specs________________
       // <B0><02><00><04> (Subscribe ack for message id 4)
-      final List<int> sampleMessage = [
+      final List<int> sampleMessage = <int>[
         0xB0,
         0x02,
         0x00,
@@ -2018,14 +2023,15 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print('Unsubscribe Ack - Valid payload::' + baseMessage.toString());
+      print('Unsubscribe Ack - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish release message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeAckMessage>());
       // Validate the message deserialization
       expect(baseMessage.header.messageType, MqttMessageType.unsubscribeAck);
       expect(baseMessage.header.messageSize, 2);
+      final MqttUnsubscribeAckMessage bm = baseMessage;
       expect(
-          (baseMessage as MqttUnsubscribeAckMessage)
+          bm
               .variableHeader
               .messageIdentifier,
           4);
@@ -2039,7 +2045,7 @@ void main() {
       expected[3] = 0x4;
       final MqttUnsubscribeAckMessage msg =
           MqttUnsubscribeAckMessage().withMessageIdentifier(4);
-      print('Unsubscribe Ack - Valid payload::' + msg.toString());
+      print('Unsubscribe Ack - Valid payload::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -2052,7 +2058,7 @@ void main() {
 
   group('Unimplemented', () {
     test('Deserialisation - Invalid payload', () {
-      final List<int> sampleMessage = [
+      final List<int> sampleMessage = <int>[
         0xFF,
         0x02,
         0x00,
@@ -2065,7 +2071,7 @@ void main() {
       try {
         final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
         print(baseMessage.toString());
-      } on Exception catch (InvalidMessageException) {
+      } on Exception {
         raised = true;
       }
       expect(raised, isTrue);

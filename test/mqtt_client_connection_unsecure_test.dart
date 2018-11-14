@@ -121,7 +121,7 @@ void main() {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
-      broker.setMessageHandler(messageHandler);
+      broker.setMessageHandler = messageHandler;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState.state, ConnectionState.connected);
@@ -158,13 +158,13 @@ void main() {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
-      broker.setMessageHandler(messageHandlerConnect);
+      broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState.state, ConnectionState.connected);
       expect(ch.connectionState.returnCode, MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
-      broker.setMessageHandler(messageHandlerPingRequest);
+      broker.setMessageHandler = messageHandlerPingRequest;
       print(
           'Connection Keep Alive - Successful response - keepealive ms is ${ka
               .keepAlivePeriod}');
@@ -188,7 +188,7 @@ void main() {
         broker.sendMessage(ack);
       }
 
-      broker.setMessageHandler(messageHandlerConnect);
+      broker.setMessageHandler = messageHandlerConnect;
       final MqttClient client = MqttClient('localhost', 'SJHMQTTClient');
       client.logging(on:true);
       const String username = 'unused';

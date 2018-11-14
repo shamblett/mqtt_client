@@ -127,11 +127,11 @@ void main() {
       ch.secure = true;
       final String currDir = path.current + path.separator;
       ch.trustedCertPath = currDir + path.join('test', 'pem', 'localhost.cert');
-      broker.setMessageHandler(messageHandlerConnect);
+      broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionState.state, ConnectionState.connected);
-      broker.setMessageHandler(messageHandlerPingRequest);
+      broker.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
           'Connection Keep Alive - Successful response - keepealive ms is ${ka
