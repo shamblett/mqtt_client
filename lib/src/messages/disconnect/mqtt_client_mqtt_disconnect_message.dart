@@ -16,7 +16,7 @@ class MqttDisconnectMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttDisconnectMessage class.
   MqttDisconnectMessage.fromHeader(MqttHeader header) {
-    header = header;
+    this.header = header;
   }
 
   @override

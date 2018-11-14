@@ -17,10 +17,10 @@ class MqttConnectMessage extends MqttMessage {
     payload = MqttConnectPayload(variableHeader);
   }
 
-  ///  Initializes a new instance of the <see cref='MqttConnectMessage' /> class.
+  ///  Initializes a new instance of the MqttConnectMessage class.
   MqttConnectMessage.fromByteBuffer(
       MqttHeader header, MqttByteBuffer messageStream) {
-    header = header;
+    this.header = header;
     readFrom(messageStream);
   }
 
