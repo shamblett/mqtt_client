@@ -4,7 +4,7 @@
  * Date   : 11/07/2017
  * Copyright :  S.Hamblett
  */
-@TestOn("linux")
+@TestOn('linux')
 import 'dart:io';
 import 'package:test/test.dart';
 
@@ -17,47 +17,47 @@ import 'package:test/test.dart';
 /// Helper function to ping a server
 bool pingServer(String server) {
   // Not on Travis
-  final bool isDeclared =
-      const String.fromEnvironment("PUB_ENVIRONMENT") != null;
+  const bool isDeclared =
+       String.fromEnvironment('PUB_ENVIRONMENT') != null;
   if (isDeclared) {
-    print("PUB_ENVIRONMENT is declared");
-    final String noPing = String.fromEnvironment('PUB_ENVIRONMENT');
-    if (noPing == "travis") {
-      print("Skipping broker tests, running on travis");
+    print('PUB_ENVIRONMENT is declared');
+    const String noPing = String.fromEnvironment('PUB_ENVIRONMENT');
+    if (noPing == 'travis') {
+      print('Skipping broker tests, running on travis');
       return true;
     } else {
-      print("PUB_ENVIRONMENT is $noPing");
+      print('PUB_ENVIRONMENT is $noPing');
     }
   }
-  final ProcessResult result = Process.runSync('ping', ['-c3', '$server']);
+  final ProcessResult result = Process.runSync('ping', <String>['-c3', '$server']);
   //Get the exit code from the new process.
   if (result.exitCode == 0) {
     return false;
   } else {
     print(
-        "Server - $server is dead, exit code is ${result.exitCode} - skipping");
+        'Server - $server is dead, exit code is ${result.exitCode} - skipping');
     return true;
   }
 }
 
 void main() {
-  final bool skipTests = pingServer("test.mosquitto.org");
-  test("Broker Subscribe", () {
+  final bool skipTests = pingServer('test.mosquitto.org');
+  test('Broker Subscribe', () {
     final ProcessResult result = Process.runSync(
-        'dart', ['test/mqtt_client_broker_test_subscribe.dart']);
-    print("Broker Subscribe::stdout");
+        'dart', <String>['test/mqtt_client_broker_test_subscribe.dart']);
+    print('Broker Subscribe::stdout');
     print(result.stdout.toString());
-    print("Broker Subscribe::stderr");
+    print('Broker Subscribe::stderr');
     print(result.stderr.toString());
     expect(result.exitCode, 0);
   }, skip: skipTests);
 
-  test("Broker Publish", () {
+  test('Broker Publish', () {
     final ProcessResult result =
-    Process.runSync('dart', ['test/mqtt_client_broker_test_publish.dart']);
-    print("Broker Publish::stdout");
+    Process.runSync('dart', <String>['test/mqtt_client_broker_test_publish.dart']);
+    print('Broker Publish::stdout');
     print(result.stdout.toString());
-    print("Broker Publish::stderr");
+    print('Broker Publish::stderr');
     print(result.stderr.toString());
     expect(result.exitCode, 0);
   }, skip: skipTests);

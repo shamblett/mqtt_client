@@ -11,9 +11,7 @@ part of mqtt_client;
 class MqttUtilities {
   /// Sleep function that allows asynchronous activity to continue.
   /// Time units are seconds
-  static Future asyncSleep(int seconds) {
-    return Future.delayed(Duration(seconds: seconds));
-  }
+  static Future<void> asyncSleep(int seconds) => Future<void>.delayed(Duration(seconds: seconds));
 
   /// Sleep function that block asynchronous activity.
   /// Time units are seconds
@@ -30,10 +28,11 @@ class MqttCancellableAsyncSleep {
   /// Millisecond timeout
   int _timeout;
 
+  /// Timeout
   int get timeout => _timeout;
 
   /// The completer
-  Completer _completer = new Completer();
+  Completer<void> _completer =  Completer<void>();
 
   /// The timer
   Timer _timer;
@@ -41,12 +40,13 @@ class MqttCancellableAsyncSleep {
   /// Timer running flag
   bool _running = false;
 
+  /// Running
   bool get isRunning => _running;
 
   /// Start the timer
-  Future sleep() {
+  Future<void> sleep() {
     if (!_running) {
-      _timer = new Timer(new Duration(milliseconds: _timeout), _timerCallback);
+      _timer = Timer(Duration(milliseconds: _timeout), _timerCallback);
       _running = true;
     }
     return _completer.future;

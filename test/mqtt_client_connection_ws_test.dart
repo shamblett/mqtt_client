@@ -14,14 +14,14 @@ import 'package:event_bus/event_bus.dart' as events;
 void main() {
   // Test wide variables
   final MockBrokerWs brokerWs = MockBrokerWs();
-  final String mockBrokerAddressWs = "ws://localhost/ws";
-  final String mockBrokerAddressWsNoScheme = "localhost.com";
-  final String mockBrokerAddressWsBad = "://localhost.com";
+  const String mockBrokerAddressWs = 'ws://localhost/ws';
+  const String mockBrokerAddressWsNoScheme = 'localhost.com';
+  const String mockBrokerAddressWsBad = '://localhost.com';
   final int mockBrokerPortWs = 8090;
-  final String testClientId = "syncMqttTests";
+  const String testClientId = 'syncMqttTests';
 
-  group("Connection parameters", () {
-    test("Invalid URL", () async {
+  group('Connection parameters', () {
+    test('Invalid URL', () async {
       try {
         final events.EventBus clientEventBus = new events.EventBus();
         final SynchronousMqttConnectionHandler ch =
@@ -29,35 +29,35 @@ void main() {
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
-      } catch (e) {
+      } on Exception catch (e) {
         expect(e is NoConnectionException, true);
         expect(
             e.toString(),
-            "mqtt-client::NoConnectionException: "
-                "MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com");
+            'mqtt-client::NoConnectionException: '
+                'MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com');
       }
     });
 
-    test("Invalid URL - bad scheme", () async {
+    test('Invalid URL - bad scheme', () async {
       try {
-        final events.EventBus clientEventBus = new events.EventBus();
+        final events.EventBus clientEventBus = events.EventBus();
         final SynchronousMqttConnectionHandler ch =
         SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
-      } catch (e) {
+      } on Exception catch (e) {
         expect(e is NoConnectionException, true);
         expect(
             e.toString(),
-            "mqtt-client::NoConnectionException: "
-                "MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme");
+            'mqtt-client::NoConnectionException: '
+                'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
   }, skip: false);
 
-  group("Connection Keep Alive - Mock broker WS", () {
-    test("Successful response WS", () async {
+  group('Connection Keep Alive - Mock broker WS', () {
+    test('Successful response WS', () async {
       int expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
@@ -71,14 +71,14 @@ void main() {
         final MqttHeader header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
           print(
-              "WS Connection Keep Alive - Successful response - Ping Request received $expectRequest");
+              'WS Connection Keep Alive - Successful response - Ping Request received $expectRequest');
           expect(header.messageType, MqttMessageType.pingRequest);
           expectRequest++;
         }
       }
 
       await brokerWs.start();
-      final events.EventBus clientEventBus = new events.EventBus();
+      final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       ch.useWebSocket = true;
@@ -89,16 +89,16 @@ void main() {
       brokerWs.setMessageHandler(messageHandlerPingRequest);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
-          "WS Connection Keep Alive - Successful response - keepealive ms is ${ka
-              .keepAlivePeriod}");
+          'WS Connection Keep Alive - Successful response - keepealive ms is ${ka
+              .keepAlivePeriod}');
       print(
-          "WS Connection Keep Alive - Successful response - ping timer active is ${ka
-              .pingTimer.isActive.toString()}");
+          'WS Connection Keep Alive - Successful response - ping timer active is ${ka
+              .pingTimer.isActive.toString()}');
       final Stopwatch stopwatch = Stopwatch()
         ..start();
       await MqttUtilities.asyncSleep(10);
-      print("WS Connection Keep Alive - Successful response - Elapsed time "
-          "is ${stopwatch.elapsedMilliseconds / 1000} seconds");
+      print('WS Connection Keep Alive - Successful response - Elapsed time '
+          'is ${stopwatch.elapsedMilliseconds / 1000} seconds');
       ka.stop();
       ch.close();
     });

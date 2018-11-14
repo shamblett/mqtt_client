@@ -6,6 +6,7 @@
 analyzer:
   exclude:
   - example/flutter/**
+  - test/issues/issue40.dart
 
 linter:
   rules:
