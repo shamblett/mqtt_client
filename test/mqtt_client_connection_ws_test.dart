@@ -8,8 +8,9 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
-import 'support/mqtt_client_mockbroker.dart';
 import 'package:event_bus/event_bus.dart' as events;
+import 'support/mqtt_client_mockbroker.dart';
+
 
 void main() {
   // Test wide variables
@@ -17,13 +18,13 @@ void main() {
   const String mockBrokerAddressWs = 'ws://localhost/ws';
   const String mockBrokerAddressWsNoScheme = 'localhost.com';
   const String mockBrokerAddressWsBad = '://localhost.com';
-  final int mockBrokerPortWs = 8090;
+  const int mockBrokerPortWs = 8090;
   const String testClientId = 'syncMqttTests';
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
       try {
-        final events.EventBus clientEventBus = new events.EventBus();
+        final events.EventBus clientEventBus = events.EventBus();
         final SynchronousMqttConnectionHandler ch =
         SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;

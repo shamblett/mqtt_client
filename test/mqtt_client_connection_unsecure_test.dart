@@ -85,13 +85,13 @@ void main() {
       expect(ch.connectionState.returnCode, MqttConnectReturnCode.notAuthorized);
     }, skip: true);
     test('Connect invalid port', () async {
-      final events.EventBus clientEventBus = new events.EventBus();
+      final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       try {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-      } catch (e) {
+      } on Exception catch (e) {
         expect(e.toString().contains('refused'), isTrue);
       }
       expect(ch.connectionState.state, ConnectionState.faulted);
@@ -99,14 +99,14 @@ void main() {
     });
     test('Connect no connect ack', () async {
       await broker.start();
-      final events.EventBus clientEventBus = new events.EventBus();
+      final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       try {
         await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
-      } catch (e) {
-        expect((e is NoConnectionException), isTrue);
+      } on Exception catch (e) {
+        expect(e is NoConnectionException, isTrue);
       }
       expect(ch.connectionState.state, ConnectionState.faulted);
       expect(ch.connectionState.returnCode, MqttConnectReturnCode.notAuthorized);
@@ -118,7 +118,7 @@ void main() {
         broker.sendMessage(ack);
       }
 
-      final events.EventBus clientEventBus = new events.EventBus();
+      final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler(messageHandler);
@@ -155,7 +155,7 @@ void main() {
         }
       }
 
-      final events.EventBus clientEventBus = new events.EventBus();
+      final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
       SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler(messageHandlerConnect);
@@ -193,7 +193,7 @@ void main() {
       client.logging(on:true);
       const String username = 'unused';
       print(username);
-      final password = 'password';
+      const String password = 'password';
       print(password);
       await client.connect();
       if (client.connectionState == ConnectionState.connected) {
