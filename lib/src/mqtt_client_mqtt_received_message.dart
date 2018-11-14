@@ -16,8 +16,5 @@ class MqttReceivedMessage<T> extends observe.ChangeRecord {
   T payload;
 
   /// Initializes a new instance of an MqttReceivedMessage class.
-  MqttReceivedMessage(String topic, T payload) {
-    this.topic = topic;
-    this.payload = payload;
-  }
+  MqttReceivedMessage(this.topic, this.payload);
 }

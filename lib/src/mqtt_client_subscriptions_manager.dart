@@ -31,6 +31,8 @@ class SubscriptionsManager {
 
   /// Subscribe and Unsubscribe callbacks
   SubscribeCallback onSubscribed;
+
+  /// Unsubscribed
   UnsubscribeCallback onUnsubscribed;
 
   /// The event bus
@@ -39,32 +41,26 @@ class SubscriptionsManager {
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(
       this.connectionHandler, this.publishingManager, this._clientEventBus) {
-    this.connectionHandler = connectionHandler;
-    this.publishingManager = publishingManager;
-    this
-        .connectionHandler
-        .registerForMessage(MqttMessageType.subscribeAck, confirmSubscription);
-    this
-        .connectionHandler
-        .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+    connectionHandler.registerForMessage(
+        MqttMessageType.subscribeAck, confirmSubscription);
+    connectionHandler.registerForMessage(
+        MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages
     _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
   }
 
   /// Observable change notifier for all subscribed topics
-  final observe.ChangeNotifier<MqttReceivedMessage> _subscriptionNotifier =
-      observe.ChangeNotifier<MqttReceivedMessage>();
+  final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>> _subscriptionNotifier =
+      observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>();
 
-  observe.ChangeNotifier<MqttReceivedMessage> get subscriptionNotifier =>
+  /// Subscription notifier
+  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>> get subscriptionNotifier =>
       _subscriptionNotifier;
 
   /// Registers a new subscription with the subscription manager.
   Subscription registerSubscription(String topic, MqttQos qos) {
-    var cn = tryGetExistingSubscription(topic);
-    if (cn == null) {
-      cn = createNewSubscription(topic, qos);
-    }
-    return cn;
+    Subscription cn = tryGetExistingSubscription(topic);
+      return cn??= createNewSubscription(topic, qos);
   }
 
   /// Gets a view on the existing observable, if the subscription already exists.
@@ -100,16 +96,16 @@ class SubscriptionsManager {
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
       return sub;
-    } catch (Exception) {
+    } on Exception  {
       throw InvalidTopicException(
-          "from SubscriptionManager::createNewSubscription", topic);
+          'from SubscriptionManager::createNewSubscription', topic);
     }
   }
 
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
-    final topic = event.topic;
-    final msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
+    final PublicationTopic topic = event.topic;
+    final MqttReceivedMessage<MqttMessage> msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
     subscriptionNotifier.notifyChange(msg);
   }
 
@@ -125,7 +121,7 @@ class SubscriptionsManager {
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
   /// Returns true, always.
   bool confirmSubscription(MqttMessage msg) {
-    final MqttSubscribeAckMessage subAck = msg as MqttSubscribeAckMessage;
+    final MqttSubscribeAckMessage subAck = msg;
     String topic;
     if (pendingSubscriptions
         .containsKey(subAck.variableHeader.messageIdentifier)) {
@@ -145,7 +141,7 @@ class SubscriptionsManager {
   /// Cleans up after an unsubscribe message is received from the broker.
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage msg) {
-    final MqttUnsubscribeAckMessage unSubAck = msg as MqttUnsubscribeAckMessage;
+    final MqttUnsubscribeAckMessage unSubAck = msg;
     String subKey;
     Subscription sub;
     subscriptions.forEach((String key, Subscription value) {

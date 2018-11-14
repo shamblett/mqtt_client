@@ -50,7 +50,7 @@ class MqttMessage {
           MqttMessageFactory.getMessage(header, messageStream);
 
       if (messageStream.position < expectedPos) {
-        messageStream.skipBytes(expectedPos - messageStream.position);
+        messageStream.skipBytes = expectedPos - messageStream.position;
       }
 
       return message;

@@ -27,7 +27,7 @@ Future<int> main() async {
   client.setProtocolV311();
   //final String currDir = path.current + path.separator;
   //client.trustedCertPath = currDir + path.join("test", "pem", "roots.pem");
-  client.logging(true);
+  client.logging(on:true);
   await client.connect(username, password);
   if (client.connectionState == ConnectionState.connected) {
     print("iotcore client connected");

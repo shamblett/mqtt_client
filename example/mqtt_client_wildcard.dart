@@ -32,7 +32,7 @@ Future<int> main() async {
   /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
   /// Set logging on if needed, defaults to off
-  client.logging(false);
+  client.logging(on:false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here

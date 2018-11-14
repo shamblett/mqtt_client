@@ -14,7 +14,7 @@ Future<int> main() async {
   MqttClient("ws://iot.eclipse.org/ws", "SJHMQTTClient");
   client.useWebSocket = true;
   client.port = 80;
-  client.logging(true);
+  client.logging(on:true);
   await client.connect();
   if (client.connectionState == ConnectionState.connected) {
     print("Mosquitto client connected");

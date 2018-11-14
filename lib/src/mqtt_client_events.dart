@@ -15,6 +15,7 @@ class MessageAvailable {
   /// The message associated with the event
   MqttMessage _message;
 
+  /// Message
   MqttMessage get message => _message;
 }
 
@@ -26,10 +27,12 @@ class MessageReceived {
   /// The message associated with the event
   MqttMessage _message;
 
+  /// Message
   MqttMessage get message => _message;
 
   /// The topic
   PublicationTopic _topic;
 
+  /// Topic
   PublicationTopic get topic => _topic;
 }

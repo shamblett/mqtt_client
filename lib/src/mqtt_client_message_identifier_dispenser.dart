@@ -9,14 +9,13 @@ part of mqtt_client;
 
 /// Message identifier handling
 class MessageIdentifierDispenser {
-  factory MessageIdentifierDispenser() {
-    return _singleton;
-  }
+  /// Factory constructor
+  factory MessageIdentifierDispenser() => _singleton;
 
   MessageIdentifierDispenser._internal();
 
   static MessageIdentifierDispenser _singleton =
-      new MessageIdentifierDispenser._internal();
+      MessageIdentifierDispenser._internal();
 
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;
@@ -30,6 +29,7 @@ class MessageIdentifierDispenser {
   /// Message identifier, zero is forbidden
   int _mid = initialValue;
 
+  /// Mid
   int get mid => _mid;
 
   /// Gets the next message identifier

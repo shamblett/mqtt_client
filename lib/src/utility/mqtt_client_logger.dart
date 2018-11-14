@@ -16,7 +16,7 @@ class MqttLogger {
   static void log(String message) {
     if (loggingOn) {
       final DateTime now = DateTime.now();
-      print("$now -- $message");
+      print('$now -- $message');
     }
   }
 }

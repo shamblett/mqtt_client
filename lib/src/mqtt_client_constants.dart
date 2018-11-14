@@ -7,6 +7,7 @@
 
 part of mqtt_client;
 
+/// Library wide constants
 class Constants {
   /// The Maximum allowed message size as defined by the MQTT v3 Spec (256MB).
   static const int maxMessageSize = 268435455;
@@ -15,6 +16,7 @@ class Constants {
   /// specification is 23 characters, however we allow more than this, a warning is
   /// given in the log if 23 is exceeded.
   static const int maxClientIdentifierLength = 1024;
+  /// Specification length
   static const int maxClientIdentifierLengthSpec = 23;
 
   /// The default Mqtt port to connect to.
@@ -27,8 +29,12 @@ class Constants {
   static int defaultKeepAlive = 60;
 
   /// Protocol variants
+  /// V3
   static const int mqttV31ProtocolVersion = 3;
-  static const String mqttV31ProtocolName = "MQIsdp";
+  /// V3 name
+  static const String mqttV31ProtocolName = 'MQIsdp';
+  /// V4
   static const int mqttV311ProtocolVersion = 4;
-  static const String mqttV311ProtocolName = "MQTT";
+  /// V4 name
+  static const String mqttV311ProtocolName = 'MQTT';
 }

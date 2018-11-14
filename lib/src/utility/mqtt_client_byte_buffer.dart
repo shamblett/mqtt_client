@@ -14,63 +14,60 @@ class MqttByteBuffer {
   /// The current position within the buffer.
   int _position = 0;
 
-  /// A value representing the length of the stream in bytes.
-  int _length;
-
   /// The underlying byte buffer
-  typed.Uint8Buffer _buffer;
+  typed.Uint8Buffer buffer;
 
-  MqttByteBuffer(this._buffer) {
-    _length = _buffer.length;
-  }
+  /// The byte buffer
+  MqttByteBuffer(this.buffer);
 
+  /// From a list
   MqttByteBuffer.fromList(List<int> data) {
-    this._buffer = typed.Uint8Buffer();
-    this._buffer.addAll(data);
-    _length = _buffer.length;
+    buffer = typed.Uint8Buffer();
+    buffer.addAll(data);
   }
 
+  /// Position
   int get position => _position;
 
-  int get length => _length;
+  /// Length
+  int get length => buffer.length;
 
-  int get availableBytes => _length - _position;
-
-  typed.Uint8Buffer get buffer => _buffer;
-
-  set buffer(typed.Uint8Buffer buff) => _buffer = buff;
+  /// Available bytes
+  int get availableBytes => length - _position;
 
   /// Resets the position to 0
   void reset() {
     _position = 0;
   }
 
-  void skipBytes(int bytes) {
-    _position += bytes;
-  }
+  /// Skip bytes
+  set skipBytes(int bytes) => _position += bytes;
 
+  /// Add a list
   void addAll(List<int> data) {
-    this._buffer.addAll(data);
-    _length += data.length;
+    buffer.addAll(data);
   }
 
+  /// Shrink the buffer
   void shrink() {
-    this._buffer.removeRange(0, _position);
-    _length -= _position;
+    buffer.removeRange(0, _position);
     _position = 0;
   }
 
+  /// Message available
   bool isMessageAvailable() {
-    if (availableBytes > 0) return true;
+    if (availableBytes > 0) {
+      return true;
+    }
 
     return false;
   }
 
-  // Reads a byte from the buffer and advances the position within the buffer by one
-  // byte, or returns -1 if at the end of the buffer.
+  /// Reads a byte from the buffer and advances the position within the buffer by one
+  /// byte, or returns -1 if at the end of the buffer.
   int readByte() {
-    final int tmp = _buffer[_position];
-    if (_position <= (_length - 1)) {
+    final int tmp = buffer[_position];
+    if (_position <= (length - 1)) {
       _position++;
     } else {
       return -1;
@@ -88,13 +85,13 @@ class MqttByteBuffer {
   /// Reads a sequence of bytes from the current
   /// buffer and advances the position within the buffer by the number of bytes read.
   typed.Uint8Buffer read(int count) {
-    if ((_length < count) || (_position + count) > _length) {
+    if ((length < count) || (_position + count) > length) {
       throw Exception(
-          "mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation "
-          "length $_length, count $count, position $_position");
+          'mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation '
+          'length $length, count $count, position $_position');
     }
     final typed.Uint8Buffer tmp = typed.Uint8Buffer();
-    tmp.addAll(_buffer.getRange(_position, _position + count));
+    tmp.addAll(buffer.getRange(_position, _position + count));
     _position += count;
     final typed.Uint8Buffer tmp2 = typed.Uint8Buffer();
     tmp2.addAll(tmp);
@@ -104,11 +101,10 @@ class MqttByteBuffer {
   /// Writes a byte to the current position in the buffer and advances the position
   //  within the buffer by one byte.
   void writeByte(int byte) {
-    if (_length == _position) {
-      _buffer.add(byte);
-      _length++;
+    if (buffer.length == _position) {
+      buffer.add(byte);
     } else {
-      _buffer[_position] = byte;
+      buffer[_position] = byte;
     }
     _position++;
   }
@@ -123,22 +119,22 @@ class MqttByteBuffer {
   /// buffer and advances the position within the buffer by the number of
   /// bytes written.
   void write(typed.Uint8Buffer buffer) {
-    if (_buffer == null) {
-      _buffer = buffer;
+    if (this.buffer == null) {
+      this.buffer = buffer;
     } else {
-      _buffer.addAll(buffer);
+      this.buffer.addAll(buffer);
     }
-    _length = _buffer.length;
-    _position = _length;
+    _position = length;
   }
 
   /// Seek. Sets the position in the buffer. If overflow occurs
   /// the position is set to the end of the buffer.
   void seek(int seek) {
-    if ((seek <= _length) && (seek >= 0)) {
+    if ((seek <= length) && (seek >= 0)) {
       _position = seek;
-    } else
-      _position = _length;
+    } else {
+      _position = length;
+    }
   }
 
   /// Writes an MQTT string member
@@ -157,9 +153,7 @@ class MqttByteBuffer {
   }
 
   /// Reads an MQTT string from the underlying stream member
-  String readMqttStringM() {
-    return MqttByteBuffer.readMqttString(this);
-  }
+  String readMqttStringM() => MqttByteBuffer.readMqttString(this);
 
   /// Reads an MQTT string from the underlying stream.
   static String readMqttString(MqttByteBuffer buffer) {

@@ -10,8 +10,9 @@ part of mqtt_client;
 /// Implementation of a Publication topic that performs additional validations
 /// of messages that are published.
 class PublicationTopic extends Topic {
+  /// Construction
   PublicationTopic(String topic)
-      : super(topic, [
+      : super(topic, <dynamic>[
           Topic.validateMinLength,
           Topic.validateMaxLength,
           _validateWildcards
@@ -21,7 +22,7 @@ class PublicationTopic extends Topic {
   static void _validateWildcards(Topic topicInstance) {
     if (topicInstance.hasWildcards) {
       throw Exception(
-          "mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)");
+          'mqtt_client::PublicationTopic: Cannot publish to a topic that contains MQTT topic wildcards (# or +)');
     }
   }
 }

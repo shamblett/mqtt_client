@@ -189,7 +189,7 @@ void main() {
 
       broker.setMessageHandler(messageHandlerConnect);
       final MqttClient client = MqttClient("localhost", "SJHMQTTClient");
-      client.logging(true);
+      client.logging(on:true);
       final String username = "unused";
       print(username);
       final password = "password";

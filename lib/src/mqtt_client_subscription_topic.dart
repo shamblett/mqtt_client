@@ -12,7 +12,7 @@ part of mqtt_client;
 class SubscriptionTopic extends Topic {
   /// Creates a new instance of a rawTopic from a topic string.
   SubscriptionTopic(String rawTopic)
-      : super(rawTopic, [
+      : super(rawTopic, <dynamic>[
           Topic.validateMinLength,
           Topic.validateMaxLength,
           _validateMultiWildcard,
@@ -30,7 +30,7 @@ class SubscriptionTopic extends Topic {
             fragment.length > 1);
     if (invalidFragment) {
       throw Exception(
-          "mqtt_client::SubscriptionTopic: rawTopic Fragment contains a wildcard but is more than one character long");
+          'mqtt_client::SubscriptionTopic: rawTopic Fragment contains a wildcard but is more than one character long');
     }
   }
 
@@ -39,14 +39,14 @@ class SubscriptionTopic extends Topic {
     if (topicInstance.rawTopic.contains(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {
       throw Exception(
-          "mqtt_client::SubscriptionTopic: The rawTopic wildcard # can only be present at the end of a topic");
+          'mqtt_client::SubscriptionTopic: The rawTopic wildcard # can only be present at the end of a topic');
     }
     if (topicInstance.rawTopic.length > 1 &&
         topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
       throw Exception(
-          "mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must "
-          "be immediately preceeded by a the rawTopic separator /");
+          'mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must '
+          'be immediately preceeded by a the rawTopic separator /');
     }
   }
 
@@ -55,15 +55,15 @@ class SubscriptionTopic extends Topic {
   bool matches(PublicationTopic matcheeTopic) {
     // If the left rawTopic is just a multi wildcard then we have a match without
     // needing to check any further.
-    if (this.rawTopic == Topic.multiWildcard) {
+    if (rawTopic == Topic.multiWildcard) {
       return true;
     }
     // If the topics are an exact match, bail early with a cheap comparison
-    if (this.rawTopic == matcheeTopic.rawTopic) {
+    if (rawTopic == matcheeTopic.rawTopic) {
       return true;
     }
     // no match yet so we need to check each fragment
-    for (int i = 0; i < this.topicFragments.length; i++) {
+    for (int i = 0; i < topicFragments.length; i++) {
       final String lhsFragment = topicFragments[i];
       // If we've reached a multi wildcard in the lhs rawTopic,
       // we have a match.
@@ -90,8 +90,8 @@ class SubscriptionTopic extends Topic {
       // If we're at the last fragment of the lhs rawTopic but there are
       // more fragments in the in the matchee then the matchee rawTopic
       // is too specific to be a match.
-      if (i + 1 == this.topicFragments.length &&
-          matcheeTopic.topicFragments.length > this.topicFragments.length) {
+      if (i + 1 == topicFragments.length &&
+          matcheeTopic.topicFragments.length > topicFragments.length) {
         return false;
       }
       // If we're here the current fragment matches so check the next

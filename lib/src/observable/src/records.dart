@@ -10,10 +10,11 @@ class ChangeRecord {
   ///
   /// May be used to produce lower-GC-pressure records where more verbose change
   /// records will not be used directly.
-  static const List<ChangeRecord> any = const [const ChangeRecord()];
+  static const List<ChangeRecord> any = <ChangeRecord>[ChangeRecord()];
 
   /// Signifies no changes occurred.
-  static const List<ChangeRecord> none = const [];
+  static const List<ChangeRecord> none = <ChangeRecord>[];
 
+  /// Constructor
   const ChangeRecord();
 }

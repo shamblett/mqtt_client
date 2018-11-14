@@ -27,8 +27,10 @@ class MqttClient {
 
   /// Server name
   String server;
+
   /// Port number
   int port;
+
   /// Client identifier
   String clientIdentifier;
 
@@ -111,11 +113,12 @@ class MqttClient {
   events.EventBus _clientEventBus = events.EventBus();
 
   /// The change notifier on which all subscribed topic updates are published to
-  Stream<List<MqttReceivedMessage>> updates;
+  Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
 
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
-  Future<MqttClientConnectionStatus> connect([String username, String password]) async {
+  Future<MqttClientConnectionStatus> connect(
+      [String username, String password]) async {
     if (username != null) {
       MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
@@ -152,25 +155,21 @@ class MqttClient {
     _subscriptionsManager.onUnsubscribed = onUnsubscribed;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
-    final MqttConnectMessage connectMessage = _getConnectMessage(username, password);
-    return await _connectionHandler.connect(
-        server, port, connectMessage);
+    final MqttConnectMessage connectMessage =
+        _getConnectMessage(username, password);
+    return await _connectionHandler.connect(server, port, connectMessage);
   }
 
   ///  Gets a pre-configured connect message if one has not been supplied by the user.
   ///  Returns an MqttConnectMessage that can be used to connect to a message broker
-  MqttConnectMessage _getConnectMessage(String username, String password) {
-    if (connectionMessage == null) {
-      connectionMessage = MqttConnectMessage()
+  MqttConnectMessage _getConnectMessage(String username, String password) =>
+      connectionMessage ??= MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
           // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
-    }
-    return connectionMessage;
-  }
 
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
   /// The topic to subscribe to.
@@ -189,7 +188,7 @@ class MqttClient {
   /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
-      [bool retain = false]) {
+      {bool retain = false}) {
     if (_connectionHandler.connectionState.state != ConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionState.state);
     }
@@ -197,8 +196,8 @@ class MqttClient {
       final PublicationTopic pubTopic = PublicationTopic(topic);
       return _publishingManager.publish(
           pubTopic, qualityOfService, data, retain);
-    } catch (Exception) {
-      throw InvalidTopicException(Exception.toString(), topic);
+    } on Exception catch (e) {
+      throw InvalidTopicException(e.toString(), topic);
     }
   }
 
@@ -208,9 +207,8 @@ class MqttClient {
   }
 
   /// Gets the current status of a subscription.
-  SubscriptionStatus getSubscriptionsStatus(String topic) {
-    return _subscriptionsManager.getSubscriptionsStatus(topic);
-  }
+  SubscriptionStatus getSubscriptionsStatus(String topic) =>
+      _subscriptionsManager.getSubscriptionsStatus(topic);
 
   /// Disconnect from the broker
   void disconnect() {
@@ -224,7 +222,7 @@ class MqttClient {
   }
 
   /// Turn on logging, true to start, false to stop
-  void logging(bool on) {
+  void logging({bool on}) {
     MqttLogger.loggingOn = false;
     if (on) {
       MqttLogger.loggingOn = true;
