@@ -16,7 +16,7 @@ class MqttClient {
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   MqttClient(this.server, this.clientIdentifier) {
-    this.port = Constants.defaultMqttPort;
+    port = Constants.defaultMqttPort;
   }
 
   /// Initializes a new instance of the MqttClient class using the supplied Mqtt Port.
@@ -25,8 +25,11 @@ class MqttClient {
   /// The port to use
   MqttClient.withPort(this.server, this.clientIdentifier, this.port);
 
+  /// Server name
   String server;
+  /// Port number
   int port;
+  /// Client identifier
   String clientIdentifier;
 
   /// If set use a websocket connection, otherwise use the default TCP one
@@ -84,6 +87,7 @@ class MqttClient {
   /// string parameter, the topic that has been subscribed to.
   SubscribeCallback _onSubscribed;
 
+  /// On subscribed
   SubscribeCallback get onSubscribed => _onSubscribed;
 
   set onSubscribed(SubscribeCallback cb) {
@@ -95,6 +99,7 @@ class MqttClient {
   /// string parameter, the topic that has been unsubscribed.
   UnsubscribeCallback _onUnsubscribed;
 
+  /// On unsubscribed
   UnsubscribeCallback get onUnsubscribed => _onUnsubscribed;
 
   set onUnsubscribed(UnsubscribeCallback cb) {
@@ -103,28 +108,28 @@ class MqttClient {
   }
 
   /// The event bus
-  events.EventBus _clientEventBus = new events.EventBus();
+  events.EventBus _clientEventBus = events.EventBus();
 
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage>> updates;
 
   /// Performs a synchronous connect to the message broker with an optional username and password
   /// for the purposes of authentication.
-  Future connect([String username, String password]) async {
+  Future<MqttClientConnectionStatus> connect([String username, String password]) async {
     if (username != null) {
       MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
       if (username.trim().length >
           Constants.recommendedMaxUsernamePasswordLength) {
         MqttLogger.log(
-            "Username length (${username.trim().length}) exceeds the max recommended in the MQTT spec. ");
+            'Username length (${username.trim().length}) exceeds the max recommended in the MQTT spec. ');
       }
     }
     if (password != null &&
         password.trim().length >
             Constants.recommendedMaxUsernamePasswordLength) {
       MqttLogger.log(
-          "Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ");
+          'Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ');
     }
     _connectionHandler = SynchronousMqttConnectionHandler(_clientEventBus);
     if (useWebSocket) {
@@ -147,9 +152,9 @@ class MqttClient {
     _subscriptionsManager.onUnsubscribed = onUnsubscribed;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
-    final connectMessage = _getConnectMessage(username, password);
+    final MqttConnectMessage connectMessage = _getConnectMessage(username, password);
     return await _connectionHandler.connect(
-        this.server, this.port, connectMessage);
+        server, port, connectMessage);
   }
 
   ///  Gets a pre-configured connect message if one has not been supplied by the user.

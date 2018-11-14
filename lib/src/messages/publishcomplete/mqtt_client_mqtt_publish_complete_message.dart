@@ -14,30 +14,32 @@ class MqttPublishCompleteMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.publishComplete);
-    this.variableHeader = MqttPublishCompleteVariableHeader();
+    header = MqttHeader().asType(MqttMessageType.publishComplete);
+    variableHeader = MqttPublishCompleteVariableHeader();
   }
 
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage.fromByteBuffer(
       MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
-    this.variableHeader =
+    variableHeader =
         MqttPublishCompleteVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(this.variableHeader.getWriteLength(), messageStream);
-    this.variableHeader.writeTo(messageStream);
+    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    variableHeader.writeTo(messageStream);
   }
 
   /// Sets the message identifier of the MqttMessage.
   MqttPublishCompleteMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

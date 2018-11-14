@@ -14,30 +14,32 @@ class MqttPublishReleaseMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.publishRelease);
-    this.variableHeader = MqttPublishReleaseVariableHeader();
+    header = MqttHeader().asType(MqttMessageType.publishRelease);
+    variableHeader = MqttPublishReleaseVariableHeader();
   }
 
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage.fromByteBuffer(
       MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
-    this.variableHeader =
+    variableHeader =
         MqttPublishReleaseVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(this.variableHeader.getWriteLength(), messageStream);
-    this.variableHeader.writeTo(messageStream);
+    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    variableHeader.writeTo(messageStream);
   }
 
   /// Sets the message identifier of the MqttMessage.
   MqttPublishReleaseMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

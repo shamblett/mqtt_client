@@ -17,9 +17,9 @@ class MqttUnsubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.unsubscribe);
-    this.variableHeader = MqttUnsubscribeVariableHeader();
-    this.payload = MqttUnsubscribePayload();
+    header = MqttHeader().asType(MqttMessageType.unsubscribe);
+    variableHeader = MqttUnsubscribeVariableHeader();
+    payload = MqttUnsubscribePayload();
   }
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
@@ -30,47 +30,50 @@ class MqttUnsubscribeMessage extends MqttMessage {
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(
-        this.variableHeader.getWriteLength() + this.payload.getWriteLength(),
+    header.writeTo(
+        variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    this.variableHeader.writeTo(messageStream);
-    this.payload.writeTo(messageStream);
+    variableHeader.writeTo(messageStream);
+    payload.writeTo(messageStream);
   }
 
   /// Reads a message from the supplied stream.
+  @override
   void readFrom(MqttByteBuffer messageStream) {
-    this.variableHeader =
+    variableHeader =
         MqttUnsubscribeVariableHeader.fromByteBuffer(messageStream);
-    this.payload = MqttUnsubscribePayload.fromByteBuffer(
+    payload = MqttUnsubscribePayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
   /// Adds a topic to the list of topics to unsubscribe from.
   MqttUnsubscribeMessage fromTopic(String topic) {
-    this.payload.addSubscription(topic);
+    payload.addSubscription(topic);
     return this;
   }
 
   /// Sets the message identifier on the subscribe message.
   MqttUnsubscribeMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
   /// Sets the message up to request acknowledgement from the broker for each topic subscription.
   MqttUnsubscribeMessage expectAcknowledgement() {
-    this.header.withQos(MqttQos.atLeastOnce);
+    header.withQos(MqttQos.atLeastOnce);
     return this;
   }
 
   /// Sets the duplicate flag for the message to indicate its a duplicate of a previous message type
   /// with the same message identifier.
   MqttUnsubscribeMessage isDuplicate() {
-    this.header.isDuplicate();
+    header.isDuplicate();
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

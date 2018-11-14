@@ -17,9 +17,9 @@ class MqttSubscribeAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
   MqttSubscribeAckMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.subscribeAck);
-    this.variableHeader = MqttSubscribeAckVariableHeader();
-    this.payload = MqttSubscribeAckPayload();
+    header = MqttHeader().asType(MqttMessageType.subscribeAck);
+    variableHeader = MqttSubscribeAckVariableHeader();
+    payload = MqttSubscribeAckPayload();
   }
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
@@ -30,34 +30,37 @@ class MqttSubscribeAckMessage extends MqttMessage {
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(
-        this.variableHeader.getWriteLength() + this.payload.getWriteLength(),
+    header.writeTo(
+        variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    this.variableHeader.writeTo(messageStream);
-    this.payload.writeTo(messageStream);
+    variableHeader.writeTo(messageStream);
+    payload.writeTo(messageStream);
   }
 
   /// Reads a message from the supplied stream.
+  @override
   void readFrom(MqttByteBuffer messageStream) {
-    this.variableHeader =
+    variableHeader =
         MqttSubscribeAckVariableHeader.fromByteBuffer(messageStream);
-    this.payload = MqttSubscribeAckPayload.fromByteBuffer(
+    payload = MqttSubscribeAckPayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
   /// Sets the message identifier on the subscribe message.
   MqttSubscribeAckMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
   ///  Adds a Qos grant to the message.
   MqttSubscribeAckMessage addQosGrant(MqttQos qosGranted) {
-    this.payload.addGrant(qosGranted);
+    payload.addGrant(qosGranted);
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

@@ -14,8 +14,8 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
   MqttUnsubscribeAckMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.unsubscribeAck);
-    this.variableHeader = MqttUnsubscribeAckVariableHeader();
+    header = MqttHeader().asType(MqttMessageType.unsubscribeAck);
+    variableHeader = MqttUnsubscribeAckVariableHeader();
   }
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
@@ -26,23 +26,26 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(this.variableHeader.getWriteLength(), messageStream);
-    this.variableHeader.writeTo(messageStream);
+    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    variableHeader.writeTo(messageStream);
   }
 
   /// Reads a message from the supplied stream.
+  @override
   void readFrom(MqttByteBuffer messageStream) {
-    this.variableHeader =
+    variableHeader =
         MqttUnsubscribeAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Sets the message identifier on the subscribe message.
   MqttUnsubscribeAckMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

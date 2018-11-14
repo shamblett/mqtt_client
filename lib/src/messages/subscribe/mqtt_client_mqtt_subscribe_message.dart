@@ -19,10 +19,10 @@ class MqttSubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
-    this.header = MqttHeader().asType(MqttMessageType.subscribe);
-    this.header.qos = MqttQos.atLeastOnce;
-    this.variableHeader = MqttSubscribeVariableHeader();
-    this.payload = MqttSubscribePayload();
+    header = MqttHeader().asType(MqttMessageType.subscribe);
+    header.qos = MqttQos.atLeastOnce;
+    variableHeader = MqttSubscribeVariableHeader();
+    payload = MqttSubscribePayload();
   }
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
@@ -34,19 +34,21 @@ class MqttSubscribeMessage extends MqttMessage {
   }
 
   /// Writes the message to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer messageStream) {
-    this.header.writeTo(
-        this.variableHeader.getWriteLength() + this.payload.getWriteLength(),
+    header.writeTo(
+        variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    this.variableHeader.writeTo(messageStream);
-    this.payload.writeTo(messageStream);
+    variableHeader.writeTo(messageStream);
+    payload.writeTo(messageStream);
   }
 
   /// Reads a message from the supplied stream.
+  @override
   void readFrom(MqttByteBuffer messageStream) {
-    this.variableHeader =
+    variableHeader =
         MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
-    this.payload = MqttSubscribePayload.fromByteBuffer(
+    payload = MqttSubscribePayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }
 
@@ -54,37 +56,38 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Qos level follow this call with a call to AtTopic(MqttQos)
   MqttSubscribeMessage toTopic(String topic) {
     _lastTopic = topic;
-    this.payload.addSubscription(topic, MqttQos.atMostOnce);
+    payload.addSubscription(topic, MqttQos.atMostOnce);
     return this;
   }
 
   /// Sets the Qos level of the last topic added to the subscription list via a call to ToTopic(string)
   MqttSubscribeMessage atQos(MqttQos qos) {
-    if (this.payload.subscriptions.containsKey(_lastTopic)) {
-      this.payload.subscriptions[_lastTopic] = qos;
+    if (payload.subscriptions.containsKey(_lastTopic)) {
+      payload.subscriptions[_lastTopic] = qos;
     }
     return this;
   }
 
   /// Sets the message identifier on the subscribe message.
   MqttSubscribeMessage withMessageIdentifier(int messageIdentifier) {
-    this.variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }
 
   /// Sets the message up to request acknowledgement from the broker for each topic subscription.
   MqttSubscribeMessage expectAcknowledgement() {
-    this.header.withQos(MqttQos.atLeastOnce);
+    header.withQos(MqttQos.atLeastOnce);
     return this;
   }
 
   /// Sets the duplicate flag for the message to indicate its a duplicate of a previous message type
   /// with the same message identifier.
   MqttSubscribeMessage isDuplicate() {
-    this.header.isDuplicate();
+    header.isDuplicate();
     return this;
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.write(super.toString());

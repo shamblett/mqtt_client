@@ -9,7 +9,10 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
+  /// Variable header
   MqttVariableHeader variableHeader;
+
+  /// Message header
   MqttHeader header;
 
   /// The collection of subscriptions, Key is the topic, Value is the qos
@@ -20,15 +23,12 @@ class MqttSubscribePayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload.fromByteBuffer(
-      MqttHeader header,
-      MqttSubscribeVariableHeader variableHeader,
-      MqttByteBuffer payloadStream) {
-    this.header = header;
-    this.variableHeader = variableHeader;
+      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
 
   /// Writes the payload to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer payloadStream) {
     subscriptions.forEach((String key, MqttQos value) {
       payloadStream.writeMqttStringM(key);
@@ -37,6 +37,7 @@ class MqttSubscribePayload extends MqttPayload {
   }
 
   /// Creates a payload from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer payloadStream) {
     int payloadBytesRead = 0;
     final int payloadLength = header.messageSize - variableHeader.length;
@@ -51,6 +52,7 @@ class MqttSubscribePayload extends MqttPayload {
   }
 
   /// Gets the length of the payload in bytes when written to a stream.
+  @override
   int getWriteLength() {
     int length = 0;
     final MqttEncoding enc = MqttEncoding();
@@ -71,11 +73,12 @@ class MqttSubscribePayload extends MqttPayload {
     subscriptions.clear();
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
-    sb.writeln("Payload: Subscription [{${subscriptions.length}}]");
+    sb.writeln('Payload: Subscription [{${subscriptions.length}}]');
     subscriptions.forEach((String key, MqttQos value) {
-      sb.writeln("{{ Topic={$key}, Qos={$value} }}");
+      sb.writeln('{{ Topic={$key}, Qos={$value} }}');
     });
     return sb.toString();
   }

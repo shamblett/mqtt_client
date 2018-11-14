@@ -9,7 +9,9 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
+  /// Variable header
   MqttVariableHeader variableHeader;
+  /// Message header
   MqttHeader header;
 
   /// The collection of subscriptions.
@@ -20,22 +22,20 @@ class MqttUnsubscribePayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload.fromByteBuffer(
-      MqttHeader header,
-      MqttUnsubscribeVariableHeader variableHeader,
+      this.header,
+      this.variableHeader,
       MqttByteBuffer payloadStream) {
-    this.header = header;
-    this.variableHeader = variableHeader;
     readFrom(payloadStream);
   }
 
   /// Writes the payload to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer payloadStream) {
-    for (String subscription in subscriptions) {
-      payloadStream.writeMqttStringM(subscription);
-    }
+    subscriptions.forEach(payloadStream.writeMqttStringM);
   }
 
   /// Creates a payload from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer payloadStream) {
     int payloadBytesRead = 0;
     final int payloadLength = header.messageSize - variableHeader.length;
@@ -48,6 +48,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   }
 
   /// Gets the length of the payload in bytes when written to a stream.
+  @override
   int getWriteLength() {
     int length = 0;
     final MqttEncoding enc = MqttEncoding();
@@ -67,11 +68,12 @@ class MqttUnsubscribePayload extends MqttPayload {
     subscriptions.clear();
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
-    sb.writeln("Payload: Unsubscription [{${subscriptions.length}}]");
+    sb.writeln('Payload: Unsubscription [{${subscriptions.length}}]');
     for (String subscription in subscriptions) {
-      sb.writeln("{{ Topic={$subscription}}");
+      sb.writeln('{{ Topic={$subscription}}');
     }
     return sb.toString();
   }

@@ -9,7 +9,10 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Subscribe Ack messages payload
 class MqttSubscribeAckPayload extends MqttPayload {
+  /// Variable header
   MqttVariableHeader variableHeader;
+
+  /// Message header
   MqttHeader header;
 
   /// The collection of Qos grants, Key is the topic, Value is the qos
@@ -20,15 +23,12 @@ class MqttSubscribeAckPayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttSubscribeAckPayload class.
   MqttSubscribeAckPayload.fromByteBuffer(
-      MqttHeader header,
-      MqttSubscribeAckVariableHeader variableHeader,
-      MqttByteBuffer payloadStream) {
-    this.header = header;
-    this.variableHeader = variableHeader;
+      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
 
   /// Writes the payload to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer payloadStream) {
     for (MqttQos value in qosGrants) {
       payloadStream.writeByte(value.index);
@@ -36,6 +36,7 @@ class MqttSubscribeAckPayload extends MqttPayload {
   }
 
   /// Creates a payload from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer payloadStream) {
     int payloadBytesRead = 0;
     final int payloadLength = header.messageSize - variableHeader.length;
@@ -48,9 +49,8 @@ class MqttSubscribeAckPayload extends MqttPayload {
   }
 
   /// Gets the length of the payload in bytes when written to a stream.
-  int getWriteLength() {
-    return qosGrants.length;
-  }
+  @override
+  int getWriteLength() => qosGrants.length;
 
   /// Adds a new QosGrant to the collection of QosGrants
   void addGrant(MqttQos grantedQos) {
@@ -62,11 +62,12 @@ class MqttSubscribeAckPayload extends MqttPayload {
     qosGrants.clear();
   }
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
-    sb.writeln("Payload: Qos grants [{${qosGrants.length}}]");
+    sb.writeln('Payload: Qos grants [{${qosGrants.length}}]');
     for (MqttQos value in qosGrants) {
-      sb.writeln("{{ Grant={$value} }}");
+      sb.writeln('{{ Grant={$value} }}');
     }
     return sb.toString();
   }

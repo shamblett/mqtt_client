@@ -19,21 +19,22 @@ class MqttPublishReceivedVariableHeader extends MqttVariableHeader {
   }
 
   /// Creates a variable header from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
     readMessageIdentifier(variableHeaderStream);
   }
 
   /// Writes the variable header to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer variableHeaderStream) {
     writeMessageIdentifier(variableHeaderStream);
   }
 
   /// Gets the length of the write data when WriteTo will be called.
-  int getWriteLength() {
-    return 2;
-  }
+  @override
+  int getWriteLength() => 2;
 
-  String toString() {
-    return "PublishReceived Variable Header: MessageIdentifier={$messageIdentifier}";
-  }
+  @override
+  String toString() =>
+      'PublishReceived Variable Header: MessageIdentifier={$messageIdentifier}';
 }
