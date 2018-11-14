@@ -88,7 +88,7 @@ class PublishingManager implements IPublishingManager {
         .withQos(qualityOfService)
         .publishData(data);
     // Retain
-    msg.setRetain(retain);
+    msg.setRetain(state:retain);
     // QOS level 1 or 2 messages need to be saved so we can do the ack processes
     if (qualityOfService == MqttQos.atLeastOnce ||
         qualityOfService == MqttQos.exactlyOnce) {

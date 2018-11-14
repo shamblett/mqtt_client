@@ -44,18 +44,19 @@ class MqttMessage {
       if (messageStream.availableBytes < header.messageSize) {
         messageStream.reset();
         throw InvalidMessageException(
-            "Available bytes is less than the message size");
+            'Available bytes is less than the message size');
       }
       final MqttMessage message =
           MqttMessageFactory.getMessage(header, messageStream);
 
-      if (messageStream.position < expectedPos)
+      if (messageStream.position < expectedPos) {
         messageStream.skipBytes(expectedPos - messageStream.position);
+      }
 
       return message;
-    } catch (e) {
+    } on Exception {
       throw InvalidMessageException(
-          "The data provided in the message stream was not a valid MQTT Message");
+          'The data provided in the message stream was not a valid MQTT Message');
     }
   }
 
@@ -67,10 +68,11 @@ class MqttMessage {
   /// Reads a message from the supplied stream.
   void readFrom(MqttByteBuffer messageStream) {}
 
+  @override
   String toString() {
     final StringBuffer sb = StringBuffer();
-    sb.write("MQTTMessage of type ");
-    sb.writeln(this.header.messageType.toString());
+    sb.write('MQTTMessage of type ');
+    sb.writeln(header.messageType.toString());
     sb.writeln(header.toString());
     return sb.toString();
   }

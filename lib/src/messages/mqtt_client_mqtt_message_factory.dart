@@ -62,8 +62,8 @@ class MqttMessageFactory {
         break;
       default:
         throw InvalidHeaderException(
-            "The Message Type specified ($header.messageType) is not a valid "
-            "MQTT Message type or currently not supported.");
+            'The Message Type specified ($header.messageType) is not a valid '
+            'MQTT Message type or currently not supported.');
     }
     return message;
   }

@@ -9,13 +9,28 @@ part of mqtt_client;
 
 /// Enumeration used by subclasses to tell the variable header what should be read from the underlying stream.
 enum readWriteFlags {
+  /// Nothing
   none,
+
+  /// Protocol name
   protocolName,
+
+  /// Protocol version
   protocolVersion,
+
+  /// Connect flags
   connectFlags,
+
+  /// Keep alive
   keepAlive,
+
+  /// Return code
   returnCode,
+
+  /// Topic name
   topicName,
+
+  /// Message identifier
   messageIdentifier
 }
 
@@ -24,8 +39,13 @@ class MqttVariableHeader {
   /// The length, in bytes, consumed by the variable header.
   int length = 0;
 
-  String protocolName = "";
+  /// Protocol name
+  String protocolName = '';
+
+  /// Protocol version
   int protocolVersion = 0;
+
+  /// Conenct flags
   MqttConnectFlags connectFlags;
 
   /// Defines the maximum allowable lag, in seconds, between expected messages.
@@ -33,15 +53,20 @@ class MqttVariableHeader {
   /// elapses.
   int keepAlive = 0;
 
+  /// Return code
   MqttConnectReturnCode returnCode = MqttConnectReturnCode.brokerUnavailable;
-  String topicName = "";
+
+  /// Topic name
+  String topicName = '';
+
+  /// Message identifier
   int messageIdentifier = 0;
 
   /// Initializes a new instance of the MqttVariableHeader class.
   MqttVariableHeader() {
-    this.protocolName = Protocol.name;
-    this.protocolVersion = Protocol.version;
-    this.connectFlags = MqttConnectFlags();
+    protocolName = Protocol.name;
+    protocolVersion = Protocol.version;
+    connectFlags = MqttConnectFlags();
   }
 
   /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
@@ -92,66 +117,80 @@ class MqttVariableHeader {
 
   /// Write functions
 
+  /// Protocol name
   void writeProtocolName(MqttByteBuffer stream) {
     MqttByteBuffer.writeMqttString(stream, protocolName);
   }
 
+  /// Protocol version
   void writeProtocolVersion(MqttByteBuffer stream) {
     stream.writeByte(protocolVersion);
   }
 
+  /// Keep alive
   void writeKeepAlive(MqttByteBuffer stream) {
     stream.writeShort(keepAlive);
   }
 
+  /// Return code
   void writeReturnCode(MqttByteBuffer stream) {
     stream.writeByte(returnCode.index);
   }
 
+  /// Topic name
   void writeTopicName(MqttByteBuffer stream) {
     MqttByteBuffer.writeMqttString(stream, topicName.toString());
   }
 
+  /// Message identifier
   void writeMessageIdentifier(MqttByteBuffer stream) {
     stream.writeShort(messageIdentifier);
   }
 
+  /// Connect flags
   void writeConnectFlags(MqttByteBuffer stream) {
     connectFlags.writeTo(stream);
   }
 
   /// Read functions
 
+  /// Protocol name
   void readProtocolName(MqttByteBuffer stream) {
     protocolName = MqttByteBuffer.readMqttString(stream);
     length += protocolName.length + 2; // 2 for length short at front of string
   }
 
+  /// Protocol version
   void readProtocolVersion(MqttByteBuffer stream) {
     protocolVersion = stream.readByte();
     length++;
   }
 
+  /// Keep alive
   void readKeepAlive(MqttByteBuffer stream) {
     keepAlive = stream.readShort();
     length += 2;
   }
 
+  /// Return code
   void readReturnCode(MqttByteBuffer stream) {
     returnCode = MqttConnectReturnCode.values[stream.readByte()];
     length++;
   }
 
+  /// Topic name
   void readTopicName(MqttByteBuffer stream) {
     topicName = MqttByteBuffer.readMqttString(stream);
     length += topicName.length + 2; // 2 for length short at front of string.
   }
 
+  /// Message identifier
   void readMessageIdentifier(MqttByteBuffer stream) {
     messageIdentifier = stream.readShort();
     length += 2;
   }
 
+  /// Connect flags
   void readConnectFlags(MqttByteBuffer stream) {
     connectFlags = MqttConnectFlags.fromByteBuffer(stream);
     length += 1;

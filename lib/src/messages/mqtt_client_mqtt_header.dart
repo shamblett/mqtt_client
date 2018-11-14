@@ -61,18 +61,17 @@ class MqttHeader {
     }
     final int firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
-    retain = (firstHeaderByte & 1) == 1 ? true : false;
+    retain = (firstHeaderByte & 1) == 1;
     qos = MqttQos.values[((firstHeaderByte & 6) >> 1)];
-    duplicate = (((firstHeaderByte & 8) >> 3) == 1 ? true : false);
+    duplicate = ((firstHeaderByte & 8) >> 3) == 1;
     messageType = MqttMessageType.values[((firstHeaderByte & 240) >> 4)];
 
     // Decode the remaining bytes as the remaining/payload size, input param is the 2nd to last byte of the header byte list
     try {
       _messageSize = readRemainingLength(headerStream);
-    } catch (InvalidPayloadSizeException) {
+    } on Exception {
       throw InvalidHeaderException(
-          'The header being processed contained an invalid size byte pattern.' +
-              'Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
+          'The header being processed contained an invalid size byte pattern. Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
     }
   }
 
@@ -93,6 +92,7 @@ class MqttHeader {
     return headerBytes;
   }
 
+  /// Get the remaining byte length in the buffer
   static int readRemainingLength(MqttByteBuffer headerStream) {
     final typed.Uint8Buffer lengthBytes = readLengthBytes(headerStream);
     return calculateLength(lengthBytes);
@@ -120,7 +120,7 @@ class MqttHeader {
     // 7 bit chunks, with the 8th bit being used to indicate 'one more to come'
     do {
       int nextByteValue = payloadCalc % 128;
-      payloadCalc = (payloadCalc ~/ 128);
+      payloadCalc = payloadCalc ~/ 128;
       if (payloadCalc > 0) {
         nextByteValue = nextByteValue | 0x80;
       }
@@ -132,8 +132,8 @@ class MqttHeader {
 
   /// Calculates the remaining length of an MqttMessage from the bytes that make up the length
   static int calculateLength(typed.Uint8Buffer lengthBytes) {
-    var remainingLength = 0;
-    var multiplier = 1;
+    int remainingLength = 0;
+    int multiplier = 1;
 
     for (int currentByte in lengthBytes) {
       remainingLength += (currentByte & 0x7f) * multiplier;
@@ -144,7 +144,7 @@ class MqttHeader {
 
   /// Sets the IsDuplicate flag of the header.
   MqttHeader isDuplicate() {
-    this.duplicate = true;
+    duplicate = true;
     return this;
   }
 
@@ -162,11 +162,11 @@ class MqttHeader {
 
   /// Defines that the message should be retained.
   MqttHeader shouldBeRetained() {
-    this.retain = true;
+    retain = true;
     return this;
   }
 
-  String toString() {
-    return 'Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize';
-  }
+  @override
+  String toString() =>
+      'Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize';
 }

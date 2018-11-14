@@ -9,7 +9,10 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Connect messages payload
 class MqttPublishPayload extends MqttPayload {
+  /// Message header
   MqttHeader header;
+
+  /// Variable header
   MqttPublishVariableHeader variableHeader;
 
   /// The message that forms the payload of the publish message.
@@ -17,18 +20,17 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttPublishPayload class.
   MqttPublishPayload() {
-    this.message = typed.Uint8Buffer();
+    message = typed.Uint8Buffer();
   }
 
   /// Initializes a new instance of the MqttPublishPayload class.
-  MqttPublishPayload.fromByteBuffer(MqttHeader header,
-      MqttPublishVariableHeader variableHeader, MqttByteBuffer payloadStream) {
-    this.header = header;
-    this.variableHeader = variableHeader;
+  MqttPublishPayload.fromByteBuffer(
+      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
 
   /// Creates a payload from the specified header stream.
+  @override
   void readFrom(MqttByteBuffer payloadStream) {
     // The payload of the publish message is not a string, just a binary chunk of bytes.
     // The length of the bytes is the length specified in the header, minus any bytes
@@ -38,19 +40,18 @@ class MqttPublishPayload extends MqttPayload {
   }
 
   /// Writes the payload to the supplied stream.
+  @override
   void writeTo(MqttByteBuffer payloadStream) {
     payloadStream.write(message);
   }
 
   /// Gets the length of the payload in bytes when written to a stream.
-  int getWriteLength() {
-    return message.length;
-  }
+  @override
+  int getWriteLength() => message.length;
 
-  /// Returns a string representation of the payload.
-  String toString() {
-    return "Payload: {${message.length} bytes={${bytesToString(message)}";
-  }
+  @override
+  String toString() =>
+      'Payload: {${message.length} bytes={${bytesToString(message)}';
 
   /// Converts an array of bytes to a byte string.
   static String bytesToString(typed.Uint8Buffer message) {
@@ -66,9 +67,7 @@ class MqttPublishPayload extends MqttPayload {
   /// Converts an array of bytes to a character string.
   static String bytesToStringAsString(typed.Uint8Buffer message) {
     final StringBuffer sb = StringBuffer();
-    for (int b in message) {
-      sb.writeCharCode(b);
-    }
+    message.forEach(sb.writeCharCode);
     return sb.toString();
   }
 }
