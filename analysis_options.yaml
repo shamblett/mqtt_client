@@ -20,7 +20,6 @@ linter:
   - avoid_as
   - avoid_bool_literals_in_conditional_expressions
   - avoid_catches_without_on_clauses
-  - avoid_catching_errors
   - avoid_double_and_int_checks
   - avoid_empty_else
   - avoid_field_initializers_in_const_classes

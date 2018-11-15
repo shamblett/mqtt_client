@@ -39,7 +39,6 @@ void main() {
   group('Connection Keep Alive - Mock tests', () {
     // Group setup
     final MockCH ch = MockCH();
-    when(ch.connectionStatus).thenReturn(MqttClientConnectionStatus());
     when(ch.secure).thenReturn(true);
     final MockKA ka = MockKA(ch, 3);
     test('Message sent', () {

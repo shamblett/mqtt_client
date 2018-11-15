@@ -72,6 +72,9 @@ class MqttHeader {
     } on Exception {
       throw InvalidHeaderException(
           'The header being processed contained an invalid size byte pattern. Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
+    } on Error {
+      throw InvalidHeaderException(
+          'The header being processed contained an invalid size byte pattern. Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
     }
   }
 

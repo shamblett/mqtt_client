@@ -179,6 +179,7 @@ void main() {
       buffer.readByte();
       buffer.writeByte(buffer.readByte() | 0xFF);
       bool raised = false;
+      buffer.seek(0);
       try {
         final MqttHeader outputHeader = MqttHeader.fromByteBuffer(buffer);
         print(outputHeader.toString());
