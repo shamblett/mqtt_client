@@ -1,5 +1,6 @@
-#3.4.0
-Issue 45, better connection fail reporting, update linter
+#4.0.0
+Issue 45, better connection fail reporting, update linter, note breaking API change
+for turning logging on/off
 
 #3.3.6
 Formatting
