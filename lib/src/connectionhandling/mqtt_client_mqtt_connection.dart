@@ -69,9 +69,6 @@ class MqttConnection {
     if (data.length == 0) {
       return;
     }
-    //readWrapper.messageBytes.addAll(data);
-    // Attempt to create a message, if this works we have a full message
-    // if not add the bytes to the read wrapper and wait for more bytes.
 
     messageStream.addAll(data);
 
@@ -80,7 +77,6 @@ class MqttConnection {
       MqttMessage msg;
 
       try {
-        final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
         msg = MqttMessage.createFrom(messageStream);
         if (msg == null) {
           return;
@@ -88,6 +84,9 @@ class MqttConnection {
       } on Exception {
         MqttLogger.log('MqttConnection::_ondata - message is not valid');
         messageIsValid = false;
+      }
+      if (!messageIsValid) {
+        return;
       }
       if (messageIsValid) {
         messageStream.shrink();
