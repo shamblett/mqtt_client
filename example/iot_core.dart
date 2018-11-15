@@ -55,12 +55,12 @@ Future<int> main() async {
   // 0x05 Connection Refused, not authorized. If the password field is not set at all the return code may be
   // 0x04 Connection Refused, bad user name or password
   await client.connect(username, password);
-  if (client.connectionState == ConnectionState.connected) {
+  if (client.connectionStatus.state == ConnectionState.connected) {
     print('iotcore client connected');
   } else {
     print(
         'ERROR iotcore client connection failed - disconnecting, state is ${client
-            .connectionState}');
+            .connectionStatus.state}');
     client.disconnect();
   }
   // Troubleshooting tips can be found here https://cloud.google.com/iot/docs/troubleshooting

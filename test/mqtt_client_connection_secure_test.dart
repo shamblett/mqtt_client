@@ -15,7 +15,10 @@ import 'support/mqtt_client_mockbroker.dart';
 
 
 // Mock classes
-class MockCH extends Mock implements MqttConnectionHandler {}
+class MockCH extends Mock implements MqttConnectionHandler {
+  @override
+  MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
+}
 
 class MockKA extends Mock implements MqttConnectionKeepAlive {
   MqttConnectionKeepAlive ka;
@@ -36,7 +39,7 @@ void main() {
   group('Connection Keep Alive - Mock tests', () {
     // Group setup
     final MockCH ch = MockCH();
-    when(ch.connectionState).thenReturn(MqttClientConnectionStatus());
+    when(ch.connectionStatus).thenReturn(MqttClientConnectionStatus());
     when(ch.secure).thenReturn(true);
     final MockKA ka = MockKA(ch, 3);
     test('Message sent', () {
@@ -82,7 +85,7 @@ void main() {
         expect(e.toString().contains('Failed host lookup'), isTrue);
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
-      expect(ch.connectionState.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, ConnectionState.faulted);
     }, skip: true);
     test('Connect invalid port', () async {
       final events.EventBus clientEventBus = events.EventBus();
@@ -95,7 +98,7 @@ void main() {
       } on Exception catch (e) {
         expect(e.toString().contains('refused'), isTrue);
       }
-      expect(ch.connectionState.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, ConnectionState.faulted);
     });
   });
   group('Connection Keep Alive - Mock broker', () {
@@ -130,7 +133,7 @@ void main() {
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionState.state, ConnectionState.connected);
+      expect(ch.connectionStatus.state, ConnectionState.connected);
       broker.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(

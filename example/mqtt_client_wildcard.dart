@@ -65,12 +65,12 @@ Future<int> main() async {
   }
 
   /// Check we are connected
-  if (client.connectionState == ConnectionState.connected) {
+  if (client.connectionStatus.state == ConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
         'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client
-            .connectionState}');
+            .connectionStatus.state}');
     client.disconnect();
     exit(-1);
   }

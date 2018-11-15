@@ -20,8 +20,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   List<MessageCallbackFunction> sentMessageCallbacks =
       List<MessageCallbackFunction>();
 
-  /// Connection state
-  MqttClientConnectionStatus connectionState = MqttClientConnectionStatus();
+  /// Connection status
+  @override
+  MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 
   /// Use a websocket rather than TCP
   bool useWebSocket = false;
@@ -52,9 +53,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   Future<MqttClientConnectionStatus> connect(String server, int port, MqttConnectMessage message) async {
     try {
       await internalConnect(server, port, message);
-      return connectionState;
+      return connectionStatus;
     } on Exception {
-      connectionState.state = ConnectionState.faulted;
+      connectionStatus.state = ConnectionState.faulted;
       rethrow;
     }
   }
@@ -66,8 +67,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   @override
   void sendMessage(MqttMessage message) {
     MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
-    if ((connectionState.state == ConnectionState.connected) ||
-        (connectionState.state == ConnectionState.connecting)) {
+    if ((connectionStatus.state == ConnectionState.connected) ||
+        (connectionStatus.state == ConnectionState.connecting)) {
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
       final MqttByteBuffer stream = MqttByteBuffer(buff);
       message.writeTo(stream);
@@ -88,7 +89,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Closes the connection to the Mqtt message broker.
   @override
   void close() {
-    if (connectionState.state == ConnectionState.connected) {
+    if (connectionStatus.state == ConnectionState.connected) {
       disconnect();
     }
   }

@@ -69,14 +69,16 @@ class MqttClient {
   PublishingManager _publishingManager;
 
   /// Gets the current connection state of the Mqtt Client.
+  /// Will be removed, use connectionStatus
+  @deprecated
   ConnectionState get connectionState => _connectionHandler != null
-      ? _connectionHandler.connectionState.state
+      ? _connectionHandler.connectionStatus.state
       : ConnectionState.disconnected;
 
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code
   MqttClientConnectionStatus get connectionStatus => _connectionHandler != null
-      ? _connectionHandler.connectionState
+      ? _connectionHandler.connectionStatus
       : MqttClientConnectionStatus();
 
   /// The connection message to use to override the default
@@ -177,8 +179,8 @@ class MqttClient {
   /// Returns the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
   Subscription subscribe(String topic, MqttQos qosLevel) {
-    if (connectionState != ConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionState.state);
+    if (connectionStatus.state != ConnectionState.connected) {
+      throw ConnectionException(_connectionHandler.connectionStatus.state);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
   }
@@ -189,8 +191,8 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (_connectionHandler.connectionState.state != ConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionState.state);
+    if (_connectionHandler.connectionStatus.state != ConnectionState.connected) {
+      throw ConnectionException(_connectionHandler.connectionStatus.state);
     }
     try {
       final PublicationTopic pubTopic = PublicationTopic(topic);
