@@ -80,7 +80,7 @@ class MqttConnection {
       MqttMessage msg;
 
       try {
-        //final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
+        final MqttByteBuffer messageStream = MqttByteBuffer.fromList(data);
         msg = MqttMessage.createFrom(messageStream);
         if (msg == null) {
           return;
