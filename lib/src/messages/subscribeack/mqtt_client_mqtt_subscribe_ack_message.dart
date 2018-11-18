@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Subscribe Ack Message.
 class MqttSubscribeAckMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
   MqttSubscribeAckMessage() {
     header = MqttHeader().asType(MqttMessageType.subscribeAck);
@@ -33,8 +32,7 @@ class MqttSubscribeAckMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(
-        variableHeader.getWriteLength() + payload.getWriteLength(),
+    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
     variableHeader.writeTo(messageStream);
     payload.writeTo(messageStream);

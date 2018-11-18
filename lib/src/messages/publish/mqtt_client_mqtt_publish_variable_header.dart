@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttPublishVariableHeader extends MqttVariableHeader {
-
   /// Initializes a new instance of the MqttPublishVariableHeader class.
   MqttPublishVariableHeader(this.header);
 

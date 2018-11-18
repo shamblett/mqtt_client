@@ -9,16 +9,12 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
-
-
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload();
 
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload.fromByteBuffer(
-      this.header,
-      this.variableHeader,
-      MqttByteBuffer payloadStream) {
+      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
 

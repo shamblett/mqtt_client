@@ -566,7 +566,8 @@ void main() {
 
     test('Add buffer', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      final typed.Uint8Buffer buffer = typed.Uint8Buffer()..addAll(<int>[1, 2, 3]);
+      final typed.Uint8Buffer buffer = typed.Uint8Buffer()
+        ..addAll(<int>[1, 2, 3]);
       builder.addBuffer(buffer);
       expect(builder.length, 3);
       expect(builder.payload, buffer);
@@ -588,10 +589,10 @@ void main() {
 
     test('Add bool', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      builder.addBool(val:true);
+      builder.addBool(val: true);
       expect(builder.length, 1);
       expect(builder.payload.toList(), <int>[1]);
-      builder.addBool(val:false);
+      builder.addBool(val: false);
       expect(builder.length, 2);
       expect(builder.payload.toList(), <int>[1, 0]);
     });
@@ -657,15 +658,15 @@ void main() {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
       builder.addDouble(1.5e43);
       expect(builder.length, 8);
-      expect(builder.payload.toList(), <int>[91, 150, 146, 56, 33, 134, 229, 72]);
+      expect(
+          builder.payload.toList(), <int>[91, 150, 146, 56, 33, 134, 229, 72]);
     });
   });
 
   group('Cancellable async timer', () {
     test('Normal expiry', () async {
       final DateTime start = DateTime.now();
-      final MqttCancellableAsyncSleep sleeper =
-          MqttCancellableAsyncSleep(200);
+      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(200);
       expect(sleeper.isRunning, false);
       expect(sleeper.timeout, 200);
       await sleeper.sleep();
@@ -680,8 +681,7 @@ void main() {
     });
     test('Normal expiry - check', () async {
       final DateTime start = DateTime.now();
-      final MqttCancellableAsyncSleep sleeper =
-          MqttCancellableAsyncSleep(100);
+      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(100);
       await sleeper.sleep();
       final DateTime now = DateTime.now();
       expect(
@@ -692,8 +692,7 @@ void main() {
     });
 
     test('Cancel', () async {
-      final MqttCancellableAsyncSleep sleeper =
-          MqttCancellableAsyncSleep(200);
+      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(200);
       void action() {
         sleeper.cancel();
         expect(sleeper.isRunning, false);

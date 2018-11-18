@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
-
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload();
 

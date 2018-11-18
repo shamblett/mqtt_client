@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Received Message.
 class MqttPublishReceivedMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
   MqttPublishReceivedMessage() {
     header = MqttHeader().asType(MqttMessageType.publishReceived);

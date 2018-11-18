@@ -9,28 +9,32 @@ import 'package:mqtt_client/mqtt_client.dart';
 
 class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   @override
-  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port,
-      MqttConnectMessage message) {
-    final Completer<MqttClientConnectionStatus> completer = Completer<MqttClientConnectionStatus>();
+  Future<MqttClientConnectionStatus> internalConnect(
+      String hostname, int port, MqttConnectMessage message) {
+    final Completer<MqttClientConnectionStatus> completer =
+        Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
 
   @override
-  ConnectionState disconnect() => connectionStatus.state = ConnectionState.disconnected;
+  ConnectionState disconnect() =>
+      connectionStatus.state = ConnectionState.disconnected;
 }
 
 class TestConnectionHandlerSend extends MqttConnectionHandler {
   List<MqttMessage> sentMessages = List<MqttMessage>();
 
   @override
-  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port,
-      MqttConnectMessage message) {
-    final Completer<MqttClientConnectionStatus> completer = Completer<MqttClientConnectionStatus>();
+  Future<MqttClientConnectionStatus> internalConnect(
+      String hostname, int port, MqttConnectMessage message) {
+    final Completer<MqttClientConnectionStatus> completer =
+        Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
 
   @override
-  ConnectionState disconnect() => connectionStatus.state = ConnectionState.disconnected;
+  ConnectionState disconnect() =>
+      connectionStatus.state = ConnectionState.disconnected;
 
   @override
   void sendMessage(MqttMessage message) {

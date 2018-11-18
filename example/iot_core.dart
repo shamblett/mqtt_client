@@ -38,7 +38,8 @@ Future<int> main() async {
   // Set the trusted cert path and optionally the private key path. If this is incorrect the TLS handshake will abort and a Handshake
   // exception will be raised, no connect ack message will be received and the broker will disconnect. Note you may not have to do this
   // if your root cert is already cached on your platform, in which case you'll get a an already cached error.
-  final String currDir = '${path.current}${path.separator}example${path.separator}';
+  final String currDir =
+      '${path.current}${path.separator}example${path.separator}';
   client.trustedCertPath = currDir + path.join('pem', 'roots.pem');
   // If needed the private key file path and the optional passphrase
   // client.privateKeyFilePath = "....";
@@ -49,7 +50,7 @@ Future<int> main() async {
   // 0x01 Connection Refused, unacceptable protocol version
   client.setProtocolV311();
   // logging if you wish
-  client.logging(on:true);
+  client.logging(on: true);
   // OK, connect, if your encoded JWT token in the password field cannot be decoded by the corresponding public key attached
   // to the device or the JWT token is incorrect a connect ack message will be received with a return code of
   // 0x05 Connection Refused, not authorized. If the password field is not set at all the return code may be
@@ -59,8 +60,7 @@ Future<int> main() async {
     print('iotcore client connected');
   } else {
     print(
-        'ERROR iotcore client connection failed - disconnecting, state is ${client
-            .connectionStatus.state}');
+        'ERROR iotcore client connection failed - disconnecting, state is ${client.connectionStatus.state}');
     client.disconnect();
   }
   // Troubleshooting tips can be found here https://cloud.google.com/iot/docs/troubleshooting

@@ -19,10 +19,11 @@ class MqttWsConnection extends MqttConnection {
     connect(server, port);
   }
 
-  /// Connect 
+  /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
-    final Completer<MqttClientConnectionStatus> completer = Completer<MqttClientConnectionStatus>();
+    final Completer<MqttClientConnectionStatus> completer =
+        Completer<MqttClientConnectionStatus>();
     // Add the port if present
     Uri uri;
     try {
@@ -45,8 +46,7 @@ class MqttWsConnection extends MqttConnection {
     try {
       // Connect and save the socket.
       final List<String> protocols = <String>['mqtt', 'mqttv3.1', 'mqttv3.11'];
-      WebSocket.connect(uriString, protocols:protocols)
-          .then((dynamic socket) {
+      WebSocket.connect(uriString, protocols: protocols).then((dynamic socket) {
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());

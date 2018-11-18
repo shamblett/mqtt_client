@@ -36,7 +36,6 @@ enum readWriteFlags {
 
 /// Represents the base class for the Variable Header portion of some MQTT Messages.
 class MqttVariableHeader {
-
   /// Initializes a new instance of the MqttVariableHeader class.
   MqttVariableHeader() {
     protocolName = Protocol.name;

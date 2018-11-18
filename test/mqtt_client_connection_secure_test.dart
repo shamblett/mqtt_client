@@ -13,7 +13,6 @@ import 'package:path/path.dart' as path;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
-
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {
   @override
@@ -21,13 +20,11 @@ class MockCH extends Mock implements MqttConnectionHandler {
 }
 
 class MockKA extends Mock implements MqttConnectionKeepAlive {
-
   MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
 
   MqttConnectionKeepAlive ka;
-
 }
 
 void main() {
@@ -77,7 +74,7 @@ void main() {
     test('Connect to bad host name', () async {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
@@ -91,7 +88,7 @@ void main() {
     test('Connect invalid port', () async {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       try {
         await ch.connect(mockBrokerAddress, badPort,
@@ -127,7 +124,7 @@ void main() {
       await broker.start();
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
       final String currDir = path.current + path.separator;
       ch.trustedCertPath = currDir + path.join('test', 'pem', 'localhost.cert');
@@ -138,13 +135,10 @@ void main() {
       broker.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
-          'Connection Keep Alive - Successful response - keepealive ms is ${ka
-              .keepAlivePeriod}');
+          'Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'Connection Keep Alive - Successful response - ping timer active is ${ka
-              .pingTimer.isActive.toString()}');
-      final Stopwatch stopwatch = Stopwatch()
-        ..start();
+          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+      final Stopwatch stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('Connection Keep Alive - Successful response - Elapsed time '
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');

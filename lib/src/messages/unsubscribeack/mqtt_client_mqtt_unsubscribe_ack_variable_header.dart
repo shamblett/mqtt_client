@@ -34,5 +34,6 @@ class MqttUnsubscribeAckVariableHeader extends MqttVariableHeader {
   int getWriteLength() => 2;
 
   @override
-  String toString() => 'UnsubscribeAck Variable Header: MessageIdentifier={$messageIdentifier}';
+  String toString() =>
+      'UnsubscribeAck Variable Header: MessageIdentifier={$messageIdentifier}';
 }

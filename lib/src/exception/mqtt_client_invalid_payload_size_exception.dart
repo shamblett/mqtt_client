@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Exception that is thrown when the payload of a message is not the correct size.
 class InvalidPayloadSizeException implements Exception {
-
   /// Construct
   InvalidPayloadSizeException(int size, int max) {
     _message =

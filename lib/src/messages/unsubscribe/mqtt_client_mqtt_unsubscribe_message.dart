@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Unsubscribe Message.
 class MqttUnsubscribeMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage() {
     header = MqttHeader().asType(MqttMessageType.unsubscribe);
@@ -33,8 +32,7 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(
-        variableHeader.getWriteLength() + payload.getWriteLength(),
+    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
     variableHeader.writeTo(messageStream);
     payload.writeTo(messageStream);

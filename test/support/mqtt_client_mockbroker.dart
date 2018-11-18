@@ -22,7 +22,6 @@ class MessageSerializationHelper {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
 class MockBroker {
-
   MockBroker();
 
   int brokerPort = 1883;
@@ -31,7 +30,6 @@ class MockBroker {
   Socket client;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-
 
   FutureOr<dynamic> start() {
     final Completer<dynamic> completer = Completer<dynamic>();
@@ -67,13 +65,14 @@ class MockBroker {
   }
 
   /// Sets a function that will be passed the next message received by the faked out broker.
-  set setMessageHandler(MessageHandlerFunction messageHandler) => handler = messageHandler;
+  set setMessageHandler(MessageHandlerFunction messageHandler) =>
+      handler = messageHandler;
 
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBroker::sending message ${msg.toString()}');
     final typed.Uint8Buffer messBuff =
-    MessageSerializationHelper.getMessageBytes(msg);
+        MessageSerializationHelper.getMessageBytes(msg);
     print('MockBroker::sending message bytes ${messBuff.toString()}');
     client.add(messBuff.toList());
   }
@@ -87,7 +86,6 @@ class MockBroker {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. websocket connection.
 class MockBrokerWs {
-
   MockBrokerWs();
 
   int port = 8090;
@@ -117,7 +115,8 @@ class MockBrokerWs {
   Future<void> start() {
     final Completer<void> completer = Completer<void>();
     HttpServer.bind(InternetAddress.loopbackIPv4, port).then((dynamic server) {
-      print('Mockbroker WS server is running on http://${server.address.address}:$port/');
+      print(
+          'Mockbroker WS server is running on http://${server.address.address}:$port/');
       server.listen((HttpRequest request) {
         if (request.uri.path == '/ws') {
           WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
@@ -132,13 +131,14 @@ class MockBrokerWs {
   }
 
   /// Sets a function that will be passed the next message received by the faked out broker.
-  set setMessageHandler(MessageHandlerFunction messageHandler) => handler = messageHandler;
+  set setMessageHandler(MessageHandlerFunction messageHandler) =>
+      handler = messageHandler;
 
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBrokerWs::sending message ${msg.toString()}');
     final typed.Uint8Buffer messBuff =
-    MessageSerializationHelper.getMessageBytes(msg);
+        MessageSerializationHelper.getMessageBytes(msg);
     print('MockBrokerWS::sending message bytes ${messBuff.toString()}');
     _webSocket.add(messBuff.toList());
   }
@@ -152,7 +152,6 @@ class MockBrokerWs {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
 class MockBrokerSecure {
-
   MockBrokerSecure();
 
   int brokerPort = 8883;
@@ -203,13 +202,14 @@ class MockBrokerSecure {
   }
 
   /// Sets a function that will be passed the next message received by the faked out broker.
-  set setMessageHandler(MessageHandlerFunction messageHandler) => handler = messageHandler;
+  set setMessageHandler(MessageHandlerFunction messageHandler) =>
+      handler = messageHandler;
 
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBrokerSecure::sending message ${msg.toString()}');
     final typed.Uint8Buffer messBuff =
-    MessageSerializationHelper.getMessageBytes(msg);
+        MessageSerializationHelper.getMessageBytes(msg);
     print('MockBrokerSecure::sending message bytes ${messBuff.toString()}');
     client.add(messBuff.toList());
   }

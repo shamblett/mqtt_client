@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Message, used for publishing telemetry data along a live MQTT stream.
 class MqttPublishMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttPublishMessage class.
   MqttPublishMessage() {
     header = MqttHeader().asType(MqttMessageType.publish);

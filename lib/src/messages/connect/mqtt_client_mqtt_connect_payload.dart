@@ -48,8 +48,10 @@ class MqttConnectPayload extends MqttPayload {
   String get password => _password;
 
   set password(String pwd) => _password = pwd != null ? pwd.trim() : pwd;
+
   /// Will topic
   String willTopic;
+
   /// Will message
   String willMessage;
 

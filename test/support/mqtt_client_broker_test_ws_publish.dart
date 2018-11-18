@@ -11,17 +11,16 @@ import 'package:mqtt_client/mqtt_client.dart';
 Future<int> main() async {
   // Create and connect the client
   final MqttClient client =
-  MqttClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
+      MqttClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
   client.useWebSocket = true;
   client.port = 80;
-  client.logging(on:true);
+  client.logging(on: true);
   await client.connect();
   if (client.connectionStatus.state == ConnectionState.connected) {
     print('Mosquitto client connected');
   } else {
     print(
-        'ERROR Mosquitto client connection failed - disconnecting, state is ${client
-            .connectionStatus}');
+        'ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus}');
     client.disconnect();
   }
   // Publish a known topic

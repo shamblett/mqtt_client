@@ -34,5 +34,6 @@ class MqttSubscribeAckVariableHeader extends MqttVariableHeader {
   int getWriteLength() => 2;
 
   @override
-  String toString() => 'SubscribeAck Variable Header: MessageIdentifier={$messageIdentifier}';
+  String toString() =>
+      'SubscribeAck Variable Header: MessageIdentifier={$messageIdentifier}';
 }

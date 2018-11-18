@@ -16,6 +16,7 @@ class Constants {
   /// specification is 23 characters, however we allow more than this, a warning is
   /// given in the log if 23 is exceeded.
   static const int maxClientIdentifierLength = 1024;
+
   /// Specification length
   static const int maxClientIdentifierLengthSpec = 23;
 
@@ -31,10 +32,13 @@ class Constants {
   /// Protocol variants
   /// V3
   static const int mqttV31ProtocolVersion = 3;
+
   /// V3 name
   static const String mqttV31ProtocolName = 'MQIsdp';
+
   /// V4
   static const int mqttV311ProtocolVersion = 4;
+
   /// V4 name
   static const String mqttV311ProtocolName = 'MQTT';
 }

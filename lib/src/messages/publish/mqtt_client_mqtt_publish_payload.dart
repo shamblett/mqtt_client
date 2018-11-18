@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Connect messages payload
 class MqttPublishPayload extends MqttPayload {
-
   /// Initializes a new instance of the MqttPublishPayload class.
   MqttPublishPayload() {
     message = typed.Uint8Buffer();

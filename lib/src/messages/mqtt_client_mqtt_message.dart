@@ -20,7 +20,6 @@ part of mqtt_client;
 /// ----------------------------
 
 class MqttMessage {
-
   /// Initializes a new instance of the MqttMessage class.
   MqttMessage();
 

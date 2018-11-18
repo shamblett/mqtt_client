@@ -13,7 +13,6 @@ typedef UnsubscribeCallback = void Function(String topic);
 
 /// A class that can manage the topic subscription process.
 class SubscriptionsManager {
-
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(
       this.connectionHandler, this.publishingManager, this._clientEventBus) {
@@ -51,17 +50,18 @@ class SubscriptionsManager {
   events.EventBus _clientEventBus;
 
   /// Observable change notifier for all subscribed topics
-  final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>> _subscriptionNotifier =
+  final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
+      _subscriptionNotifier =
       observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>();
 
   /// Subscription notifier
-  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>> get subscriptionNotifier =>
-      _subscriptionNotifier;
+  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
+      get subscriptionNotifier => _subscriptionNotifier;
 
   /// Registers a new subscription with the subscription manager.
   Subscription registerSubscription(String topic, MqttQos qos) {
     Subscription cn = tryGetExistingSubscription(topic);
-      return cn??= createNewSubscription(topic, qos);
+    return cn ??= createNewSubscription(topic, qos);
   }
 
   /// Gets a view on the existing observable, if the subscription already exists.
@@ -97,7 +97,7 @@ class SubscriptionsManager {
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
       return sub;
-    } on Exception  {
+    } on Exception {
       throw InvalidTopicException(
           'from SubscriptionManager::createNewSubscription', topic);
     }
@@ -106,7 +106,8 @@ class SubscriptionsManager {
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
     final PublicationTopic topic = event.topic;
-    final MqttReceivedMessage<MqttMessage> msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
+    final MqttReceivedMessage<MqttMessage> msg =
+        MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
     subscriptionNotifier.notifyChange(msg);
   }
 

@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Represents a MQTT message that has been received from a broker.
 class MqttReceivedMessage<T> extends observe.ChangeRecord {
-
   /// Initializes a new instance of an MqttReceivedMessage class.
   MqttReceivedMessage(this.topic, this.payload);
 
@@ -18,5 +17,4 @@ class MqttReceivedMessage<T> extends observe.ChangeRecord {
 
   /// The payload of the message received.
   T payload;
-
 }

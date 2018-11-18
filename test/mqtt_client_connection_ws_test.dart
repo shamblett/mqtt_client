@@ -11,7 +11,6 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
-
 void main() {
   // Test wide variables
   final MockBrokerWs brokerWs = MockBrokerWs();
@@ -26,7 +25,7 @@ void main() {
       try {
         final events.EventBus clientEventBus = events.EventBus();
         final SynchronousMqttConnectionHandler ch =
-        SynchronousMqttConnectionHandler(clientEventBus);
+            SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -35,7 +34,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-                'MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com');
+            'MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com');
       }
     });
 
@@ -43,7 +42,7 @@ void main() {
       try {
         final events.EventBus clientEventBus = events.EventBus();
         final SynchronousMqttConnectionHandler ch =
-        SynchronousMqttConnectionHandler(clientEventBus);
+            SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -52,7 +51,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-                'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
+            'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
   }, skip: false);
@@ -81,7 +80,7 @@ void main() {
       await brokerWs.start();
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       ch.useWebSocket = true;
       brokerWs.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,
@@ -90,13 +89,10 @@ void main() {
       brokerWs.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(
-          'WS Connection Keep Alive - Successful response - keepealive ms is ${ka
-              .keepAlivePeriod}');
+          'WS Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'WS Connection Keep Alive - Successful response - ping timer active is ${ka
-              .pingTimer.isActive.toString()}');
-      final Stopwatch stopwatch = Stopwatch()
-        ..start();
+          'WS Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+      final Stopwatch stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('WS Connection Keep Alive - Successful response - Elapsed time '
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');

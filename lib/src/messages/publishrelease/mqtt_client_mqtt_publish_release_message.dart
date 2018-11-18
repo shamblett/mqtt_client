@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Release Message.
 class MqttPublishReleaseMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage() {
     header = MqttHeader().asType(MqttMessageType.publishRelease);

@@ -191,7 +191,8 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (_connectionHandler.connectionStatus.state != ConnectionState.connected) {
+    if (_connectionHandler.connectionStatus.state !=
+        ConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionStatus.state);
     }
     try {

@@ -9,7 +9,6 @@ part of mqtt_client;
 
 ///  This class provides shared connection functionality to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
-
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
@@ -51,7 +50,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Connect to the specific Mqtt Connection.
   @override
-  Future<MqttClientConnectionStatus> connect(String server, int port, MqttConnectMessage message) async {
+  Future<MqttClientConnectionStatus> connect(
+      String server, int port, MqttConnectMessage message) async {
     try {
       await internalConnect(server, port, message);
       return connectionStatus;
@@ -62,7 +62,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Connect to the specific Mqtt Connection.
-  Future<MqttClientConnectionStatus> internalConnect(String hostname, int port, MqttConnectMessage message);
+  Future<MqttClientConnectionStatus> internalConnect(
+      String hostname, int port, MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.
   @override

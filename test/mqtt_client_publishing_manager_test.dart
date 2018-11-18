@@ -35,8 +35,8 @@ void main() {
       final MessageIdentifierDispenser dispenser = MessageIdentifierDispenser();
       dispenser.reset();
       for (int i = 0;
-      i == MessageIdentifierDispenser.maxMessageIdentifier;
-      i++) {
+          i == MessageIdentifierDispenser.maxMessageIdentifier;
+          i++) {
         dispenser.getNextMessageIdentifier();
       }
       // One more call should overflow us and reset us back to 1.
@@ -114,8 +114,7 @@ void main() {
           PublicationTopic('A/rawTopic'), MqttQos.atMostOnce, buff, true);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
-      final MqttPublishMessage pubMess =
-      testCHS.sentMessages[0];
+      final MqttPublishMessage pubMess = testCHS.sentMessages[0];
       expect(pubMess.header.messageType, MqttMessageType.publish);
       expect(pubMess.variableHeader.messageIdentifier, 1);
       expect(pubMess.header.qos, MqttQos.atMostOnce);
@@ -136,7 +135,7 @@ void main() {
       buff[3] = 't'.codeUnitAt(0);
       pm.messageIdentifierDispenser.reset();
       final int msgId =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final MqttPublishMessage pubMess = pm.publishedMessages[1];
@@ -159,7 +158,7 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final MqttPublishMessage pubMess = pm.publishedMessages[1];
@@ -180,9 +179,9 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId1 =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
       final int msgId2 =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
       expect(msgId2, msgId1 + 1);
     });
     test('Publish at least once and ack', () {
@@ -196,7 +195,7 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
       expect(msgId, 1);
       pm.handlePublishAcknowledgement(
           MqttPublishAckMessage().withMessageIdentifier(msgId));
@@ -213,13 +212,12 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final int msgId =
-      pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId));
-      final MqttPublishReleaseMessage pubMessRel =
-      testCHS.sentMessages[1];
+      final MqttPublishReleaseMessage pubMessRel = testCHS.sentMessages[1];
       expect(pubMessRel.variableHeader.messageIdentifier, msgId);
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId));
@@ -300,7 +298,7 @@ void main() {
       expect(testCHS.sentMessages[0].header.messageType,
           MqttMessageType.publishReceived);
       final MqttPublishReleaseMessage relMess =
-      MqttPublishReleaseMessage().withMessageIdentifier(msgId);
+          MqttPublishReleaseMessage().withMessageIdentifier(msgId);
       pm.handlePublishRelease(relMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages[1].header.messageType,
@@ -330,11 +328,9 @@ void main() {
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
       expect(testCHS.sentMessages.length, 2);
-      final MqttPublishReleaseMessage pubMessRel2 =
-      testCHS.sentMessages[1];
+      final MqttPublishReleaseMessage pubMessRel2 = testCHS.sentMessages[1];
       expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
-      final MqttPublishReleaseMessage pubMessRel1 =
-      testCHS.sentMessages[0];
+      final MqttPublishReleaseMessage pubMessRel1 = testCHS.sentMessages[0];
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
@@ -376,11 +372,9 @@ void main() {
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
       expect(testCHS.sentMessages.length, 4);
-      final MqttPublishReleaseMessage pubMessRel1 =
-      testCHS.sentMessages[1];
+      final MqttPublishReleaseMessage pubMessRel1 = testCHS.sentMessages[1];
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
-      final MqttPublishReleaseMessage pubMessRel2 =
-      testCHS.sentMessages[3];
+      final MqttPublishReleaseMessage pubMessRel2 = testCHS.sentMessages[3];
       expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
 
       // PubComp 1

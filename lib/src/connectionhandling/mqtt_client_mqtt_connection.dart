@@ -20,7 +20,6 @@ class ReadWrapper {
 
 /// The MQTT connection base class
 class MqttConnection {
-
   /// Default constructor
   MqttConnection(this._clientEventBus);
 

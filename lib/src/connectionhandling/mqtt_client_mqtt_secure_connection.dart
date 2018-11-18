@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// The MQTT secure connection class
 class MqttSecureConnection extends MqttConnection {
-
   /// Default constructor
   MqttSecureConnection(
       this.trustedCertPath,
@@ -41,7 +40,8 @@ class MqttSecureConnection extends MqttConnection {
   /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
-    final Completer<MqttClientConnectionStatus> completer = Completer<MqttClientConnectionStatus>();
+    final Completer<MqttClientConnectionStatus> completer =
+        Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttSecureConnection::connect');
     try {
       // Connect and save the socket.

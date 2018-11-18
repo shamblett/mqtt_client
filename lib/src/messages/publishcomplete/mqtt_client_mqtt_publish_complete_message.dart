@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Complete Message.
 class MqttPublishCompleteMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage() {
     header = MqttHeader().asType(MqttMessageType.publishComplete);

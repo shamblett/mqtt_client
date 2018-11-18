@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Unsubscribe Ack Message.
 class MqttUnsubscribeAckMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
   MqttUnsubscribeAckMessage() {
     header = MqttHeader().asType(MqttMessageType.unsubscribeAck);

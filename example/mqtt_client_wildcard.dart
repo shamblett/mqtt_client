@@ -32,7 +32,7 @@ Future<int> main() async {
   /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on:false);
+  client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -69,8 +69,7 @@ Future<int> main() async {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client
-            .connectionStatus.state}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus.state}');
     client.disconnect();
     exit(-1);
   }
@@ -94,8 +93,7 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0]
-            .topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
   });
 

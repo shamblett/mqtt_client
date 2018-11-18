@@ -12,17 +12,16 @@ Future<int> main() async {
   // Create and connect the client for websocket usage. The scheme must be ws:// otherwise
   // Dart IO will not create the websocket
   final MqttClient client =
-  MqttClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
+      MqttClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
   client.useWebSocket = true;
   client.port = 80;
-  client.logging(on:true);
+  client.logging(on: true);
   await client.connect();
   if (client.connectionStatus.state == ConnectionState.connected) {
     print('Mosquitto client connected');
   } else {
     print(
-        'ERROR Mosquitto client connection failed - disconnecting, state is ${client
-            .connectionStatus}');
+        'ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus}');
     client.disconnect();
   }
   // Subscribe to a known topic
@@ -31,7 +30,7 @@ Future<int> main() async {
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
     final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print('Change notification:: payload is <$pt> for topic <$topic>');
   });
   print('Sleeping....');

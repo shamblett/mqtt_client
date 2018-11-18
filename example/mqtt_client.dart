@@ -32,7 +32,7 @@ Future<int> main() async {
   /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on:false);
+  client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -75,8 +75,7 @@ Future<int> main() async {
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client
-            .connectionStatus}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
     client.disconnect();
     exit(-1);
   }
@@ -90,7 +89,7 @@ Future<int> main() async {
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
     final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
@@ -98,8 +97,7 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0]
-            .topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
   });
 

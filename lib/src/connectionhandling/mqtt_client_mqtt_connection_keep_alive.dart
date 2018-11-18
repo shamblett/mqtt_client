@@ -24,8 +24,7 @@ class MqttConnectionKeepAlive {
         MqttMessageType.pingResponse, pingResponseReceived);
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
-    pingTimer =
-        Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
+    pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
   }
 
   /// The keep alive period in  milliseconds
@@ -49,12 +48,12 @@ class MqttConnectionKeepAlive {
     }
     bool pinged = false;
     final MqttPingRequestMessage pingMsg = MqttPingRequestMessage();
-    if (_connectionHandler.connectionStatus.state == ConnectionState.connected) {
+    if (_connectionHandler.connectionStatus.state ==
+        ConnectionState.connected) {
       _connectionHandler.sendMessage(pingMsg);
       pinged = true;
     }
-    pingTimer =
-        Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
+    pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
     _shutdownPadlock = false;
     return pinged;
   }

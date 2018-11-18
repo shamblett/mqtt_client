@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Subscribe Message.
 class MqttSubscribeMessage extends MqttMessage {
-
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
     header = MqttHeader().asType(MqttMessageType.subscribe);
@@ -37,8 +36,7 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(
-        variableHeader.getWriteLength() + payload.getWriteLength(),
+    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
     variableHeader.writeTo(messageStream);
     payload.writeTo(messageStream);
@@ -47,8 +45,7 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   @override
   void readFrom(MqttByteBuffer messageStream) {
-    variableHeader =
-        MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
     payload = MqttSubscribePayload.fromByteBuffer(
         header, variableHeader, messageStream);
   }

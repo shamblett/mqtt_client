@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Exception thrown when the connection state is incorrect.
 class ConnectionException implements Exception {
-
   /// Construct
   ConnectionException(ConnectionState state) {
     _message =

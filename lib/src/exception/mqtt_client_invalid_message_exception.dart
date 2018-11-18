@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Exception thrown when processing a Message that is invalid in some way.
 class InvalidMessageException implements Exception {
-
   /// Construct
   InvalidMessageException(String text) {
     _message = 'mqtt-client::InvalidMessageException: $text';

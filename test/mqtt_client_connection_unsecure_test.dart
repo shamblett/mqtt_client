@@ -12,7 +12,6 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
-
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {
   @override
@@ -20,7 +19,6 @@ class MockCH extends Mock implements MqttConnectionHandler {
 }
 
 class MockKA extends Mock implements MqttConnectionKeepAlive {
-
   MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
@@ -76,7 +74,7 @@ void main() {
     test('Connect to bad host name', () async {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -85,12 +83,13 @@ void main() {
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
       expect(ch.connectionStatus.state, ConnectionState.faulted);
-      expect(ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
+      expect(
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     }, skip: true);
     test('Connect invalid port', () async {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       try {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -98,13 +97,14 @@ void main() {
         expect(e.toString().contains('refused'), isTrue);
       }
       expect(ch.connectionStatus.state, ConnectionState.faulted);
-      expect(ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
+      expect(
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     });
     test('Connect no connect ack', () async {
       await broker.start();
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       try {
         await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -112,7 +112,8 @@ void main() {
         expect(e is NoConnectionException, isTrue);
       }
       expect(ch.connectionStatus.state, ConnectionState.faulted);
-      expect(ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
+      expect(
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     });
     test('Successful response and disconnect', () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
@@ -123,12 +124,13 @@ void main() {
 
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandler;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, ConnectionState.connected);
-      expect(ch.connectionStatus.returnCode, MqttConnectReturnCode.connectionAccepted);
+      expect(ch.connectionStatus.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
     });
@@ -160,22 +162,20 @@ void main() {
 
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, ConnectionState.connected);
-      expect(ch.connectionStatus.returnCode, MqttConnectReturnCode.connectionAccepted);
+      expect(ch.connectionStatus.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       broker.setMessageHandler = messageHandlerPingRequest;
       print(
-          'Connection Keep Alive - Successful response - keepealive ms is ${ka
-              .keepAlivePeriod}');
+          'Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'Connection Keep Alive - Successful response - ping timer active is ${ka
-              .pingTimer.isActive.toString()}');
-      final Stopwatch stopwatch = Stopwatch()
-        ..start();
+          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+      final Stopwatch stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('Connection Keep Alive - Successful response - Elapsed time '
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');
@@ -193,7 +193,7 @@ void main() {
 
       broker.setMessageHandler = messageHandlerConnect;
       final MqttClient client = MqttClient('localhost', 'SJHMQTTClient');
-      client.logging(on:true);
+      client.logging(on: true);
       const String username = 'unused';
       print(username);
       const String password = 'password';
@@ -203,8 +203,7 @@ void main() {
         print('Client connected');
       } else {
         print(
-            'ERROR Client connection failed - disconnecting, state is ${client
-                .connectionStatus.state}');
+            'ERROR Client connection failed - disconnecting, state is ${client.connectionStatus.state}');
         client.disconnect();
       }
       // Publish a known topic

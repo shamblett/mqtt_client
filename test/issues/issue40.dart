@@ -8,7 +8,7 @@ Future<int> main() async {
   Future _connect() async {
     final Completer completer = Completer();
     client = MqttClient("test.mosquitto.org", "");
-    client.logging(on:false);
+    client.logging(on: false);
 
     client.onDisconnected = onDisconnected;
 

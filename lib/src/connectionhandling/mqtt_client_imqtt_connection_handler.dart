@@ -22,7 +22,8 @@ abstract class IMqttConnectionHandler {
   /// The broker server to connect to
   /// The port to connect to
   /// The connect message to use to initiate the connection
-  Future<MqttClientConnectionStatus> connect(String server, int port, MqttConnectMessage message);
+  Future<MqttClientConnectionStatus> connect(
+      String server, int port, MqttConnectMessage message);
 
   /// Register the specified callback to receive messages of a specific type.
   /// The type of message that the callback should be sent

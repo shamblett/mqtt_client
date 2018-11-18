@@ -27,13 +27,11 @@ class MqttConnectAckMessage extends MqttMessage {
   /// Gets or sets the variable header contents. Contains extended metadata about the message
   MqttConnectAckVariableHeader variableHeader;
 
-
   /// Reads a message from the supplied stream.
   @override
   void readFrom(MqttByteBuffer messageStream) {
     super.readFrom(messageStream);
-    variableHeader =
-        MqttConnectAckVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttConnectAckVariableHeader.fromByteBuffer(messageStream);
   }
 
   /// Writes a message to the supplied stream.

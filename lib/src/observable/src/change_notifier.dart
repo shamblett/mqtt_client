@@ -21,12 +21,13 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   ///
   /// Changes should produced in order, if significant.
   @override
-  Stream<List<C>> get changes => (_changes ??= StreamController<List<C>>.broadcast(
-      sync: true,
-      onListen: observed,
-      onCancel: unobserved,
-    ))
-        .stream;
+  Stream<List<C>> get changes =>
+      (_changes ??= StreamController<List<C>>.broadcast(
+        sync: true,
+        onListen: observed,
+        onCancel: unobserved,
+      ))
+          .stream;
 
   /// May override to be notified when [changes] is first observed.
   @override

@@ -11,7 +11,6 @@ part of mqtt_client;
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
-
   /// The byte buffer
   MqttByteBuffer(this.buffer);
 

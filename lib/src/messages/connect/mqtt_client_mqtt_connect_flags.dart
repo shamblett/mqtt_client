@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
-
   /// Initializes a new instance of the MqttConnectFlags class.
   MqttConnectFlags();
 

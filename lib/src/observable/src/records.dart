@@ -6,7 +6,6 @@ library observable.src.records;
 
 /// Result of a change to an observed object.
 class ChangeRecord {
-
   /// Constructor
   const ChangeRecord();
 
@@ -18,5 +17,4 @@ class ChangeRecord {
 
   /// Signifies no changes occurred.
   static const List<ChangeRecord> none = <ChangeRecord>[];
-
 }
