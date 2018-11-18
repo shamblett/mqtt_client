@@ -36,6 +36,19 @@ enum readWriteFlags {
 
 /// Represents the base class for the Variable Header portion of some MQTT Messages.
 class MqttVariableHeader {
+
+  /// Initializes a new instance of the MqttVariableHeader class.
+  MqttVariableHeader() {
+    protocolName = Protocol.name;
+    protocolVersion = Protocol.version;
+    connectFlags = MqttConnectFlags();
+  }
+
+  /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
+  MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
+    readFrom(headerStream);
+  }
+
   /// The length, in bytes, consumed by the variable header.
   int length = 0;
 
@@ -61,18 +74,6 @@ class MqttVariableHeader {
 
   /// Message identifier
   int messageIdentifier = 0;
-
-  /// Initializes a new instance of the MqttVariableHeader class.
-  MqttVariableHeader() {
-    protocolName = Protocol.name;
-    protocolVersion = Protocol.version;
-    connectFlags = MqttConnectFlags();
-  }
-
-  /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
-  MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
-    readFrom(headerStream);
-  }
 
   /// Creates a variable header from the specified header stream.
   /// A subclass can override this method to do completely custom read operations

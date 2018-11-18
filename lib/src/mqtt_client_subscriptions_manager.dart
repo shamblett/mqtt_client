@@ -13,6 +13,18 @@ typedef UnsubscribeCallback = void Function(String topic);
 
 /// A class that can manage the topic subscription process.
 class SubscriptionsManager {
+
+  ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
+  SubscriptionsManager(
+      this.connectionHandler, this.publishingManager, this._clientEventBus) {
+    connectionHandler.registerForMessage(
+        MqttMessageType.subscribeAck, confirmSubscription);
+    connectionHandler.registerForMessage(
+        MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+    // Start listening for published messages
+    _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
+  }
+
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
@@ -37,17 +49,6 @@ class SubscriptionsManager {
 
   /// The event bus
   events.EventBus _clientEventBus;
-
-  ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
-  SubscriptionsManager(
-      this.connectionHandler, this.publishingManager, this._clientEventBus) {
-    connectionHandler.registerForMessage(
-        MqttMessageType.subscribeAck, confirmSubscription);
-    connectionHandler.registerForMessage(
-        MqttMessageType.unsubscribeAck, confirmUnsubscribe);
-    // Start listening for published messages
-    _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
-  }
 
   /// Observable change notifier for all subscribed topics
   final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>> _subscriptionNotifier =

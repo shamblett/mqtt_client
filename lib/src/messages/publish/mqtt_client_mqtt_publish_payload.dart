@@ -9,14 +9,6 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Connect messages payload
 class MqttPublishPayload extends MqttPayload {
-  /// Message header
-  MqttHeader header;
-
-  /// Variable header
-  MqttPublishVariableHeader variableHeader;
-
-  /// The message that forms the payload of the publish message.
-  typed.Uint8Buffer message;
 
   /// Initializes a new instance of the MqttPublishPayload class.
   MqttPublishPayload() {
@@ -28,6 +20,15 @@ class MqttPublishPayload extends MqttPayload {
       this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
+
+  /// Message header
+  MqttHeader header;
+
+  /// Variable header
+  MqttPublishVariableHeader variableHeader;
+
+  /// The message that forms the payload of the publish message.
+  typed.Uint8Buffer message;
 
   /// Creates a payload from the specified header stream.
   @override

@@ -9,8 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Release Message.
 class MqttPublishReleaseMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttPublishReleaseVariableHeader variableHeader;
 
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage() {
@@ -25,6 +23,9 @@ class MqttPublishReleaseMessage extends MqttMessage {
     variableHeader =
         MqttPublishReleaseVariableHeader.fromByteBuffer(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttPublishReleaseVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

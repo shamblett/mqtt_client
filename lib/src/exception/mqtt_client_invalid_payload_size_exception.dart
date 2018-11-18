@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Exception that is thrown when the payload of a message is not the correct size.
 class InvalidPayloadSizeException implements Exception {
-  String _message;
 
   /// Construct
   InvalidPayloadSizeException(int size, int max) {
@@ -17,6 +16,8 @@ class InvalidPayloadSizeException implements Exception {
         'mqtt-client::InvalidPayloadSizeException: The size of the payload ($size bytes) must '
         'be equal to or greater than 0 and less than $max bytes';
   }
+
+  String _message;
 
   @override
   String toString() => _message;

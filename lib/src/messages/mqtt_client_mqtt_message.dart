@@ -20,8 +20,6 @@ part of mqtt_client;
 /// ----------------------------
 
 class MqttMessage {
-  /// The header of the MQTT Message. Contains metadata about the message
-  MqttHeader header;
 
   /// Initializes a new instance of the MqttMessage class.
   MqttMessage();
@@ -30,6 +28,9 @@ class MqttMessage {
   MqttMessage.fromHeader(MqttHeader header) {
     header = header;
   }
+
+  /// The header of the MQTT Message. Contains metadata about the message
+  MqttHeader header;
 
   /// Creates a new instance of an MQTT Message based on a raw message stream.
   static MqttMessage createFrom(MqttByteBuffer messageStream) {

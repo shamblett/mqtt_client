@@ -22,6 +22,9 @@ class MessageSerializationHelper {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
 class MockBroker {
+
+  MockBroker();
+
   int brokerPort = 1883;
   ServerSocket listener;
   MessageHandlerFunction handler;
@@ -29,7 +32,6 @@ class MockBroker {
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
 
-  MockBroker();
 
   FutureOr<dynamic> start() {
     final Completer<dynamic> completer = Completer<dynamic>();
@@ -85,13 +87,14 @@ class MockBroker {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. websocket connection.
 class MockBrokerWs {
+
+  MockBrokerWs();
+
   int port = 8090;
   MessageHandlerFunction handler;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
   WebSocket _webSocket;
-
-  MockBrokerWs();
 
   void _handleMessage(dynamic data) {
     // Listen for incoming data.
@@ -149,14 +152,15 @@ class MockBrokerWs {
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
 class MockBrokerSecure {
+
+  MockBrokerSecure();
+
   int brokerPort = 8883;
   SecureServerSocket listener;
   MessageHandlerFunction handler;
   SecureSocket client;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-
-  MockBrokerSecure();
 
   Future<void> start() {
     final Completer<void> completer = Completer<void>();

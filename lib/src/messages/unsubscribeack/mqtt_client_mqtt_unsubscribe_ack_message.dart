@@ -9,8 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Unsubscribe Ack Message.
 class MqttUnsubscribeAckMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttUnsubscribeAckVariableHeader variableHeader;
 
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
   MqttUnsubscribeAckMessage() {
@@ -24,6 +22,9 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
     this.header = header;
     readFrom(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttUnsubscribeAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

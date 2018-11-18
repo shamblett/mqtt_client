@@ -9,8 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Received Message.
 class MqttPublishReceivedMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttPublishReceivedVariableHeader variableHeader;
 
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
   MqttPublishReceivedMessage() {
@@ -25,6 +23,9 @@ class MqttPublishReceivedMessage extends MqttMessage {
     variableHeader =
         MqttPublishReceivedVariableHeader.fromByteBuffer(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttPublishReceivedVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

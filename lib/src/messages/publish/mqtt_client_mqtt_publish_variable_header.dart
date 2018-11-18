@@ -9,8 +9,6 @@ part of mqtt_client;
 
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttPublishVariableHeader extends MqttVariableHeader {
-  /// Stores the standard header
-  MqttHeader header;
 
   /// Initializes a new instance of the MqttPublishVariableHeader class.
   MqttPublishVariableHeader(this.header);
@@ -20,6 +18,9 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
       this.header, MqttByteBuffer variableHeaderStream) {
     readFrom(variableHeaderStream);
   }
+
+  /// Standard header
+  MqttHeader header;
 
   /// Creates a variable header from the specified header stream.
   @override

@@ -17,15 +17,16 @@ class MqttConnectAckMessage extends MqttMessage {
     variableHeader.returnCode = MqttConnectReturnCode.connectionAccepted;
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttConnectAckVariableHeader variableHeader;
-
   /// Initializes a new instance of the MqttConnectAckMessage class.
   MqttConnectAckMessage.fromByteBuffer(
       MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
     readFrom(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttConnectAckVariableHeader variableHeader;
+
 
   /// Reads a message from the supplied stream.
   @override

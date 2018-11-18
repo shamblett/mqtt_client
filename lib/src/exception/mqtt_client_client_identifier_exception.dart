@@ -9,7 +9,6 @@ part of mqtt_client;
 
 /// Exception thrown when a client identifier included in a message is too long.
 class ClientIdentifierException implements Exception {
-  String _message;
 
   /// Construct
   ClientIdentifierException(String clientIdentifier) {
@@ -17,6 +16,8 @@ class ClientIdentifierException implements Exception {
         'mqtt-client::ClientIdentifierException: Client id $clientIdentifier is too long at ${clientIdentifier.length}, '
         'Maximum ClientIdentifier length is ${Constants.maxClientIdentifierLength}';
   }
+
+  String _message;
 
   @override
   String toString() => _message;

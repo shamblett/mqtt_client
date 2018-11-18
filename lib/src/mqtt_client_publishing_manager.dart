@@ -34,6 +34,21 @@ part of mqtt_client;
 ///                                                                                                   | v
 ///                                                                                            Message Processor
 class PublishingManager implements IPublishingManager {
+
+  /// Initializes a new instance of the PublishingManager class.
+  PublishingManager(this.connectionHandler, this._clientEventBus) {
+    connectionHandler.registerForMessage(
+        MqttMessageType.publishAck, handlePublishAcknowledgement);
+    connectionHandler.registerForMessage(
+        MqttMessageType.publish, handlePublish);
+    connectionHandler.registerForMessage(
+        MqttMessageType.publishComplete, handlePublishComplete);
+    connectionHandler.registerForMessage(
+        MqttMessageType.publishRelease, handlePublishRelease);
+    connectionHandler.registerForMessage(
+        MqttMessageType.publishReceived, handlePublishReceived);
+  }
+
   /// Handles dispensing of message ids for messages published to a topic.
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
@@ -58,20 +73,6 @@ class PublishingManager implements IPublishingManager {
 
   /// The event bus
   events.EventBus _clientEventBus;
-
-  /// Initializes a new instance of the PublishingManager class.
-  PublishingManager(this.connectionHandler, this._clientEventBus) {
-    connectionHandler.registerForMessage(
-        MqttMessageType.publishAck, handlePublishAcknowledgement);
-    connectionHandler.registerForMessage(
-        MqttMessageType.publish, handlePublish);
-    connectionHandler.registerForMessage(
-        MqttMessageType.publishComplete, handlePublishComplete);
-    connectionHandler.registerForMessage(
-        MqttMessageType.publishRelease, handlePublishRelease);
-    connectionHandler.registerForMessage(
-        MqttMessageType.publishReceived, handlePublishReceived);
-  }
 
   /// Publish a message to the broker on the specified topic.
   /// The topic to send the message to

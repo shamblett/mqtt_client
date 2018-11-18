@@ -9,11 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Subscribe Ack Message.
 class MqttSubscribeAckMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttSubscribeAckVariableHeader variableHeader;
-
-  /// Gets or sets the payload of the Mqtt Message.
-  MqttSubscribeAckPayload payload;
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
   MqttSubscribeAckMessage() {
@@ -28,6 +23,12 @@ class MqttSubscribeAckMessage extends MqttMessage {
     this.header = header;
     readFrom(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttSubscribeAckVariableHeader variableHeader;
+
+  /// Gets or sets the payload of the Mqtt Message.
+  MqttSubscribeAckPayload payload;
 
   /// Writes the message to the supplied stream.
   @override

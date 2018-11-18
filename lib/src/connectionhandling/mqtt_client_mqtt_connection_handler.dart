@@ -9,6 +9,10 @@ part of mqtt_client;
 
 ///  This class provides shared connection functionality to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
+
+  /// Initializes a new instance of the MqttConnectionHandler class.
+  MqttConnectionHandler();
+
   /// The connection
   dynamic connection;
 
@@ -44,9 +48,6 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
-
-  /// Initializes a new instance of the MqttConnectionHandler class.
-  MqttConnectionHandler();
 
   /// Connect to the specific Mqtt Connection.
   @override

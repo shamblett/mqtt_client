@@ -9,13 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Subscribe Message.
 class MqttSubscribeMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttSubscribeVariableHeader variableHeader;
-
-  /// Gets or sets the payload of the Mqtt Message.
-  MqttSubscribePayload payload;
-
-  String _lastTopic;
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
@@ -32,6 +25,14 @@ class MqttSubscribeMessage extends MqttMessage {
     this.header.qos = MqttQos.atLeastOnce;
     readFrom(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttSubscribeVariableHeader variableHeader;
+
+  /// Gets or sets the payload of the Mqtt Message.
+  MqttSubscribePayload payload;
+
+  String _lastTopic;
 
   /// Writes the message to the supplied stream.
   @override

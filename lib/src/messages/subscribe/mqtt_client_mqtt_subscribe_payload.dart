@@ -9,14 +9,6 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
-  /// Variable header
-  MqttVariableHeader variableHeader;
-
-  /// Message header
-  MqttHeader header;
-
-  /// The collection of subscriptions, Key is the topic, Value is the qos
-  Map<String, MqttQos> subscriptions = Map<String, MqttQos>();
 
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload();
@@ -26,6 +18,15 @@ class MqttSubscribePayload extends MqttPayload {
       this.header, this.variableHeader, MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
+
+  /// Variable header
+  MqttVariableHeader variableHeader;
+
+  /// Message header
+  MqttHeader header;
+
+  /// The collection of subscriptions, Key is the topic, Value is the qos
+  Map<String, MqttQos> subscriptions = Map<String, MqttQos>();
 
   /// Writes the payload to the supplied stream.
   @override

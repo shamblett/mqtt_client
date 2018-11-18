@@ -9,17 +9,6 @@ part of mqtt_client;
 
 /// The MQTT secure connection class
 class MqttSecureConnection extends MqttConnection {
-  /// Trusted certificate file path for use in secure working
-  String trustedCertPath;
-
-  /// The certificate chain path for secure working.
-  String certificateChainPath;
-
-  /// Private key file path
-  String privateKeyFilePath;
-
-  /// Private keyfile passphrase
-  String privateKeyFilePassphrase;
 
   /// Default constructor
   MqttSecureConnection(
@@ -36,6 +25,18 @@ class MqttSecureConnection extends MqttConnection {
       : super(eventBus) {
     connect(server, port);
   }
+
+  /// Trusted certificate file path for use in secure working
+  String trustedCertPath;
+
+  /// The certificate chain path for secure working.
+  String certificateChainPath;
+
+  /// Private key file path
+  String privateKeyFilePath;
+
+  /// Private keyfile passphrase
+  String privateKeyFilePassphrase;
 
   /// Connect
   @override

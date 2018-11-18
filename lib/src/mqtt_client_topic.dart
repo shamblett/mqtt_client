@@ -9,6 +9,18 @@ part of mqtt_client;
 
 /// Provides the base implementation of an MQTT topic.
 abstract class Topic {
+
+  /// Creates a new instance of a rawTopic from a rawTopic string.
+  /// rawTopic - The topic to represent.
+  /// validations - The validations to run on the rawTopic.
+  Topic(this.rawTopic, List<dynamic> validations) {
+    topicFragments = rawTopic.split(topicSeparator[0]);
+    // run all validations
+    for (dynamic validation in validations) {
+      validation(this);
+    }
+  }
+
   /// Separator
   static const String topicSeparator = '/';
 
@@ -30,16 +42,6 @@ abstract class Topic {
   /// Topic fragments
   List<String> topicFragments;
 
-  /// Creates a new instance of a rawTopic from a rawTopic string.
-  /// rawTopic - The topic to represent.
-  /// validations - The validations to run on the rawTopic.
-  Topic(this.rawTopic, List<dynamic> validations) {
-    topicFragments = rawTopic.split(topicSeparator[0]);
-    // run all validations
-    for (dynamic validation in validations) {
-      validation(this);
-    }
-  }
 
   /// Validates that the topic does not exceed the maximum length.
   /// topicInstance - The instance to check.

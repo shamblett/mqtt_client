@@ -9,6 +9,10 @@ part of mqtt_client;
 
 /// Connection handler that performs connections and disconnections to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
+
+  /// Initializes a new instance of the MqttConnectionHandler class.
+  SynchronousMqttConnectionHandler(this._clientEventBus);
+
   /// Max connection attempts
   static const int maxConnectionAttempts = 3;
 
@@ -17,9 +21,6 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
 
   /// The event bus
   events.EventBus _clientEventBus;
-
-  /// Initializes a new instance of the MqttConnectionHandler class.
-  SynchronousMqttConnectionHandler(this._clientEventBus);
 
   /// Synchronously connect to the specific Mqtt Connection.
   @override

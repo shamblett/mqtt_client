@@ -20,11 +20,12 @@ class MockCH extends Mock implements MqttConnectionHandler {
 }
 
 class MockKA extends Mock implements MqttConnectionKeepAlive {
-  MqttConnectionKeepAlive ka;
 
   MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
+
+  MqttConnectionKeepAlive ka;
 }
 
 void main() {

@@ -20,6 +20,15 @@ class ReadWrapper {
 
 /// The MQTT connection base class
 class MqttConnection {
+
+  /// Default constructor
+  MqttConnection(this._clientEventBus);
+
+  /// Initializes a new instance of the MqttConnection class.
+  MqttConnection.fromConnect(String server, int port, this._clientEventBus) {
+    connect(server, port);
+  }
+
   /// The socket that maintains the connection to the MQTT broker.
   dynamic client;
 
@@ -37,14 +46,6 @@ class MqttConnection {
 
   /// The event bus
   events.EventBus _clientEventBus;
-
-  /// Default constructor
-  MqttConnection(this._clientEventBus);
-
-  /// Initializes a new instance of the MqttConnection class.
-  MqttConnection.fromConnect(String server, int port, this._clientEventBus) {
-    connect(server, port);
-  }
 
   /// Connect, must be overridden in connection classes
   Future<void> connect(String server, int port) {

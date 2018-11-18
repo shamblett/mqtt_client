@@ -9,11 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Unsubscribe Message.
 class MqttUnsubscribeMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttUnsubscribeVariableHeader variableHeader;
-
-  /// Gets or sets the payload of the Mqtt Message.
-  MqttUnsubscribePayload payload;
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage() {
@@ -28,6 +23,12 @@ class MqttUnsubscribeMessage extends MqttMessage {
     this.header = header;
     readFrom(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttUnsubscribeVariableHeader variableHeader;
+
+  /// Gets or sets the payload of the Mqtt Message.
+  MqttUnsubscribePayload payload;
 
   /// Writes the message to the supplied stream.
   @override

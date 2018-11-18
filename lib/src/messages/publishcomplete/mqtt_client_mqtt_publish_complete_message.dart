@@ -9,8 +9,6 @@ part of mqtt_client;
 
 /// Implementation of an MQTT Publish Complete Message.
 class MqttPublishCompleteMessage extends MqttMessage {
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
-  MqttPublishCompleteVariableHeader variableHeader;
 
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage() {
@@ -25,6 +23,9 @@ class MqttPublishCompleteMessage extends MqttMessage {
     variableHeader =
         MqttPublishCompleteVariableHeader.fromByteBuffer(messageStream);
   }
+
+  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  MqttPublishCompleteVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

@@ -9,13 +9,7 @@ part of mqtt_client;
 
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
-  /// Variable header
-  MqttVariableHeader variableHeader;
-  /// Message header
-  MqttHeader header;
 
-  /// The collection of subscriptions.
-  List<String> subscriptions = List<String>();
 
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload();
@@ -27,6 +21,15 @@ class MqttUnsubscribePayload extends MqttPayload {
       MqttByteBuffer payloadStream) {
     readFrom(payloadStream);
   }
+
+  /// Variable header
+  MqttVariableHeader variableHeader;
+
+  /// Message header
+  MqttHeader header;
+
+  /// The collection of subscriptions.
+  List<String> subscriptions = List<String>();
 
   /// Writes the payload to the supplied stream.
   @override

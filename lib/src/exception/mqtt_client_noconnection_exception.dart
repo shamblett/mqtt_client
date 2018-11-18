@@ -9,12 +9,13 @@ part of mqtt_client;
 
 /// Exception thrown when the client fails to connect
 class NoConnectionException implements Exception {
-  String _message;
 
   /// Construct
   NoConnectionException(String message) {
     _message = 'mqtt-client::NoConnectionException: $message';
   }
+
+  String _message;
 
   @override
   String toString() => _message;

@@ -11,11 +11,6 @@ part of mqtt_client;
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
-  /// The current position within the buffer.
-  int _position = 0;
-
-  /// The underlying byte buffer
-  typed.Uint8Buffer buffer;
 
   /// The byte buffer
   MqttByteBuffer(this.buffer);
@@ -25,6 +20,12 @@ class MqttByteBuffer {
     buffer = typed.Uint8Buffer();
     buffer.addAll(data);
   }
+
+  /// The current position within the buffer.
+  int _position = 0;
+
+  /// The underlying byte buffer
+  typed.Uint8Buffer buffer;
 
   /// Position
   int get position => _position;
