@@ -76,7 +76,8 @@ class MqttClient {
       : ConnectionState.disconnected;
 
   /// Gets the current connection status of the Mqtt Client.
-  /// This is the connection state as above also with the broker return code
+  /// This is the connection state as above also with the broker return code.
+  /// Set after every connection attempt.
   MqttClientConnectionStatus get connectionStatus => _connectionHandler != null
       ? _connectionHandler.connectionStatus
       : MqttClientConnectionStatus();
