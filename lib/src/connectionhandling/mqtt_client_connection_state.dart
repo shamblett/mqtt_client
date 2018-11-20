@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Enumeration that indicates various client connection states
-enum ConnectionState {
+enum MqttConnectionState {
   /// The MQTT Connection is in the process of disconnecting from the broker.
   disconnecting,
 

@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Describes the status of a subscription
-enum SubscriptionStatus {
+enum MqttSubscriptionStatus {
   /// The subscription does not exist / is not known
   doesNotExist,
 

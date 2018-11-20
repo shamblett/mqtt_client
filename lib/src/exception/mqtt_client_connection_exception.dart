@@ -10,7 +10,7 @@ part of mqtt_client;
 /// Exception thrown when the connection state is incorrect.
 class ConnectionException implements Exception {
   /// Construct
-  ConnectionException(ConnectionState state) {
+  ConnectionException(MqttConnectionState state) {
     _message =
         'mqtt-client::ConnectionException: The connection must be in the Connected state in order to perform this operation. '
         'Current state is ${state.toString().substring(_classLength)}';

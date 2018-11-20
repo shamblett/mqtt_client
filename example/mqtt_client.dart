@@ -70,7 +70,7 @@ Future<int> main() async {
   }
 
   /// Check we are connected
-  if (client.connectionStatus.state == ConnectionState.connected) {
+  if (client.connectionStatus.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     /// Use status here rather than state if you also want the broker return code.

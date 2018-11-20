@@ -56,7 +56,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       await internalConnect(server, port, message);
       return connectionStatus;
     } on Exception {
-      connectionStatus.state = ConnectionState.faulted;
+      connectionStatus.state = MqttConnectionState.faulted;
       rethrow;
     }
   }
@@ -69,8 +69,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   @override
   void sendMessage(MqttMessage message) {
     MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
-    if ((connectionStatus.state == ConnectionState.connected) ||
-        (connectionStatus.state == ConnectionState.connecting)) {
+    if ((connectionStatus.state == MqttConnectionState.connected) ||
+        (connectionStatus.state == MqttConnectionState.connecting)) {
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
       final MqttByteBuffer stream = MqttByteBuffer(buff);
       message.writeTo(stream);
@@ -86,12 +86,12 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   }
 
   /// Runs the disconnection process to stop communicating with a message broker.
-  ConnectionState disconnect();
+  MqttConnectionState disconnect();
 
   /// Closes the connection to the Mqtt message broker.
   @override
   void close() {
-    if (connectionStatus.state == ConnectionState.connected) {
+    if (connectionStatus.state == MqttConnectionState.connected) {
       disconnect();
     }
   }

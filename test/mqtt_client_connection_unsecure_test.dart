@@ -82,7 +82,7 @@ void main() {
         expect(e.toString().contains('Failed host lookup'), isTrue);
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
-      expect(ch.connectionStatus.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     }, skip: true);
@@ -96,7 +96,7 @@ void main() {
       } on Exception catch (e) {
         expect(e.toString().contains('refused'), isTrue);
       }
-      expect(ch.connectionStatus.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     });
@@ -111,7 +111,7 @@ void main() {
       } on Exception catch (e) {
         expect(e is NoConnectionException, isTrue);
       }
-      expect(ch.connectionStatus.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     });
@@ -128,11 +128,11 @@ void main() {
       broker.setMessageHandler = messageHandler;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionStatus.state, ConnectionState.connected);
+      expect(ch.connectionStatus.state, MqttConnectionState.connected);
       expect(ch.connectionStatus.returnCode,
           MqttConnectReturnCode.connectionAccepted);
-      final ConnectionState state = ch.disconnect();
-      expect(state, ConnectionState.disconnected);
+      final MqttConnectionState state = ch.disconnect();
+      expect(state, MqttConnectionState.disconnected);
     });
     test('Successful response and disconnect with returned status', () async {
       void messageHandler(typed.Uint8Buffer messageArrived) {
@@ -147,11 +147,11 @@ void main() {
       broker.setMessageHandler = messageHandler;
       final MqttClientConnectionStatus status = await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(status.state, ConnectionState.connected);
+      expect(status.state, MqttConnectionState.connected);
       expect(status.returnCode,
           MqttConnectReturnCode.connectionAccepted);
-      final ConnectionState state = ch.disconnect();
-      expect(state, ConnectionState.disconnected);
+      final MqttConnectionState state = ch.disconnect();
+      expect(state, MqttConnectionState.disconnected);
     });
   }, skip: false);
 
@@ -185,7 +185,7 @@ void main() {
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionStatus.state, ConnectionState.connected);
+      expect(ch.connectionStatus.state, MqttConnectionState.connected);
       expect(ch.connectionStatus.returnCode,
           MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
@@ -218,7 +218,7 @@ void main() {
       const String password = 'password';
       print(password);
       await client.connect();
-      if (client.connectionStatus.state == ConnectionState.connected) {
+      if (client.connectionStatus.state == MqttConnectionState.connected) {
         print('Client connected');
       } else {
         print(

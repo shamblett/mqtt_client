@@ -164,14 +164,14 @@ class SubscriptionsManager {
   }
 
   /// Gets the current status of a subscription.
-  SubscriptionStatus getSubscriptionsStatus(String topic) {
-    SubscriptionStatus status = SubscriptionStatus.doesNotExist;
+  MqttSubscriptionStatus getSubscriptionsStatus(String topic) {
+    MqttSubscriptionStatus status = MqttSubscriptionStatus.doesNotExist;
     if (subscriptions.containsKey(topic)) {
-      status = SubscriptionStatus.active;
+      status = MqttSubscriptionStatus.active;
     }
     pendingSubscriptions.forEach((int key, Subscription value) {
       if (value.topic.rawTopic == topic) {
-        status = SubscriptionStatus.pending;
+        status = MqttSubscriptionStatus.pending;
       }
     });
     return status;

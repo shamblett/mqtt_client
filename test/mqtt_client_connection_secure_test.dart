@@ -83,7 +83,7 @@ void main() {
         expect(e.toString().contains('Failed host lookup'), isTrue);
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
-      expect(ch.connectionStatus.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
     }, skip: true);
     test('Connect invalid port', () async {
       final events.EventBus clientEventBus = events.EventBus();
@@ -96,7 +96,7 @@ void main() {
       } on Exception catch (e) {
         expect(e.toString().contains('refused'), isTrue);
       }
-      expect(ch.connectionStatus.state, ConnectionState.faulted);
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
     });
   });
   group('Connection Keep Alive - Mock broker', () {
@@ -131,7 +131,7 @@ void main() {
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
-      expect(ch.connectionStatus.state, ConnectionState.connected);
+      expect(ch.connectionStatus.state, MqttConnectionState.connected);
       broker.setMessageHandler = messageHandlerPingRequest;
       final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
       print(

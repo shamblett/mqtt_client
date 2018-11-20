@@ -11,7 +11,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
-/// files for separate subscribe/publish tests. This example shows the usage of wildcard subscriptions.
+/// files for separate subscribe/publish tests.
 Future<int> main() async {
   /// First create a client, the client is constructed with a broker name, client identifier
   /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
@@ -36,17 +36,22 @@ Future<int> main() async {
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
-  client.keepAlivePeriod = 30;
+  client.keepAlivePeriod = 20;
 
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
+
+  /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
+  /// You can add these before connection or change them dynamically after connection if
+  /// you wish.
+  client.onSubscribed = onSubscribed;
 
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
   final MqttConnectMessage connMess = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueIdWildcard')
-      .keepAliveFor(30) // Must agree with the keep alive set above or not set
+      .withClientIdentifier('Mqtt_MyClientUniqueId')
+      .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
@@ -57,60 +62,33 @@ Future<int> main() async {
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
+  MqttClientConnectionStatus status = MqttClientConnectionStatus();
   try {
-    await client.connect();
+    status = await client.connect();
   } on Exception catch (e) {
     print('EXAMPLE::client exception - $e');
-    client.disconnect();
   }
 
   /// Check we are connected
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (status.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
+    /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus.state}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, $status');
     client.disconnect();
     exit(-1);
   }
 
-  /// Ok, lets try a subscription or two, note these may change/cease to exist on the broker
-  const String topic = 'test/#'; // Wildcard topic
-  client.subscribe(topic, MqttQos.atMostOnce);
-  const String topic1 = 'ebcon/#'; // Wildcard topic
-  client.subscribe(topic1, MqttQos.atMostOnce);
-
-  /// The client has a change notifier object(see the Observable class) which we then listen to to get
-  /// notifications of published updates to each subscribed topic.
-  client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-    final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
-    /// The above may seem a little convoluted for users only interested in the
-    /// payload, some users however may be interested in the received publish message,
-    /// lets not constrain ourselves yet until the package has been in the wild
-    /// for a while.
-    /// The payload is a byte buffer, this will be specific to the topic
-    print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-    print('');
-  });
-
-  /// Ok, we will now sleep a while, in this gap you will see ping request/response
-  /// messages being exchanged by the keep alive mechanism.
-  print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(120);
-
-  /// Finally, unsubscribe and exit gracefully
-  print('EXAMPLE::Unsubscribing');
-  client.unsubscribe(topic);
-
-  /// Wait for the unsubscribe message from the broker if you wish.
   await MqttUtilities.asyncSleep(2);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
+}
+
+/// The subscribed callback
+void onSubscribed(String topic) {
+  print('EXAMPLE::Subscription confirmed for topic $topic');
 }
 
 /// The unsolicited disconnect callback

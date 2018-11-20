@@ -49,7 +49,7 @@ class MqttConnectionKeepAlive {
     bool pinged = false;
     final MqttPingRequestMessage pingMsg = MqttPingRequestMessage();
     if (_connectionHandler.connectionStatus.state ==
-        ConnectionState.connected) {
+        MqttConnectionState.connected) {
       _connectionHandler.sendMessage(pingMsg);
       pinged = true;
     }

@@ -17,8 +17,8 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   }
 
   @override
-  ConnectionState disconnect() =>
-      connectionStatus.state = ConnectionState.disconnected;
+  MqttConnectionState disconnect() =>
+      connectionStatus.state = MqttConnectionState.disconnected;
 }
 
 class TestConnectionHandlerSend extends MqttConnectionHandler {
@@ -33,8 +33,8 @@ class TestConnectionHandlerSend extends MqttConnectionHandler {
   }
 
   @override
-  ConnectionState disconnect() =>
-      connectionStatus.state = ConnectionState.disconnected;
+  MqttConnectionState disconnect() =>
+      connectionStatus.state = MqttConnectionState.disconnected;
 
   @override
   void sendMessage(MqttMessage message) {

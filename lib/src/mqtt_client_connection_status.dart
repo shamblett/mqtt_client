@@ -10,7 +10,7 @@ part of mqtt_client;
 /// Records the status of the last connection attempt
 class MqttClientConnectionStatus {
   /// Connection state
-  ConnectionState state = ConnectionState.disconnected;
+  MqttConnectionState state = MqttConnectionState.disconnected;
 
   /// Return code
   MqttConnectReturnCode returnCode = MqttConnectReturnCode.notAuthorized;

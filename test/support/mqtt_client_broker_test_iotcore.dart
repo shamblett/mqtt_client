@@ -29,7 +29,7 @@ Future<int> main() async {
   //client.trustedCertPath = currDir + path.join('test', 'pem', 'roots.pem');
   client.logging(on: true);
   await client.connect(username, password);
-  if (client.connectionStatus.state == ConnectionState.connected) {
+  if (client.connectionStatus.state == MqttConnectionState.connected) {
     print('iotcore client connected');
   } else {
     print(

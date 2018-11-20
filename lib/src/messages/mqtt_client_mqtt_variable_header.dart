@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Enumeration used by subclasses to tell the variable header what should be read from the underlying stream.
-enum readWriteFlags {
+enum MqttReadWriteFlags {
   /// Nothing
   none,
 

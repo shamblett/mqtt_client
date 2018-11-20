@@ -28,7 +28,7 @@ void main() {
           'Maximum ClientIdentifier length is ${Constants.maxClientIdentifierLength}');
     });
     test('Connection', () {
-      const ConnectionState state = ConnectionState.disconnected;
+      const MqttConnectionState state = MqttConnectionState.disconnected;
       final ConnectionException exception = ConnectionException(state);
       expect(
           exception.toString(),
@@ -712,7 +712,7 @@ void main() {
       final MqttClientConnectionStatus status = MqttClientConnectionStatus();
       expect(status.toString(),
           'Connection status is disconnected with return code notAuthorized');
-      status.state = ConnectionState.faulted;
+      status.state = MqttConnectionState.faulted;
       status.returnCode = MqttConnectReturnCode.identifierRejected;
       expect(status.toString(),
           'Connection status is faulted with return code identifierRejected');

@@ -31,7 +31,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       // Initiate the connection
       MqttLogger.log(
           'SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts');
-      connectionStatus.state = ConnectionState.connecting;
+      connectionStatus.state = MqttConnectionState.connecting;
       if (useWebSocket) {
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::internalConnect - websocket selected');
@@ -63,10 +63,10 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       await _connectTimer.sleep();
       MqttLogger.log(
           'SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionStatus');
-    } while (connectionStatus.state != ConnectionState.connected &&
+    } while (connectionStatus.state != MqttConnectionState.connected &&
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
-    if (connectionStatus.state != ConnectionState.connected) {
+    if (connectionStatus.state != MqttConnectionState.connected) {
       MqttLogger.log(
           'SynchronousMqttConnectionHandler::internalConnect failed');
       throw NoConnectionException(
@@ -81,20 +81,20 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
 
   /// Disconnects
   @override
-  ConnectionState disconnect() {
+  MqttConnectionState disconnect() {
     MqttLogger.log('SynchronousMqttConnectionHandler::disconnect');
     // Send a disconnect message to the broker
-    connectionStatus.state = ConnectionState.disconnecting;
+    connectionStatus.state = MqttConnectionState.disconnecting;
     sendMessage(MqttDisconnectMessage());
     _performConnectionDisconnect();
-    return connectionStatus.state = ConnectionState.disconnected;
+    return connectionStatus.state = MqttConnectionState.disconnected;
   }
 
   /// Disconnects the underlying connection object.
   void _performConnectionDisconnect() {
     // Set the connection to disconnected.
     connection?.disconnectRequested = true;
-    connectionStatus.state = ConnectionState.disconnected;
+    connectionStatus.state = MqttConnectionState.disconnected;
   }
 
   /// Processes the connect acknowledgement message.
@@ -121,7 +121,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         // Initialize the keepalive to start the ping based keepalive process.
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::_connectAckProcessor - state = connected');
-        connectionStatus.state = ConnectionState.connected;
+        connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
       }
     } on Exception {

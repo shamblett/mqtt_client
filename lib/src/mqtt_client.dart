@@ -71,9 +71,9 @@ class MqttClient {
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
   @deprecated
-  ConnectionState get connectionState => _connectionHandler != null
+  MqttConnectionState get connectionState => _connectionHandler != null
       ? _connectionHandler.connectionStatus.state
-      : ConnectionState.disconnected;
+      : MqttConnectionState.disconnected;
 
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
@@ -180,7 +180,7 @@ class MqttClient {
   /// Returns the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
   Subscription subscribe(String topic, MqttQos qosLevel) {
-    if (connectionStatus.state != ConnectionState.connected) {
+    if (connectionStatus.state != MqttConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionStatus.state);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
@@ -193,7 +193,7 @@ class MqttClient {
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
     if (_connectionHandler.connectionStatus.state !=
-        ConnectionState.connected) {
+        MqttConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionStatus.state);
     }
     try {
@@ -211,7 +211,7 @@ class MqttClient {
   }
 
   /// Gets the current status of a subscription.
-  SubscriptionStatus getSubscriptionsStatus(String topic) =>
+  MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       _subscriptionsManager.getSubscriptionsStatus(topic);
 
   /// Disconnect from the broker
