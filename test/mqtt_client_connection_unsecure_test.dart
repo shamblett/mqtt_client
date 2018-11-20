@@ -134,6 +134,25 @@ void main() {
       final ConnectionState state = ch.disconnect();
       expect(state, ConnectionState.disconnected);
     });
+    test('Successful response and disconnect with returned status', () async {
+      void messageHandler(typed.Uint8Buffer messageArrived) {
+        final MqttConnectAckMessage ack = MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      final events.EventBus clientEventBus = events.EventBus();
+      final SynchronousMqttConnectionHandler ch =
+      SynchronousMqttConnectionHandler(clientEventBus);
+      broker.setMessageHandler = messageHandler;
+      final MqttClientConnectionStatus status = await ch.connect(mockBrokerAddress, mockBrokerPort,
+          MqttConnectMessage().withClientIdentifier(testClientId));
+      expect(status.state, ConnectionState.connected);
+      expect(status.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
+      final ConnectionState state = ch.disconnect();
+      expect(state, ConnectionState.disconnected);
+    });
   }, skip: false);
 
   group('Connection Keep Alive - Mock broker', () {
