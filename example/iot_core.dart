@@ -36,8 +36,7 @@ Future<int> main() async {
   // Set secure
   client.secure = true;
   // Set the trusted cert path and optionally the private key path. If this is incorrect the TLS handshake will abort and a Handshake
-  // exception will be raised, no connect ack message will be received and the broker will disconnect. Note you may not have to do this
-  // if your root cert is already cached on your platform, in which case you'll get a an already cached error.
+  // exception will be raised, no connect ack message will be received and the broker will disconnect.
   final String currDir =
       '${path.current}${path.separator}example${path.separator}';
   client.trustedCertPath = currDir + path.join('pem', 'roots.pem');

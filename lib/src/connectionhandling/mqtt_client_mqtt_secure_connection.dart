@@ -90,6 +90,13 @@ class MqttSecureConnection extends MqttConnection {
           'MqttSecureConnection::Handshake exception to the message broker {$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
+    } on TlsException catch(e) {
+      /// Trap the certificate already in hash table exception, this is not really an error
+      if (!e.toString().contains('CERT_ALREADY_IN_HASH_TABLE')) {
+        final String message =
+            'MqttSecureConnection::TLS exception raised on secure connection. Error is ${e.toString()}';
+        throw NoConnectionException(message);
+      }
     }
     return completer.future;
   }
