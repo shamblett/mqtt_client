@@ -33,17 +33,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// If set use a secure connection, note TCP only, not websocket.
   bool secure = false;
 
-  /// Trusted certificate file path for use in secure working
-  String trustedCertPath;
-
-  /// The certificate chain path for secure working.
-  String certificateChainPath;
-
-  /// Private key file path
-  String privateKeyFilePath;
-
-  /// Private key file pass phrase
-  String privateKeyFilePassphrase;
+  /// The security context for secure usage
+  SecurityContext securityContext;
 
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;

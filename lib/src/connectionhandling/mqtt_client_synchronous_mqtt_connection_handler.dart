@@ -39,8 +39,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       } else if (secure) {
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::internalConnect - secure selected');
-        connection = MqttSecureConnection(trustedCertPath, privateKeyFilePath,
-            certificateChainPath, privateKeyFilePassphrase, _clientEventBus);
+        connection = MqttSecureConnection(securityContext, _clientEventBus);
       } else {
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::internalConnect - insecure TCP selected');

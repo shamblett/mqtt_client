@@ -7,6 +7,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:typed_data/typed_data.dart' as typed;
@@ -35,16 +36,16 @@ Future<int> main() async {
   client.port = port;
   // Set secure
   client.secure = true;
-  // Set the trusted cert path and optionally the private key path. If this is incorrect the TLS handshake will abort and a Handshake
-  // exception will be raised, no connect ack message will be received and the broker will disconnect.
+  // Set the security context as you need, note this is the standard Dart SecurityContext class.
+  // If this is incorrect the TLS handshake will abort and a Handshake exception will be raised,
+  // no connect ack message will be received and the broker will disconnect.
   final String currDir =
       '${path.current}${path.separator}example${path.separator}';
-  client.trustedCertPath = currDir + path.join('pem', 'roots.pem');
-  // If needed the private key file path and the optional passphrase
-  // client.privateKeyFilePath = "....";
-  // client.privateKeyFilePassphrase = "....";
-  // If needed the certificate chain path
-  // client.certificateChainPath = "....";
+  final SecurityContext context = SecurityContext.defaultContext;
+  context.setTrustedCertificates(currDir + path.join('pem', 'roots.pem'));
+  // If needed set the private key file path and the optional passphrase and any other supported security features
+  // Note that for flutter users the parameters above can be set in byte format rather than file paths.
+  client.securityContext = context;
   // Set the protocol to V3.1.1 for iot-core, if you fail to do this you will receive a connect ack with the response code
   // 0x01 Connection Refused, unacceptable protocol version
   client.setProtocolV311();

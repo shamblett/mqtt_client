@@ -41,17 +41,8 @@ class MqttClient {
   /// secure websockets(wss).
   bool secure = false;
 
-  /// Trusted certificate file path for use in secure working
-  String trustedCertPath;
-
-  /// The certificate chain path for secure working.
-  String certificateChainPath;
-
-  /// Private key file path
-  String privateKeyFilePath;
-
-  /// Private key file pass phrase
-  String privateKeyFilePassphrase;
+  /// The security context for secure usage
+  SecurityContext securityContext = SecurityContext.defaultContext;
 
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
@@ -145,10 +136,7 @@ class MqttClient {
     if (secure) {
       _connectionHandler.secure = true;
       _connectionHandler.useWebSocket = false;
-      _connectionHandler.trustedCertPath = trustedCertPath;
-      _connectionHandler.certificateChainPath = certificateChainPath;
-      _connectionHandler.privateKeyFilePath = privateKeyFilePath;
-      _connectionHandler.privateKeyFilePassphrase = privateKeyFilePassphrase;
+      _connectionHandler.securityContext = securityContext;
     }
     _connectionHandler.onDisconnected = onDisconnected;
     _publishingManager = PublishingManager(_connectionHandler, _clientEventBus);

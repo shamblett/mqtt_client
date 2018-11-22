@@ -5,6 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
@@ -126,8 +127,11 @@ void main() {
       final SynchronousMqttConnectionHandler ch =
           SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
+      final SecurityContext context = SecurityContext.defaultContext;
       final String currDir = path.current + path.separator;
-      ch.trustedCertPath = currDir + path.join('test', 'pem', 'localhost.cert');
+      context.setTrustedCertificates(
+          currDir + path.join('test', 'pem', 'localhost.cert'));
+      ch.securityContext = context;
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
