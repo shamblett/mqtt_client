@@ -19,7 +19,7 @@ class ConnectionException implements Exception {
   String _message;
 
   /// Length of 'ConnectionException.'
-  static const int _classLength = 16;
+  static const int _classLength = 20;
 
   @override
   String toString() => _message;
