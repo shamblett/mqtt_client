@@ -116,21 +116,28 @@ void main() {
           ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     });
     test('Successful response and disconnect', () async {
+      bool connectCbCalled = false;
       void messageHandler(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
 
+      void connectCb() {
+        connectCbCalled = true;
+      }
+
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
           SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandler;
+      ch.onConnected = connectCb;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, MqttConnectionState.connected);
       expect(ch.connectionStatus.returnCode,
           MqttConnectReturnCode.connectionAccepted);
+      expect(connectCbCalled, isTrue);
       final MqttConnectionState state = ch.disconnect();
       expect(state, MqttConnectionState.disconnected);
     });
