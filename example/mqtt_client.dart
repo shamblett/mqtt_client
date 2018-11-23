@@ -41,6 +41,9 @@ Future<int> main() async {
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
 
+  /// Add the successful connection callback
+  client.onConnected = onConnected;
+
   /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
   /// You can add these before connection or change them dynamically after connection if
   /// you wish.
@@ -140,5 +143,11 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+  exit(-1);
+}
+
+/// The successful connect callback
+void onConnected() {
+  print('EXAMPLE::OnConnected client callback - Client connection was sucessful');
   exit(-1);
 }
