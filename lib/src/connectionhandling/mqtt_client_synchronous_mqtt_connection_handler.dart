@@ -122,6 +122,10 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
             'SynchronousMqttConnectionHandler::_connectAckProcessor - state = connected');
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
+        // Call the connected callback if we have one
+        if ( onConnected != null ) {
+          onConnected();
+        }
       }
     } on Exception {
       _performConnectionDisconnect();

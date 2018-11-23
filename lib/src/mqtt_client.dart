@@ -10,6 +10,9 @@ part of mqtt_client;
 /// The client disconnect callback type
 typedef DisconnectCallback = void Function();
 
+/// The client Connect callback type
+typedef ConnectCallback = void Function();
+
 /// A client class for interacting with MQTT Data Packets
 class MqttClient {
   /// Initializes a new instance of the MqttClient class using the default Mqtt Port.
@@ -79,6 +82,9 @@ class MqttClient {
   /// Client disconnect callback, called on unsolicited disconnect.
   DisconnectCallback onDisconnected;
 
+  /// Client connect callback, called on successful connect
+  ConnectCallback onConnected;
+
   /// Subscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been subscribed to.
   SubscribeCallback _onSubscribed;
@@ -139,6 +145,7 @@ class MqttClient {
       _connectionHandler.securityContext = securityContext;
     }
     _connectionHandler.onDisconnected = onDisconnected;
+    _connectionHandler.onConnected = onConnected;
     _publishingManager = PublishingManager(_connectionHandler, _clientEventBus);
     _subscriptionsManager = SubscriptionsManager(
         _connectionHandler, _publishingManager, _clientEventBus);

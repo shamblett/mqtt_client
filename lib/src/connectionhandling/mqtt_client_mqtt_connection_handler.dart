@@ -36,6 +36,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// The security context for secure usage
   SecurityContext securityContext;
 
+  /// Successful connection callback
+  ConnectCallback onConnected;
+
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
 
