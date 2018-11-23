@@ -123,7 +123,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
         // Call the connected callback if we have one
-        if ( onConnected != null ) {
+        if (onConnected != null) {
           onConnected();
         }
       }

@@ -143,13 +143,14 @@ void main() {
 
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
-      SynchronousMqttConnectionHandler(clientEventBus);
+          SynchronousMqttConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandler;
-      final MqttClientConnectionStatus status = await ch.connect(mockBrokerAddress, mockBrokerPort,
+      final MqttClientConnectionStatus status = await ch.connect(
+          mockBrokerAddress,
+          mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(status.state, MqttConnectionState.connected);
-      expect(status.returnCode,
-          MqttConnectReturnCode.connectionAccepted);
+      expect(status.returnCode, MqttConnectReturnCode.connectionAccepted);
       final MqttConnectionState state = ch.disconnect();
       expect(state, MqttConnectionState.disconnected);
     });

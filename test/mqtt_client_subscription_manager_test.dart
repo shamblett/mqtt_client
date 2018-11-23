@@ -32,7 +32,8 @@ void main() {
       final SubscriptionsManager subs =
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -58,7 +59,8 @@ void main() {
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.onSubscribed = subCallback;
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -86,7 +88,8 @@ void main() {
       final SubscriptionsManager subs =
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -99,7 +102,8 @@ void main() {
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atLeastOnce);
       subs.confirmSubscription(subAckMsg);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
     });
     test('Get subscription with valid topic returns subscription', () {
       testCHS.sentMessages.clear();
@@ -111,7 +115,8 @@ void main() {
       final SubscriptionsManager subs =
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -137,7 +142,8 @@ void main() {
       final SubscriptionsManager subs =
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -163,7 +169,8 @@ void main() {
       final SubscriptionsManager subs =
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -190,7 +197,8 @@ void main() {
           SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       subs.onUnsubscribed = unsubCallback;
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
+      expect(
+          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
       final MqttSubscribeMessage msg = testCHS.sentMessages[0];
@@ -217,8 +225,8 @@ void main() {
       final MqttUnsubscribeAckMessage unsubAck =
           MqttUnsubscribeAckMessage().withMessageIdentifier(1);
       subs.confirmUnsubscribe(unsubAck);
-      expect(
-          subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.doesNotExist);
+      expect(subs.getSubscriptionsStatus(topic),
+          MqttSubscriptionStatus.doesNotExist);
       expect(cbCalled, isTrue);
     });
     test('Change notification', () {

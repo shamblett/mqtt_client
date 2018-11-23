@@ -30,7 +30,8 @@ class MqttSecureConnection extends MqttConnection {
         Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttSecureConnection::connect');
     try {
-      SecureSocket.connect(server, port, context:context).then((SecureSocket socket) {
+      SecureSocket.connect(server, port, context: context)
+          .then((SecureSocket socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;
         readWrapper = ReadWrapper();

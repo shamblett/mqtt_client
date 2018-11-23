@@ -148,5 +148,6 @@ void onDisconnected() {
 
 /// The successful connect callback
 void onConnected() {
-  print('EXAMPLE::OnConnected client callback - Client connection was sucessful');
+  print(
+      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
 }
