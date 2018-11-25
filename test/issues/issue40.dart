@@ -27,7 +27,7 @@ Future<int> main() async {
       completer.completeError(null);
     }
 
-    if (client.connectionState == ConnectionState.connected) {
+    if (client.connectionStatus.state  == MqttConnectionState.connected) {
       print("EXAMPLE::Mosquitto client connected");
       completer.complete();
     } else {
