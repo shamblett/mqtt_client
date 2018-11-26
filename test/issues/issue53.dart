@@ -9,7 +9,7 @@ Future<int> main() async {
 
   const String clientId = 'SJHMQTTTest_53';
   client = MqttClient('test.mosquitto.org', clientId);
-  client.setProtocolV31();
+  client.setProtocolV311();
   client.keepAlivePeriod = 20;
   client.port = 1883;
   client.logging(on: true);
@@ -38,8 +38,7 @@ Future<int> main() async {
     ),
   );
 
-  const String id = 'SJHTest';
-  client.publishMessage('u\$id', MqttQos.exactlyOnce, builder.payload);
+  client.publishMessage('u\SJHTest', MqttQos.exactlyOnce, builder.payload);
 
   print('Sleeping...');
   await MqttUtilities.asyncSleep(120);
