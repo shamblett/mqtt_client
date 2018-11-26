@@ -1270,7 +1270,7 @@ void main() {
     test('Serialisation - Valid payload', () {
       // Publish complete msg with message identifier 4
       final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
-      expected[0] = 0x60;
+      expected[0] = 0x62;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
