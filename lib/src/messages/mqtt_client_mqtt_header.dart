@@ -28,7 +28,7 @@ class MqttHeader {
   bool duplicate = false;
 
   /// Gets or sets the Quality of Service indicator for the message.
-  MqttQos qos = MqttQos.atLeastOnce;
+  MqttQos qos = MqttQos.atMostOnce;
 
   /// Gets or sets a value indicating whether this MQTT message should be retained by the message broker for transmission to new subscribers.
   /// True if message should be retained by the message broker; otherwise, false.

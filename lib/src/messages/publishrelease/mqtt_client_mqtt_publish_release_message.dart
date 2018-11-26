@@ -12,6 +12,8 @@ class MqttPublishReleaseMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage() {
     header = MqttHeader().asType(MqttMessageType.publishRelease);
+    // Qos is specified for this message
+    header.qos = MqttQos.atLeastOnce;
     variableHeader = MqttPublishReleaseVariableHeader();
   }
 
