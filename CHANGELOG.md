@@ -1,6 +1,6 @@
 #5.0.0
-Issues 48, 49 50 and 52, breaking API change for connection state and security context
-hence the major version bump.
+Roll up release for issues 48, 49, 50, 52 and 53, warning - breaking API change for connection state and security context
+in secure mode hence the major version bump.
 
 #4.0.0
 Issue 45, better connection fail reporting, update linter, note breaking API change
