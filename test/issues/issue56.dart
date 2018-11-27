@@ -5,7 +5,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 Future<int> main() async {
   const String broker = 'mq.meeo.xyz';
   const String username = 'md-hi75gqj';
-  const String password = 'some-password';
+  const String password = 'user_K8SzwBbLqBEwfIqM';
   final MqttClient client = MqttClient(broker, '');
   client.logging(on: true);
   client.onDisconnected = onDisconnected;
