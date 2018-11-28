@@ -1,18 +1,21 @@
-#5.0.0
+# 5.1.0
+Issue 56
+
+# 5.0.0
 Roll up release for issues 48, 49, 50, 52 and 53, warning - breaking API change for connection state and security context
 in secure mode hence the major version bump.
 
-#4.0.0
+# 4.0.0
 Issue 45, better connection fail reporting, update linter, note breaking API change
 for turning logging on/off
 
-#3.3.6
+# 3.3.6
 Formatting
 
-#3.3.5
+# 3.3.5
 Issue 40, disconnected clients
 
-#3.3.4
+# 3.3.4
 Formatting
 
 # 3.3.3

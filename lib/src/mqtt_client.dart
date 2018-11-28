@@ -115,8 +115,10 @@ class MqttClient {
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
 
-  /// Performs a synchronous connect to the message broker with an optional username and password
-  /// for the purposes of authentication.
+  /// Performs a connect to the message broker with an optional username and password
+  /// for the purposes of authentication. If a username and password are supplied these will override
+  /// any previously set in a supplied connection message so if you supply your own connection message
+  /// and use the authenticateAs method to set these parameters do not set them again here.
   Future<MqttClientConnectionStatus> connect(
       [String username, String password]) async {
     if (username != null) {
@@ -134,6 +136,9 @@ class MqttClient {
       MqttLogger.log(
           'Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ');
     }
+    // Set the authentication parameters in the connection message if we have one
+    connectionMessage?.authenticateAs(username, password);
+
     _connectionHandler = SynchronousMqttConnectionHandler(_clientEventBus);
     if (useWebSocket) {
       _connectionHandler.secure = false;
