@@ -7,6 +7,7 @@ Future<int> main() async {
   client.keepAlivePeriod = 60;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
+  client.onUnsubscribed = onUnsubscribed;
 
   final MqttConnectMessage connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
@@ -74,6 +75,11 @@ Future<int> main() async {
 /// The subscribed callback
 void onSubscribed(String topic) {
   print('EXAMPLE::Subscription confirmed for topic $topic');
+}
+
+/// The unsubscribed callback
+void onUnsubscribed(String topic) {
+  print('EXAMPLE::Unsubscribed from topic $topic');
 }
 
 /// The unsolicited disconnect callback

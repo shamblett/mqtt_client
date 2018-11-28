@@ -145,6 +145,9 @@ class SubscriptionsManager {
   bool confirmUnsubscribe(MqttMessage msg) {
     final MqttUnsubscribeAckMessage unSubAck = msg;
     subscriptions.remove(unSubAck.variableHeader.topicName);
+    if (onUnsubscribed != null) {
+      onUnsubscribed(unSubAck.variableHeader.topicName);
+    }
     return true;
   }
 
