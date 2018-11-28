@@ -150,7 +150,7 @@ class SubscriptionsManager {
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage msg) {
     final MqttUnsubscribeAckMessage unSubAck = msg;
-    String topic =
+    final String topic =
         pendingUnsubscriptions[unSubAck.variableHeader.messageIdentifier];
     subscriptions.remove(topic);
     pendingUnsubscriptions.remove(unSubAck.variableHeader.messageIdentifier);
