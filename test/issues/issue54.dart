@@ -64,7 +64,7 @@ Future<int> main() async {
   final MqttClientPayloadBuilder builderM = MqttClientPayloadBuilder();
   builderM.addString('Hello from spl again');
   client.subscribe(topic, MqttQos.exactlyOnce);
-  client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);
+  client.publishMessage(topic, MqttQos.exactlyOnce, builderM.payload);
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(10);
   print('EXAMPLE::Disconnecting');

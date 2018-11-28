@@ -34,6 +34,10 @@ class SubscriptionsManager {
   /// A list of subscriptions that are pending acknowledgement, keyed on the message identifier.
   Map<int, Subscription> pendingSubscriptions = Map<int, Subscription>();
 
+  /// A list of unsubscribe requests waiting for an unsubscribe ack message.
+  /// Index is the message identifier of the unsubscribe message
+  Map<int, String> pendingUnsubscriptions = Map<int, String>();
+
   /// The connection handler that we use to subscribe to subscription acknowledgements.
   IMqttConnectionHandler connectionHandler;
 
@@ -118,6 +122,8 @@ class SubscriptionsManager {
             messageIdentifierDispenser.getNextMessageIdentifier())
         .fromTopic(topic);
     connectionHandler.sendMessage(unsubscribeMsg);
+    pendingUnsubscriptions[unsubscribeMsg.variableHeader.messageIdentifier] =
+        topic;
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
@@ -144,9 +150,12 @@ class SubscriptionsManager {
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage msg) {
     final MqttUnsubscribeAckMessage unSubAck = msg;
-    subscriptions.remove(unSubAck.variableHeader.topicName);
+    String topic =
+        pendingUnsubscriptions[unSubAck.variableHeader.messageIdentifier];
+    subscriptions.remove(topic);
+    pendingUnsubscriptions.remove(unSubAck.variableHeader.messageIdentifier);
     if (onUnsubscribed != null) {
-      onUnsubscribed(unSubAck.variableHeader.topicName);
+      onUnsubscribed(topic);
     }
     return true;
   }
