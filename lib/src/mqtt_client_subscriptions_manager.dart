@@ -144,22 +144,7 @@ class SubscriptionsManager {
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage msg) {
     final MqttUnsubscribeAckMessage unSubAck = msg;
-    String subKey;
-    Subscription sub;
-    subscriptions.forEach((String key, Subscription value) {
-      if (value.messageIdentifier ==
-          unSubAck.variableHeader.messageIdentifier) {
-        sub = value;
-        subKey = key;
-      }
-    });
-    // If we have the subscription remove it
-    if (sub != null) {
-      if (onUnsubscribed != null) {
-        onUnsubscribed(subKey);
-      }
-      subscriptions.remove(subKey);
-    }
+    subscriptions.remove(unSubAck.variableHeader.topicName);
     return true;
   }
 

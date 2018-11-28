@@ -33,10 +33,10 @@ Future<int> main() async {
 
     await MqttUtilities.asyncSleep(2);
 
-    MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+    final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
     builder.addString(
       json.encode(
-        {
+        <String,dynamic>{
           'type': 'msgText',
           'data': 'TextMessage',
           'identifier': Random().nextInt(1000000),
