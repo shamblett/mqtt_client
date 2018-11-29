@@ -216,7 +216,11 @@ class MqttClient {
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       _subscriptionsManager.getSubscriptionsStatus(topic);
 
-  /// Disconnect from the broker
+  /// Disconnect from the broker.
+  /// This is a hard disconnect, a disconnect message is sent to the broker and the client is
+  /// then reset to its pre-connection state, i.e all subscriptions are deleted, on subsequent reconnection the
+  /// use must re-subscribe, also the updates change notifier is re-initialised and as such the user must re-listen on this
+  /// stream.
   void disconnect() {
     _connectionHandler?.disconnect();
     _publishingManager = null;
