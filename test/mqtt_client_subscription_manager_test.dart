@@ -221,12 +221,15 @@ void main() {
       expect(unSub.variableHeader.messageIdentifier, 2);
       expect(unSub.payload.subscriptions.length, 1);
       expect(unSub.payload.subscriptions[0], topic);
+      expect(subs.pendingUnsubscriptions.length, 1);
+      expect(subs.pendingUnsubscriptions[2], topic);
       // Unsubscribe ack
       final MqttUnsubscribeAckMessage unsubAck =
-          MqttUnsubscribeAckMessage().withMessageIdentifier(1);
+          MqttUnsubscribeAckMessage().withMessageIdentifier(2);
       subs.confirmUnsubscribe(unsubAck);
       expect(subs.getSubscriptionsStatus(topic),
           MqttSubscriptionStatus.doesNotExist);
+      expect(subs.pendingUnsubscriptions.length, 0);
       expect(cbCalled, isTrue);
     });
     test('Change notification', () {
