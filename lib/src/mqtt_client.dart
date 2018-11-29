@@ -110,7 +110,7 @@ class MqttClient {
   }
 
   /// The event bus
-  events.EventBus _clientEventBus = events.EventBus();
+  events.EventBus _clientEventBus;
 
   /// The change notifier on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
@@ -139,6 +139,8 @@ class MqttClient {
     // Set the authentication parameters in the connection message if we have one
     connectionMessage?.authenticateAs(username, password);
 
+    // Do the connection
+    _clientEventBus = events.EventBus();
     _connectionHandler = SynchronousMqttConnectionHandler(_clientEventBus);
     if (useWebSocket) {
       _connectionHandler.secure = false;
@@ -223,6 +225,9 @@ class MqttClient {
     _keepAlive = null;
     _connectionHandler = null;
     _clientEventBus.destroy();
+    if (onDisconnected != null) {
+      onDisconnected();
+    }
   }
 
   /// Turn on logging, true to start, false to stop

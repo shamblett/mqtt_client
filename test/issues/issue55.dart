@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+  final MqttClient client = MqttClient('test.mosquito.org', '');
   client.logging(on: false);
   client.keepAlivePeriod = 60;
 
@@ -47,7 +47,7 @@ Future<int> main() async {
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+        'EXAMPLE::1st Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
   });
 
@@ -68,14 +68,24 @@ Future<int> main() async {
   client.disconnect();
   await MqttUtilities.asyncSleep(10);
 
-  print("EXAMPLE::Connecting again");
+  print('EXAMPLE::Connecting again');
   await client.connect();
   print('EXAMPLE::Publishing our topic again');
   await MqttUtilities.asyncSleep(2);
+  client.subscribe(topic, MqttQos.exactlyOnce);
+  client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+    final MqttPublishMessage recMess = c[0].payload;
+    final String pt =
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+    print(
+        'EXAMPLE::2nd Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+    print('');
+  });
   client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(20);
-  print("end exc");
+  print('end exc');
   return 0;
 }
 

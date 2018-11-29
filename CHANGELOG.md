@@ -1,5 +1,5 @@
 # 5.1.0
-Issues 54 and 56
+Issues 54, 55 and 56
 
 # 5.0.0
 Roll up release for issues 48, 49, 50, 52 and 53, warning - breaking API change for connection state and security context
