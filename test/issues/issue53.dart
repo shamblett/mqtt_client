@@ -20,8 +20,8 @@ Future<int> main() async {
     exit(-1);
   };
 
-  client.connectionMessage = MqttConnectMessage()
-      .withClientIdentifier(clientId);
+  client.connectionMessage =
+      MqttConnectMessage().withClientIdentifier(clientId);
 
   client.connectionMessage.startClean();
 
@@ -30,7 +30,7 @@ Future<int> main() async {
   final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
   builder.addString(
     json.encode(
-      <String,dynamic>{
+      <String, dynamic>{
         'type': 'msgText',
         'data': 'message data',
         'identifier': Random().nextInt(1000000),
@@ -46,5 +46,4 @@ Future<int> main() async {
   print('Client exiting');
 
   return 0;
-  
 }

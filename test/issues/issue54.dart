@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('localhost', '');
+  final MqttClient client = MqttClient('test.mosquitto.org', '');
   client.logging(on: false);
   client.keepAlivePeriod = 60;
   client.onDisconnected = onDisconnected;
