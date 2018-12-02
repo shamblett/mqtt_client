@@ -43,7 +43,7 @@ Future<int> main() async {
     );
 
     client.publishMessage('u/$id', MqttQos.exactlyOnce, builder.payload);
-  }).catchError(() {
+  }).catchError((e) {
     print('Connection failed');
   });
 
