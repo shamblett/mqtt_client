@@ -12,11 +12,13 @@ void main() async {
 
   MqttClientConnectionStatus val = await Mqtt.connect();
   print('===> Connection Result: $val');
+  if ( val != null ) {
   Mqtt.subscribe();
   for ( int i = 0; i<=5; i++ ) {
     await Mqtt.subAndPub();
-    print('Publish Attempt $i ......\n' );
+    print('Publish Attempt $i ......\n');
     await MqttUtilities.asyncSleep(2);
+  }
   }
 }
 
@@ -45,16 +47,19 @@ class Mqtt {
   }
 
   static Future connect() async {
+    MqttClientConnectionStatus status;
     try {
-      MqttClientConnectionStatus status = await client.connect();
+      status = await client.connect();
 
       print('===> Connection Status: $status');
-
       return status;
+
     } catch (e) {
       print(e);
-      return false;
+      return status;
     }
+
+
   }
 
   static subscribe() {
