@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:mqtt_client/mqtt_client.dart';
 
 const String clientId = '5bc71e3ea74ad804cc04a856';
-const String token = '2844865:94da2a801302660754642a85592f7755';
+const String token = '2844865:b08b650bdef3774426b2b718f6ab2d6e';
 const String id = '2844865';
 
 void main() async {
@@ -14,7 +14,7 @@ void main() async {
   print('===> Connection Result: $val');
   if ( val != null ) {
   Mqtt.subscribe();
-  for ( int i = 0; i<=5; i++ ) {
+  for ( int i = 0; i<=10; i++ ) {
     await Mqtt.subAndPub();
     print('Publish Attempt $i ......\n');
     await MqttUtilities.asyncSleep(2);
