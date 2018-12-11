@@ -79,7 +79,7 @@ class MockBroker {
 
   /// Close the broker socket
   void close() {
-    client.destroy();
+    client?.destroy();
   }
 }
 

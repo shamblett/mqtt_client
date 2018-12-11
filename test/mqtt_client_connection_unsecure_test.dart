@@ -246,6 +246,7 @@ void main() {
       await MqttUtilities.asyncSleep(10);
       print('Disconnecting');
       client.disconnect();
+      expect(client.connectionStatus.state, MqttConnectionState.disconnected);
       broker.close();
     });
   }, skip: false);
