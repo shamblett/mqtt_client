@@ -1,6 +1,6 @@
 name: mqtt_client
 description: A server side MQTT client for Dart supporting both secure sockets and websockets.
-version: 5.1.0
+version: 5.1.1
 author: Steve Hamblett <steve.hamblett@linux.com>
 homepage: https://github.com/shamblett/mqtt_client
 

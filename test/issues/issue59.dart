@@ -80,8 +80,8 @@ Future<int> main() async {
     exit(-1);
   }
 
-  await MqttUtilities.asyncSleep(60);
   print('EXAMPLE::Please stop the broker now......');
+  await MqttUtilities.asyncSleep(60);
   return 0;
 }
 
