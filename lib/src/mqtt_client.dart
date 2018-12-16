@@ -221,6 +221,7 @@ class MqttClient {
   /// then reset to its pre-connection state, i.e all subscriptions are deleted, on subsequent reconnection the
   /// use must re-subscribe, also the updates change notifier is re-initialised and as such the user must re-listen on this
   /// stream.
+  /// Do NOT call this in any onDisconnect callback that may be set, this will result in a loop situation.
   void disconnect() {
     _connectionHandler?.disconnect();
     _publishingManager = null;
