@@ -60,7 +60,7 @@ class MqttConnectFlags {
     reserved1 = (connectFlagsByte & 1) == 1;
     cleanStart = (connectFlagsByte & 2) == 2;
     willFlag = (connectFlagsByte & 4) == 4;
-    willQos = MqttQos.values[((connectFlagsByte >> 3) & 3)];
+    willQos = MqttUtilities.getQosLevel((connectFlagsByte >> 3) & 3);
     willRetain = (connectFlagsByte & 32) == 32;
     passwordFlag = (connectFlagsByte & 64) == 64;
     usernameFlag = (connectFlagsByte & 128) == 128;

@@ -19,6 +19,23 @@ class MqttUtilities {
   static void syncSleep(int seconds) {
     sleep(Duration(seconds: seconds));
   }
+
+  /// Qos conversion, always use this to get a Qos
+  /// enumeration from a value
+  static MqttQos getQosLevel(int value) {
+    switch (value) {
+      case 0:
+        return MqttQos.atMostOnce;
+      case 1:
+        return MqttQos.atLeastOnce;
+      case 2:
+        return MqttQos.exactlyOnce;
+      case 0x80:
+        return MqttQos.failure;
+      default:
+        return MqttQos.reserved1;
+    }
+  }
 }
 
 /// Cancellable asynchronous sleep support class

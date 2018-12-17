@@ -44,7 +44,7 @@ class MqttSubscribePayload extends MqttPayload {
     // Read all the topics and qos subscriptions from the message payload
     while (payloadBytesRead < payloadLength) {
       final String topic = payloadStream.readMqttStringM();
-      final MqttQos qos = MqttQos.values[payloadStream.readByte()];
+      final MqttQos qos = MqttUtilities.getQosLevel(payloadStream.readByte());
       payloadBytesRead +=
           topic.length + 3; // +3 = Mqtt string length bytes + qos byte
       addSubscription(topic, qos);

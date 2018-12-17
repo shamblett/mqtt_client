@@ -62,7 +62,7 @@ class MqttHeader {
     final int firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
     retain = (firstHeaderByte & 1) == 1;
-    qos = MqttQos.values[((firstHeaderByte & 6) >> 1)];
+    qos = MqttUtilities.getQosLevel((firstHeaderByte & 6) >> 1);
     duplicate = ((firstHeaderByte & 8) >> 3) == 1;
     messageType = MqttMessageType.values[((firstHeaderByte & 240) >> 4)];
 

@@ -97,6 +97,18 @@ class MqttClient {
     _subscriptionsManager?.onSubscribed = cb;
   }
 
+  /// Subscribed failed callback, function returns a void and takes a
+  /// string parameter, the topic that has failed subscription.
+  SubscribeFailCallback _onSubscribeFail;
+
+  /// On subscribed fail
+  SubscribeFailCallback get onSubscribeFail => _onSubscribeFail;
+
+  set onSubscribeFail(SubscribeFailCallback cb) {
+    _onSubscribeFail = cb;
+    _subscriptionsManager?.onSubscribeFail = cb;
+  }
+
   /// Unsubscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been unsubscribed.
   UnsubscribeCallback _onUnsubscribed;

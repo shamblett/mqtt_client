@@ -42,7 +42,8 @@ class MqttSubscribeAckPayload extends MqttPayload {
     final int payloadLength = header.messageSize - variableHeader.length;
     // Read the qos grants from the message payload
     while (payloadBytesRead < payloadLength) {
-      final MqttQos granted = MqttQos.values[payloadStream.readByte()];
+      final MqttQos granted =
+          MqttUtilities.getQosLevel(payloadStream.readByte());
       payloadBytesRead++;
       addGrant(granted);
     }

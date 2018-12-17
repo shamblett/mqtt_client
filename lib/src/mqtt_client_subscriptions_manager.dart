@@ -9,6 +9,7 @@ part of mqtt_client;
 
 /// Subscribed and Unsubscribed callback typedefs
 typedef SubscribeCallback = void Function(String topic);
+typedef SubscribeFailCallback = void Function(String topic);
 typedef UnsubscribeCallback = void Function(String topic);
 
 /// A class that can manage the topic subscription process.
@@ -49,6 +50,9 @@ class SubscriptionsManager {
 
   /// Unsubscribed
   UnsubscribeCallback onUnsubscribed;
+
+  /// Subscription failed callback
+  SubscribeFailCallback onSubscribeFail;
 
   /// The event bus
   events.EventBus _clientEventBus;
@@ -127,7 +131,7 @@ class SubscriptionsManager {
   }
 
   /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
-  /// Returns true, always.
+  /// Returns true on successful subscription, false on fail
   bool confirmSubscription(MqttMessage msg) {
     final MqttSubscribeAckMessage subAck = msg;
     String topic;
@@ -140,6 +144,16 @@ class SubscriptionsManager {
           pendingSubscriptions[subAck.variableHeader.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
     }
+
+    // Check the Qos, we can get a failure indication(value 0x80) here if the
+    // topic cannot be subscribed to.
+    if (msg.header.qos == MqttQos.failure) {
+      if (onSubscribeFail != null) {
+        onSubscribeFail(topic);
+        return false;
+      }
+    }
+    // Success, call the subscribed callback
     if (onSubscribed != null) {
       onSubscribed(topic);
     }
