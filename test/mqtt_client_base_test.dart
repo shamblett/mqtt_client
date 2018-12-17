@@ -555,6 +555,18 @@ void main() {
       final Duration difference = end.difference(start);
       expect(difference.inSeconds, 1);
     });
+    test('Get Qos Level', () {
+      MqttQos qos = MqttUtilities.getQosLevel(0);
+      expect(qos, MqttQos.atMostOnce);
+      qos = MqttUtilities.getQosLevel(1);
+      expect(qos, MqttQos.atLeastOnce);
+      qos = MqttUtilities.getQosLevel(2);
+      expect(qos, MqttQos.exactlyOnce);
+      qos = MqttUtilities.getQosLevel(0x80);
+      expect(qos, MqttQos.failure);
+      qos = MqttUtilities.getQosLevel(0x55);
+      expect(qos, MqttQos.reserved1);
+    });
   });
 
   group('Payload builder', () {
