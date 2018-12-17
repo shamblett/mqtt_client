@@ -12,18 +12,19 @@ import 'package:mqtt_client/mqtt_client.dart';
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
 /// files for separate subscribe/publish tests.
-Future<int> main() async {
-  /// First create a client, the client is constructed with a broker name, client identifier
-  /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
-  /// client connecting to a MQTT broker. As the word identifier already suggests, it should be unique per broker.
-  /// The broker uses it for identifying the client and the current state of the client. If you don’t need a state
-  /// to be hold by the broker, in MQTT 3.1.1 you can set an empty ClientId, which results in a connection without any state.
-  /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
-  /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
-  /// of 1883 is used.
-  /// If you want to use websockets rather than TCP see below.
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+///
+///  First create a client, the client is constructed with a broker name, client identifier
+///   and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
+///   client connecting to a MQTT broker. As the word identifier already suggests, it should be unique per broker.
+///   The broker uses it for identifying the client and the current state of the client. If you don’t need a state
+///   to be hold by the broker, in MQTT 3.1.1 you can set an empty ClientId, which results in a connection without any state.
+///   A condition is that clean session connect flag is true, otherwise the connection will be rejected.
+///   The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
+///   of 1883 is used.
 
+final MqttClient client = MqttClient('test.mosquitto.org', '');
+
+Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
   /// for details.
   /// To use websockets add the following lines -:
@@ -93,5 +94,10 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+  if (client.connectionStatus.state != MqttConnectionState.disconnected) {
+    print('EXAMPLE::ERROR - client connection state should be disconnected');
+  } else {
+    print('EXAMPLE::SUCCESS - client is indicating disconnected');
+  }
   exit(-1);
 }
