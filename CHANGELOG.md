@@ -1,5 +1,5 @@
 # 5.1.1
-Issue 59
+Issues 59 + 60
 
 # 5.1.0
 Issues 54, 55 and 56

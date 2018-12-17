@@ -20,6 +20,12 @@ enum MqttQos {
   /// it is successfully sent..
   exactlyOnce,
 
-  /// Reserved by the MQTT Spec. Currently unused.
-  reserved1
+  /// Reserved by the MQTT Spec. Currently unused from here on until the fail
+  /// indicator below
+  reserved1,
+
+  /// Failure indication
+  /// This is a QOS value of 128, used in a sub ack message to indicate failure
+  /// to subscribe to a topic
+  failure
 }
