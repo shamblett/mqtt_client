@@ -143,11 +143,14 @@ class SubscriptionsManager {
       subscriptions[topic] =
           pendingSubscriptions[subAck.variableHeader.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader.messageIdentifier);
+    } else {
+      return false;
     }
 
     // Check the Qos, we can get a failure indication(value 0x80) here if the
     // topic cannot be subscribed to.
-    if (msg.header.qos == MqttQos.failure) {
+    if (subAck.payload.qosGrants[0] == MqttQos.failure) {
+      subscriptions.remove(topic);
       if (onSubscribeFail != null) {
         onSubscribeFail(topic);
         return false;
