@@ -88,8 +88,11 @@ Future<int> main() async {
     exit(-1);
   }
 
-  print('EXAMPLE::Please stop the broker now......');
-  await MqttUtilities.asyncSleep(60);
+  print('EXAMPLE::subcribing to invalid topic');
+  client.subscribe('house#', MqttQos.atLeastOnce);
+
+  print('EXAMPLE::Sleeping......');
+  await MqttUtilities.asyncSleep(20);
   return 0;
 }
 
