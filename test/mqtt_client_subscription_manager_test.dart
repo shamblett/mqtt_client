@@ -22,6 +22,26 @@ final TestConnectionHandlerSend testCHS = TestConnectionHandlerSend();
 
 void main() {
   group('Manager', () {
+    test('Invalid topic returns null subscription', () {
+      bool cbCalled = false;
+      void subCallback(String topic) {
+        expect(topic, 'house#');
+        cbCalled = true;
+      }
+
+      testCHS.sentMessages.clear();
+      final events.EventBus clientEventBus = events.EventBus();
+      final PublishingManager pm = PublishingManager(testCHS, clientEventBus);
+      pm.messageIdentifierDispenser.reset();
+      const String topic = 'house#';
+      const MqttQos qos = MqttQos.atLeastOnce;
+      final SubscriptionsManager subs =
+          SubscriptionsManager(testCHS, pm, clientEventBus);
+      subs.onSubscribeFail = subCallback;
+      final Subscription ret = subs.registerSubscription(topic, qos);
+      expect(ret, isNull);
+      expect(cbCalled, isTrue);
+    });
     test('Subscription request creates pending subscription', () {
       testCHS.sentMessages.clear();
       final events.EventBus clientEventBus = events.EventBus();
@@ -107,7 +127,9 @@ void main() {
       expect(
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
     });
-    test('Acknowledged but failed subscription request removed pending subscription', () {
+    test(
+        'Acknowledged but failed subscription request removed pending subscription',
+        () {
       bool cbCalled = false;
       void subFailCallback(String topic) {
         expect(topic, 'testtopic');
@@ -121,7 +143,7 @@ void main() {
       const String topic = 'testtopic';
       const MqttQos qos = MqttQos.atLeastOnce;
       final SubscriptionsManager subs =
-      SubscriptionsManager(testCHS, pm, clientEventBus);
+          SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.onSubscribeFail = subFailCallback;
       subs.registerSubscription(topic, qos);
       expect(
@@ -139,7 +161,8 @@ void main() {
           .addQosGrant(MqttQos.failure);
       final bool ret = subs.confirmSubscription(subAckMsg);
       expect(ret, isFalse);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.doesNotExist);
+      expect(subs.getSubscriptionsStatus(topic),
+          MqttSubscriptionStatus.doesNotExist);
       expect(cbCalled, isTrue);
     });
     test('Get subscription with valid topic returns subscription', () {
