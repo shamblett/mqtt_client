@@ -99,6 +99,8 @@ class MqttClient {
 
   /// Subscribed failed callback, function returns a void and takes a
   /// string parameter, the topic that has failed subscription.
+  /// Invoked either by subscribe if an invalid topic is supplied or on
+  /// reception of a failed subscribe indication from the broker.
   SubscribeFailCallback _onSubscribeFail;
 
   /// On subscribed fail
@@ -170,6 +172,7 @@ class MqttClient {
         _connectionHandler, _publishingManager, _clientEventBus);
     _subscriptionsManager.onSubscribed = onSubscribed;
     _subscriptionsManager.onUnsubscribed = onUnsubscribed;
+    _subscriptionsManager.onSubscribeFail = onSubscribeFail;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
     final MqttConnectMessage connectMessage =
@@ -191,8 +194,7 @@ class MqttClient {
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
-  /// Returns the subscription.
-  /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
+  /// Returns the subscription or null on failure
   Subscription subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus.state != MqttConnectionState.connected) {
       throw ConnectionException(_connectionHandler.connectionStatus.state);

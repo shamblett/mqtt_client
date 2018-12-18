@@ -54,6 +54,9 @@ Future<int> main() async {
   /// you wish.
   client.onSubscribed = onSubscribed;
 
+  /// Add a subscribe fail callback
+  client.onSubscribeFail = onSubscribeFail;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
@@ -92,13 +95,18 @@ Future<int> main() async {
   client.subscribe('house#', MqttQos.atLeastOnce);
 
   print('EXAMPLE::Sleeping......');
-  await MqttUtilities.asyncSleep(20);
+  await MqttUtilities.asyncSleep(10);
   return 0;
 }
 
 /// The subscribed callback
 void onSubscribed(String topic) {
   print('EXAMPLE::Subscription confirmed for topic $topic');
+}
+
+/// The subscribed fail callback
+void onSubscribeFail(String topic) {
+  print('EXAMPLE::Subscription failed for topic $topic');
 }
 
 /// The unsolicited disconnect callback

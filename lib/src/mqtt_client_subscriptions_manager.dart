@@ -87,6 +87,7 @@ class SubscriptionsManager {
   }
 
   /// Creates a new subscription for the specified topic.
+  /// If the subscription cannot be created null is returned.
   Subscription createNewSubscription(String topic, MqttQos qos) {
     try {
       final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
@@ -105,9 +106,13 @@ class SubscriptionsManager {
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
       return sub;
-    } on Exception {
-      throw InvalidTopicException(
-          'from SubscriptionManager::createNewSubscription', topic);
+    } on Exception catch(e){
+      MqttLogger.log(
+          'Subscriptionsmanager::createNewSubscription exception raised, text is ${e}');
+      if ( onSubscribeFail != null ) {
+        onSubscribeFail(topic);
+      }
+      return null;
     }
   }
 
