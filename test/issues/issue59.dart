@@ -104,7 +104,11 @@ void onDisconnected() {
   if (client.connectionStatus.state != MqttConnectionState.disconnected) {
     print('EXAMPLE::ERROR - client connection state should be disconnected');
   } else {
-    print('EXAMPLE::SUCCESS - client is indicating disconnected');
+    if (client.connectionStatus.returnCode == MqttConnectReturnCode.unsolicited ) {
+      print('EXAMPLE::SUCCESS - client is indicating unsolicited disconnect');
+    } else {
+      print('EXAMPLE::WARNING - client is indicating disconnected but NOT unsolicited');
+    }
   }
   exit(-1);
 }

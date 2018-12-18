@@ -25,5 +25,9 @@ enum MqttConnectReturnCode {
   badUsernameOrPassword,
 
   /// Not authorised
-  notAuthorized
+  notAuthorized,
+
+  /// Unsolicited, i.e. not requested by the client
+  /// Also the default reason code
+  unsolicited
 }
