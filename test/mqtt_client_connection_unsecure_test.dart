@@ -98,7 +98,7 @@ void main() {
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
-          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
     });
     test('Connect no connect ack', () async {
       await broker.start();
@@ -113,7 +113,7 @@ void main() {
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
-          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
     });
     test('Successful response and disconnect', () async {
       bool connectCbCalled = false;

@@ -13,7 +13,7 @@ class MqttClientConnectionStatus {
   MqttConnectionState state = MqttConnectionState.disconnected;
 
   /// Return code
-  MqttConnectReturnCode returnCode = MqttConnectReturnCode.unsolicited;
+  MqttConnectReturnCode returnCode = MqttConnectReturnCode.noneSpecified;
 
   @override
   String toString() {

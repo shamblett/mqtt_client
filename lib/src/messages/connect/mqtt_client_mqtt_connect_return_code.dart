@@ -28,6 +28,11 @@ enum MqttConnectReturnCode {
   notAuthorized,
 
   /// Unsolicited, i.e. not requested by the client
-  /// Also the default reason code
-  unsolicited
+  unsolicited,
+
+  /// Solicited, i.e. requested by the client
+  solicited,
+
+  /// Default
+  noneSpecified
 }

@@ -723,7 +723,7 @@ void main() {
     test('To String', () {
       final MqttClientConnectionStatus status = MqttClientConnectionStatus();
       expect(status.toString(),
-          'Connection status is disconnected with return code notAuthorized');
+          'Connection status is disconnected with return code noneSpecified');
       status.state = MqttConnectionState.faulted;
       status.returnCode = MqttConnectReturnCode.identifierRejected;
       expect(status.toString(),

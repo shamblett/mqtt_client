@@ -69,12 +69,14 @@ class MqttClient {
       ? _connectionHandler.connectionStatus.state
       : MqttConnectionState.disconnected;
 
+  MqttClientConnectionStatus _connectionStatus = MqttClientConnectionStatus();
+
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
   /// Set after every connection attempt.
   MqttClientConnectionStatus get connectionStatus => _connectionHandler != null
       ? _connectionHandler.connectionStatus
-      : MqttClientConnectionStatus();
+      : _connectionStatus;
 
   /// The connection message to use to override the default
   MqttConnectMessage connectionMessage;
@@ -252,8 +254,10 @@ class MqttClient {
     // Only disconnect the connection handler if the request is
     // solicited, unsolicited requests, ie broker termination don't
     // need this.
+    MqttConnectReturnCode returnCode =  MqttConnectReturnCode.unsolicited;
     if (!unsolicited) {
       _connectionHandler?.disconnect();
+      returnCode =  MqttConnectReturnCode.solicited;
     }
     _publishingManager = null;
     _subscriptionsManager = null;
@@ -261,6 +265,9 @@ class MqttClient {
     _keepAlive = null;
     _connectionHandler = null;
     _clientEventBus.destroy();
+    // Set the connection status before calling onDisconnected
+    _connectionStatus.state = MqttConnectionState.disconnected;
+    _connectionStatus.returnCode = returnCode;
     if (onDisconnected != null) {
       onDisconnected();
     }
