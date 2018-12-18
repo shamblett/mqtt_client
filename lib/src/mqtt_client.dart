@@ -165,7 +165,7 @@ class MqttClient {
       _connectionHandler.useWebSocket = false;
       _connectionHandler.securityContext = securityContext;
     }
-    _connectionHandler.onDisconnected = onDisconnected;
+    _connectionHandler.onDisconnected = _internalDisconnect;
     _connectionHandler.onConnected = onConnected;
     _publishingManager = PublishingManager(_connectionHandler, _clientEventBus);
     _subscriptionsManager = SubscriptionsManager(
@@ -237,7 +237,24 @@ class MqttClient {
   /// stream.
   /// Do NOT call this in any onDisconnect callback that may be set, this will result in a loop situation.
   void disconnect() {
-    _connectionHandler?.disconnect();
+    _disconnect(unsolicited: false);
+  }
+
+  /// Internal disconnect
+  /// This is always passed to the connection handler to allow the client to close itself
+  /// down correctly on disconnect.
+  void _internalDisconnect() {
+    _disconnect(unsolicited: true);
+  }
+
+  /// Actual disconnect processing
+  void _disconnect({bool unsolicited = true}) {
+    // Only disconnect the connection handler if the request is
+    // solicited, unsolicited requests, ie broker termination don't
+    // need this.
+    if (!unsolicited) {
+      _connectionHandler?.disconnect();
+    }
     _publishingManager = null;
     _subscriptionsManager = null;
     _keepAlive?.stop();

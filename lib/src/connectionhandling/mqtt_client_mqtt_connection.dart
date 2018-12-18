@@ -37,9 +37,6 @@ class MqttConnection {
   ///The read buffer
   MqttByteBuffer messageStream;
 
-  /// Indicates if disconnect(onDone) has been requested or not
-  bool disconnectRequested = false;
-
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
 
@@ -109,15 +106,9 @@ class MqttConnection {
 
   /// OnDone listener callback
   void _onDone() {
-    // We should never be done unless requested
     _disconnect();
-    if (!disconnectRequested) {
-      if (onDisconnected != null) {
-        MqttLogger.log(
-            'MqttConnection::_onDone - calling disconnected callback');
-        onDisconnected();
-      }
-    }
+    MqttLogger.log('MqttConnection::_onDone - calling disconnected callback');
+    onDisconnected();
   }
 
   /// Disconnects from the message broker
@@ -136,7 +127,6 @@ class MqttConnection {
 
   /// User requested disconnection
   void disconnect() {
-    disconnectRequested = true;
     _onDone();
   }
 }
