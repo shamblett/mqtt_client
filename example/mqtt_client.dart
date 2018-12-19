@@ -47,7 +47,9 @@ Future<int> main() async {
 
   /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
   /// You can add these before connection or change them dynamically after connection if
-  /// you wish.
+  /// you wish. There is also an onSubscribeFail callback for failed subscriptions, these
+  /// can fail either because you have tried to subscribe to an invalid topic or the broker
+  /// rejects the subscribe request.
   client.onSubscribed = onSubscribed;
 
   /// Create a connection message to use or use the default one. The default one sets the
