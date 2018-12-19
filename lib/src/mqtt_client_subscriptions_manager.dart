@@ -106,10 +106,10 @@ class SubscriptionsManager {
           .atQos(sub.qos);
       connectionHandler.sendMessage(msg);
       return sub;
-    } on Exception catch(e){
+    } on Exception catch (e) {
       MqttLogger.log(
           'Subscriptionsmanager::createNewSubscription exception raised, text is ${e}');
-      if ( onSubscribeFail != null ) {
+      if (onSubscribeFail != null) {
         onSubscribeFail(topic);
       }
       return null;

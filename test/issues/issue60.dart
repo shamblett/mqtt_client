@@ -29,6 +29,7 @@ String getHostname() {
     return 'localhost';
   }
 }
+
 final MqttClient client = MqttClient(getHostname(), '');
 
 Future<int> main() async {

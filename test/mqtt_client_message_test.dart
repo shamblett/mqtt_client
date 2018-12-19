@@ -1642,8 +1642,7 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print(
-          'Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
+      print('Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       final MqttSubscribeAckMessage bm = baseMessage;
@@ -1658,8 +1657,7 @@ void main() {
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
-      print(
-          'Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
+      print('Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
       final MqttSubscribeAckMessage bm = baseMessage;

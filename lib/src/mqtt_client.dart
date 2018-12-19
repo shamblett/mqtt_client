@@ -254,10 +254,10 @@ class MqttClient {
     // Only disconnect the connection handler if the request is
     // solicited, unsolicited requests, ie broker termination don't
     // need this.
-    MqttConnectReturnCode returnCode =  MqttConnectReturnCode.unsolicited;
+    MqttConnectReturnCode returnCode = MqttConnectReturnCode.unsolicited;
     if (!unsolicited) {
       _connectionHandler?.disconnect();
-      returnCode =  MqttConnectReturnCode.solicited;
+      returnCode = MqttConnectReturnCode.solicited;
     }
     _publishingManager = null;
     _subscriptionsManager = null;

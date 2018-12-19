@@ -29,6 +29,7 @@ String getHostname() {
     return 'localhost';
   }
 }
+
 final MqttClient client = MqttClient(getHostname(), '');
 
 Future<int> main() async {
@@ -104,10 +105,12 @@ void onDisconnected() {
   if (client.connectionStatus.state != MqttConnectionState.disconnected) {
     print('EXAMPLE::ERROR - client connection state should be disconnected');
   } else {
-    if (client.connectionStatus.returnCode == MqttConnectReturnCode.unsolicited ) {
+    if (client.connectionStatus.returnCode ==
+        MqttConnectReturnCode.unsolicited) {
       print('EXAMPLE::SUCCESS - client is indicating unsolicited disconnect');
     } else {
-      print('EXAMPLE::WARNING - client is indicating disconnected but NOT unsolicited');
+      print(
+          'EXAMPLE::WARNING - client is indicating disconnected but NOT unsolicited');
     }
   }
   exit(-1);
