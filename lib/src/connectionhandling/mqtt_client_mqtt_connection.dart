@@ -102,6 +102,8 @@ class MqttConnection {
   /// OnError listener callback
   void _onError(dynamic error) {
     _disconnect();
+    MqttLogger.log('MqttConnection::_onError - calling disconnected callback');
+    onDisconnected();
   }
 
   /// OnDone listener callback

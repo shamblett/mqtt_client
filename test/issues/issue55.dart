@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+  final MqttClient client = MqttClient('localhost', '');
   client.logging(on: false);
   client.keepAlivePeriod = 60;
 
@@ -54,14 +54,13 @@ Future<int> main() async {
   print('EXAMPLE::Publishing our topic');
 
   final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-  builder.addString('Hello from sql connnect');
+  builder.addString('Hello from sql connect');
 
   /// Subscribe to it
   client.subscribe(topic, MqttQos.exactlyOnce);
 
   /// Publish it
   client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);
-  await MqttUtilities.asyncSleep(20);
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(20);
   print('EXAMPLE::Disconnecting');

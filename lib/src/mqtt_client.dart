@@ -246,7 +246,11 @@ class MqttClient {
   /// This is always passed to the connection handler to allow the client to close itself
   /// down correctly on disconnect.
   void _internalDisconnect() {
-    _disconnect(unsolicited: true);
+    // Only call disconnect if we are connected, i.e. a connection to
+    // the broker has been previously established.
+    if (connectionStatus.state == MqttConnectionState.connected) {
+      _disconnect(unsolicited: true);
+    }
   }
 
   /// Actual disconnect processing
