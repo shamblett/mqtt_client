@@ -87,9 +87,15 @@ void main() {
           ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
     }, skip: true);
     test('Connect invalid port', () async {
+      bool cbCalled = false;
+      void disconnectCB() {
+        cbCalled = true;
+      }
+
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
           SynchronousMqttConnectionHandler(clientEventBus);
+      ch.onDisconnected = disconnectCB;
       try {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -99,6 +105,7 @@ void main() {
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
+      expect(cbCalled, isTrue);
     });
     test('Connect no connect ack', () async {
       await broker.start();

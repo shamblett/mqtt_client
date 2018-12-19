@@ -87,10 +87,16 @@ void main() {
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
     }, skip: true);
     test('Connect invalid port', () async {
+      bool cbCalled = false;
+      void disconnectCB() {
+        cbCalled = true;
+      }
+
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
           SynchronousMqttConnectionHandler(clientEventBus);
       ch.secure = true;
+      ch.onDisconnected = disconnectCB;
       try {
         await ch.connect(mockBrokerAddress, badPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -98,6 +104,7 @@ void main() {
         expect(e.toString().contains('refused'), isTrue);
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
+      expect(cbCalled, isTrue);
     });
   });
   group('Connection Keep Alive - Mock broker', () {
