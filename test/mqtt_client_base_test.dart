@@ -659,6 +659,20 @@ void main() {
       expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
     });
 
+    test('Add emoji', () {
+      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      builder.addUTF16String('😁');
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), <int>[0x3D, 0xD8, 0x1, 0xDE]);
+    });
+
+    test('Add arabic', () {
+      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      builder.addUTF16String('سلام');
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
+    });
+
     test('Add half double', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
       builder.addHalfDouble(10000.5);

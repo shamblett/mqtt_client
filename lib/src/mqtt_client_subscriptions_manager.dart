@@ -108,7 +108,7 @@ class SubscriptionsManager {
       return sub;
     } on Exception catch (e) {
       MqttLogger.log(
-          'Subscriptionsmanager::createNewSubscription exception raised, text is ${e}');
+          'Subscriptionsmanager::createNewSubscription exception raised, text is $e');
       if (onSubscribeFail != null) {
         onSubscribeFail(topic);
       }
