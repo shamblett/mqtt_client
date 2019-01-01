@@ -673,6 +673,15 @@ void main() {
       expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
     });
 
+    test('Add arabic string', () {
+      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      const String arabic = 'این یک پیام تستی هستش';
+      print(arabic.codeUnits);
+      builder.addUTF16String(arabic);
+      expect(builder.length, 4);
+      expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
+    });
+
     test('Add half double', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
       builder.addHalfDouble(10000.5);
