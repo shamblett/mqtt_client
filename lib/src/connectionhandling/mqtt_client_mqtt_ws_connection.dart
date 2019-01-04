@@ -19,6 +19,19 @@ class MqttWsConnection extends MqttConnection {
     connect(server, port);
   }
 
+  /// The default websocket subprotocol list
+  static const List<String> protocolsMultipleDefault = <String>[
+    'mqtt',
+    'mqttv3.1',
+    'mqttv3.11'
+  ];
+
+  /// The default websocket subprotocol list for brokers who expect this field to be a single entry
+  static const List<String> protocolsSingleDefault = <String>['mqtt'];
+
+  /// The websocket subprotocol list
+  List<String> protocols = protocolsMultipleDefault;
+
   /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
@@ -45,7 +58,6 @@ class MqttWsConnection extends MqttConnection {
     MqttLogger.log('MqttWsConnection:: WS URL is $uriString');
     try {
       // Connect and save the socket.
-      final List<String> protocols = <String>['mqtt', 'mqttv3.1', 'mqttv3.11'];
       WebSocket.connect(uriString, protocols: protocols).then((dynamic socket) {
         client = socket;
         readWrapper = ReadWrapper();
