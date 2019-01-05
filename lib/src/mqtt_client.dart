@@ -40,6 +40,21 @@ class MqttClient {
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
 
+  List<String> _websocketProtocols;
+
+  /// User definable websocket protocols. Use this for non default websocket
+  /// protocols only if your broker needs this. There are two defaults in
+  /// MqttWsConnection class, the multiple protocol is the default. Some brokers
+  /// will not accept a list and only expect a single protocol identifier, in this case use
+  /// the single protocol default. You can supply tour own list, or to disable this entirely
+  /// set the protocols to an empty list , i.e []
+  set websocketProtocols(List<String> protocols) {
+    _websocketProtocols = protocols;
+    if (_connectionHandler != null) {
+      _connectionHandler.websocketProtocols = protocols;
+    }
+  }
+
   /// If set use a secure connection, note TCP only, do not use for
   /// secure websockets(wss).
   bool secure = false;
@@ -161,6 +176,9 @@ class MqttClient {
     if (useWebSocket) {
       _connectionHandler.secure = false;
       _connectionHandler.useWebSocket = true;
+      if (_websocketProtocols != null) {
+        _connectionHandler.websocketProtocols = _websocketProtocols;
+      }
     }
     if (secure) {
       _connectionHandler.secure = true;

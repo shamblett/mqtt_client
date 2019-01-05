@@ -31,6 +31,9 @@ Future<int> main() async {
   /// client.useWebSocket = true;
   /// client.port = 80;  ( or whatever your WS port is)
   /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
+  /// You can also supply your own websocket protocol list or disable this feature using the websocketProtocols
+  /// setter, read the API docs for further details here, the vast majority of brokers will support the client default
+  /// list so in most cases you can ignore this.
 
   /// Set logging on if needed, defaults to off
   client.logging(on: false);

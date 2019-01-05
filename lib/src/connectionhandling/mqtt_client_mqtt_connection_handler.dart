@@ -30,6 +30,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Use a websocket rather than TCP
   bool useWebSocket = false;
 
+  /// User supplied websocket protocols
+  List<String> websocketProtocols;
+
   /// If set use a secure connection, note TCP only, not websocket.
   bool secure = false;
 

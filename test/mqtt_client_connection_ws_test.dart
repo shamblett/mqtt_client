@@ -81,7 +81,9 @@ void main() {
       final events.EventBus clientEventBus = events.EventBus();
       final SynchronousMqttConnectionHandler ch =
           SynchronousMqttConnectionHandler(clientEventBus);
+      MqttLogger.loggingOn = true;
       ch.useWebSocket = true;
+      ch.websocketProtocols = ['SJHprotocol'];
       brokerWs.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddressWs, mockBrokerPortWs,
           MqttConnectMessage().withClientIdentifier(testClientId));

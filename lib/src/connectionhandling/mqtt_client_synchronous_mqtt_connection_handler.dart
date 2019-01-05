@@ -36,6 +36,9 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::internalConnect - websocket selected');
         connection = MqttWsConnection(_clientEventBus);
+        if (websocketProtocols != null) {
+          connection.protocols = websocketProtocols;
+        }
       } else if (secure) {
         MqttLogger.log(
             'SynchronousMqttConnectionHandler::internalConnect - secure selected');

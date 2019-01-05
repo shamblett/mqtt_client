@@ -55,10 +55,13 @@ class MqttWsConnection extends MqttConnection {
       uri = uri.replace(port: port);
     }
     final String uriString = uri.toString();
-    MqttLogger.log('MqttWsConnection:: WS URL is $uriString');
+    MqttLogger.log(
+        'MqttWsConnection:: WS URL is $uriString, protocols are $protocols');
     try {
       // Connect and save the socket.
-      WebSocket.connect(uriString, protocols: protocols).then((dynamic socket) {
+      WebSocket.connect(uriString,
+              protocols: protocols.isNotEmpty ? protocols : null)
+          .then((dynamic socket) {
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
