@@ -5,6 +5,7 @@
  * Copyright :  S.Hamblett
  */
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
@@ -668,18 +669,112 @@ void main() {
 
     test('Add arabic', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      builder.addUTF16String('سلام');
-      expect(builder.length, 4);
-      expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
+      const String arabic = 'سلام';
+      builder.addUTF16String(arabic);
+      expect(builder.length, 8);
+      expect(builder.payload.toList(),
+          <int>[0x33, 0x06, 0x44, 0x06, 0x27, 0x06, 0x45, 0x06]);
     });
 
     test('Add arabic string', () {
       final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
       const String arabic = 'این یک پیام تستی هستش';
-      print(arabic.codeUnits);
-      builder.addUTF16String(arabic);
-      expect(builder.length, 4);
-      expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
+      builder.addString(arabic);
+      expect(builder.length, 38);
+      expect(builder.payload.toList(), <int>[
+        0x27,
+        0x06,
+        0xCC,
+        0x06,
+        0x46,
+        0x06,
+        0x20,
+        0xCC,
+        0x06,
+        0xA9,
+        0x06,
+        0x20,
+        0x7E,
+        0x06,
+        0xCC,
+        0x06,
+        0x27,
+        0x06,
+        0x45,
+        0x06,
+        0x20,
+        0x2A,
+        0x06,
+        0x33,
+        0x06,
+        0x2A,
+        0x06,
+        0xCC,
+        0x06,
+        0x020,
+        0x47,
+        0x06,
+        0x33,
+        0x06,
+        0x2A,
+        0x06,
+        0x34,
+        0x06
+      ]);
+    });
+
+    test('Add UTF8 string', () {
+      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      builder.addUTF8String(json
+          .encode(<String, String>{'type': 'msgText', 'data': 'تست 😀 😁 '}));
+      expect(builder.length, 45);
+      expect(builder.payload.toList(), <int>[
+        123,
+        34,
+        116,
+        121,
+        112,
+        101,
+        34,
+        58,
+        34,
+        109,
+        115,
+        103,
+        84,
+        101,
+        120,
+        116,
+        34,
+        44,
+        34,
+        100,
+        97,
+        116,
+        97,
+        34,
+        58,
+        34,
+        216,
+        170,
+        216,
+        179,
+        216,
+        170,
+        32,
+        240,
+        159,
+        152,
+        128,
+        32,
+        240,
+        159,
+        152,
+        129,
+        32,
+        34,
+        125
+      ]);
     });
 
     test('Add half double', () {

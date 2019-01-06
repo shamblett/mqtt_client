@@ -55,15 +55,26 @@ class MqttClientPayloadBuilder {
     _payload.addAll(tmp.buffer.asInt8List());
   }
 
-  /// Add a UTF8 string
+  /// Add a standard Dart string
   void addString(String val) {
-    _payload.addAll(val.codeUnits);
+    addUTF16String(val);
   }
 
-  /// Add a UTF16 string
+  /// Add a UTF16 string, note Dart natively encodes strings as UTF16
   void addUTF16String(String val) {
-    addHalf(val.codeUnits[0]);
-    addHalf(val.codeUnits[1]);
+    for (int codeunit in val.codeUnits) {
+      if (codeunit <= 255) {
+        _payload.add(codeunit);
+      } else {
+        addHalf(codeunit);
+      }
+    }
+  }
+
+  /// Add a UTF8 string
+  void addUTF8String(String val) {
+    const Utf8Encoder encoder = Utf8Encoder();
+    _payload.addAll(encoder.convert(val));
   }
 
   /// Add a 32 bit double
