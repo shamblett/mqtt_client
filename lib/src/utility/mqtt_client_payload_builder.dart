@@ -57,7 +57,7 @@ class MqttClientPayloadBuilder {
 
   /// Add a UTF8 string
   void addString(String val) {
-    _payload.addAll(val.codeUnits);
+    _payload.addAll(stringToUTF8(val));
   }
 
   /// Add a UTF16 string
@@ -77,4 +77,42 @@ class MqttClientPayloadBuilder {
     final Float64List tmp = Float64List.fromList(<double>[val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
+}
+
+/// Convert strings to utf8
+typed.Uint8Buffer stringToUTF8(String input) {
+  final typed.Uint8Buffer output = typed.Uint8Buffer();
+
+  for (int i = 0; i < input.length; i++) {
+    int charCode = input.codeUnitAt(i);
+
+    // Check for a surrogate pair.
+    if (0xd800 <= charCode && charCode <= 0xdbff) {
+      final int lowCharCode = input.codeUnitAt(++i);
+      if (lowCharCode == null) {
+        throw Exception(
+            'mqtt_client::stringToUTF8: Malformed Unicode $charCode $lowCharCode');
+      }
+
+      charCode = ((charCode - 0xd800) << 10) + (lowCharCode - 0xdc00) + 0x10000;
+    }
+
+    if (charCode <= 0x7f) {
+      output.add(charCode);
+    } else if (charCode <= 0x7ff) {
+      output.add(((charCode >> 6) & 0x1f) | 0xc0);
+      output.add((charCode & 0x3f) | 0x80);
+    } else if (charCode <= 0xffff) {
+      output.add(((charCode >> 12) & 0x0f) | 0xe0);
+      output.add(((charCode >> 6) & 0x3f) | 0x80);
+      output.add((charCode & 0x3f) | 0x80);
+    } else {
+      output.add(((charCode >> 18) & 0x07) | 0xf0);
+      output.add(((charCode >> 12) & 0x3f) | 0x80);
+      output.add(((charCode >> 6) & 0x3f) | 0x80);
+      output.add((charCode & 0x3f) | 0x80);
+    }
+  }
+
+  return output;
 }
