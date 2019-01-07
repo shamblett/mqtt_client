@@ -63,7 +63,7 @@ class MqttClientPayloadBuilder {
   /// Add a UTF16 string, note Dart natively encodes strings as UTF16
   void addUTF16String(String val) {
     for (int codeunit in val.codeUnits) {
-      if (codeunit <= 255) {
+      if (codeunit <= 255 && codeunit >= 0) {
         _payload.add(codeunit);
       } else {
         addHalf(codeunit);
