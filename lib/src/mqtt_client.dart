@@ -77,6 +77,11 @@ class MqttClient {
   /// Handles everything to do with publication management.
   PublishingManager _publishingManager;
 
+  /// Published message stream. A publish message is added to this stream on completion of
+  /// the message publishing protocol for a Qos level. Attach listeners only after connect has been called
+  StreamController<MqttPublishMessage> get published =>
+      _publishingManager != null ? _publishingManager.published : null;
+
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
   @deprecated
@@ -143,7 +148,7 @@ class MqttClient {
   /// The event bus
   events.EventBus _clientEventBus;
 
-  /// The change notifier on which all subscribed topic updates are published to
+  /// The stream on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
 
   /// Performs a connect to the message broker with an optional username and password
@@ -281,6 +286,7 @@ class MqttClient {
       _connectionHandler?.disconnect();
       returnCode = MqttConnectReturnCode.solicited;
     }
+    _publishingManager.published.close();
     _publishingManager = null;
     _subscriptionsManager = null;
     _keepAlive?.stop();

@@ -66,6 +66,12 @@ class PublishingManager implements IPublishingManager {
   /// The current connection handler.
   IMqttConnectionHandler connectionHandler;
 
+  StreamController<MqttPublishMessage> _published =
+      StreamController<MqttPublishMessage>.broadcast();
+
+  /// The stream on which all confirmed published messages are added to
+  StreamController<MqttPublishMessage> get published => _published;
+
   /// Raised when a message has been recieved by the client and the relevant QOS handshake is complete.
   @override
   MessageReceived publishEvent;
@@ -122,15 +128,17 @@ class PublishingManager implements IPublishingManager {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
         _clientEventBus.fire(MessageReceived(topic, msg));
+        _notifyPublish(msg);
       } else if (pubMsg.header.qos == MqttQos.atLeastOnce) {
-        // QOS AtLeastOnce 1 require an acknowledgement
+        // QOS AtLeastOnce 1 requires an acknowledgement
         // Send the message for processing to whoever is waiting.
         _clientEventBus.fire(MessageReceived(topic, msg));
+        _notifyPublish(msg);
         final MqttPublishAckMessage ackMsg = MqttPublishAckMessage()
             .withMessageIdentifier(pubMsg.variableHeader.messageIdentifier);
         connectionHandler.sendMessage(ackMsg);
       } else if (pubMsg.header.qos == MqttQos.exactlyOnce) {
-        // QOS ExactlyOnce means we can't give it away yet, we gotta do a handshake
+        // QOS ExactlyOnce means we can't give it away yet, we need to do a handshake
         // to make sure the broker knows we got it, and we know he knows we got it.
         // If we've already got it thats ok, it just means its being republished because
         // of a handshake breakdown, overwrite our existing one for the sake of it
@@ -174,9 +182,10 @@ class PublishingManager implements IPublishingManager {
   /// Returns true if the message flow completed successfully, otherwise false.
   bool handlePublishComplete(MqttMessage msg) {
     final MqttPublishCompleteMessage compMsg = msg;
-    final MqttPublishMessage ok =
+    final MqttPublishMessage publishMessage =
         publishedMessages.remove(compMsg.variableHeader.messageIdentifier);
-    if (ok != null) {
+    if (publishMessage != null) {
+      _notifyPublish(publishMessage);
       return true;
     }
     return false;
@@ -194,5 +203,12 @@ class PublishingManager implements IPublishingManager {
       connectionHandler.sendMessage(relMsg);
     }
     return true;
+  }
+
+  /// On publish complete add the message to the published stream if needed
+  void _notifyPublish(MqttPublishMessage message) {
+    if (_published.hasListener) {
+      _published.add(message);
+    }
   }
 }
