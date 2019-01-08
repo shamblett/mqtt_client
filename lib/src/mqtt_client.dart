@@ -79,8 +79,8 @@ class MqttClient {
 
   /// Published message stream. A publish message is added to this stream on completion of
   /// the message publishing protocol for a Qos level. Attach listeners only after connect has been called
-  StreamController<MqttPublishMessage> get published =>
-      _publishingManager != null ? _publishingManager.published : null;
+  Stream<MqttPublishMessage> get published =>
+      _publishingManager != null ? _publishingManager.published.stream : null;
 
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus

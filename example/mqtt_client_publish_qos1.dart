@@ -61,6 +61,14 @@ Future<int> main() async {
     print('');
   });
 
+  /// If needed you can listen for published messages that have completed the publishing
+  /// handshake which is Qos dependant. Any message received on this stream has completed its
+  /// publishing handshake with the broker.
+  client.published.listen((MqttPublishMessage message) {
+    print(
+        'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+  });
+
   final MqttClientPayloadBuilder builder1 = MqttClientPayloadBuilder();
   builder1.addString('Hello from mqtt_client topic 1');
   print('EXAMPLE:: <<<< PUBLISH 1 >>>>');

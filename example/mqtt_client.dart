@@ -90,6 +90,7 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription
+  print('EXAMPLE::Subscribing to the test/lol topic');
   const String topic = 'test/lol'; // Not a wildcard topic
   client.subscribe(topic, MqttQos.atMostOnce);
 
@@ -110,19 +111,27 @@ Future<int> main() async {
     print('');
   });
 
-  /// Lets publish to our topic
-  // Use the payload builder rather than a raw buffer
-  print('EXAMPLE::Publishing our topic');
+  /// If needed you can listen for published messages that have completed the publishing
+  /// handshake which is Qos dependant. Any message received on this stream has completed its
+  /// publishing handshake with the broker.
+  client.published.listen((MqttPublishMessage message) {
+    print(
+        'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+  });
 
+  /// Lets publish to our topic
+  /// Use the payload builder rather than a raw buffer
   /// Our known topic to publish to
   const String pubTopic = 'Dart/Mqtt_client/testtopic';
   final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
   builder.addString('Hello from mqtt_client');
 
   /// Subscribe to it
+  print('EXAMPLE::Subscribing to the Dart/Mqtt_client/testtopic topic');
   client.subscribe(pubTopic, MqttQos.exactlyOnce);
 
   /// Publish it
+  print('EXAMPLE::Publishing our topic');
   client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
