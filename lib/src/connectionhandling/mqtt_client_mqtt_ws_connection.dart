@@ -79,3 +79,4 @@ class MqttWsConnection extends MqttConnection {
     return completer.future;
   }
 }
+

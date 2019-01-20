@@ -59,6 +59,19 @@ class MqttConnection {
     }
   }
 
+  /// Attach to an existing stream subscription
+  void _attachToSubscription(StreamSubscription ss) {
+    MqttLogger.log('MqttConnection::_attachToSubscription');
+    try {
+      ss.onData(_onData);
+      ss.onError(_onError);
+      ss.onDone(_onDone);
+    } on Exception catch (e) {
+      print('MqttConnection::_attachToSubscription - exception raised $e');
+    }
+  }
+
+
   /// OnData listener callback
   void _onData(dynamic data) {
     MqttLogger.log('MqttConnection::_onData');
