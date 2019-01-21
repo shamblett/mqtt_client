@@ -236,17 +236,13 @@ bool _parseResponse(String resp, String key) {
   }
 
   if (!headers.containsKey('connection') ||
-      headers['connection'] != 'upgrade') {
+      headers['connection'].toLowerCase() != 'upgrade') {
     throw NoConnectionException(
         'MqttWs2Connection::server returned improper connection header line');
   }
-  if (!headers.containsKey('upgrade') || headers['upgrade'] != 'websocket') {
+  if (!headers.containsKey('upgrade') || headers['upgrade'].toLowerCase() != 'websocket') {
     throw NoConnectionException(
         'MqttWs2Connection::server returned improper upgrade header line');
-  }
-  if (!headers.containsKey('sec-websocket-protocol')) {
-    throw NoConnectionException(
-        'MqttWs2Connection::server failed to return protocol header');
   }
   if (!headers.containsKey('sec-websocket-protocol')) {
     throw NoConnectionException(

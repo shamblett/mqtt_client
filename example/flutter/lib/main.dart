@@ -17,8 +17,7 @@ class _MyAppState extends State<MyApp> {
   PageController _pageController;
   int _page = 0;
 
-//  String broker = 'test.mosquitto.org';
-    String broker = 'wss://alznq70z6qmj0-ats.iot.us-east-2.amazonaws.com:443/mqtt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIUQT5SGY5H7M7CDA%2F20190120%2Fus-east-2%2Fiotdata%2Faws4_request&X-Amz-Date=20190120T224933Z&X-Amz-SignedHeaders=host&X-Amz-Signature=19ae36a3df90b6232641c22ae1e1864ab27f7547d8be6985f59d84a3a70ac392';
+  String broker = 'wss://test.mosquitto.org';
   mqtt.MqttClient client;
   mqtt.MqttConnectionState connectionState;
 
@@ -291,9 +290,12 @@ class _MyAppState extends State<MyApp> {
     /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
     /// for details.
     /// To use websockets add the following lines -:
-    client.useWebSocket = true;
-    client.useAlternateWebSocketImplementation = true;
-    client.port = 443; // ( or whatever your WS port is)
+    // client.useWebSocket = true;
+
+    /// This flag causes the mqtt client to use an alternate method to perform the WebSocket handshake. This is needed for certain
+    /// matt clients (Particularly Amazon Web Services IOT) that will not tolerate additional message headers in their get request
+    // client.useAlternateWebSocketImplementation = true;
+    // client.port = 443; // ( or whatever your WS port is)
     /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
     /// Set logging on if needed, defaults to off
