@@ -16,7 +16,6 @@ import 'package:event_bus/event_bus.dart' as events;
 import 'package:crypto/crypto.dart';
 import 'src/observable/observable.dart' as observe;
 
-
 /// The mqtt_client package exported interface
 part 'src/mqtt_client.dart';
 

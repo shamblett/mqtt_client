@@ -39,7 +39,7 @@ class MqttClient {
 
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
-  
+
   /// If set use the alternate websocket implementation
   bool useAlternateWebSocketImplementation = false;
 
@@ -184,7 +184,8 @@ class MqttClient {
     if (useWebSocket) {
       _connectionHandler.secure = false;
       _connectionHandler.useWebSocket = true;
-      _connectionHandler.useAlternateWebSocketImplementation = useAlternateWebSocketImplementation;
+      _connectionHandler.useAlternateWebSocketImplementation =
+          useAlternateWebSocketImplementation;
       if (_websocketProtocols != null) {
         _connectionHandler.websocketProtocols = _websocketProtocols;
       }

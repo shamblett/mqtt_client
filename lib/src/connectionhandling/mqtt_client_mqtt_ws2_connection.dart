@@ -40,7 +40,7 @@ class _DetachedSocket extends Stream<List<int>> implements Socket {
   void writeCharCode(int charCode) => _socket.writeCharCode(charCode);
 
   @override
-  void writeAll(Iterable objects, [String separator = '']) =>
+  void writeAll(Iterable<Object> objects, [String separator = '']) =>
       _socket.writeAll(objects, separator);
 
   @override
@@ -51,19 +51,20 @@ class _DetachedSocket extends Stream<List<int>> implements Socket {
       _socket.addError(error, stackTrace);
 
   @override
-  Future addStream(Stream<List<int>> stream) => _socket.addStream(stream);
+  Future<dynamic> addStream(Stream<List<int>> stream) =>
+      _socket.addStream(stream);
 
   @override
   void destroy() => _socket.destroy();
 
   @override
-  Future flush() => _socket.flush();
+  Future<dynamic> flush() => _socket.flush();
 
   @override
-  Future close() => _socket.close();
+  Future<dynamic> close() => _socket.close();
 
   @override
-  Future get done => _socket.done;
+  Future<dynamic> get done => _socket.done;
 
   @override
   int get port => _socket.port;
@@ -110,7 +111,7 @@ class MqttWs2Connection extends MqttConnection {
   /// The security context for secure usage
   SecurityContext context;
 
-  StreamSubscription _subscription;
+  StreamSubscription<dynamic> _subscription;
 
   /// Connect
   @override
@@ -200,6 +201,7 @@ class MqttWs2Connection extends MqttConnection {
         c.complete(true);
       }
     }, onDone: () {
+      _subscription.cancel();
       const String message =
           'MqttWs2Connection::TLS connection unexpectedly closed';
       throw NoConnectionException(message);

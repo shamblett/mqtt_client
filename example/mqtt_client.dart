@@ -30,6 +30,7 @@ Future<int> main() async {
   /// To use websockets add the following lines -:
   /// client.useWebSocket = true;
   /// client.port = 80;  ( or whatever your WS port is)
+  /// There is also an alternate websocket implementation for specialist use, see useAlternateWebSocketImplementation
   /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
   /// You can also supply your own websocket protocol list or disable this feature using the websocketProtocols
   /// setter, read the API docs for further details here, the vast majority of brokers will support the client default

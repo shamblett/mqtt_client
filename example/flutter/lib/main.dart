@@ -140,9 +140,10 @@ class _MyAppState extends State<MyApp> {
         ),
         SizedBox(height: 8.0),
         RaisedButton(
-          child: Text(client?.connectionState == mqtt.MqttConnectionState.connected
-              ? 'Disconnect'
-              : 'Connect'),
+          child: Text(
+              client?.connectionState == mqtt.MqttConnectionState.connected
+                  ? 'Disconnect'
+                  : 'Connect'),
           onPressed: () {
             if (client?.connectionState == mqtt.MqttConnectionState.connected) {
               _disconnect();
