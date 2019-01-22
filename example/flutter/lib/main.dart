@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
 
   String broker = 'test.mosquitto.org';
   mqtt.MqttClient client;
-  mqtt.ConnectionState connectionState;
+  mqtt.MqttConnectionState connectionState;
 
   StreamSubscription subscription;
 
@@ -33,19 +33,19 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     IconData connectionStateIcon;
     switch (client?.connectionState) {
-      case mqtt.ConnectionState.connected:
+      case mqtt.MqttConnectionState.connected:
         connectionStateIcon = Icons.cloud_done;
         break;
-      case mqtt.ConnectionState.disconnected:
+      case mqtt.MqttConnectionState.disconnected:
         connectionStateIcon = Icons.cloud_off;
         break;
-      case mqtt.ConnectionState.connecting:
+      case mqtt.MqttConnectionState.connecting:
         connectionStateIcon = Icons.cloud_upload;
         break;
-      case mqtt.ConnectionState.disconnecting:
+      case mqtt.MqttConnectionState.disconnecting:
         connectionStateIcon = Icons.cloud_download;
         break;
-      case mqtt.ConnectionState.faulted:
+      case mqtt.MqttConnectionState.faulted:
         connectionStateIcon = Icons.error;
         break;
       default:
@@ -140,11 +140,11 @@ class _MyAppState extends State<MyApp> {
         ),
         SizedBox(height: 8.0),
         RaisedButton(
-          child: Text(client?.connectionState == mqtt.ConnectionState.connected
+          child: Text(client?.connectionState == mqtt.MqttConnectionState.connected
               ? 'Disconnect'
               : 'Connect'),
           onPressed: () {
-            if (client?.connectionState == mqtt.ConnectionState.connected) {
+            if (client?.connectionState == mqtt.MqttConnectionState.connected) {
               _disconnect();
             } else {
               _connect();
@@ -290,12 +290,16 @@ class _MyAppState extends State<MyApp> {
     /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
     /// for details.
     /// To use websockets add the following lines -:
-    /// client.useWebSocket = true;
-    /// client.port = 80;  ( or whatever your WS port is)
+    // client.useWebSocket = true;
+
+    /// This flag causes the mqtt client to use an alternate method to perform the WebSocket handshake. This is needed for certain
+    /// matt clients (Particularly Amazon Web Services IOT) that will not tolerate additional message headers in their get request
+    // client.useAlternateWebSocketImplementation = true;
+    // client.port = 443; // ( or whatever your WS port is)
     /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
 
     /// Set logging on if needed, defaults to off
-    client.logging(true);
+    client.logging(on: true);
 
     /// If you intend to use a keep alive value in your connect message that is not the default(60s)
     /// you must set it here
@@ -330,7 +334,7 @@ class _MyAppState extends State<MyApp> {
     }
 
     /// Check if we are connected
-    if (client.connectionState == mqtt.ConnectionState.connected) {
+    if (client.connectionState == mqtt.MqttConnectionState.connected) {
       print('MQTT client connected');
       setState(() {
         connectionState = client.connectionState;
@@ -396,7 +400,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _subscribeToTopic(String topic) {
-    if (connectionState == mqtt.ConnectionState.connected) {
+    if (connectionState == mqtt.MqttConnectionState.connected) {
       setState(() {
         if (topics.add(topic.trim())) {
           print('Subscribing to ${topic.trim()}');
@@ -407,7 +411,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _unsubscribeFromTopic(String topic) {
-    if (connectionState == mqtt.ConnectionState.connected) {
+    if (connectionState == mqtt.MqttConnectionState.connected) {
       setState(() {
         if (topics.remove(topic.trim())) {
           print('Unsubscribing from ${topic.trim()}');

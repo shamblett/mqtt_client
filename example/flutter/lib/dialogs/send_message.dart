@@ -175,7 +175,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
       _topicContent,
       mqtt.MqttQos.values[_qosValue],
       builder.payload,
-      _retainValue,
+      retain: _retainValue,
     );
     Navigator.pop(context);
   }

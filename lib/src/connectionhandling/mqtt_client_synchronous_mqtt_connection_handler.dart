@@ -33,9 +33,15 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
           'SynchronousMqttConnectionHandler::internalConnect - initiating connection try $connectionAttempts');
       connectionStatus.state = MqttConnectionState.connecting;
       if (useWebSocket) {
-        MqttLogger.log(
-            'SynchronousMqttConnectionHandler::internalConnect - websocket selected');
-        connection = MqttWsConnection(_clientEventBus);
+        if (useAlternateWebSocketImplementation) {
+          MqttLogger.log(
+              'SynchronousMqttConnectionHandler::internalConnect - alternate websocket implementation selected');
+          connection = MqttWs2Connection(securityContext, _clientEventBus);
+        } else {
+          MqttLogger.log(
+              'SynchronousMqttConnectionHandler::internalConnect - websocket selected');
+          connection = MqttWsConnection(_clientEventBus);
+        }
         if (websocketProtocols != null) {
           connection.protocols = websocketProtocols;
         }
