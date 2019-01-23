@@ -1,5 +1,5 @@
 # 5.4.0
-Issue 67
+Issues 67 and 68
 
 # 5.3.0
 Issues 61, 62 and 63
