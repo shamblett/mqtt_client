@@ -75,7 +75,8 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription or two, note these may change/cease to exist on the broker
-  const String topic = 'test/#'; // Wildcard topic
+  const String topic =
+      'test/#'; // Wildcard topic, you wont see these, see below
   client.subscribe(topic, MqttQos.atMostOnce);
   const String topic1 = 'ebcon/#'; // Wildcard topic
   client.subscribe(topic1, MqttQos.atMostOnce);
