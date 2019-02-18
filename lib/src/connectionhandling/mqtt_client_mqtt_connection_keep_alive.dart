@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+/// Ping response received callback
+typedef PongCallback = void Function();
+
 /// Implements keepalive functionality on the Mqtt Connection, ensuring that the connection
 /// remains active according to the keepalive seconds setting.
 /// This class implements the keepalive by sending an MqttPingRequest to the broker if a message
@@ -38,6 +41,9 @@ class MqttConnectionKeepAlive {
 
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;
+
+  /// Ping response received callback
+  PongCallback pongCallback;
 
   /// Pings the message broker if there has been no activity for the specified amount of idle time.
   bool pingRequired() {
@@ -74,7 +80,13 @@ class MqttConnectionKeepAlive {
   }
 
   /// Processed ping response messages received from a message broker.
-  bool pingResponseReceived(MqttMessage pingMsg) => true;
+  bool pingResponseReceived(MqttMessage pingMsg) {
+    // Call the pong callback if not null
+    if (pongCallback != null) {
+      pongCallback();
+    }
+    return true;
+  }
 
   /// Handles the MessageSent event of the connectionHandler control.
   bool messageSent(MqttMessage msg) => true;

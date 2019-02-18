@@ -86,7 +86,7 @@ Future<int> main() async {
   /// See the MqttClientTopicFilter documentation for more details.
 
   // Create the topic filter
-  MqttClientTopicFilter topicFilter =
+  final MqttClientTopicFilter topicFilter =
       MqttClientTopicFilter('ebcon/#', client.updates);
   // Now listen on the filtered updates, not the client updates
   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {

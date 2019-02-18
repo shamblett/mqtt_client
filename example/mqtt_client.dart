@@ -56,6 +56,10 @@ Future<int> main() async {
   /// rejects the subscribe request.
   client.onSubscribed = onSubscribed;
 
+  /// Set a ping received callback if needed, called whenever a ping response(pong) is received
+  /// from the broker.
+  client.pongCallback = pong;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
@@ -169,4 +173,9 @@ void onDisconnected() {
 void onConnected() {
   print(
       'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+}
+
+/// Pong callback
+void pong() {
+  print('EXAMPLE::Ping response client callback invoked');
 }

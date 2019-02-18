@@ -148,6 +148,19 @@ class MqttClient {
     _subscriptionsManager?.onUnsubscribed = cb;
   }
 
+  /// Ping response received callback.
+  /// If set when a ping response is received from the broker this will be called.
+  /// Can be used for health monitoring outside of the client itself.
+  PongCallback _pongCallback;
+
+  /// The ping received callback
+  PongCallback get pongCallback => _pongCallback;
+
+  set pongCallback(PongCallback cb) {
+    _pongCallback = cb;
+    _keepAlive?.pongCallback = cb;
+  }
+
   /// The event bus
   events.EventBus _clientEventBus;
 
@@ -206,6 +219,9 @@ class MqttClient {
     _subscriptionsManager.onSubscribeFail = onSubscribeFail;
     updates = _subscriptionsManager.subscriptionNotifier.changes;
     _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
+    if (pongCallback != null) {
+      _keepAlive.pongCallback = pongCallback;
+    }
     final MqttConnectMessage connectMessage =
         _getConnectMessage(username, password);
     return await _connectionHandler.connect(server, port, connectMessage);
