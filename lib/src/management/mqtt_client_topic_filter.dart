@@ -38,8 +38,15 @@ class MqttClientTopicFilter {
 
   void _topicIn(List<MqttReceivedMessage<MqttMessage>> c) {
     // Pass through if we have a match
-    if (_subscriptionTopic.matches(PublicationTopic(c[0].topic))) {
-      _updates.add(c);
+    final List<MqttReceivedMessage<MqttMessage>> tmp =
+        List<MqttReceivedMessage<MqttMessage>>();
+    for (MqttReceivedMessage<MqttMessage> message in c) {
+      if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {
+        tmp.add(message);
+      }
+    }
+    if (tmp.isNotEmpty) {
+      _updates.add(tmp);
     }
   }
 }
