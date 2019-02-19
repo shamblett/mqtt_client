@@ -80,8 +80,10 @@ Future<int> main() async {
   client.subscribe(topic, MqttQos.atMostOnce);
   const String topic1 = 'ebcon/#'; // Wildcard topic
   client.subscribe(topic1, MqttQos.atMostOnce);
+  print(
+      'EXAMPLE::We have subscribed to test/# and ebcon/# but due to topic filtering you will only see messages for ebcon/#');
 
-  /// If needed we can filter the incoming subscribed topics by using topic filtering.
+  /// We can filter the incoming subscribed topics by using topic filtering.
   /// As many filters can be attached to the clients change notifier as needed.
   /// See the MqttClientTopicFilter documentation for more details.
 
