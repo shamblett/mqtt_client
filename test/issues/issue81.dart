@@ -15,7 +15,7 @@ Future<int> main() async {
   client.port = 8883;
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: false);
+  client.logging(on: true);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
