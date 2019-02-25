@@ -10,8 +10,9 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-
   final MqttClient client = MqttClient('mqtt.hsl.fi', '');
+
+  client.port = 8883;
 
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
@@ -63,7 +64,8 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription
-  print('EXAMPLE::Subscribing to the /hfp/v1/journey/ongoing/+/+/+/2550/2/# topic');
+  print(
+      'EXAMPLE::Subscribing to the /hfp/v1/journey/ongoing/+/+/+/2550/2/# topic');
   const String topic = '/hfp/v1/journey/ongoing/+/+/+/2550/2/#';
   client.subscribe(topic, MqttQos.atMostOnce);
 
@@ -72,7 +74,7 @@ Future<int> main() async {
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
     final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
