@@ -10,9 +10,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('mqtt.hsl.fi', '');
-
-  client.secure = true;
+  final MqttClient client = MqttClient('mqtt.hsl.fi', '8883');
 
   /// Set logging on if needed, defaults to off
   client.logging(on: true);
@@ -29,19 +27,6 @@ Future<int> main() async {
   /// you wish.
   client.onSubscribed = onSubscribed;
 
-  /// Create a connection message to use or use the default one. The default one sets the
-  /// client identifier, any supplied username/password, the default keepalive interval(60s)
-  /// and clean session, an example of a specific one below.
-  final MqttConnectMessage connMess = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .keepAliveFor(20) // Must agree with the keep alive set above or not set
-      .withWillTopic('willtopic') // If you set this you must set a will message
-      .withWillMessage('My Will message')
-      .startClean() // Non persistent session for testing
-      .withWillQos(MqttQos.atLeastOnce);
-  print('EXAMPLE::client connecting....');
-  client.connectionMessage = connMess;
-
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
@@ -57,8 +42,7 @@ Future<int> main() async {
     print('EXAMPLE::client connected');
   } else {
     /// Use status here rather than state if you also want the broker return code.
-    print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, $status');
+    print('EXAMPLE::ERROR client connection failed - disconnecting, $status');
     client.disconnect();
     exit(-1);
   }
