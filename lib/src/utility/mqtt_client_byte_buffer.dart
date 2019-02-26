@@ -164,4 +164,13 @@ class MqttByteBuffer {
     final typed.Uint8Buffer stringBuff = buffer.read(stringLength);
     return enc.getString(stringBuff);
   }
+
+  @override
+  String toString() {
+    if (buffer != null && buffer.isNotEmpty) {
+      return 'Bytestream is null or empty';
+    } else {
+      return buffer.toList().toString();
+    }
+  }
 }
