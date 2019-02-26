@@ -64,6 +64,7 @@ class MqttConnection {
     MqttLogger.log('MqttConnection::_onData');
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
+      MqttLogger.log('MqttConnection::_ondata - Error - 0 byte message');
       return;
     }
 
