@@ -422,10 +422,8 @@ void main() {
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
-        expect(
-            exception.toString(),
-            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough '
-            'bytes for the read operation length 3, count 2, position 2');
+        expect(exception.toString(),
+            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 3, count 2, position 2, buffer [0, 2, 109]');
         raised = true;
       }
       expect(raised, isTrue);
@@ -457,10 +455,8 @@ void main() {
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
-        expect(
-            exception.toString(),
-            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough '
-            'bytes for the read operation length 1, count 2, position 0');
+        expect(exception.toString(),
+            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 1, count 2, position 0, buffer [0]');
         raised = true;
       }
       expect(raised, isTrue);
@@ -948,6 +944,50 @@ void main() {
       final typed.Uint8Buffer buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print('Publish - Valid payload::${baseMessage.toString()}');
+      // Check that the message was correctly identified as a publish message.
+      expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.duplicate, isFalse);
+      expect(baseMessage.header.retain, isFalse);
+      expect(baseMessage.header.qos, MqttQos.atMostOnce);
+      expect(baseMessage.header.messageType, MqttMessageType.publish);
+      expect(baseMessage.header.messageSize, 12);
+      final MqttPublishMessage pm = baseMessage;
+      // Check the payload
+      expect(pm.payload.message[0], 'h'.codeUnitAt(0));
+      expect(pm.payload.message[1], 'e'.codeUnitAt(0));
+      expect(pm.payload.message[2], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[3], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[4], 'o'.codeUnitAt(0));
+      expect(pm.payload.message[5], '!'.codeUnitAt(0));
+    });
+    test('Deserialisation - Valid payload V311', () {
+      // Tests basic message deserialization from a raw byte array.
+      // Message Specs________________
+      // <30><0C><00><04>fredhello!
+      final List<int> sampleMessage = <int>[
+        0x30,
+        0x0C,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0),
+        '!'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
+      Protocol.version = Constants.mqttV311ProtocolVersion;
       final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish message.

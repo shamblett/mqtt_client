@@ -184,8 +184,11 @@ class MqttVariableHeader {
   /// Topic name
   void readTopicName(MqttByteBuffer stream) {
     topicName = MqttByteBuffer.readMqttString(stream);
-    length += _enc.getByteCount(topicName) +
-        2; // 2 for length short at front of string.
+    if (Protocol.version == Constants.mqttV311ProtocolVersion) {
+      length += _enc.getByteCount(topicName);
+    } else {
+      length = topicName.length + 2; // 2 for length short at front of string.
+    }
   }
 
   /// Message identifier
