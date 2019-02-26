@@ -1074,6 +1074,7 @@ void main() {
       payload[3] = 'l'.codeUnitAt(0);
       payload[4] = 'o'.codeUnitAt(0);
       payload[5] = '!'.codeUnitAt(0);
+      Protocol.version = Constants.mqttV311ProtocolVersion;
       final MqttMessage msg = MqttPublishMessage()
           .withQos(MqttQos.exactlyOnce)
           .withMessageIdentifier(10)
@@ -1083,21 +1084,15 @@ void main() {
       print('Publish - Qos Level 2 Exactly Once::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
-      expect(actual.length, expected.length);
+      expect(actual.length, 102);
       expect(actual[0], expected[0]); // msg type of header + other bits
-      expect(actual[1], expected[1]); // remaining length
+      expect(actual[1], 100); // remaining length
       expect(actual[2], expected[2]); // first topic length byte
-      expect(actual[3], expected[3]); // second topic length byte
-      expect(actual[4], expected[4]); // f
-      expect(actual[5], expected[5]); // r
-      expect(actual[6], expected[6]); // e
-      expect(actual[7], expected[7]); // d
-      expect(actual[8], expected[8]); // h
-      expect(actual[9], expected[9]); // e
-      expect(actual[10], expected[10]); // l
-      expect(actual[11], expected[11]); // l
-      expect(actual[12], expected[12]); // o
-      expect(actual[13], expected[13]); // !
+      expect(actual[3], 89); // second topic length byte
+      expect(actual[4], 47);
+      expect(actual[5], 104);
+      expect(actual[6], 102);
+      expect(actual[7], 112);
     });
     test('Serialisation - Qos Level 0 No MID', () {
       final List<int> expected = <int>[
