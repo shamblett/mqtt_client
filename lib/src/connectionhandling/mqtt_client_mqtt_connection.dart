@@ -85,6 +85,7 @@ class MqttConnection {
         messageIsValid = false;
       }
       if (!messageIsValid) {
+        messageStream.reset();
         return;
       }
       if (messageIsValid) {

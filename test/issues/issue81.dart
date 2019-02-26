@@ -12,6 +12,9 @@ import 'package:mqtt_client/mqtt_client.dart';
 Future<int> main() async {
   final MqttClient client = MqttClient('mqtt.hsl.fi', '8883');
 
+  /// Version must be V3.1.1
+  client.setProtocolV311();
+
   /// Set logging on if needed, defaults to off
   client.logging(on: true);
 

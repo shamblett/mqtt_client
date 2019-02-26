@@ -74,6 +74,9 @@ class MqttVariableHeader {
   /// Message identifier
   int messageIdentifier = 0;
 
+  /// Encoder
+  MqttEncoding _enc = MqttEncoding();
+
   /// Creates a variable header from the specified header stream.
   /// A subclass can override this method to do completely custom read operations
   /// if required.
@@ -181,7 +184,8 @@ class MqttVariableHeader {
   /// Topic name
   void readTopicName(MqttByteBuffer stream) {
     topicName = MqttByteBuffer.readMqttString(stream);
-    length += topicName.length + 2; // 2 for length short at front of string.
+    length += _enc.getByteCount(topicName) +
+        2; // 2 for length short at front of string.
   }
 
   /// Message identifier

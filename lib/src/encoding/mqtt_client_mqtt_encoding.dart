@@ -35,18 +35,17 @@ class MqttEncoding extends Utf8Codec {
   }
 
   /// Calculates the number of bytes produced by encoding the characters in the specified.
-  int getByteCount(String chars) {
-    _validateString(chars);
-    return getBytes(chars).length;
-  }
+  int getByteCount(String chars) => getBytes(chars).length;
 
   /// Validates the string to ensure it doesn't contain any characters invalid within the Mqtt string format.
   static void _validateString(String s) {
     for (int i = 0; i < s.length; i++) {
-      if (s.codeUnitAt(i) > 0x7F) {
-        throw Exception(
-            'mqtt_client::MQTTEncoding: The input string has extended '
-            'UTF characters, which are not supported');
+      if (Protocol.version == Constants.mqttV31ProtocolVersion) {
+        if (s.codeUnitAt(i) > 0x7F) {
+          throw Exception(
+              'mqtt_client::MQTTEncoding: The input string has extended '
+              'UTF characters, which are not supported');
+        }
       }
     }
   }
