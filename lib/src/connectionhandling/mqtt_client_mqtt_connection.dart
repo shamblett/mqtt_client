@@ -78,8 +78,9 @@ class MqttConnection {
         if (msg == null) {
           return;
         }
-      } on Exception {
+      } on Exception catch (e) {
         MqttLogger.log('MqttConnection::_ondata - message is not valid');
+        MqttLogger.log('MqttConnection::_ondata, exception is $e');
         messageIsValid = false;
       }
       if (!messageIsValid) {
