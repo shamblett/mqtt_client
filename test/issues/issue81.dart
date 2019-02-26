@@ -16,7 +16,7 @@ Future<int> main() async {
   client.setProtocolV311();
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -67,7 +67,7 @@ Future<int> main() async {
     print('');
   });
 
-  await MqttUtilities.asyncSleep(2);
+  await MqttUtilities.asyncSleep(5);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
