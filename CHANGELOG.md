@@ -1,3 +1,6 @@
+#5.5.2
+Fix for dart 2.2 usage
+
 #5.5.1
 Issue 81
 
