@@ -1,7 +1,7 @@
 language: dart
 dart:
   # Install the latest stable release
-  - stable
+  - "2.1.1"
 dart_task:
   - test: --exclude-tags no-xvfb
     xvfb: false
