@@ -422,10 +422,8 @@ void main() {
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
-        expect(
-            exception.toString(),
-            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough '
-            'bytes for the read operation length 3, count 2, position 2');
+        expect(exception.toString(),
+            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 3, count 2, position 2, buffer [0, 2, 109]');
         raised = true;
       }
       expect(raised, isTrue);
@@ -457,10 +455,8 @@ void main() {
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
-        expect(
-            exception.toString(),
-            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough '
-            'bytes for the read operation length 1, count 2, position 0');
+        expect(exception.toString(),
+            'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 1, count 2, position 0, buffer [0]');
         raised = true;
       }
       expect(raised, isTrue);
@@ -967,6 +963,50 @@ void main() {
       expect(pm.payload.message[4], 'o'.codeUnitAt(0));
       expect(pm.payload.message[5], '!'.codeUnitAt(0));
     });
+    test('Deserialisation - Valid payload V311', () {
+      // Tests basic message deserialization from a raw byte array.
+      // Message Specs________________
+      // <30><0C><00><04>fredhello!
+      final List<int> sampleMessage = <int>[
+        0x30,
+        0x0C,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0),
+        '!'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
+      Protocol.version = Constants.mqttV311ProtocolVersion;
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print('Publish - Valid payload::${baseMessage.toString()}');
+      // Check that the message was correctly identified as a publish message.
+      expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header.duplicate, isFalse);
+      expect(baseMessage.header.retain, isFalse);
+      expect(baseMessage.header.qos, MqttQos.atMostOnce);
+      expect(baseMessage.header.messageType, MqttMessageType.publish);
+      expect(baseMessage.header.messageSize, 12);
+      final MqttPublishMessage pm = baseMessage;
+      // Check the payload
+      expect(pm.payload.message[0], 'h'.codeUnitAt(0));
+      expect(pm.payload.message[1], 'e'.codeUnitAt(0));
+      expect(pm.payload.message[2], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[3], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[4], 'o'.codeUnitAt(0));
+      expect(pm.payload.message[5], '!'.codeUnitAt(0));
+    });
     test('Deserialisation - payload too short', () {
       final List<int> sampleMessage = <int>[
         0x30,
@@ -1046,6 +1086,53 @@ void main() {
       expect(actual[11], expected[11]); // l
       expect(actual[12], expected[12]); // o
       expect(actual[13], expected[13]); // !
+    });
+    test('Serialisation - Topic has special characters', () {
+      final List<int> expected = <int>[
+        0x34,
+        0x0E,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+        0x00,
+        0x0A,
+        // message payload is here
+        'h'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'l'.codeUnitAt(0),
+        'o'.codeUnitAt(0),
+        '!'.codeUnitAt(0)
+      ];
+      final typed.Uint8Buffer payload = typed.Uint8Buffer(6);
+      payload[0] = 'h'.codeUnitAt(0);
+      payload[1] = 'e'.codeUnitAt(0);
+      payload[2] = 'l'.codeUnitAt(0);
+      payload[3] = 'l'.codeUnitAt(0);
+      payload[4] = 'o'.codeUnitAt(0);
+      payload[5] = '!'.codeUnitAt(0);
+      Protocol.version = Constants.mqttV311ProtocolVersion;
+      final MqttMessage msg = MqttPublishMessage()
+          .withQos(MqttQos.exactlyOnce)
+          .withMessageIdentifier(10)
+          .toTopic(
+              '/hfp/v1/journey/ongoing/bus/0012/01314/2550/2/Itäkeskus(M)/19:16/1454121/3/60;25/20/14/83')
+          .publishData(payload);
+      print('Publish - Qos Level 2 Exactly Once::${msg.toString()}');
+      final typed.Uint8Buffer actual =
+          MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, 102);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], 100); // remaining length
+      expect(actual[2], expected[2]); // first topic length byte
+      expect(actual[3], 89); // second topic length byte
+      expect(actual[4], 47);
+      expect(actual[5], 104);
+      expect(actual[6], 102);
+      expect(actual[7], 112);
     });
     test('Serialisation - Qos Level 0 No MID', () {
       final List<int> expected = <int>[
@@ -1993,6 +2080,366 @@ void main() {
         raised = true;
       }
       expect(raised, isTrue);
+    });
+  });
+
+  group('Issues', () {
+    test('81 - extended UTF8 characters must use version V3.1.1', () {
+      final List<int> sampleMessage = <int>[
+        48,
+        216,
+        2,
+        0,
+        90,
+        47,
+        104,
+        102,
+        112,
+        47,
+        118,
+        49,
+        47,
+        106,
+        111,
+        117,
+        114,
+        110,
+        101,
+        121,
+        47,
+        111,
+        110,
+        103,
+        111,
+        105,
+        110,
+        103,
+        47,
+        98,
+        117,
+        115,
+        47,
+        48,
+        48,
+        49,
+        50,
+        47,
+        48,
+        49,
+        51,
+        51,
+        50,
+        47,
+        50,
+        53,
+        53,
+        48,
+        47,
+        50,
+        47,
+        73,
+        116,
+        195,
+        164,
+        107,
+        101,
+        115,
+        107,
+        117,
+        115,
+        40,
+        77,
+        41,
+        47,
+        49,
+        50,
+        58,
+        48,
+        54,
+        47,
+        49,
+        51,
+        54,
+        50,
+        49,
+        49,
+        51,
+        47,
+        52,
+        47,
+        54,
+        48,
+        59,
+        50,
+        53,
+        47,
+        50,
+        48,
+        47,
+        50,
+        49,
+        47,
+        54,
+        53,
+        123,
+        34,
+        86,
+        80,
+        34,
+        58,
+        123,
+        34,
+        100,
+        101,
+        115,
+        105,
+        34,
+        58,
+        34,
+        53,
+        53,
+        48,
+        34,
+        44,
+        34,
+        100,
+        105,
+        114,
+        34,
+        58,
+        34,
+        50,
+        34,
+        44,
+        34,
+        111,
+        112,
+        101,
+        114,
+        34,
+        58,
+        49,
+        50,
+        44,
+        34,
+        118,
+        101,
+        104,
+        34,
+        58,
+        49,
+        51,
+        51,
+        50,
+        44,
+        34,
+        116,
+        115,
+        116,
+        34,
+        58,
+        34,
+        50,
+        48,
+        49,
+        57,
+        45,
+        48,
+        50,
+        45,
+        50,
+        54,
+        84,
+        49,
+        48,
+        58,
+        53,
+        56,
+        58,
+        52,
+        55,
+        90,
+        34,
+        44,
+        34,
+        116,
+        115,
+        105,
+        34,
+        58,
+        49,
+        53,
+        53,
+        49,
+        49,
+        55,
+        56,
+        55,
+        50,
+        55,
+        44,
+        34,
+        115,
+        112,
+        100,
+        34,
+        58,
+        49,
+        48,
+        46,
+        52,
+        54,
+        44,
+        34,
+        104,
+        100,
+        103,
+        34,
+        58,
+        49,
+        51,
+        48,
+        44,
+        34,
+        108,
+        97,
+        116,
+        34,
+        58,
+        54,
+        48,
+        46,
+        50,
+        50,
+        54,
+        53,
+        50,
+        57,
+        44,
+        34,
+        108,
+        111,
+        110,
+        103,
+        34,
+        58,
+        50,
+        53,
+        46,
+        48,
+        49,
+        53,
+        51,
+        57,
+        55,
+        44,
+        34,
+        97,
+        99,
+        99,
+        34,
+        58,
+        48,
+        46,
+        51,
+        49,
+        44,
+        34,
+        100,
+        108,
+        34,
+        58,
+        45,
+        50,
+        49,
+        52,
+        44,
+        34,
+        111,
+        100,
+        111,
+        34,
+        58,
+        50,
+        50,
+        50,
+        48,
+        50,
+        44,
+        34,
+        100,
+        114,
+        115,
+        116,
+        34,
+        58,
+        48,
+        44,
+        34,
+        111,
+        100,
+        97,
+        121,
+        34,
+        58,
+        34,
+        50,
+        48,
+        49,
+        57,
+        45,
+        48,
+        50,
+        45,
+        50,
+        54,
+        34,
+        44,
+        34,
+        106,
+        114,
+        110,
+        34,
+        58,
+        52,
+        50,
+        52,
+        44,
+        34,
+        108,
+        105,
+        110,
+        101,
+        34,
+        58,
+        50,
+        54,
+        49,
+        44,
+        34,
+        115,
+        116,
+        97,
+        114,
+        116,
+        34,
+        58,
+        34,
+        49,
+        50,
+        58,
+        48,
+        54,
+        34,
+        125,
+        125
+      ];
+      Protocol.version = Constants.mqttV311ProtocolVersion;
+      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
+      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      print(baseMessage);
     });
   });
 }

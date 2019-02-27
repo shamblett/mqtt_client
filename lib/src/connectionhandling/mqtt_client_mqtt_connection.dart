@@ -64,6 +64,7 @@ class MqttConnection {
     MqttLogger.log('MqttConnection::_onData');
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
+      MqttLogger.log('MqttConnection::_ondata - Error - 0 byte message');
       return;
     }
 
@@ -78,11 +79,13 @@ class MqttConnection {
         if (msg == null) {
           return;
         }
-      } on Exception {
+      } on Exception catch (e) {
         MqttLogger.log('MqttConnection::_ondata - message is not valid');
+        MqttLogger.log('MqttConnection::_ondata - exception is $e');
         messageIsValid = false;
       }
       if (!messageIsValid) {
+        messageStream.reset();
         return;
       }
       if (messageIsValid) {
