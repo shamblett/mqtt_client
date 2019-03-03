@@ -10,13 +10,14 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('alitest.fflux.tech/mqtt', '');
+  final MqttClient client = MqttClient('ws://alitest.fflux.tech/mqtt', '');
 
   /// Version must be V3.1.1
   //client.setProtocolV311();
 
   /// WS
   client.useWebSocket = true;
+  client.port = 80;
 
   /// Set logging on if needed, defaults to off
   client.logging(on: true);
@@ -52,9 +53,14 @@ Future<int> main() async {
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
   MqttClientConnectionStatus status = MqttClientConnectionStatus();
+  const String password1 =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBUFAiLCJ1c2VyX2lkIjoiMTM2IiwiaXNzIjoiU2VydmljZSIsImV4cCI6MTU1MjMyMDA0MSwiaWF0IjoxNTUxNDU2MDQxfQ.4ewl7d2y7koxW2dNoRT_rHS7LAN7neMvhwGFxH-FDHk';
+  const String userName1 = '00000088';
+  const String password2 =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBUFAiLCJ1c2VyX2lkIjoiMTMzIiwiaXNzIjoiU2VydmljZSIsImV4cCI6MTU1MjQ1ODA5OCwiaWF0IjoxNTUxNTk0MDk4fQ.XAsj5X_oq-eaFjgi8KwsYi-Q926qNwOamxMgJK2YJWk';
+  const String userName2 = '13516784057';
   try {
-    status = await client.connect('00000088',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBUFAiLCJ1c2VyX2lkIjoiMTM2IiwiaXNzIjoiU2VydmljZSIsImV4cCI6MTU1MjMyMDA0MSwiaWF0IjoxNTUxNDU2MDQxfQ.4ewl7d2y7koxW2dNoRT_rHS7LAN7neMvhwGFxH-FDHk');
+    status = await client.connect(userName2, password2);
   } on Exception catch (e) {
     print('EXAMPLE::client exception - $e');
   }
