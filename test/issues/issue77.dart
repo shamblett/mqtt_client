@@ -86,7 +86,7 @@ Future<int> main() async {
     print('');
   });
 
-  await MqttUtilities.asyncSleep(5);
+  await MqttUtilities.asyncSleep(120);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
