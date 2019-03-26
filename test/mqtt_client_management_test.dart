@@ -78,5 +78,20 @@ void main() {
           <MqttReceivedMessage<MqttMessage>>[message0, message1, message2]);
       expect(called, 1);
     });
+    test('Issue 85', () {
+      const String topicToFilter = '+/systemStructure';
+      int called = 0;
+      final MqttReceivedMessage<MqttMessage> message0 =
+      MqttReceivedMessage<MqttMessage>('101/systemStructure', payload);
+      final MqttClientTopicFilter filter =
+      MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
+      filter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+        expect(c[called].topic, '101/systemStructure');
+        called++;
+      });
+      clientUpdates.add(
+          <MqttReceivedMessage<MqttMessage>>[message0]);
+      expect(called, 1);
+    });
   });
 }
