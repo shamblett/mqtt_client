@@ -244,7 +244,7 @@ class MqttClient {
   /// Returns the subscription or null on failure
   Subscription subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus.state != MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionStatus.state);
+      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
   }
@@ -255,9 +255,9 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (_connectionHandler.connectionStatus.state !=
+    if (_connectionHandler?.connectionStatus?.state !=
         MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionStatus.state);
+      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
     }
     try {
       final PublicationTopic pubTopic = PublicationTopic(topic);
