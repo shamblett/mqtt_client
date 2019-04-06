@@ -308,13 +308,14 @@ class MqttClient {
       _connectionHandler?.disconnect();
       returnCode = MqttConnectReturnCode.solicited;
     }
-    _publishingManager.published?.close();
+    _publishingManager?.published?.close();
     _publishingManager = null;
     _subscriptionsManager = null;
     _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
-    _clientEventBus.destroy();
+    _clientEventBus?.destroy();
+    _clientEventBus = null;
     // Set the connection status before calling onDisconnected
     _connectionStatus.state = MqttConnectionState.disconnected;
     _connectionStatus.returnCode = returnCode;
