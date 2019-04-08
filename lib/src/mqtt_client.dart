@@ -244,7 +244,7 @@ class MqttClient {
   /// Returns the subscription or null on failure
   Subscription subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus.state != MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionStatus.state);
+      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
   }
@@ -255,9 +255,9 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (_connectionHandler.connectionStatus.state !=
+    if (_connectionHandler?.connectionStatus?.state !=
         MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler.connectionStatus.state);
+      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
     }
     try {
       final PublicationTopic pubTopic = PublicationTopic(topic);
@@ -308,13 +308,14 @@ class MqttClient {
       _connectionHandler?.disconnect();
       returnCode = MqttConnectReturnCode.solicited;
     }
-    _publishingManager.published?.close();
+    _publishingManager?.published?.close();
     _publishingManager = null;
     _subscriptionsManager = null;
     _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
-    _clientEventBus.destroy();
+    _clientEventBus?.destroy();
+    _clientEventBus = null;
     // Set the connection status before calling onDisconnected
     _connectionStatus.state = MqttConnectionState.disconnected;
     _connectionStatus.returnCode = returnCode;
