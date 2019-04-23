@@ -11,7 +11,9 @@ part of mqtt_client;
 /// acts as a bandpass filter for the topics you are interested in if
 /// you subscribe to more than one topic or use wildcard topics.
 /// Simply construct it, and listen to its message stream rather than
-/// that of the client.
+/// that of the client. Note this class will only filter valid receive topics
+/// so if you filter on wildcard topics for instance, which you should only
+/// subscribe to,  it  will always generate a no match.
 class MqttClientTopicFilter {
   /// Construction
   MqttClientTopicFilter(this._topic, this._clientUpdates) {
@@ -37,16 +39,24 @@ class MqttClientTopicFilter {
   Stream<List<MqttReceivedMessage<MqttMessage>>> get updates => _updates.stream;
 
   void _topicIn(List<MqttReceivedMessage<MqttMessage>> c) {
-    // Pass through if we have a match
-    final List<MqttReceivedMessage<MqttMessage>> tmp =
-        List<MqttReceivedMessage<MqttMessage>>();
-    for (MqttReceivedMessage<MqttMessage> message in c) {
-      if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {
-        tmp.add(message);
+    String lastTopic;
+    try {
+      // Pass through if we have a match
+      final List<MqttReceivedMessage<MqttMessage>> tmp =
+          List<MqttReceivedMessage<MqttMessage>>();
+      for (MqttReceivedMessage<MqttMessage> message in c) {
+        lastTopic = message.topic;
+        if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {
+          tmp.add(message);
+        }
       }
-    }
-    if (tmp.isNotEmpty) {
-      _updates.add(tmp);
+      if (tmp.isNotEmpty) {
+        _updates.add(tmp);
+      }
+    } on RangeError catch (e) {
+      MqttLogger.log(
+          'MqttClientTopicFilter::_topicIn - cannot process received topic: $lastTopic');
+      MqttLogger.log('MqttClientTopicFilter::_topicIn - exception is $e');
     }
   }
 }

@@ -1,3 +1,6 @@
+#5.5.3
+Issues 85 and 87
+
 #5.5.2
 Fix for dart 2.2 usage
 

@@ -78,9 +78,11 @@ void main() {
           <MqttReceivedMessage<MqttMessage>>[message0, message1, message2]);
       expect(called, 1);
     });
-    test('Multiple filters - 1', () {
+    test('Multiple filters - invalid topic received', () {
       const String topicNumberOfSystems = 'PLCs/numberOfSystems';
       const String topicSystemStructure = 'PLCs/+/systemStructure';
+      int called1 = 0;
+      int called2 = 0;
       payload.header = MqttHeader();
       payload.header.qos = MqttQos.atLeastOnce;
       payload.header.retain = true;
@@ -93,8 +95,19 @@ void main() {
 
       final MqttClientTopicFilter topicFilterNumberOfSystems =
           MqttClientTopicFilter(topicNumberOfSystems, clientUpdates.stream);
-
+      topicFilterNumberOfSystems.updates
+          .listen((List<MqttReceivedMessage<MqttMessage>> c) {
+        expect(c[called1].topic, 'PLCs/numberOfSystems');
+        called1++;
+      });
+      topicFilterSystemStructure.updates
+          .listen((List<MqttReceivedMessage<MqttMessage>> c) {
+        expect(c[called2].topic, 'PLCs/+/systemStructure');
+        called2++;
+      });
       clientUpdates.add(<MqttReceivedMessage<MqttMessage>>[message0]);
+      expect(called1, 1);
+      expect(called2, 0);
     });
   });
 }
