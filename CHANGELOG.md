@@ -1,3 +1,6 @@
+#5.5.4
+Remove flutter example
+
 #5.5.3
 Issues 85 and 87
 
