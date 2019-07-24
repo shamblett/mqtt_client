@@ -1,3 +1,6 @@
+#5.5.5
+Fix for dart 2.5 usage (issue 99)
+
 #5.5.4
 Remove flutter example
 
