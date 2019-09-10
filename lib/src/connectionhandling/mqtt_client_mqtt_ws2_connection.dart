@@ -8,14 +8,14 @@
 
 part of mqtt_client;
 
-class _DetachedSocket extends Stream<List<int>> implements Socket {
+class _DetachedSocket extends Stream<Uint8List> implements Socket {
   _DetachedSocket(this._socket, this._subscription);
 
-  final StreamSubscription<List<int>> _subscription;
+  final StreamSubscription<Uint8List> _subscription;
   final Socket _socket;
 
   @override
-  StreamSubscription<List<int>> listen(void onData(List<int> event),
+  StreamSubscription<Uint8List> listen(void onData(Uint8List event),
       {Function onError, void onDone(), bool cancelOnError}) {
     _subscription
       ..onData(onData)
@@ -201,7 +201,7 @@ class MqttWs2Connection extends MqttConnection {
     request += 'Sec-WebSocket-Version: 13$endL';
     request += endL;
     socket.write(request);
-    _subscription = socket.listen((List<int> data) {
+    _subscription = socket.listen((Uint8List data) {
       String s = String.fromCharCodes(data);
       s = s.replaceAll('\r', '');
       if (!_parseResponse(s, key64)) {

@@ -1,3 +1,9 @@
+#5.5.4
+Fix for dart 2.5 usage (issue 99), remove flutter example  and issue 115.
+Note that from here on in the client is not compatible with
+Dart 2.4.x, if you want to stay on 2.4.x use client version
+5.5.4 or lower.
+
 #5.5.3
 Issues 85 and 87
 
