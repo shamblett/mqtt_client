@@ -88,4 +88,7 @@ class MqttClientPayloadBuilder {
     final Float64List tmp = Float64List.fromList(<double>[val]);
     _payload.addAll(tmp.buffer.asInt8List());
   }
+
+  /// Clear the buffer
+  void clear() => _payload.clear();
 }

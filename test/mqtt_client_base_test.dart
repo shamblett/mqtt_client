@@ -791,6 +791,14 @@ void main() {
       expect(
           builder.payload.toList(), <int>[91, 150, 146, 56, 33, 134, 229, 72]);
     });
+
+    test('Clear', () {
+      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      builder.addString('Hello');
+      expect(builder.length, 5);
+      builder.clear();
+      expect(builder.length, 0);
+    });
   });
 
   group('Cancellable async timer', () {
