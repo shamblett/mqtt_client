@@ -160,14 +160,15 @@ class MockBrokerSecure {
   SecureSocket client;
   MqttByteBuffer networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
+  String pemName;
 
   Future<void> start() {
     final Completer<void> completer = Completer<void>();
-    final SecurityContext context = SecurityContext.defaultContext;
+    final SecurityContext context = SecurityContext();
     final String currDir = path.current + path.separator;
     context.useCertificateChain(
-        currDir + path.join('test', 'pem', 'localhost.cert'));
-    context.usePrivateKey(currDir + path.join('test', 'pem', 'localhost.key'));
+        currDir + path.join('test', 'pem', '$pemName.cert'));
+    context.usePrivateKey(currDir + path.join('test', 'pem', '$pemName.key'));
     SecureServerSocket.bind('localhost', brokerPort, context)
         .then((SecureServerSocket server) {
       listener = server;
@@ -215,5 +216,7 @@ class MockBrokerSecure {
   }
 
   /// Close the broker socket
-  void close() {}
+  void close() {
+    listener?.close();
+  }
 }
