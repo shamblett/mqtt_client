@@ -10,7 +10,8 @@ part of mqtt_client;
 /// The MQTT secure connection class
 class MqttSecureConnection extends MqttConnection {
   /// Default constructor
-  MqttSecureConnection(this.context, events.EventBus eventBus)
+  MqttSecureConnection(
+      this.context, events.EventBus eventBus, this.onBadCertificate)
       : super(eventBus);
 
   /// Initializes a new instance of the MqttSecureConnection class.
@@ -22,6 +23,8 @@ class MqttSecureConnection extends MqttConnection {
 
   /// The security context for secure usage
   SecurityContext context;
+  /// Callback function to handle bad cerfitication. if true, ignore the error.
+  bool Function(X509Certificate certificate) onBadCertificate;
 
   /// Connect
   @override
@@ -30,7 +33,7 @@ class MqttSecureConnection extends MqttConnection {
         Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttSecureConnection::connect');
     try {
-      SecureSocket.connect(server, port, context: context)
+      SecureSocket.connect(server, port, onBadCertificate: onBadCertificate, context: context)
           .then((SecureSocket socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;

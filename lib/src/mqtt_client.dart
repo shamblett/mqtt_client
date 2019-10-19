@@ -65,6 +65,9 @@ class MqttClient {
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
+  /// Callback function to handle bad cerfitication. if true, ignore the error.
+  bool Function(X509Certificate certificate) onBadCertificate;
+
   /// The Handler that is managing the connection to the remote server.
   MqttConnectionHandler _connectionHandler;
 
@@ -208,6 +211,7 @@ class MqttClient {
       _connectionHandler.useWebSocket = false;
       _connectionHandler.useAlternateWebSocketImplementation = false;
       _connectionHandler.securityContext = securityContext;
+      _connectionHandler.onBadCertificate = onBadCertificate;
     }
     _connectionHandler.onDisconnected = _internalDisconnect;
     _connectionHandler.onConnected = onConnected;
