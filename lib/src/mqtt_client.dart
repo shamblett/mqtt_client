@@ -65,7 +65,7 @@ class MqttClient {
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
-  /// Callback function to handle bad cerfitication. if true, ignore the error.
+  /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(X509Certificate certificate) onBadCertificate;
 
   /// The Handler that is managing the connection to the remote server.

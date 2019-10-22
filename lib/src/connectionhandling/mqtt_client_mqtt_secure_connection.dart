@@ -23,7 +23,7 @@ class MqttSecureConnection extends MqttConnection {
 
   /// The security context for secure usage
   SecurityContext context;
-  /// Callback function to handle bad cerfitication. if true, ignore the error.
+  /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(X509Certificate certificate) onBadCertificate;
 
   /// Connect

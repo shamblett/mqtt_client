@@ -54,7 +54,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
 
-  /// Callback function to handle bad cerfitication. if true, ignore the error.
+  /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(X509Certificate certificate) onBadCertificate;
 
   /// Connect to the specific Mqtt Connection.
