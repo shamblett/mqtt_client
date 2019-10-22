@@ -119,6 +119,7 @@ void main() {
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
+
       broker.setMessageHandler = messageHandlerConnect;
     });
 
@@ -167,11 +168,14 @@ void main() {
       ch.close();
     });
 
-    test('Self-signed certificate - Failed with error - Handshake error in client', () async {
+    test(
+        'Self-signed certificate - Failed with error - Handshake error in client',
+        () async {
       bool cbCalled = false;
       void disconnectCB() {
         cbCalled = true;
       }
+
       broker.pemName = 'self_signed';
       await broker.start();
       final events.EventBus clientEventBus = events.EventBus();
@@ -193,7 +197,8 @@ void main() {
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(cbCalled, isTrue);
     });
-    test('Successfully connected to broker with self-signed certifcate', () async {
+    test('Successfully connected to broker with self-signed certifcate',
+        () async {
       broker.pemName = 'self_signed';
       await broker.start();
       final events.EventBus clientEventBus = events.EventBus();
