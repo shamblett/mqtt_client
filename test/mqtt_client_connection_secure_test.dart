@@ -107,16 +107,27 @@ void main() {
       expect(cbCalled, isTrue);
     });
   });
-  group('Connection Keep Alive - Mock broker', () {
-    test('Successful response', () async {
-      final MockBrokerSecure broker = MockBrokerSecure();
-      int expectRequest = 0;
 
+  group('MockBroker', () {
+    MockBrokerSecure broker;
+
+    setUp(() async {
+      broker = MockBrokerSecure();
+      broker.pemName = 'localhost';
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
         final MqttConnectAckMessage ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
       }
+      broker.setMessageHandler = messageHandlerConnect;
+    });
+
+    tearDown(() {
+      broker?.close();
+    });
+
+    test('Connection Keep Alive - Successful response', () async {
+      int expectRequest = 0;
 
       void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
         final MqttByteBuffer headerStream = MqttByteBuffer(messageArrived);
@@ -139,7 +150,6 @@ void main() {
       context.setTrustedCertificates(
           currDir + path.join('test', 'pem', 'localhost.cert'));
       ch.securityContext = context;
-      broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, MqttConnectionState.connected);
@@ -156,5 +166,51 @@ void main() {
       ka.stop();
       ch.close();
     });
-  }, skip: false);
+
+    test('Self-signed certificate - Failed with error - Handshake error in client', () async {
+      bool cbCalled = false;
+      void disconnectCB() {
+        cbCalled = true;
+      }
+      broker.pemName = 'self_signed';
+      await broker.start();
+      final events.EventBus clientEventBus = events.EventBus();
+      final SynchronousMqttConnectionHandler ch =
+          SynchronousMqttConnectionHandler(clientEventBus);
+      ch.secure = true;
+      ch.onDisconnected = disconnectCB;
+      final SecurityContext context = SecurityContext();
+      final String currDir = path.current + path.separator;
+      context.setTrustedCertificates(
+          currDir + path.join('test', 'pem', 'self_signed.cert'));
+      ch.securityContext = context;
+      try {
+        await ch.connect(mockBrokerAddress, mockBrokerPort,
+            MqttConnectMessage().withClientIdentifier(testClientId));
+      } on Exception catch (e) {
+        expect(e.toString().contains('Handshake error in client'), isTrue);
+      }
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
+      expect(cbCalled, isTrue);
+    });
+    test('Successfully connected to broker with self-signed certifcate', () async {
+      broker.pemName = 'self_signed';
+      await broker.start();
+      final events.EventBus clientEventBus = events.EventBus();
+      final SynchronousMqttConnectionHandler ch =
+          SynchronousMqttConnectionHandler(clientEventBus);
+      ch.secure = true;
+      // Skip bad certificate
+      ch.onBadCertificate = (_) => true;
+      final SecurityContext context = SecurityContext();
+      final String currDir = path.current + path.separator;
+      context.setTrustedCertificates(
+          currDir + path.join('test', 'pem', 'self_signed.cert'));
+      ch.securityContext = context;
+      await ch.connect(mockBrokerAddress, mockBrokerPort,
+          MqttConnectMessage().withClientIdentifier(testClientId));
+      expect(ch.connectionStatus.state, MqttConnectionState.connected);
+      ch.close();
+    });
+  });
 }
