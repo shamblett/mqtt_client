@@ -81,15 +81,22 @@ class MqttHeader {
   /// Gets the value of the Mqtt header as a byte array
   typed.Uint8Buffer headerBytes() {
     final typed.Uint8Buffer headerBytes = typed.Uint8Buffer();
+    int firstByte;
 
-    // Build the bytes that make up the header. The first byte is a combination of message type, dup,
-    // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
-    final int messageTypeLength = messageType.index << 4;
-    final int duplicateLength = (duplicate ? 1 : 0) << 3;
-    final int qosLength = qos.index << 1;
-    final int retainLength = retain ? 1 : 0;
-    final int firstByte =
-        messageTypeLength + duplicateLength + qosLength + retainLength;
+    if (messageType==MqttMessageType.unsubscribe) {
+      firstByte = 162;
+    }
+    else {
+      // Build the bytes that make up the header. The first byte is a combination of message type, dup,
+      // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
+      final int messageTypeLength = messageType.index << 4;
+      final int duplicateLength = (duplicate ? 1 : 0) << 3;
+      final int qosLength = qos.index << 1;
+      final int retainLength = retain ? 1 : 0;
+      firstByte =
+          messageTypeLength + duplicateLength + qosLength + retainLength;
+    }
+
     headerBytes.add(firstByte);
     headerBytes.addAll(getRemainingLengthBytes());
     return headerBytes;
