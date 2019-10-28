@@ -1935,6 +1935,7 @@ void main() {
       expect(bm.payload.subscriptions.contains('mark'), isTrue);
     });
     test('Serialisation - Single topic', () {
+      Protocol.version = Constants.mqttV31ProtocolVersion;
       final typed.Uint8Buffer expected = typed.Uint8Buffer(10);
       expected[0] = 0xAA;
       expected[1] = 0x08;
@@ -1954,6 +1955,39 @@ void main() {
       print('Unsubscribe - Single topic::${msg.toString()}');
       final typed.Uint8Buffer actual =
           MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, expected.length);
+      expect(actual[0], expected[0]); // msg type of header + other bits
+      expect(actual[1], expected[1]); // remaining length
+      expect(actual[2], expected[2]); // Start of VH: MsgID Byte1
+      expect(actual[3], expected[3]); // MsgID Byte 2
+      expect(actual[4], expected[4]); // Topic Length B1
+      expect(actual[5], expected[5]); // Topic Length B2
+      expect(actual[6], expected[6]); // f
+      expect(actual[7], expected[7]); // r
+      expect(actual[8], expected[8]); // e
+      expect(actual[9], expected[9]); // d
+    });
+    test('Serialisation V311 - Single topic', () {
+      Protocol.version = Constants.mqttV311ProtocolVersion;
+      final typed.Uint8Buffer expected = typed.Uint8Buffer(10);
+      expected[0] = 0xA2; // With V3.1.1 the header first byte changes to 162
+      expected[1] = 0x08;
+      expected[2] = 0x00;
+      expected[3] = 0x03;
+      expected[4] = 0x00;
+      expected[5] = 0x04;
+      expected[6] = 'f'.codeUnitAt(0);
+      expected[7] = 'r'.codeUnitAt(0);
+      expected[8] = 'e'.codeUnitAt(0);
+      expected[9] = 'd'.codeUnitAt(0);
+      final MqttMessage msg = MqttUnsubscribeMessage()
+          .fromTopic('fred')
+          .withMessageIdentifier(3)
+          .expectAcknowledgement()
+          .isDuplicate();
+      print('Unsubscribe - Single topic::${msg.toString()}');
+      final typed.Uint8Buffer actual =
+      MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length

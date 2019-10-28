@@ -1,20 +1,22 @@
-#5.6.0
+# 5.6.1
+Issue 128, unsubscribe header error
+
+# 5.6.0
 Issue 127, callback added for bad certificate error
 
-
-#5.5.4
+# 5.5.4
 Fix for dart 2.5 usage (issue 99), remove flutter example  and issue 115.
 Note that from here on in the client is not compatible with
 Dart 2.4.x, if you want to stay on 2.4.x use client version
 5.5.4 or lower.
 
-#5.5.3
+# 5.5.3
 Issues 85 and 87
 
-#5.5.2
+# 5.5.2
 Fix for dart 2.2 usage
 
-#5.5.1
+# 5.5.1
 Issue 81
 
 # 5.5.0

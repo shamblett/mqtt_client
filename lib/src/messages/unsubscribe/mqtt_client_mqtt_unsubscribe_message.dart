@@ -32,6 +32,13 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
+    // If the protocol is V3.1.1 the following header fields must be set as below
+    // as in this protocol they are reserved.
+    if (Protocol.version == Constants.mqttV311ProtocolVersion) {
+      header.duplicate = false;
+      header.qos = MqttQos.atLeastOnce;
+      header.retain = false;
+    }
     header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
         messageStream);
     variableHeader.writeTo(messageStream);
