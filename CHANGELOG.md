@@ -1,6 +1,7 @@
 #5.6.0
 Issue 127, callback added for bad certificate error
 
+
 #5.5.4
 Fix for dart 2.5 usage (issue 99), remove flutter example  and issue 115.
 Note that from here on in the client is not compatible with

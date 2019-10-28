@@ -23,6 +23,7 @@ class MqttSecureConnection extends MqttConnection {
 
   /// The security context for secure usage
   SecurityContext context;
+
   /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(X509Certificate certificate) onBadCertificate;
 
@@ -33,7 +34,8 @@ class MqttSecureConnection extends MqttConnection {
         Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttSecureConnection::connect');
     try {
-      SecureSocket.connect(server, port, onBadCertificate: onBadCertificate, context: context)
+      SecureSocket.connect(server, port,
+              onBadCertificate: onBadCertificate, context: context)
           .then((SecureSocket socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;
