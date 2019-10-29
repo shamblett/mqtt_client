@@ -1987,7 +1987,7 @@ void main() {
           .isDuplicate();
       print('Unsubscribe - Single topic::${msg.toString()}');
       final typed.Uint8Buffer actual =
-      MessageSerializationHelper.getMessageBytes(msg);
+          MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
