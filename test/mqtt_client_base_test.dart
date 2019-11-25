@@ -812,7 +812,7 @@ void main() {
       final DateTime now = DateTime.now();
       expect(
           start.millisecondsSinceEpoch +
-                  Duration(milliseconds: 200).inMilliseconds <=
+                  const Duration(milliseconds: 200).inMilliseconds <=
               now.millisecondsSinceEpoch,
           true);
       expect(sleeper.isRunning, false);
@@ -824,7 +824,7 @@ void main() {
       final DateTime now = DateTime.now();
       expect(
           start.millisecondsSinceEpoch +
-                  Duration(milliseconds: 200).inMilliseconds <=
+                  const Duration(milliseconds: 200).inMilliseconds <=
               now.millisecondsSinceEpoch,
           false);
     });
@@ -837,7 +837,7 @@ void main() {
       }
 
       final DateTime start = DateTime.now();
-      Future<void>.delayed(Duration(milliseconds: 100), action);
+      Future<void>.delayed(const Duration(milliseconds: 100), action);
       await sleeper.sleep();
       final DateTime now = DateTime.now();
       expect(now.millisecondsSinceEpoch - start.millisecondsSinceEpoch < 200,

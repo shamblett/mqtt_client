@@ -1,3 +1,6 @@
+# 5.6.2 
+Issue 138, WS2 protocol string error
+
 # 5.6.1
 Issue 128, unsubscribe header error
 

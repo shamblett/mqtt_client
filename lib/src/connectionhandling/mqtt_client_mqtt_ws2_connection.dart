@@ -197,7 +197,7 @@ class MqttWs2Connection extends MqttConnection {
     request += 'Upgrade: websocket$endL';
     request += 'Connection: Upgrade$endL';
     request += 'Sec-WebSocket-Key: $key64$endL';
-    request += 'Sec-WebSocket-Protocol: $protocols$endL';
+    request += 'Sec-WebSocket-Protocol: ${protocols.join(' ').trim()}$endL';
     request += 'Sec-WebSocket-Version: 13$endL';
     request += endL;
     socket.write(request);

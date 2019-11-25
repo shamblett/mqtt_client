@@ -5,8 +5,7 @@
 
 analyzer:
   exclude:
-  - example/flutter/**
-  - test/issues/**
+    - test/issues/**
 
 linter:
   rules:
