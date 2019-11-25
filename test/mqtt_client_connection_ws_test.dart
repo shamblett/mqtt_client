@@ -38,6 +38,15 @@ void main() {
       }
     });
 
+    test('Web Protocol string', (){
+      List<String> protocols = MqttWs2Connection.protocolsMultipleDefault;
+      expect(protocols.join(' ').trim(), 'mqtt mqttv3.1 mqttv3.11');
+      protocols = MqttWs2Connection.protocolsSingleDefault;
+      expect(protocols.join(' ').trim(), 'mqtt');
+      protocols = <String>[];
+      expect(protocols.join(' ').trim(), '');
+    });
+
     test('Invalid URL - bad scheme', () async {
       try {
         final events.EventBus clientEventBus = events.EventBus();
