@@ -1,3 +1,6 @@
+# 5.6.3
+Issue 142, correct misleading logging
+
 # 5.6.2 
 Issue 138, WS2 protocol string error
 
