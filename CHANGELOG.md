@@ -1,5 +1,6 @@
 # 5.6.3
-Issue 142, correct misleading logging
+Issue 142, correct misleading logging.
+Issue 145, disconnection code tidy up.
 
 # 5.6.2 
 Issue 138, WS2 protocol string error
