@@ -7,6 +7,11 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_returning_this
+
 /// Implementation of an MQTT Subscribe Message.
 class MqttSubscribeMessage extends MqttMessage {
   /// Initializes a new instance of the MqttSubscribeMessage class.
@@ -25,7 +30,8 @@ class MqttSubscribeMessage extends MqttMessage {
     readFrom(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
   MqttSubscribeVariableHeader variableHeader;
 
   /// Gets or sets the payload of the Mqtt Message.
@@ -50,15 +56,17 @@ class MqttSubscribeMessage extends MqttMessage {
         header, variableHeader, messageStream);
   }
 
-  /// Adds a new subscription topic with the AtMostOnce Qos Level. If you want to change the
-  /// Qos level follow this call with a call to AtTopic(MqttQos)
+  /// Adds a new subscription topic with the AtMostOnce Qos Level.
+  /// If you want to change the Qos level follow this call with a
+  /// call to AtTopic(MqttQos).
   MqttSubscribeMessage toTopic(String topic) {
     _lastTopic = topic;
     payload.addSubscription(topic, MqttQos.atMostOnce);
     return this;
   }
 
-  /// Sets the Qos level of the last topic added to the subscription list via a call to ToTopic(string)
+  /// Sets the Qos level of the last topic added to the subscription
+  /// list via a call to ToTopic(string).
   MqttSubscribeMessage atQos(MqttQos qos) {
     if (payload.subscriptions.containsKey(_lastTopic)) {
       payload.subscriptions[_lastTopic] = qos;
@@ -72,13 +80,15 @@ class MqttSubscribeMessage extends MqttMessage {
     return this;
   }
 
-  /// Sets the message up to request acknowledgement from the broker for each topic subscription.
+  /// Sets the message up to request acknowledgement from the
+  /// broker for each topic subscription.
   MqttSubscribeMessage expectAcknowledgement() {
     header.withQos(MqttQos.atLeastOnce);
     return this;
   }
 
-  /// Sets the duplicate flag for the message to indicate its a duplicate of a previous message type
+  /// Sets the duplicate flag for the message to indicate its a
+  /// duplicate of a previous message type
   /// with the same message identifier.
   MqttSubscribeMessage isDuplicate() {
     header.isDuplicate();

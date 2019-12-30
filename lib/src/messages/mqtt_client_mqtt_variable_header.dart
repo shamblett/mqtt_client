@@ -7,7 +7,13 @@
 
 part of mqtt_client;
 
-/// Enumeration used by subclasses to tell the variable header what should be read from the underlying stream.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+// ignore_for_file: cascade_invocations
+
+/// Enumeration used by subclasses to tell the variable header what
+/// should be read from the underlying stream.
 enum MqttReadWriteFlags {
   /// Nothing
   none,
@@ -34,7 +40,8 @@ enum MqttReadWriteFlags {
   messageIdentifier
 }
 
-/// Represents the base class for the Variable Header portion of some MQTT Messages.
+/// Represents the base class for the Variable Header portion
+/// of some MQTT Messages.
 class MqttVariableHeader {
   /// Initializes a new instance of the MqttVariableHeader class.
   MqttVariableHeader() {
@@ -43,7 +50,8 @@ class MqttVariableHeader {
     connectFlags = MqttConnectFlags();
   }
 
-  /// Initializes a new instance of the MqttVariableHeader class, populating it with data from a stream.
+  /// Initializes a new instance of the MqttVariableHeader class,
+  /// populating it with data from a stream.
   MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }
@@ -75,11 +83,11 @@ class MqttVariableHeader {
   int messageIdentifier = 0;
 
   /// Encoder
-  MqttEncoding _enc = MqttEncoding();
+  final MqttEncoding _enc = MqttEncoding();
 
   /// Creates a variable header from the specified header stream.
-  /// A subclass can override this method to do completely custom read operations
-  /// if required.
+  /// A subclass can override this method to do completely
+  /// custom read operations if required.
   void readFrom(MqttByteBuffer variableHeaderStream) {
     readProtocolName(variableHeaderStream);
     readProtocolVersion(variableHeaderStream);
@@ -91,8 +99,8 @@ class MqttVariableHeader {
   }
 
   /// Writes the variable header to the supplied stream.
-  /// A subclass can override this method to do completely custom write operations
-  /// if required.
+  /// A subclass can override this method to do completely
+  /// custom write operations if required.
   void writeTo(MqttByteBuffer variableHeaderStream) {
     writeProtocolName(variableHeaderStream);
     writeProtocolVersion(variableHeaderStream);

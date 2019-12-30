@@ -7,12 +7,16 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
   /// Initializes a new instance of the MqttConnectFlags class.
   MqttConnectFlags();
 
-  /// Initializes a new instance of the MqttConnectFlags class configured as per the supplied stream.
+  /// Initializes a new instance of the MqttConnectFlags class configured
+  /// as per the supplied stream.
   MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {
     readFrom(connectFlagsStream);
   }
@@ -72,5 +76,7 @@ class MqttConnectFlags {
   /// Returns a String that represents the current connect flag settings
   @override
   String toString() =>
-      'Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, WillFlag=$willFlag, WillQos=$willQos, WillRetain=$willRetain, PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag';
+      'Connect Flags: Reserved1=$reserved1, CleanStart=$cleanStart, '
+      'WillFlag=$willFlag, WillQos=$willQos, WillRetain=$willRetain, '
+      'PasswordFlag=$passwordFlag, UserNameFlag=$usernameFlag';
 }

@@ -7,10 +7,15 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
 /// Message that indicates a connection acknowledgement.
 class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
-  /// Only called via the MqttMessage.Create operation during processing of an Mqtt message stream.
+  /// Only called via the MqttMessage.Create operation during processing
+  /// of an Mqtt message stream.
   MqttConnectAckMessage() {
     header = MqttHeader().asType(MqttMessageType.connectAck);
     variableHeader = MqttConnectAckVariableHeader();
@@ -24,7 +29,8 @@ class MqttConnectAckMessage extends MqttMessage {
     readFrom(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message
   MqttConnectAckVariableHeader variableHeader;
 
   /// Reads a message from the supplied stream.
@@ -42,6 +48,7 @@ class MqttConnectAckMessage extends MqttMessage {
   }
 
   /// Sets the return code of the Variable Header.
+  // ignore: avoid_returning_this
   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
     variableHeader.returnCode = returnCode;
     return this;

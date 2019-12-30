@@ -7,8 +7,9 @@
 
 part of mqtt_client;
 
-/// Interface that defines how the publishing manager publishes messages to the broker and
-/// how it passed on messages that are received from the broker.
+/// Interface that defines how the publishing manager publishes
+/// messages to the broker and how it passed on messages that are
+/// received from the broker.
 abstract class IPublishingManager {
   /// Publish a message to the broker on the specified topic.
   /// The topic to send the message to

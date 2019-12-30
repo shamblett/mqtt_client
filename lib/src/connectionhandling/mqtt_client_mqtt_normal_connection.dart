@@ -7,6 +7,11 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 /// The MQTT normal(insecure TCP) connection class
 class MqttNormalConnection extends MqttConnection {
   /// Default constructor
@@ -39,7 +44,8 @@ class MqttNormalConnection extends MqttConnection {
     } on Exception catch (e) {
       completer.completeError(e);
       final String message =
-          'MqttNormalConnection::The connection to the message broker {$server}:{$port} could not be made.';
+          'MqttNormalConnection::The connection to the message '
+          'broker {$server}:{$port} could not be made.';
       throw NoConnectionException(message);
     }
     return completer.future;

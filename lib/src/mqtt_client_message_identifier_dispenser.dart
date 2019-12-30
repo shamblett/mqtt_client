@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Message identifier handling
 class MessageIdentifierDispenser {
   /// Factory constructor
@@ -14,7 +17,7 @@ class MessageIdentifierDispenser {
 
   MessageIdentifierDispenser._internal();
 
-  static MessageIdentifierDispenser _singleton =
+  static final MessageIdentifierDispenser _singleton =
       MessageIdentifierDispenser._internal();
 
   /// Maximum message identifier

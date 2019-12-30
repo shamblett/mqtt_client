@@ -7,7 +7,8 @@
 
 part of mqtt_client;
 
-/// Implementation of the variable header for an MQTT Publish Acknowledgement message.
+/// Implementation of the variable header for an MQTT Publish
+/// Acknowledgement message.
 class MqttPublishAckVariableHeader extends MqttVariableHeader {
   /// Initializes a new instance of the MqttPublishAckVariableHeader class.
   MqttPublishAckVariableHeader();

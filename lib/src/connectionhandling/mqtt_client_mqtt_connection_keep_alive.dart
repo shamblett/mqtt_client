@@ -7,13 +7,20 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 /// Ping response received callback
 typedef PongCallback = void Function();
 
-/// Implements keepalive functionality on the Mqtt Connection, ensuring that the connection
-/// remains active according to the keepalive seconds setting.
-/// This class implements the keepalive by sending an MqttPingRequest to the broker if a message
-/// has not been send or received within the keepalive period.
+/// Implements keepalive functionality on the Mqtt Connection,
+/// ensuring that the connection remains active according to the
+/// keepalive seconds setting.
+/// This class implements the keepalive by sending an MqttPingRequest
+/// to the broker if a message has not been sent or received
+/// within the keepalive period.
 class MqttConnectionKeepAlive {
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
   MqttConnectionKeepAlive(
@@ -23,8 +30,10 @@ class MqttConnectionKeepAlive {
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
         MqttMessageType.pingRequest, pingRequestReceived);
+    // ignore: cascade_invocations
     connectionHandler.registerForMessage(
         MqttMessageType.pingResponse, pingResponseReceived);
+    // ignore: cascade_invocations
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
@@ -45,7 +54,8 @@ class MqttConnectionKeepAlive {
   /// Ping response received callback
   PongCallback pongCallback;
 
-  /// Pings the message broker if there has been no activity for the specified amount of idle time.
+  /// Pings the message broker if there has been no activity for
+  /// the specified amount of idle time.
   bool pingRequired() {
     if (_shutdownPadlock) {
       return false;
@@ -64,9 +74,11 @@ class MqttConnectionKeepAlive {
     return pinged;
   }
 
-  /// Signal to the keepalive that a ping request has been received from the message broker.
-  /// The effect of calling this method on the keepalive handler is the transmission of a ping response
-  /// message to the message broker on the current connection.
+  /// Signal to the keepalive that a ping request has been received
+  /// from the message broker.
+  /// The effect of calling this method on the keepalive handler is the
+  /// transmission of a ping response message to the message broker on
+  /// the current connection.
   bool pingRequestReceived(MqttMessage pingMsg) {
     if (_shutdownPadlock) {
       return false;

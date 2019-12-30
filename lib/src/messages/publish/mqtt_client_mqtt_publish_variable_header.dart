@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttPublishVariableHeader extends MqttVariableHeader {
   /// Initializes a new instance of the MqttPublishVariableHeader class.
@@ -55,6 +59,6 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   }
 
   @override
-  String toString() =>
-      'Publish Variable Header: TopicName={$topicName}, MessageIdentifier={$messageIdentifier}, VH Length={$length}';
+  String toString() => 'Publish Variable Header: TopicName={$topicName}, '
+      'MessageIdentifier={$messageIdentifier}, VH Length={$length}';
 }

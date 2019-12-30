@@ -7,7 +7,14 @@
 
 part of mqtt_client;
 
-/// Class that contains details related to an MQTT Subscribe Ack messages payload
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+
+/// Class that contains details related to an MQTT Subscribe Ack
+/// messages payload.
 class MqttSubscribeAckPayload extends MqttPayload {
   /// Initializes a new instance of the MqttSubscribeAckPayload class.
   MqttSubscribeAckPayload();
@@ -25,12 +32,12 @@ class MqttSubscribeAckPayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of Qos grants, Key is the topic, Value is the qos
-  List<MqttQos> qosGrants = List<MqttQos>();
+  List<MqttQos> qosGrants = <MqttQos>[];
 
   /// Writes the payload to the supplied stream.
   @override
   void writeTo(MqttByteBuffer payloadStream) {
-    for (MqttQos value in qosGrants) {
+    for (final MqttQos value in qosGrants) {
       payloadStream.writeByte(value.index);
     }
   }
@@ -67,7 +74,7 @@ class MqttSubscribeAckPayload extends MqttPayload {
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.writeln('Payload: Qos grants [{${qosGrants.length}}]');
-    for (MqttQos value in qosGrants) {
+    for (final MqttQos value in qosGrants) {
       sb.writeln('{{ Grant={$value} }}');
     }
     return sb.toString();

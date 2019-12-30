@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Records the status of the last connection attempt
 class MqttClientConnectionStatus {
   /// Connection state

@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+
 /// Implementation of an MQTT Unsubscribe Message.
 class MqttUnsubscribeMessage extends MqttMessage {
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
@@ -23,7 +29,8 @@ class MqttUnsubscribeMessage extends MqttMessage {
     readFrom(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
   MqttUnsubscribeVariableHeader variableHeader;
 
   /// Gets or sets the payload of the Mqtt Message.
@@ -32,8 +39,8 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    // If the protocol is V3.1.1 the following header fields must be set as below
-    // as in this protocol they are reserved.
+    // If the protocol is V3.1.1 the following header fields
+    // must be set as below as in this protocol they are reserved.
     if (Protocol.version == Constants.mqttV311ProtocolVersion) {
       header.duplicate = false;
       header.qos = MqttQos.atLeastOnce;
@@ -66,14 +73,15 @@ class MqttUnsubscribeMessage extends MqttMessage {
     return this;
   }
 
-  /// Sets the message up to request acknowledgement from the broker for each topic subscription.
+  /// Sets the message up to request acknowledgement from the
+  /// broker for each topic subscription.
   MqttUnsubscribeMessage expectAcknowledgement() {
     header.withQos(MqttQos.atLeastOnce);
     return this;
   }
 
-  /// Sets the duplicate flag for the message to indicate its a duplicate of a previous message type
-  /// with the same message identifier.
+  /// Sets the duplicate flag for the message to indicate its a
+  /// duplicate of a previous message type with the same message identifier.
   MqttUnsubscribeMessage isDuplicate() {
     header.isDuplicate();
     return this;

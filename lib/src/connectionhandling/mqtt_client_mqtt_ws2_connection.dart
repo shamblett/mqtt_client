@@ -8,6 +8,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_types_on_closure_parameters
+
 class _DetachedSocket extends Stream<Uint8List> implements Socket {
   _DetachedSocket(this._socket, this._subscription);
 
@@ -15,8 +21,8 @@ class _DetachedSocket extends Stream<Uint8List> implements Socket {
   final Socket _socket;
 
   @override
-  StreamSubscription<Uint8List> listen(void onData(Uint8List event),
-      {Function onError, void onDone(), bool cancelOnError}) {
+  StreamSubscription<Uint8List> listen(void Function(Uint8List event) onData,
+      {Function onError, void Function() onDone, bool cancelOnError}) {
     _subscription
       ..onData(onData)
       ..onError(onError)
@@ -109,7 +115,8 @@ class MqttWs2Connection extends MqttConnection {
     'mqttv3.11'
   ];
 
-  /// The default websocket subprotocol list for brokers who expect this field to be a single entry
+  /// The default websocket subprotocol list for brokers who expect
+  /// this field to be a single entry.
   static const List<String> protocolsSingleDefault = <String>['mqtt'];
 
   /// The websocket subprotocol list
@@ -131,12 +138,14 @@ class MqttWs2Connection extends MqttConnection {
       uri = Uri.parse(server);
     } on Exception {
       final String message =
-          'MqttWsConnection::The URI supplied for the WS2 connection is not valid - $server';
+          'MqttWsConnection::The URI supplied for the WS2 connection '
+          'is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'wss') {
       final String message =
-          'MqttWsConnection::The URI supplied for the WS2 has an incorrect scheme - $server';
+          'MqttWsConnection::The URI supplied for the WS2 has an '
+          'incorrect scheme - $server';
       throw NoConnectionException(message);
     }
     if (port != null) {
@@ -166,17 +175,20 @@ class MqttWs2Connection extends MqttConnection {
       });
     } on SocketException catch (e) {
       final String message =
-          'MqttWs2Connection::The connection to the message broker {$server}:{$port} could not be made. Error is ${e.toString()}';
+          'MqttWs2Connection::The connection to the message broker '
+          '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
       final String message =
-          'MqttWs2Connection::Handshake exception to the message broker {$server}:{$port}. Error is ${e.toString()}';
+          'MqttWs2Connection::Handshake exception to the message broker '
+          '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on TlsException catch (e) {
       final String message =
-          'MqttWs2Connection::TLS exception raised on secure connection. Error is ${e.toString()}';
+          'MqttWs2Connection::TLS exception raised on secure connection. '
+          'Error is ${e.toString()}';
       throw NoConnectionException(message);
     }
     return completer.future;
@@ -237,9 +249,9 @@ bool _parseResponse(String resp, String key) {
         'MqttWs2Connection::server returned malformed status line');
   }
   // make a map of the headers
-  final Map<String, String> headers = Map<String, String>();
+  final Map<String, String> headers = <String, String>{};
   lines.removeAt(0);
-  for (String l in lines) {
+  for (final String l in lines) {
     final int space = l.indexOf(' ');
     if (space < 0) {
       throw NoConnectionException(
@@ -260,7 +272,8 @@ bool _parseResponse(String resp, String key) {
   // now lets see if we like what we found.
   if (status[1] != '101') {
     throw NoConnectionException(
-        'MqttWs2Connection::server refused to upgrade, response = ${status[1]} - ${status[2]} - $body');
+        'MqttWs2Connection::server refused to upgrade, response = '
+        '${status[1]} - ${status[2]} - $body');
   }
 
   if (!headers.containsKey('connection') ||

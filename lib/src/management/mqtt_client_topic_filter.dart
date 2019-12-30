@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_types_on_closure_parameters
+
 /// This class allows specific topics to be listened for. It essentially
 /// acts as a bandpass filter for the topics you are interested in if
 /// you subscribe to more than one topic or use wildcard topics.
@@ -24,14 +30,14 @@ class MqttClientTopicFilter {
             sync: true);
   }
 
-  String _topic;
+  final String _topic;
 
   SubscriptionTopic _subscriptionTopic;
 
   /// The topic on which to filter
   String get topic => _topic;
 
-  Stream<List<MqttReceivedMessage<MqttMessage>>> _clientUpdates;
+  final Stream<List<MqttReceivedMessage<MqttMessage>>> _clientUpdates;
 
   StreamController<List<MqttReceivedMessage<MqttMessage>>> _updates;
 
@@ -43,8 +49,8 @@ class MqttClientTopicFilter {
     try {
       // Pass through if we have a match
       final List<MqttReceivedMessage<MqttMessage>> tmp =
-          List<MqttReceivedMessage<MqttMessage>>();
-      for (MqttReceivedMessage<MqttMessage> message in c) {
+          <MqttReceivedMessage<MqttMessage>>[];
+      for (final MqttReceivedMessage<MqttMessage> message in c) {
         lastTopic = message.topic;
         if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {
           tmp.add(message);
@@ -53,9 +59,10 @@ class MqttClientTopicFilter {
       if (tmp.isNotEmpty) {
         _updates.add(tmp);
       }
+      // ignore: avoid_catching_errors
     } on RangeError catch (e) {
-      MqttLogger.log(
-          'MqttClientTopicFilter::_topicIn - cannot process received topic: $lastTopic');
+      MqttLogger.log('MqttClientTopicFilter::_topicIn - cannot process '
+          'received topic: $lastTopic');
       MqttLogger.log('MqttClientTopicFilter::_topicIn - exception is $e');
     }
   }

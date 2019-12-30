@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+
 /// The client disconnect callback type
 typedef DisconnectCallback = void Function();
 
@@ -15,14 +21,16 @@ typedef ConnectCallback = void Function();
 
 /// A client class for interacting with MQTT Data Packets
 class MqttClient {
-  /// Initializes a new instance of the MqttClient class using the default Mqtt Port.
+  /// Initializes a new instance of the MqttClient class using the
+  /// default Mqtt Port.
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   MqttClient(this.server, this.clientIdentifier) {
     port = Constants.defaultMqttPort;
   }
 
-  /// Initializes a new instance of the MqttClient class using the supplied Mqtt Port.
+  /// Initializes a new instance of the MqttClient class using
+  /// the supplied Mqtt Port.
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   /// The port to use
@@ -48,9 +56,11 @@ class MqttClient {
   /// User definable websocket protocols. Use this for non default websocket
   /// protocols only if your broker needs this. There are two defaults in
   /// MqttWsConnection class, the multiple protocol is the default. Some brokers
-  /// will not accept a list and only expect a single protocol identifier, in this case use
-  /// the single protocol default. You can supply tour own list, or to disable this entirely
-  /// set the protocols to an empty list , i.e []
+  /// will not accept a list and only expect a single protocol identifier,
+  /// in this case use the single protocol default. You can supply your own
+  /// list, or to disable this entirely set the protocols to an
+  /// empty list , i.e [].
+  // ignore: avoid_setters_without_getters
   set websocketProtocols(List<String> protocols) {
     _websocketProtocols = protocols;
     if (_connectionHandler != null) {
@@ -83,19 +93,22 @@ class MqttClient {
   /// Handles everything to do with publication management.
   PublishingManager _publishingManager;
 
-  /// Published message stream. A publish message is added to this stream on completion of
-  /// the message publishing protocol for a Qos level. Attach listeners only after connect has been called
+  /// Published message stream. A publish message is added to this
+  /// stream on completion of the message publishing protocol for a Qos level.
+  /// Attach listeners only after connect has been called.
   Stream<MqttPublishMessage> get published =>
+      // ignore: prefer_null_aware_operators
       _publishingManager != null ? _publishingManager.published.stream : null;
 
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
-  @deprecated
+  @Deprecated('Use ConnectionStatus, not this')
   MqttConnectionState get connectionState => _connectionHandler != null
       ? _connectionHandler.connectionStatus.state
       : MqttConnectionState.disconnected;
 
-  MqttClientConnectionStatus _connectionStatus = MqttClientConnectionStatus();
+  final MqttClientConnectionStatus _connectionStatus =
+      MqttClientConnectionStatus();
 
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
@@ -152,7 +165,8 @@ class MqttClient {
   }
 
   /// Ping response received callback.
-  /// If set when a ping response is received from the broker this will be called.
+  /// If set when a ping response is received from the broker
+  /// this will be called.
   /// Can be used for health monitoring outside of the client itself.
   PongCallback _pongCallback;
 
@@ -170,28 +184,31 @@ class MqttClient {
   /// The stream on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
 
-  /// Performs a connect to the message broker with an optional username and password
-  /// for the purposes of authentication. If a username and password are supplied these will override
-  /// any previously set in a supplied connection message so if you supply your own connection message
-  /// and use the authenticateAs method to set these parameters do not set them again here.
+  /// Performs a connect to the message broker with an optional
+  /// username and password for the purposes of authentication.
+  /// If a username and password are supplied these will override
+  /// any previously set in a supplied connection message so if you
+  /// supply your own connection message and use the authenticateAs method to
+  /// set these parameters do not set them again here.
   Future<MqttClientConnectionStatus> connect(
       [String username, String password]) async {
     if (username != null) {
-      MqttLogger.log(
-          "Authenticating with username '{$username}' and password '{$password}'");
+      MqttLogger.log("Authenticating with username '{$username}' "
+          "and password '{$password}'");
       if (username.trim().length >
           Constants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log(
-            'Username length (${username.trim().length}) exceeds the max recommended in the MQTT spec. ');
+        MqttLogger.log('Username length (${username.trim().length}) '
+            'exceeds the max recommended in the MQTT spec. ');
       }
     }
     if (password != null &&
         password.trim().length >
             Constants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log(
-          'Password length (${password.trim().length}) exceeds the max recommended in the MQTT spec. ');
+      MqttLogger.log('Password length (${password.trim().length}) '
+          'exceeds the max recommended in the MQTT spec. ');
     }
-    // Set the authentication parameters in the connection message if we have one
+    // Set the authentication parameters in the connection
+    // message if we have one.
     connectionMessage?.authenticateAs(username, password);
 
     // Do the connection
@@ -228,11 +245,13 @@ class MqttClient {
     }
     final MqttConnectMessage connectMessage =
         _getConnectMessage(username, password);
-    return await _connectionHandler.connect(server, port, connectMessage);
+    return _connectionHandler.connect(server, port, connectMessage);
   }
 
-  ///  Gets a pre-configured connect message if one has not been supplied by the user.
-  ///  Returns an MqttConnectMessage that can be used to connect to a message broker
+  ///  Gets a pre-configured connect message if one has not been
+  ///  supplied by the user.
+  ///  Returns an MqttConnectMessage that can be used to connect to a
+  ///  message broker.
   MqttConnectMessage _getConnectMessage(String username, String password) =>
       connectionMessage ??= MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
@@ -242,7 +261,8 @@ class MqttClient {
           .authenticateAs(username, password)
           .startClean();
 
-  /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
+  /// Initiates a topic subscription request to the connected broker
+  /// with a strongly typed data processor callback.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
   /// Returns the subscription or null on failure
@@ -255,7 +275,8 @@ class MqttClient {
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
-  /// Raises InvalidTopicException if the topic supplied violates the MQTT topic format rules.
+  /// Raises InvalidTopicException if the topic supplied violates the
+  /// MQTT topic format rules.
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
@@ -282,18 +303,21 @@ class MqttClient {
       _subscriptionsManager.getSubscriptionsStatus(topic);
 
   /// Disconnect from the broker.
-  /// This is a hard disconnect, a disconnect message is sent to the broker and the client is
-  /// then reset to its pre-connection state, i.e all subscriptions are deleted, on subsequent reconnection the
-  /// use must re-subscribe, also the updates change notifier is re-initialised and as such the user must re-listen on this
-  /// stream.
-  /// Do NOT call this in any onDisconnect callback that may be set, this will result in a loop situation.
+  /// This is a hard disconnect, a disconnect message is sent to the
+  /// broker and the client is then reset to its pre-connection state,
+  /// i.e all subscriptions are deleted, on subsequent reconnection the
+  /// use must re-subscribe, also the updates change notifier is re-initialised
+  /// and as such the user must re-listen on this stream.
+  ///
+  /// Do NOT call this in any onDisconnect callback that may be set,
+  /// this will result in a loop situation.
   void disconnect() {
     _disconnect(unsolicited: false);
   }
 
   /// Internal disconnect
-  /// This is always passed to the connection handler to allow the client to close itself
-  /// down correctly on disconnect.
+  /// This is always passed to the connection handler to allow the
+  /// client to close itself down correctly on disconnect.
   void _internalDisconnect() {
     // Only call disconnect if we are connected, i.e. a connection to
     // the broker has been previously established.

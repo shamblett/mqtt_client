@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
 /// Implementation of an MQTT Publish Release Message.
 class MqttPublishReleaseMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
@@ -25,7 +29,8 @@ class MqttPublishReleaseMessage extends MqttMessage {
         MqttPublishReleaseVariableHeader.fromByteBuffer(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
   MqttPublishReleaseVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
@@ -36,6 +41,7 @@ class MqttPublishReleaseMessage extends MqttMessage {
   }
 
   /// Sets the message identifier of the MqttMessage.
+  // ignore: avoid_returning_this
   MqttPublishReleaseMessage withMessageIdentifier(int messageIdentifier) {
     variableHeader.messageIdentifier = messageIdentifier;
     return this;

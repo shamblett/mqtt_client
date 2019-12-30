@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
   /// Initializes a new instance of the MqttUnsubscribePayload class.
@@ -25,7 +31,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of subscriptions.
-  List<String> subscriptions = List<String>();
+  List<String> subscriptions = <String>[];
 
   /// Writes the payload to the supplied stream.
   @override
@@ -51,7 +57,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   int getWriteLength() {
     int length = 0;
     final MqttEncoding enc = MqttEncoding();
-    for (String subscription in subscriptions) {
+    for (final String subscription in subscriptions) {
       length += enc.getByteCount(subscription);
     }
     return length;
@@ -71,7 +77,7 @@ class MqttUnsubscribePayload extends MqttPayload {
   String toString() {
     final StringBuffer sb = StringBuffer();
     sb.writeln('Payload: Unsubscription [{${subscriptions.length}}]');
-    for (String subscription in subscriptions) {
+    for (final String subscription in subscriptions) {
       sb.writeln('{{ Topic={$subscription}}');
     }
     return sb.toString();

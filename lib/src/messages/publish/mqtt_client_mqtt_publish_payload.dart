@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
 /// Class that contains details related to an MQTT Connect messages payload
 class MqttPublishPayload extends MqttPayload {
   /// Initializes a new instance of the MqttPublishPayload class.
@@ -32,9 +36,10 @@ class MqttPublishPayload extends MqttPayload {
   /// Creates a payload from the specified header stream.
   @override
   void readFrom(MqttByteBuffer payloadStream) {
-    // The payload of the publish message is not a string, just a binary chunk of bytes.
-    // The length of the bytes is the length specified in the header, minus any bytes
-    // spent in the variable header.
+    // The payload of the publish message is not a string, just
+    // a binary chunk of bytes.
+    // The length of the bytes is the length specified in the header,
+    // minus any bytes spent in the variable header.
     final int messageBytes = header.messageSize - variableHeader.length;
     message = payloadStream.read(messageBytes);
   }
@@ -56,7 +61,7 @@ class MqttPublishPayload extends MqttPayload {
   /// Converts an array of bytes to a byte string.
   static String bytesToString(typed.Uint8Buffer message) {
     final StringBuffer sb = StringBuffer();
-    for (int b in message) {
+    for (final int b in message) {
       sb.write('<');
       sb.write(b);
       sb.write('>');
