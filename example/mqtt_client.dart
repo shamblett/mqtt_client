@@ -9,6 +9,13 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_types_on_closure_parameters
+
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
 /// files for separate subscribe/publish tests.
@@ -22,6 +29,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
 /// of 1883 is used.
 /// If you want to use websockets rather than TCP see below.
+
 final MqttClient client = MqttClient('test.mosquitto.org', '');
 
 Future<int> main() async {
