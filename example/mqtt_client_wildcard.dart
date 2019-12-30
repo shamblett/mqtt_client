@@ -9,6 +9,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
 /// files for separate subscribe/publish tests. This example shows the usage of wildcard subscriptions.
@@ -82,6 +88,7 @@ Future<int> main() async {
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
+  // ignore: avoid_types_on_closure_parameters
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
     final String pt =

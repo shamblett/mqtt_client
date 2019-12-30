@@ -9,6 +9,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+
 /// A QOS2 publishing example, two QOS two topics are subscribed to and published in quick succession,
 /// tests QOS2 protocol handling.
 Future<int> main() async {
@@ -52,6 +58,7 @@ Future<int> main() async {
   const String topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
+  // ignore: avoid_annotating_with_dynamic
   client.updates.listen((dynamic c) {
     final MqttPublishMessage recMess = c[0].payload;
     final String pt =
@@ -64,6 +71,7 @@ Future<int> main() async {
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
+  // ignore: avoid_types_on_closure_parameters
   client.published.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');

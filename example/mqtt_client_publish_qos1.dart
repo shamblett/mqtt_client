@@ -18,7 +18,6 @@ import 'package:mqtt_client/mqtt_client.dart';
 /// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
 /// tests QOS1 protocol handling.
 Future<int> main() async {
-
   final MqttClient client = MqttClient('test.mosquitto.org', '');
   client.logging(on: true);
   client.keepAlivePeriod = 20;
