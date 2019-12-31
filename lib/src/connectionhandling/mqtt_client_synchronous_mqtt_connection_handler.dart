@@ -101,10 +101,10 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   MqttConnectionState disconnect() {
     MqttLogger.log('SynchronousMqttConnectionHandler::disconnect');
     // Send a disconnect message to the broker
-    connectionStatus.state = MqttConnectionState.disconnecting;
     sendMessage(MqttDisconnectMessage());
+    // Disconnect
     _performConnectionDisconnect();
-    return connectionStatus.state = MqttConnectionState.disconnected;
+    return connectionStatus.state;
   }
 
   /// Disconnects the underlying connection object.
