@@ -7,12 +7,19 @@
 
 part of mqtt_client;
 
-/// Encoding implementation that can encode and decode strings in the MQTT string format.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
+/// Encoding implementation that can encode and decode strings
+/// in the MQTT string format.
 ///
-/// The MQTT string format is simply a pascal string with ANSI character encoding. The first 2 bytes define
-/// the length of the string, and they are followed by the string itself.
+/// The MQTT string format is simply a pascal string with ANSI character
+/// encoding. The first 2 bytes define the length of the string, and they
+/// are followed by the string itself.
 class MqttEncoding extends Utf8Codec {
-  /// Encodes all the characters in the specified string into a sequence of bytes.
+  /// Encodes all the characters in the specified string
+  /// into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);
     final typed.Uint8Buffer stringBytes = typed.Uint8Buffer();
@@ -25,7 +32,8 @@ class MqttEncoding extends Utf8Codec {
   /// Decodes the bytes in the specified byte array into a string.
   String getString(typed.Uint8Buffer bytes) => decoder.convert(bytes.toList());
 
-  ///  When overridden in a derived class, calculates the number of characters produced by decoding all the bytes in the specified byte array.
+  ///  When overridden in a derived class, calculates the number of characters
+  ///  produced by decoding all the bytes in the specified byte array.
   int getCharCount(typed.Uint8Buffer bytes) {
     if (bytes.length < 2) {
       throw Exception(
@@ -34,10 +42,12 @@ class MqttEncoding extends Utf8Codec {
     return (bytes[0] << 8) + bytes[1];
   }
 
-  /// Calculates the number of bytes produced by encoding the characters in the specified.
+  /// Calculates the number of bytes produced by encoding the
+  /// characters in the specified.
   int getByteCount(String chars) => getBytes(chars).length;
 
-  /// Validates the string to ensure it doesn't contain any characters invalid within the Mqtt string format.
+  /// Validates the string to ensure it doesn't contain any characters
+  /// invalid within the Mqtt string format.
   static void _validateString(String s) {
     for (int i = 0; i < s.length; i++) {
       if (Protocol.version == Constants.mqttV31ProtocolVersion) {

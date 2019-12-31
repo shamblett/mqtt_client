@@ -11,6 +11,12 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_print
+
 void main() {
   // Test wide variables
   final MockBrokerWs brokerWs = MockBrokerWs();
@@ -38,7 +44,7 @@ void main() {
       }
     });
 
-    test('Web Protocol string', (){
+    test('Web Protocol string', () {
       List<String> protocols = MqttWs2Connection.protocolsMultipleDefault;
       expect(protocols.join(' ').trim(), 'mqtt mqttv3.1 mqttv3.11');
       protocols = MqttWs2Connection.protocolsSingleDefault;

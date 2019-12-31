@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_types_on_closure_parameters
+
 /// Implementation of a Subscription topic that performs additional validations
 /// of topics that are subscribed to.
 class SubscriptionTopic extends Topic {
@@ -19,10 +23,12 @@ class SubscriptionTopic extends Topic {
           _validateFragments
         ]);
 
-  /// Validates all unique fragments in the topic match the MQTT spec requirements.
+  /// Validates all unique fragments in the topic match the
+  /// MQTT spec requirements.
   static void _validateFragments(Topic topicInstance) {
-    // If any fragment contains a wildcard or a multi wildcard but is greater than
-    // 1 character long, then it's an error - wildcards must appear by themselves.
+    // If any fragment contains a wildcard or a multi wildcard
+    // but is greater than 1 character long, then it's an error -
+    // wildcards must appear by themselves.
     final bool invalidFragment = topicInstance.topicFragments.any(
         (String fragment) =>
             (fragment.contains(Topic.multiWildcard) ||
@@ -30,30 +36,36 @@ class SubscriptionTopic extends Topic {
             fragment.length > 1);
     if (invalidFragment) {
       throw Exception(
-          'mqtt_client::SubscriptionTopic: rawTopic Fragment contains a wildcard but is more than one character long');
+          'mqtt_client::SubscriptionTopic: rawTopic Fragment contains '
+          'a wildcard but is more than one character long');
     }
   }
 
-  /// Validates the placement of the multi-wildcard character in subscription topics.
+  /// Validates the placement of the multi-wildcard character
+  /// in subscription topics.
   static void _validateMultiWildcard(Topic topicInstance) {
     if (topicInstance.rawTopic.contains(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {
-      throw Exception(
-          'mqtt_client::SubscriptionTopic: The rawTopic wildcard # can only be present at the end of a topic');
+      throw Exception('mqtt_client::SubscriptionTopic: The rawTopic wildcard # '
+          'can only be present at the end of a topic');
     }
     if (topicInstance.rawTopic.length > 1 &&
         topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
         !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
       throw Exception(
-          'mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must '
+          'mqtt_client::SubscriptionTopic: Topics using the # wildcard '
+          'longer than 1 character must '
           'be immediately preceeded by a the rawTopic separator /');
     }
   }
 
-  /// Checks if the rawTopic matches the supplied rawTopic using the MQTT rawTopic matching rules.
-  /// Returns true if the rawTopic matches based on the MQTT rawTopic matching rules, otherwise false.
+  /// Checks if the rawTopic matches the supplied rawTopic using
+  /// the MQTT rawTopic matching rules.
+  /// Returns true if the rawTopic matches based on the MQTT rawTopic
+  /// matching rules, otherwise false.
   bool matches(PublicationTopic matcheeTopic) {
-    // If the left rawTopic is just a multi wildcard then we have a match without
+    // If the left rawTopic is just a multi wildcard then we
+    // have a match without
     // needing to check any further.
     if (rawTopic == Topic.multiWildcard) {
       return true;
@@ -72,9 +84,9 @@ class SubscriptionTopic extends Topic {
         return true;
       }
       final bool isLhsWildcard = lhsFragment == Topic.wildcard;
-      // If we've reached a wildcard match but the matchee does not have anything at
-      // this fragment level then it's not a match.
-      // (this is the mqtt spec rule finance does not match finance/+
+      // If we've reached a wildcard match but the matchee does
+      // not have anything at this fragment level then it's not a match.
+      // (this is the MQTT spec rule 'finance does not match finance/+'
       if (isLhsWildcard && matcheeTopic.topicFragments.length <= i) {
         return false;
       }

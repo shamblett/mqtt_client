@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Implementation of an MQTT Disconnect Message.
 class MqttDisconnectMessage extends MqttMessage {
   /// Initializes a new instance of the MqttDisconnectMessage class.
@@ -22,6 +25,7 @@ class MqttDisconnectMessage extends MqttMessage {
   @override
   String toString() {
     final StringBuffer sb = StringBuffer();
+    // ignore: cascade_invocations
     sb.write(super.toString());
     return sb.toString();
   }

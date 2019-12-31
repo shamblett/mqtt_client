@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+
 /// Converts string data to and from the MQTT wire format
 class AsciiPayloadConverter implements PayloadConverter<String> {
   /// Processes received data and returns it as a string.
@@ -21,6 +24,7 @@ class AsciiPayloadConverter implements PayloadConverter<String> {
   typed.Uint8Buffer convertToBytes(String data) {
     const Utf8Encoder encoder = Utf8Encoder();
     final typed.Uint8Buffer buff = typed.Uint8Buffer();
+    // ignore: cascade_invocations
     buff.addAll(encoder.convert(data));
     return buff;
   }

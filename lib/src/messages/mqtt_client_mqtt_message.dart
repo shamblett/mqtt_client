@@ -7,7 +7,14 @@
 
 part of mqtt_client;
 
-/// Represents an MQTT message that contains a fixed header, variable header and message body.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+// ignore_for_file: cascade_invocations
+
+/// Represents an MQTT message that contains a fixed header, variable
+/// header and message body.
+///
 /// Messages roughly look as follows.
 /// ----------------------------
 /// | Header, 2-5 Bytes Length |
@@ -35,8 +42,8 @@ class MqttMessage {
   static MqttMessage createFrom(MqttByteBuffer messageStream) {
     try {
       MqttHeader header = MqttHeader();
-      // Pass the input stream sequentially through the component deserialization(create) methods
-      // to build a full MqttMessage.
+      // Pass the input stream sequentially through the component
+      // deserialization(create) methods to build a full MqttMessage.
       header = MqttHeader.fromByteBuffer(messageStream);
       //expected position after reading payload
       final int expectedPos = messageStream.position + header.messageSize;
@@ -56,7 +63,8 @@ class MqttMessage {
       return message;
     } on Exception catch (e) {
       throw InvalidMessageException(
-          'The data provided in the message stream was not a valid MQTT Message, '
+          'The data provided in the message stream was not a '
+          'valid MQTT Message, '
           'exception is $e, bytestream is $messageStream');
     }
   }

@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: avoid_types_on_closure_parameters
+
 /// The MQTT connection class for the websocket interface
 class MqttWsConnection extends MqttConnection {
   /// Default constructor
@@ -26,7 +32,8 @@ class MqttWsConnection extends MqttConnection {
     'mqttv3.11'
   ];
 
-  /// The default websocket subprotocol list for brokers who expect this field to be a single entry
+  /// The default websocket subprotocol list for brokers who expect
+  /// this field to be a single entry
   static const List<String> protocolsSingleDefault = <String>['mqtt'];
 
   /// The websocket subprotocol list
@@ -42,13 +49,14 @@ class MqttWsConnection extends MqttConnection {
     try {
       uri = Uri.parse(server);
     } on Exception {
-      final String message =
-          'MqttWsConnection::The URI supplied for the WS connection is not valid - $server';
+      final String message = 'MqttWsConnection::The URI supplied for the WS '
+          'connection is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final String message =
-          'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $server';
+          'MqttWsConnection::The URI supplied for the WS has '
+          'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
     if (port != null) {
@@ -73,7 +81,8 @@ class MqttWsConnection extends MqttConnection {
       });
     } on Exception {
       final String message =
-          'MqttWsConnection::The connection to the message broker {$uriString} could not be made.';
+          'MqttWsConnection::The connection to the message broker '
+          '{$uriString} could not be made.';
       throw NoConnectionException(message);
     }
     return completer.future;

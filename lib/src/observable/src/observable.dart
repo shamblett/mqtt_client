@@ -19,6 +19,7 @@ import 'records.dart';
 /// - Implement the interface yourself and provide your own implementation
 abstract class Observable<C extends ChangeRecord> {
   // To be removed when https://github.com/dart-lang/observable/issues/10
+  // ignore: unnecessary_final
   final ChangeNotifier<C> _delegate = ChangeNotifier<C>();
 
   /// Emits a list of changes when the state of the object changes.

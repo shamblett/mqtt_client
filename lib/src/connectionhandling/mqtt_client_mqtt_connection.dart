@@ -7,11 +7,17 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 /// State and logic used to read from the underlying network stream.
 class ReadWrapper {
-  /// Creates a new ReadWrapper that wraps the state used to read a message from a stream.
+  /// Creates a new ReadWrapper that wraps the state used to read
+  /// a message from a stream.
   ReadWrapper() {
-    messageBytes = List<int>();
+    messageBytes = <int>[];
   }
 
   /// The bytes associated with the message being read.
@@ -41,7 +47,7 @@ class MqttConnection {
   DisconnectCallback onDisconnected;
 
   /// The event bus
-  events.EventBus _clientEventBus;
+  final events.EventBus _clientEventBus;
 
   /// Connect, must be overridden in connection classes
   Future<void> connect(String server, int port) {
@@ -79,9 +85,9 @@ class MqttConnection {
         if (msg == null) {
           return;
         }
-      } on Exception catch (e) {
-        MqttLogger.log('MqttConnection::_ondata - message is not valid');
-        MqttLogger.log('MqttConnection::_ondata - exception is $e');
+      } on Exception {
+        MqttLogger.log('MqttConnection::_ondata - message is not yet valid, '
+            'waiting for more data ...');
         messageIsValid = false;
       }
       if (!messageIsValid) {

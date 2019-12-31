@@ -21,6 +21,7 @@ enum MqttConnectionState {
   /// The MQTT Connection is currently connected to the broker.
   connected,
 
-  /// The MQTT Connection is faulted and no longer communicating with the broker.
+  /// The MQTT Connection is faulted and no longer communicating
+  /// with the broker.
   faulted
 }

@@ -7,7 +7,13 @@
 
 part of mqtt_client;
 
-///  This class provides shared connection functionality to connection handler implementations.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
+///  This class provides shared connection functionality
+///  to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
@@ -17,11 +23,11 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
-      Map<MqttMessageType, MessageCallbackFunction>();
+      <MqttMessageType, MessageCallbackFunction>{};
 
   /// Registry of sent message callbacks
   List<MessageCallbackFunction> sentMessageCallbacks =
-      List<MessageCallbackFunction>();
+      <MessageCallbackFunction>[];
 
   /// Connection status
   @override
@@ -32,11 +38,14 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
 
   /// Alternate websocket implementation.
   ///
-  /// The Amazon Web Services (AWS) IOT MQTT interface(and maybe others) has a bug that causes it
-  /// not to connect if unexpected message headers are present in the initial GET message during the handshake.
-  /// Since the httpclient classes insist on adding those headers, an alternate method is used to perform the handshake.
+  /// The Amazon Web Services (AWS) IOT MQTT interface(and maybe others)
+  /// has a bug that causes it not to connect if unexpected message headers are
+  /// present in the initial GET message during the handshake.
+  /// Since the httpclient classes insist on adding those headers, an alternate
+  /// method is used to perform the handshake.
   /// After the handshake everything goes back to the normal websocket class.
-  /// Only use this websocket implementation if you know it is needed by your broker.
+  /// Only use this websocket implementation if you know it is needed
+  /// by your broker.
   bool useAlternateWebSocketImplementation = false;
 
   /// User supplied websocket protocols
@@ -86,7 +95,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       stream.seek(0);
       connection.send(stream);
       // Let any registered people know we're doing a message.
-      for (MessageCallbackFunction callback in sentMessageCallbacks) {
+      for (final MessageCallbackFunction callback in sentMessageCallbacks) {
         callback(message);
       }
     } else {
@@ -94,7 +103,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     }
   }
 
-  /// Runs the disconnection process to stop communicating with a message broker.
+  /// Runs the disconnection process to stop communicating
+  /// with a message broker.
   MqttConnectionState disconnect();
 
   /// Closes the connection to the Mqtt message broker.
@@ -130,7 +140,8 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     sentMessageCallbacks.remove(sentMsgCallback);
   }
 
-  /// Handles the Message Available event of the connection control for handling non connection messages
+  /// Handles the Message Available event of the connection control for
+  /// handling non connection messages.
   void messageAvailable(MessageAvailable event) {
     final MessageCallbackFunction callback =
         messageProcessorRegistry[event.message.header.messageType];

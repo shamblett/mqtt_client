@@ -7,14 +7,16 @@
 
 part of mqtt_client;
 
+// ignore: avoid_classes_with_only_static_members
 /// Library wide constants
 class Constants {
   /// The Maximum allowed message size as defined by the MQTT v3 Spec (256MB).
   static const int maxMessageSize = 268435455;
 
   /// The Maximum allowed client identifier length as specified by the 3.1
-  /// specification is 23 characters, however we allow more than this, a warning is
-  /// given in the log if 23 is exceeded.
+  /// specification is 23 characters, however we allow more than
+  /// this, a warning is given in the log if 23 is exceeded.
+  /// NOte: this is only a warning, it changes no client behaviour.
   static const int maxClientIdentifierLength = 1024;
 
   /// Specification length

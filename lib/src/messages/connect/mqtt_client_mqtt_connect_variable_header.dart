@@ -7,6 +7,9 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttConnectVariableHeader extends MqttVariableHeader {
   /// Initializes a new instance of the MqttConnectVariableHeader class.
@@ -47,7 +50,8 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   }
 
   @override
-  String toString() =>
-      'Connect Variable Header: ProtocolName=$protocolName, ProtocolVersion=$protocolVersion, '
-      'ConnectFlags=${connectFlags.toString()}, KeepAlive=$keepAlive';
+  String toString() => 'Connect Variable Header: ProtocolName=$protocolName, '
+      'ProtocolVersion=$protocolVersion, '
+      'ConnectFlags=${connectFlags.toString()}, '
+      'KeepAlive=$keepAlive';
 }

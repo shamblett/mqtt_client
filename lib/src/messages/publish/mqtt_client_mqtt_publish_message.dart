@@ -7,7 +7,13 @@
 
 part of mqtt_client;
 
-/// Implementation of an MQTT Publish Message, used for publishing telemetry data along a live MQTT stream.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_returning_this
+
+/// Implementation of an MQTT Publish Message, used for publishing
+/// telemetry data along a live MQTT stream.
 class MqttPublishMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPublishMessage class.
   MqttPublishMessage() {

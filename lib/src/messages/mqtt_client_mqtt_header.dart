@@ -7,12 +7,17 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_returning_this
+
 /// Represents the Fixed Header of an MQTT message.
 class MqttHeader {
   /// Initializes a new instance of the MqttHeader class.
   MqttHeader();
 
-  /// Initializes a new instance of MqttHeader' based on data contained within the supplied stream.
+  /// Initializes a new instance of MqttHeader' based on data
+  /// contained within the supplied stream.
   MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }
@@ -23,18 +28,22 @@ class MqttHeader {
   /// Gets or sets the type of the MQTT message.
   MqttMessageType messageType;
 
-  /// Gets or sets a value indicating whether this MQTT Message is duplicate of a previous message.
+  /// Gets or sets a value indicating whether this MQTT Message is
+  /// duplicate of a previous message.
   /// True if duplicate; otherwise, false.
   bool duplicate = false;
 
   /// Gets or sets the Quality of Service indicator for the message.
   MqttQos qos = MqttQos.atMostOnce;
 
-  /// Gets or sets a value indicating whether this MQTT message should be retained by the message broker for transmission to new subscribers.
-  /// True if message should be retained by the message broker; otherwise, false.
+  /// Gets or sets a value indicating whether this MQTT message should be
+  /// retained by the message broker for transmission to new subscribers.
+  /// True if message should be retained by the message broker;
+  /// otherwise, false.
   bool retain = false;
 
-  /// Gets or sets the size of the variable header + payload section of the message.
+  /// Gets or sets the size of the variable header + payload
+  /// section of the message.
   /// The size of the variable header + payload.
   int get messageSize => _messageSize;
 
@@ -57,7 +66,8 @@ class MqttHeader {
     if (headerStream.length < 2) {
       headerStream.reset();
       throw InvalidHeaderException(
-          'The supplied header is invalid. Header must be at least 2 bytes long.');
+          'The supplied header is invalid. Header must be at '
+          'least 2 bytes long.');
     }
     final int firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
@@ -71,10 +81,15 @@ class MqttHeader {
       _messageSize = readRemainingLength(headerStream);
     } on Exception {
       throw InvalidHeaderException(
-          'The header being processed contained an invalid size byte pattern. Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
+          'The header being processed contained an invalid size byte pattern. '
+          'Message size must take a most 4 bytes, and the last byte '
+          'must have bit 8 set to 0.');
+      // ignore: avoid_catching_errors
     } on Error {
       throw InvalidHeaderException(
-          'The header being processed contained an invalid size byte pattern. Message size must take a most 4 bytes, and the last byte must have bit 8 set to 0.');
+          'The header being processed contained an invalid size byte pattern. '
+          'Message size must take a most 4 bytes, and the last byte '
+          'must have bit 8 set to 0.');
     }
   }
 
@@ -82,8 +97,10 @@ class MqttHeader {
   typed.Uint8Buffer headerBytes() {
     final typed.Uint8Buffer headerBytes = typed.Uint8Buffer();
 
-    // Build the bytes that make up the header. The first byte is a combination of message type, dup,
-    // qos and retain, and the follow bytes (up to 4 of them) are the size of the payload + variable header.
+    // Build the bytes that make up the header. The first byte is a
+    // combination of message type, dup, qos and retain, and the
+    // following bytes (up to 4 of them) are the size of the
+    // payload + variable header.
     final int messageTypeLength = messageType.index << 4;
     final int duplicateLength = (duplicate ? 1 : 0) << 3;
     final int qosLength = qos.index << 1;
@@ -91,6 +108,7 @@ class MqttHeader {
     final int firstByte =
         messageTypeLength + duplicateLength + qosLength + retainLength;
     headerBytes.add(firstByte);
+    // ignore: cascade_invocations
     headerBytes.addAll(getRemainingLengthBytes());
     return headerBytes;
   }
@@ -114,7 +132,8 @@ class MqttHeader {
     return lengthBytes;
   }
 
-  /// Calculates and return the bytes that represent the remaining length of the message.
+  /// Calculates and return the bytes that represent the
+  /// remaining length of the message.
   typed.Uint8Buffer getRemainingLengthBytes() {
     final typed.Uint8Buffer lengthBytes = typed.Uint8Buffer();
     int payloadCalc = _messageSize;
@@ -133,12 +152,13 @@ class MqttHeader {
     return lengthBytes;
   }
 
-  /// Calculates the remaining length of an MqttMessage from the bytes that make up the length
+  /// Calculates the remaining length of an MqttMessage
+  /// from the bytes that make up the length.
   static int calculateLength(typed.Uint8Buffer lengthBytes) {
     int remainingLength = 0;
     int multiplier = 1;
 
-    for (int currentByte in lengthBytes) {
+    for (final int currentByte in lengthBytes) {
       remainingLength += (currentByte & 0x7f) * multiplier;
       multiplier *= 0x80;
     }
@@ -171,5 +191,6 @@ class MqttHeader {
 
   @override
   String toString() =>
-      'Header: MessageType = $messageType, Duplicate = $duplicate, Retain = $retain, Qos = $qos, Size = $_messageSize';
+      'Header: MessageType = $messageType, Duplicate = $duplicate, '
+      'Retain = $retain, Qos = $qos, Size = $_messageSize';
 }

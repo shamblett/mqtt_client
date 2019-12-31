@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Utility class to assist with the build in of message topic payloads.
 class MqttClientPayloadBuilder {
   /// Construction
@@ -62,7 +66,7 @@ class MqttClientPayloadBuilder {
 
   /// Add a UTF16 string, note Dart natively encodes strings as UTF16
   void addUTF16String(String val) {
-    for (int codeunit in val.codeUnits) {
+    for (final int codeunit in val.codeUnits) {
       if (codeunit <= 255 && codeunit >= 0) {
         _payload.add(codeunit);
       } else {

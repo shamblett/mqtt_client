@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// General library wide utilties
 class MqttUtilities {
   /// Sleep function that allows asynchronous activity to continue.
@@ -44,13 +48,13 @@ class MqttCancellableAsyncSleep {
   MqttCancellableAsyncSleep(this._timeout);
 
   /// Millisecond timeout
-  int _timeout;
+  final int _timeout;
 
   /// Timeout
   int get timeout => _timeout;
 
   /// The completer
-  Completer<void> _completer = Completer<void>();
+  final Completer<void> _completer = Completer<void>();
 
   /// The timer
   Timer _timer;

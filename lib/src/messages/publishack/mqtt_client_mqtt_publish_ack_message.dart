@@ -7,7 +7,12 @@
 
 part of mqtt_client;
 
-/// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a publish message that has it's QOS set to AtLeast or Exactly Once.
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: cascade_invocations
+
+/// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a
+/// publish message that has it's QOS set to AtLeast or Exactly Once.
 class MqttPublishAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPublishAckMessage class.
   MqttPublishAckMessage() {
@@ -22,7 +27,8 @@ class MqttPublishAckMessage extends MqttMessage {
     variableHeader = MqttPublishAckVariableHeader.fromByteBuffer(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended metadata about the message
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message
   MqttPublishAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
@@ -33,6 +39,7 @@ class MqttPublishAckMessage extends MqttMessage {
   }
 
   /// Sets the message identifier of the MqttMessage.
+  // ignore: avoid_returning_this
   MqttPublishAckMessage withMessageIdentifier(int messageIdentifier) {
     variableHeader.messageIdentifier = messageIdentifier;
     return this;

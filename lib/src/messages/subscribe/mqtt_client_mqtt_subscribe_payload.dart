@@ -7,6 +7,11 @@
 
 part of mqtt_client;
 
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
   /// Initializes a new instance of the MqttSubscribePayload class.
@@ -25,7 +30,7 @@ class MqttSubscribePayload extends MqttPayload {
   MqttHeader header;
 
   /// The collection of subscriptions, Key is the topic, Value is the qos
-  Map<String, MqttQos> subscriptions = Map<String, MqttQos>();
+  Map<String, MqttQos> subscriptions = <String, MqttQos>{};
 
   /// Writes the payload to the supplied stream.
   @override
