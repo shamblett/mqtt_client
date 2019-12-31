@@ -9,6 +9,13 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_types_on_closure_parameters
+
 void main() {
   group('Topic filtering', () {
     final StreamController<List<MqttReceivedMessage<MqttMessage>>>
@@ -135,5 +142,6 @@ void main() {
       expect(called1, 1);
       expect(called2, 0);
     });
+    clientUpdates.close();
   });
 }

@@ -7,6 +7,8 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+
 /// Provides the base implementation of an MQTT topic.
 abstract class Topic {
   /// Creates a new instance of a rawTopic from a rawTopic string.
@@ -15,7 +17,7 @@ abstract class Topic {
   Topic(this.rawTopic, List<dynamic> validations) {
     topicFragments = rawTopic.split(topicSeparator[0]);
     // run all validations
-    for (dynamic validation in validations) {
+    for (final dynamic validation in validations) {
       validation(this);
     }
   }
@@ -46,11 +48,13 @@ abstract class Topic {
   static void validateMaxLength(Topic topicInstance) {
     if (topicInstance.rawTopic.length > maxTopicLength) {
       throw Exception('mqtt_client::Topic: The length of the supplied rawTopic '
-          '(${topicInstance.rawTopic.length}) is longer than the maximum allowable ($maxTopicLength)');
+          '(${topicInstance.rawTopic.length}) is longer than the '
+          'maximum allowable ($maxTopicLength)');
     }
   }
 
-  /// Returns true if there are any wildcards in the specified rawTopic, otherwise false.
+  /// Returns true if there are any wildcards in the specified
+  /// rawTopic, otherwise false.
   bool get hasWildcards =>
       rawTopic.contains(multiWildcard) || rawTopic.contains(wildcard);
 
@@ -65,10 +69,12 @@ abstract class Topic {
 
   /// Serves as a hash function for a topics.
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => rawTopic.hashCode;
 
   /// Checks if one topic equals another topic exactly.
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;

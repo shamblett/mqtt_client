@@ -7,6 +7,11 @@
 
 part of mqtt_client;
 
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+
 /// Subscribed and Unsubscribed callback typedefs
 typedef SubscribeCallback = void Function(String topic);
 typedef SubscribeFailCallback = void Function(String topic);
@@ -14,7 +19,8 @@ typedef UnsubscribeCallback = void Function(String topic);
 
 /// A class that can manage the topic subscription process.
 class SubscriptionsManager {
-  ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
+  ///  Creates a new instance of a SubscriptionsManager that uses the
+  ///  specified connection to manage subscriptions.
   SubscriptionsManager(
       this.connectionHandler, this.publishingManager, this._clientEventBus) {
     connectionHandler.registerForMessage(
@@ -30,16 +36,18 @@ class SubscriptionsManager {
       MessageIdentifierDispenser();
 
   /// List of confirmed subscriptions, keyed on the topic name.
-  Map<String, Subscription> subscriptions = Map<String, Subscription>();
+  Map<String, Subscription> subscriptions = <String, Subscription>{};
 
-  /// A list of subscriptions that are pending acknowledgement, keyed on the message identifier.
-  Map<int, Subscription> pendingSubscriptions = Map<int, Subscription>();
+  /// A list of subscriptions that are pending acknowledgement, keyed
+  /// on the message identifier.
+  Map<int, Subscription> pendingSubscriptions = <int, Subscription>{};
 
   /// A list of unsubscribe requests waiting for an unsubscribe ack message.
   /// Index is the message identifier of the unsubscribe message
-  Map<int, String> pendingUnsubscriptions = Map<int, String>();
+  Map<int, String> pendingUnsubscriptions = <int, String>{};
 
-  /// The connection handler that we use to subscribe to subscription acknowledgements.
+  /// The connection handler that we use to subscribe to subscription
+  /// acknowledgements.
   IMqttConnectionHandler connectionHandler;
 
   /// Publishing manager used for passing on published messages to subscribers.
@@ -55,7 +63,7 @@ class SubscriptionsManager {
   SubscribeFailCallback onSubscribeFail;
 
   /// The event bus
-  events.EventBus _clientEventBus;
+  final events.EventBus _clientEventBus;
 
   /// Observable change notifier for all subscribed topics
   final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
@@ -72,12 +80,13 @@ class SubscriptionsManager {
     return cn ??= createNewSubscription(topic, qos);
   }
 
-  /// Gets a view on the existing observable, if the subscription already exists.
+  /// Gets a view on the existing observable, if the subscription
+  /// already exists.
   Subscription tryGetExistingSubscription(String topic) {
     final Subscription retSub = subscriptions[topic];
     if (retSub == null) {
       // Search the pending subscriptions
-      for (Subscription sub in pendingSubscriptions.values) {
+      for (final Subscription sub in pendingSubscriptions.values) {
         if (sub.topic.rawTopic == topic) {
           return sub;
         }
@@ -91,7 +100,8 @@ class SubscriptionsManager {
   Subscription createNewSubscription(String topic, MqttQos qos) {
     try {
       final SubscriptionTopic subscriptionTopic = SubscriptionTopic(topic);
-      // Get an ID that represents the subscription. We will use this same ID for unsubscribe as well.
+      // Get an ID that represents the subscription. We will use this
+      // same ID for unsubscribe as well.
       final int msgId = messageIdentifierDispenser.getNextMessageIdentifier();
       final Subscription sub = Subscription();
       sub.topic = subscriptionTopic;
@@ -107,8 +117,8 @@ class SubscriptionsManager {
       connectionHandler.sendMessage(msg);
       return sub;
     } on Exception catch (e) {
-      MqttLogger.log(
-          'Subscriptionsmanager::createNewSubscription exception raised, text is $e');
+      MqttLogger.log('Subscriptionsmanager::createNewSubscription '
+          'exception raised, text is $e');
       if (onSubscribeFail != null) {
         onSubscribeFail(topic);
       }
@@ -135,8 +145,9 @@ class SubscriptionsManager {
         topic;
   }
 
-  /// Confirms a subscription has been made with the broker. Marks the sub as confirmed in the subs storage.
-  /// Returns true on successful subscription, false on fail
+  /// Confirms a subscription has been made with the broker.
+  /// Marks the sub as confirmed in the subs storage.
+  /// Returns true on successful subscription, false on fail.
   bool confirmSubscription(MqttMessage msg) {
     final MqttSubscribeAckMessage subAck = msg;
     String topic;

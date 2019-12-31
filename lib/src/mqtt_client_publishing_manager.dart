@@ -7,6 +7,12 @@
 
 part of mqtt_client;
 
+// ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+
 /// Handles the logic and workflow surrounding the message publishing and receipt process.
 ///
 ///         It's probably worth going into a bit of the detail around publishing and Quality of Service levels
@@ -53,20 +59,18 @@ class PublishingManager implements IPublishingManager {
       MessageIdentifierDispenser();
 
   /// Stores messages that have been pubished but not yet acknowledged.
-  Map<int, MqttPublishMessage> publishedMessages =
-      Map<int, MqttPublishMessage>();
+  Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
 
   /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
-  Map<int, MqttPublishMessage> receivedMessages =
-      Map<int, MqttPublishMessage>();
+  Map<int, MqttPublishMessage> receivedMessages = <int, MqttPublishMessage>{};
 
   /// Stores a cache of data converters used when publishing data to a broker.
-  Map<Type, Object> dataConverters = Map<Type, Object>();
+  Map<Type, Object> dataConverters = <Type, Object>{};
 
   /// The current connection handler.
   IMqttConnectionHandler connectionHandler;
 
-  StreamController<MqttPublishMessage> _published =
+  final StreamController<MqttPublishMessage> _published =
       StreamController<MqttPublishMessage>.broadcast();
 
   /// The stream on which all confirmed published messages are added to
@@ -77,7 +81,7 @@ class PublishingManager implements IPublishingManager {
   MessageReceived publishEvent;
 
   /// The event bus
-  events.EventBus _clientEventBus;
+  final events.EventBus _clientEventBus;
 
   /// Publish a message to the broker on the specified topic.
   /// The topic to send the message to

@@ -7,6 +7,10 @@
 
 part of mqtt_client;
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+
 /// Utility class to allow stream like access to a sized byte buffer.
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
@@ -41,6 +45,7 @@ class MqttByteBuffer {
   }
 
   /// Skip bytes
+  // ignore: avoid_setters_without_getters
   set skipBytes(int bytes) => _position += bytes;
 
   /// Add a list
@@ -63,8 +68,8 @@ class MqttByteBuffer {
     return false;
   }
 
-  /// Reads a byte from the buffer and advances the position within the buffer by one
-  /// byte, or returns -1 if at the end of the buffer.
+  /// Reads a byte from the buffer and advances the position
+  /// within the buffer by one byte, or returns -1 if at the end of the buffer.
   int readByte() {
     final int tmp = buffer[_position];
     if (_position <= (length - 1)) {
@@ -83,11 +88,12 @@ class MqttByteBuffer {
   }
 
   /// Reads a sequence of bytes from the current
-  /// buffer and advances the position within the buffer by the number of bytes read.
+  /// buffer and advances the position within the buffer
+  /// by the number of bytes read.
   typed.Uint8Buffer read(int count) {
     if ((length < count) || (_position + count) > length) {
-      throw Exception(
-          'mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation '
+      throw Exception('mqtt_client::ByteBuffer: The buffer did not have '
+          'enough bytes for the read operation '
           'length $length, count $count, position $_position, buffer $buffer');
     }
     final typed.Uint8Buffer tmp = typed.Uint8Buffer();
@@ -98,8 +104,8 @@ class MqttByteBuffer {
     return tmp2;
   }
 
-  /// Writes a byte to the current position in the buffer and advances the position
-  //  within the buffer by one byte.
+  /// Writes a byte to the current position in the buffer
+  /// and advances the position within the buffer by one byte.
   void writeByte(int byte) {
     if (buffer.length == _position) {
       buffer.add(byte);

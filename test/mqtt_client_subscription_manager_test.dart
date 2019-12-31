@@ -12,6 +12,13 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_test_connection_handler.dart';
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_types_on_closure_parameters
+
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {}
 

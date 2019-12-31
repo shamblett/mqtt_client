@@ -5,8 +5,15 @@
  * Copyright :  S.Hamblett
  */
 @TestOn('linux')
+
 import 'dart:io';
 import 'package:test/test.dart';
+
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_print
 
 /// These tests check the mqtt client subscribe/publish functionality against a publicly
 /// available(Mosquitto) MQTT broker.

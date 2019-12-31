@@ -8,6 +8,13 @@ import 'dart:async';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
 
+// ignore_for_file: cascade_invocations
+// ignore_for_file: unnecessary_final
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_types_on_closure_parameters
+
 Future<int> main() async {
   // Create and connect the client
   final MqttClient client =
