@@ -15,6 +15,7 @@ import 'package:test/test.dart';
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: avoid_print
 // ignore_for_file: avoid_types_on_closure_parameters
+// ignore_for_file: close_sinks
 
 void main() {
   group('Topic filtering', () {
@@ -142,6 +143,5 @@ void main() {
       expect(called1, 1);
       expect(called2, 0);
     });
-    clientUpdates.close();
   });
 }
