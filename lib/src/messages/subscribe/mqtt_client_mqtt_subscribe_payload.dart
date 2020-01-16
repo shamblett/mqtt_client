@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
   /// Initializes a new instance of the MqttSubscribePayload class.
@@ -44,12 +39,12 @@ class MqttSubscribePayload extends MqttPayload {
   /// Creates a payload from the specified header stream.
   @override
   void readFrom(MqttByteBuffer payloadStream) {
-    int payloadBytesRead = 0;
-    final int payloadLength = header.messageSize - variableHeader.length;
+    var payloadBytesRead = 0;
+    final payloadLength = header.messageSize - variableHeader.length;
     // Read all the topics and qos subscriptions from the message payload
     while (payloadBytesRead < payloadLength) {
-      final String topic = payloadStream.readMqttStringM();
-      final MqttQos qos = MqttUtilities.getQosLevel(payloadStream.readByte());
+      final topic = payloadStream.readMqttStringM();
+      final qos = MqttUtilities.getQosLevel(payloadStream.readByte());
       payloadBytesRead +=
           topic.length + 3; // +3 = Mqtt string length bytes + qos byte
       addSubscription(topic, qos);
@@ -59,8 +54,8 @@ class MqttSubscribePayload extends MqttPayload {
   /// Gets the length of the payload in bytes when written to a stream.
   @override
   int getWriteLength() {
-    int length = 0;
-    final MqttEncoding enc = MqttEncoding();
+    var length = 0;
+    final enc = MqttEncoding();
     subscriptions.forEach((String key, MqttQos value) {
       length += enc.getByteCount(key);
       length += 1;
@@ -80,7 +75,7 @@ class MqttSubscribePayload extends MqttPayload {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.writeln('Payload: Subscription [{${subscriptions.length}}]');
     subscriptions.forEach((String key, MqttQos value) {
       sb.writeln('{{ Topic={$key}, Qos={$value} }}');

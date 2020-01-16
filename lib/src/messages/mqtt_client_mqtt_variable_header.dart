@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: cascade_invocations
-
 /// Enumeration used by subclasses to tell the variable header what
 /// should be read from the underlying stream.
 enum MqttReadWriteFlags {
@@ -114,8 +109,8 @@ class MqttVariableHeader {
   /// Gets the length of the write data when WriteTo will be called.
   /// A subclass that overrides writeTo must also overwrite this method.
   int getWriteLength() {
-    int headerLength = 0;
-    final MqttEncoding enc = MqttEncoding();
+    var headerLength = 0;
+    final enc = MqttEncoding();
     headerLength += enc.getByteCount(protocolName);
     headerLength += 1; // protocolVersion
     headerLength += MqttConnectFlags.getWriteLength();

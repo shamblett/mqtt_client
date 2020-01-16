@@ -8,16 +8,9 @@
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_types_on_closure_parameters
-
 Future<int> main() async {
   // Create and connect the client
-  final MqttClient client = MqttClient('iot.eclipse.org', 'SJHMQTTClient');
+  final client = MqttClient('iot.eclipse.org', 'SJHMQTTClient');
   client.logging(on: true);
   await client.connect();
   if (client.connectionStatus.state == MqttConnectionState.connected) {
@@ -28,11 +21,11 @@ Future<int> main() async {
     client.disconnect();
   }
   // Subscribe to a known topic
-  const String topic = 'test/hw';
+  const topic = 'test/hw';
   client.subscribe(topic, MqttQos.exactlyOnce);
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print('Change notification:: payload is <$pt> for topic <$topic>');
   });

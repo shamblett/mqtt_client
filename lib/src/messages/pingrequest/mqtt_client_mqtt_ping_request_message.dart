@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// Implementation of an MQTT ping Request Message.
 class MqttPingRequestMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPingRequestMessage class.
@@ -25,7 +21,7 @@ class MqttPingRequestMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     return sb.toString();
   }

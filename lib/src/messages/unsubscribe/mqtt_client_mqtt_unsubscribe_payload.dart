@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_returning_this
-
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
   /// Initializes a new instance of the MqttUnsubscribePayload class.
@@ -42,11 +36,11 @@ class MqttUnsubscribePayload extends MqttPayload {
   /// Creates a payload from the specified header stream.
   @override
   void readFrom(MqttByteBuffer payloadStream) {
-    int payloadBytesRead = 0;
-    final int payloadLength = header.messageSize - variableHeader.length;
+    var payloadBytesRead = 0;
+    final payloadLength = header.messageSize - variableHeader.length;
     // Read all the topics and qos subscriptions from the message payload
     while (payloadBytesRead < payloadLength) {
-      final String topic = payloadStream.readMqttStringM();
+      final topic = payloadStream.readMqttStringM();
       payloadBytesRead += topic.length + 2; // +2 = Mqtt string length bytes
       addSubscription(topic);
     }
@@ -55,9 +49,9 @@ class MqttUnsubscribePayload extends MqttPayload {
   /// Gets the length of the payload in bytes when written to a stream.
   @override
   int getWriteLength() {
-    int length = 0;
-    final MqttEncoding enc = MqttEncoding();
-    for (final String subscription in subscriptions) {
+    var length = 0;
+    final enc = MqttEncoding();
+    for (final subscription in subscriptions) {
       length += enc.getByteCount(subscription);
     }
     return length;
@@ -75,9 +69,9 @@ class MqttUnsubscribePayload extends MqttPayload {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.writeln('Payload: Unsubscription [{${subscriptions.length}}]');
-    for (final String subscription in subscriptions) {
+    for (final subscription in subscriptions) {
       sb.writeln('{{ Topic={$subscription}}');
     }
     return sb.toString();

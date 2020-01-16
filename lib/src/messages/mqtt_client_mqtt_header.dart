@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_returning_this
-
 /// Represents the Fixed Header of an MQTT message.
 class MqttHeader {
   /// Initializes a new instance of the MqttHeader class.
@@ -57,7 +53,7 @@ class MqttHeader {
   /// Writes the header to a supplied stream.
   void writeTo(int messageSize, MqttByteBuffer messageStream) {
     _messageSize = messageSize;
-    final typed.Uint8Buffer headerBuff = headerBytes();
+    final headerBuff = headerBytes();
     messageStream.write(headerBuff);
   }
 
@@ -69,7 +65,7 @@ class MqttHeader {
           'The supplied header is invalid. Header must be at '
           'least 2 bytes long.');
     }
-    final int firstHeaderByte = headerStream.readByte();
+    final firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
     retain = (firstHeaderByte & 1) == 1;
     qos = MqttUtilities.getQosLevel((firstHeaderByte & 6) >> 1);
@@ -95,36 +91,35 @@ class MqttHeader {
 
   /// Gets the value of the Mqtt header as a byte array
   typed.Uint8Buffer headerBytes() {
-    final typed.Uint8Buffer headerBytes = typed.Uint8Buffer();
+    final headerBytes = typed.Uint8Buffer();
 
     // Build the bytes that make up the header. The first byte is a
     // combination of message type, dup, qos and retain, and the
     // following bytes (up to 4 of them) are the size of the
     // payload + variable header.
-    final int messageTypeLength = messageType.index << 4;
-    final int duplicateLength = (duplicate ? 1 : 0) << 3;
-    final int qosLength = qos.index << 1;
-    final int retainLength = retain ? 1 : 0;
-    final int firstByte =
+    final messageTypeLength = messageType.index << 4;
+    final duplicateLength = (duplicate ? 1 : 0) << 3;
+    final qosLength = qos.index << 1;
+    final retainLength = retain ? 1 : 0;
+    final firstByte =
         messageTypeLength + duplicateLength + qosLength + retainLength;
     headerBytes.add(firstByte);
-    // ignore: cascade_invocations
     headerBytes.addAll(getRemainingLengthBytes());
     return headerBytes;
   }
 
   /// Get the remaining byte length in the buffer
   static int readRemainingLength(MqttByteBuffer headerStream) {
-    final typed.Uint8Buffer lengthBytes = readLengthBytes(headerStream);
+    final lengthBytes = readLengthBytes(headerStream);
     return calculateLength(lengthBytes);
   }
 
   /// Reads the length bytes of an MqttHeader from the supplied stream.
   static typed.Uint8Buffer readLengthBytes(MqttByteBuffer headerStream) {
-    final typed.Uint8Buffer lengthBytes = typed.Uint8Buffer();
+    final lengthBytes = typed.Uint8Buffer();
     // Read until we've got the entire size, or the 4 byte limit is reached
     int sizeByte;
-    int byteCount = 0;
+    var byteCount = 0;
     do {
       sizeByte = headerStream.readByte();
       lengthBytes.add(sizeByte);
@@ -135,13 +130,13 @@ class MqttHeader {
   /// Calculates and return the bytes that represent the
   /// remaining length of the message.
   typed.Uint8Buffer getRemainingLengthBytes() {
-    final typed.Uint8Buffer lengthBytes = typed.Uint8Buffer();
-    int payloadCalc = _messageSize;
+    final lengthBytes = typed.Uint8Buffer();
+    var payloadCalc = _messageSize;
 
     // Generate a byte array based on the message size, splitting it up into
     // 7 bit chunks, with the 8th bit being used to indicate 'one more to come'
     do {
-      int nextByteValue = payloadCalc % 128;
+      var nextByteValue = payloadCalc % 128;
       payloadCalc = payloadCalc ~/ 128;
       if (payloadCalc > 0) {
         nextByteValue = nextByteValue | 0x80;
@@ -155,10 +150,10 @@ class MqttHeader {
   /// Calculates the remaining length of an MqttMessage
   /// from the bytes that make up the length.
   static int calculateLength(typed.Uint8Buffer lengthBytes) {
-    int remainingLength = 0;
-    int multiplier = 1;
+    var remainingLength = 0;
+    var multiplier = 1;
 
-    for (final int currentByte in lengthBytes) {
+    for (final currentByte in lengthBytes) {
       remainingLength += (currentByte & 0x7f) * multiplier;
       multiplier *= 0x80;
     }

@@ -7,9 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Class that contains details related to an MQTT Connect messages payload.
 class MqttConnectPayload extends MqttPayload {
   /// Initializes a new instance of the MqttConnectPayload class.
@@ -93,8 +90,8 @@ class MqttConnectPayload extends MqttPayload {
 
   @override
   int getWriteLength() {
-    int length = 0;
-    final MqttEncoding enc = MqttEncoding();
+    var length = 0;
+    final enc = MqttEncoding();
     length += enc.getByteCount(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
       length += enc.getByteCount(willTopic);

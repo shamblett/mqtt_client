@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_types_on_closure_parameters
-
 /// This class allows specific topics to be listened for. It essentially
 /// acts as a bandpass filter for the topics you are interested in if
 /// you subscribe to more than one topic or use wildcard topics.
@@ -48,9 +42,8 @@ class MqttClientTopicFilter {
     String lastTopic;
     try {
       // Pass through if we have a match
-      final List<MqttReceivedMessage<MqttMessage>> tmp =
-          <MqttReceivedMessage<MqttMessage>>[];
-      for (final MqttReceivedMessage<MqttMessage> message in c) {
+      final tmp = <MqttReceivedMessage<MqttMessage>>[];
+      for (final message in c) {
         lastTopic = message.topic;
         if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {
           tmp.add(message);

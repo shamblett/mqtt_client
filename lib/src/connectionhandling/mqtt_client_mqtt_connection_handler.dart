@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 ///  This class provides shared connection functionality
 ///  to connection handler implementations.
 abstract class MqttConnectionHandler implements IMqttConnectionHandler {
@@ -89,13 +84,13 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
     if ((connectionStatus.state == MqttConnectionState.connected) ||
         (connectionStatus.state == MqttConnectionState.connecting)) {
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
-      final MqttByteBuffer stream = MqttByteBuffer(buff);
+      final buff = typed.Uint8Buffer();
+      final stream = MqttByteBuffer(buff);
       message.writeTo(stream);
       stream.seek(0);
       connection.send(stream);
       // Let any registered people know we're doing a message.
-      for (final MessageCallbackFunction callback in sentMessageCallbacks) {
+      for (final callback in sentMessageCallbacks) {
         callback(message);
       }
     } else {
@@ -143,8 +138,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Handles the Message Available event of the connection control for
   /// handling non connection messages.
   void messageAvailable(MessageAvailable event) {
-    final MessageCallbackFunction callback =
-        messageProcessorRegistry[event.message.header.messageType];
+    final callback = messageProcessorRegistry[event.message.header.messageType];
     callback(event.message);
   }
 }

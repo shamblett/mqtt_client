@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_returning_this
-
 /// The client disconnect callback type
 typedef DisconnectCallback = void Function();
 
@@ -243,8 +237,7 @@ class MqttClient {
     if (pongCallback != null) {
       _keepAlive.pongCallback = pongCallback;
     }
-    final MqttConnectMessage connectMessage =
-        _getConnectMessage(username, password);
+    final connectMessage = _getConnectMessage(username, password);
     return _connectionHandler.connect(server, port, connectMessage);
   }
 
@@ -285,7 +278,7 @@ class MqttClient {
       throw ConnectionException(_connectionHandler?.connectionStatus?.state);
     }
     try {
-      final PublicationTopic pubTopic = PublicationTopic(topic);
+      final pubTopic = PublicationTopic(topic);
       return _publishingManager.publish(
           pubTopic, qualityOfService, data, retain);
     } on Exception catch (e) {
@@ -331,7 +324,7 @@ class MqttClient {
     // Only disconnect the connection handler if the request is
     // solicited, unsolicited requests, ie broker termination don't
     // need this.
-    MqttConnectReturnCode returnCode = MqttConnectReturnCode.unsolicited;
+    var returnCode = MqttConnectReturnCode.unsolicited;
     if (!unsolicited) {
       _connectionHandler?.disconnect();
       returnCode = MqttConnectReturnCode.solicited;

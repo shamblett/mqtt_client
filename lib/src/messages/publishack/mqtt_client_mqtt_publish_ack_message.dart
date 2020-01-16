@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a
 /// publish message that has it's QOS set to AtLeast or Exactly Once.
 class MqttPublishAckMessage extends MqttMessage {
@@ -47,7 +43,7 @@ class MqttPublishAckMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();
