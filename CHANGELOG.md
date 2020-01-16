@@ -1,3 +1,6 @@
+# 6.0.0
+Addition of web based client, issue 144
+
 # 5.6.3
 Issue 142, correct misleading logging.
 Issue 145, disconnection code tidy up.
