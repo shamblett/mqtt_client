@@ -74,7 +74,7 @@ void main() {
       expect(ka.ka.pingTimer.isActive, isTrue);
       ka.ka.pingTimer.cancel();
     });
-  }, skip: false);
+  });
 
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
@@ -90,8 +90,8 @@ void main() {
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
-          ch.connectionStatus.returnCode, MqttConnectReturnCode.notAuthorized);
-    }, skip: true);
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
+    });
     test('Connect invalid port', () async {
       bool cbCalled = false;
       void disconnectCB() {
@@ -174,7 +174,7 @@ void main() {
       final MqttConnectionState state = ch.disconnect();
       expect(state, MqttConnectionState.disconnected);
     });
-  }, skip: false);
+  });
 
   group('Connection Keep Alive - Mock broker', () {
     test('Successful response', () async {
@@ -221,7 +221,7 @@ void main() {
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');
       ka.stop();
     });
-  }, skip: false);
+  });
 
   group('Client interface Mock broker', () {
     test('Normal publish', () async {
@@ -262,5 +262,5 @@ void main() {
       expect(client.connectionStatus.state, MqttConnectionState.disconnected);
       broker.close();
     });
-  }, skip: false);
+  });
 }
