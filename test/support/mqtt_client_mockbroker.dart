@@ -4,26 +4,17 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_setters_without_getters
-
 typedef MessageHandlerFunction = void Function(typed.Uint8Buffer message);
 
 /// Helper methods for test message serialization and deserialization
 class MessageSerializationHelper {
   /// Invokes the serialization of a message to get an array of bytes that represent the message.
   static typed.Uint8Buffer getMessageBytes(MqttMessage msg) {
-    final typed.Uint8Buffer buff = typed.Uint8Buffer();
-    final MqttByteBuffer ms = MqttByteBuffer(buff);
+    final buff = typed.Uint8Buffer();
+    final ms = MqttByteBuffer(buff);
     msg.writeTo(ms);
     ms.seek(0);
-    final typed.Uint8Buffer msgBytes = ms.read(ms.length);
+    final msgBytes = ms.read(ms.length);
     return msgBytes;
   }
 }
@@ -41,7 +32,7 @@ class MockBroker {
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
 
   FutureOr<dynamic> start() {
-    final Completer<dynamic> completer = Completer<dynamic>();
+    final completer = Completer<dynamic>();
     ServerSocket.bind('localhost', brokerPort, shared: true)
         .then((dynamic server) {
       listener = server;
@@ -60,12 +51,12 @@ class MockBroker {
 
   void _dataArrivedOnConnection(List<int> data) {
     print('MockBroker::data arrived ${data.toString()}');
-    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
+    final dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     networkstream = MqttByteBuffer(dataBytesBuff);
     networkstream.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final MqttMessage msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream);
     print(msg.toString());
     if (handler != null) {
       handler(networkstream.buffer);
@@ -80,8 +71,7 @@ class MockBroker {
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBroker::sending message ${msg.toString()}');
-    final typed.Uint8Buffer messBuff =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final messBuff = MessageSerializationHelper.getMessageBytes(msg);
     print('MockBroker::sending message bytes ${messBuff.toString()}');
     client.add(messBuff.toList());
   }
@@ -106,7 +96,7 @@ class MockBrokerWs {
   void _handleMessage(dynamic data) {
     // Listen for incoming data.
     print('MockBrokerWs::data arrived ${data.toString()}');
-    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
+    final dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     if (networkstream == null) {
       networkstream = MqttByteBuffer(dataBytesBuff);
@@ -115,14 +105,14 @@ class MockBrokerWs {
     }
     networkstream.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final MqttMessage msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream);
     print(msg.toString());
     handler(networkstream.buffer);
     networkstream = null;
   }
 
   Future<void> start() {
-    final Completer<void> completer = Completer<void>();
+    final completer = Completer<void>();
     HttpServer.bind(InternetAddress.loopbackIPv4, port).then((dynamic server) {
       print(
           'Mockbroker WS server is running on http://${server.address.address}:$port/');
@@ -146,8 +136,7 @@ class MockBrokerWs {
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBrokerWs::sending message ${msg.toString()}');
-    final typed.Uint8Buffer messBuff =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final messBuff = MessageSerializationHelper.getMessageBytes(msg);
     print('MockBrokerWS::sending message bytes ${messBuff.toString()}');
     _webSocket.add(messBuff.toList());
   }
@@ -172,9 +161,9 @@ class MockBrokerSecure {
   String pemName;
 
   Future<void> start() {
-    final Completer<void> completer = Completer<void>();
-    final SecurityContext context = SecurityContext();
-    final String currDir = path.current + path.separator;
+    final completer = Completer<void>();
+    final context = SecurityContext();
+    final currDir = path.current + path.separator;
     context.useCertificateChain(
         currDir + path.join('test', 'pem', '$pemName.cert'));
     context.usePrivateKey(currDir + path.join('test', 'pem', '$pemName.key'));
@@ -196,7 +185,7 @@ class MockBrokerSecure {
 
   void _dataArrivedOnConnection(List<int> data) {
     print('MockBrokerSecure::data arrived ${data.toString()}');
-    final typed.Uint8Buffer dataBytesBuff = typed.Uint8Buffer();
+    final dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     if (networkstream == null) {
       networkstream = MqttByteBuffer(dataBytesBuff);
@@ -205,7 +194,7 @@ class MockBrokerSecure {
     }
     networkstream.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final MqttMessage msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream);
     print(msg.toString());
     handler(networkstream.buffer);
     networkstream = null;
@@ -218,8 +207,7 @@ class MockBrokerSecure {
   /// Sends the message to the client connected to the broker.
   void sendMessage(MqttMessage msg) {
     print('MockBrokerSecure::sending message ${msg.toString()}');
-    final typed.Uint8Buffer messBuff =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final messBuff = MessageSerializationHelper.getMessageBytes(msg);
     print('MockBrokerSecure::sending message bytes ${messBuff.toString()}');
     client.add(messBuff.toList());
   }

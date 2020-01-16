@@ -7,8 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-
 /// Provides the base implementation of an MQTT topic.
 abstract class Topic {
   /// Creates a new instance of a rawTopic from a rawTopic string.

@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// Encoding implementation that can encode and decode strings
 /// in the MQTT string format.
 ///
@@ -22,7 +18,7 @@ class MqttEncoding extends Utf8Codec {
   /// into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);
-    final typed.Uint8Buffer stringBytes = typed.Uint8Buffer();
+    final stringBytes = typed.Uint8Buffer();
     stringBytes.add(s.length >> 8);
     stringBytes.add(s.length & 0xFF);
     stringBytes.addAll(encoder.convert(s));
@@ -49,7 +45,7 @@ class MqttEncoding extends Utf8Codec {
   /// Validates the string to ensure it doesn't contain any characters
   /// invalid within the Mqtt string format.
   static void _validateString(String s) {
-    for (int i = 0; i < s.length; i++) {
+    for (var i = 0; i < s.length; i++) {
       if (Protocol.version == Constants.mqttV31ProtocolVersion) {
         if (s.codeUnitAt(i) > 0x7F) {
           throw Exception(

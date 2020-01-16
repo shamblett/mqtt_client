@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_types_on_closure_parameters
-
 /// Connection handler that performs connections and disconnections
 /// to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
@@ -32,7 +26,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
-    int connectionAttempts = 0;
+    var connectionAttempts = 0;
     MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect entered');
     do {
       // Initiate the connection

@@ -7,9 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Records the status of the last connection attempt
 class MqttClientConnectionStatus {
   /// Connection state
@@ -20,8 +17,8 @@ class MqttClientConnectionStatus {
 
   @override
   String toString() {
-    final String s = state.toString().split('.')[1];
-    final String r = returnCode.toString().split('.')[1];
+    final s = state.toString().split('.')[1];
+    final r = returnCode.toString().split('.')[1];
     return 'Connection status is $s with return code $r';
   }
 }

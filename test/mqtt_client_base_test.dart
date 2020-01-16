@@ -11,71 +11,60 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-
 void main() {
   group('Exceptions', () {
     test('Client Identifier', () {
-      const String clid =
+      const clid =
           'ThisCLIDisMorethan1024characterslongvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv'
           'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
           'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn'
           'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn'
           'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'
           'llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll';
-      final ClientIdentifierException exception =
-          ClientIdentifierException(clid);
+      final exception = ClientIdentifierException(clid);
       expect(
           exception.toString(),
           'mqtt-client::ClientIdentifierException: Client id $clid is too long at ${clid.length}, '
           'Maximum ClientIdentifier length is ${Constants.maxClientIdentifierLength}');
     });
     test('Connection', () {
-      const MqttConnectionState state = MqttConnectionState.disconnected;
-      final ConnectionException exception = ConnectionException(state);
+      const state = MqttConnectionState.disconnected;
+      final exception = ConnectionException(state);
       expect(
           exception.toString(),
           'mqtt-client::ConnectionException: The connection must be in the Connected state in '
           'order to perform this operation. Current state is disconnected');
     });
     test('No Connection', () {
-      final NoConnectionException exception =
-          NoConnectionException('the message');
+      final exception = NoConnectionException('the message');
       expect(exception.toString(),
           'mqtt-client::NoConnectionException: the message');
     });
     test('Invalid Header', () {
-      const String message = 'Corrupt Header Packet';
-      final InvalidHeaderException exception = InvalidHeaderException(message);
+      const message = 'Corrupt Header Packet';
+      final exception = InvalidHeaderException(message);
       expect(exception.toString(),
           'mqtt-client::InvalidHeaderException: $message');
     });
     test('Invalid Message', () {
-      const String message = 'Corrupt Message Packet';
-      final InvalidMessageException exception =
-          InvalidMessageException(message);
+      const message = 'Corrupt Message Packet';
+      final exception = InvalidMessageException(message);
       expect(exception.toString(),
           'mqtt-client::InvalidMessageException: $message');
     });
     test('Invalid Payload Size', () {
-      const int size = 2000;
-      const int max = 1000;
-      final InvalidPayloadSizeException exception =
-          InvalidPayloadSizeException(size, max);
+      const size = 2000;
+      const max = 1000;
+      final exception = InvalidPayloadSizeException(size, max);
       expect(
           exception.toString(),
           'mqtt-client::InvalidPayloadSizeException: The size of the payload ($size bytes) must '
           'be equal to or greater than 0 and less than $max bytes');
     });
     test('Invalid Topic', () {
-      const String message = 'Too long';
-      const String topic = 'kkkk-yyyy';
-      final InvalidTopicException exception =
-          InvalidTopicException(message, topic);
+      const message = 'Too long';
+      const topic = 'kkkk-yyyy';
+      final exception = InvalidTopicException(message, topic);
       expect(exception.toString(),
           'mqtt-client::InvalidTopicException: Topic $topic is $message');
     });
@@ -83,10 +72,10 @@ void main() {
 
   group('Publication Topic', () {
     test('Min length', () {
-      const String topic = '';
-      bool raised = false;
+      const topic = '';
+      var raised = false;
       try {
-        final PublicationTopic pubTopic = PublicationTopic(topic);
+        final pubTopic = PublicationTopic(topic);
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(exception.toString(),
@@ -96,14 +85,14 @@ void main() {
       expect(raised, isTrue);
     });
     test('Max length', () {
-      bool raised = false;
-      final StringBuffer sb = StringBuffer();
-      for (int i = 0; i < Topic.maxTopicLength + 1; i++) {
+      var raised = false;
+      final sb = StringBuffer();
+      for (var i = 0; i < Topic.maxTopicLength + 1; i++) {
         sb.write('a');
       }
       try {
-        final String topic = sb.toString();
-        final PublicationTopic pubTopic = PublicationTopic(topic);
+        final topic = sb.toString();
+        final pubTopic = PublicationTopic(topic);
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -115,10 +104,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('Wildcards', () {
-      const String topic = Topic.wildcard;
-      bool raised = false;
+      const topic = Topic.wildcard;
+      var raised = false;
       try {
-        final PublicationTopic pubTopic = PublicationTopic(topic);
+        final pubTopic = PublicationTopic(topic);
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -129,9 +118,9 @@ void main() {
       }
       expect(raised, isTrue);
       raised = false;
-      const String topic1 = Topic.multiWildcard;
+      const topic1 = Topic.multiWildcard;
       try {
-        final PublicationTopic pubTopic1 = PublicationTopic(topic1);
+        final pubTopic1 = PublicationTopic(topic1);
         print(pubTopic1.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -143,25 +132,25 @@ void main() {
       expect(raised, isTrue);
     });
     test('Valid', () {
-      const String topic = 'AValidTopic';
-      final PublicationTopic pubTopic = PublicationTopic(topic);
+      const topic = 'AValidTopic';
+      final pubTopic = PublicationTopic(topic);
       expect(pubTopic.hasWildcards, false);
       expect(pubTopic.rawTopic, topic);
       expect(pubTopic.toString(), topic);
-      final PublicationTopic pubTopic1 = PublicationTopic(topic);
+      final pubTopic1 = PublicationTopic(topic);
       expect(pubTopic1, pubTopic);
       expect(pubTopic1.hashCode, pubTopic.hashCode);
-      final PublicationTopic pubTopic2 = PublicationTopic('DDDDDDD');
+      final pubTopic2 = PublicationTopic('DDDDDDD');
       expect(pubTopic.hashCode, isNot(equals(pubTopic2.hashCode)));
     });
   });
 
   group('Subscription Topic', () {
     test('Invalid multiWildcard at end', () {
-      const String topic = 'invalidEnding#';
-      bool raised = false;
+      const topic = 'invalidEnding#';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -173,10 +162,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('MultiWildcard in middle', () {
-      const String topic = 'a/#/topic';
-      bool raised = false;
+      const topic = 'a/#/topic';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -188,10 +177,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('More than one MultiWildcard in single fragment', () {
-      const String topic = 'a/##/topic';
-      bool raised = false;
+      const topic = 'a/##/topic';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -203,10 +192,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('More than one type of Wildcard in single fragment', () {
-      const String topic = 'a/#+/topic';
-      bool raised = false;
+      const topic = 'a/#+/topic';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -218,10 +207,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('More than one Wildcard in single fragment', () {
-      const String topic = 'a/++/topic';
-      bool raised = false;
+      const topic = 'a/++/topic';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -233,10 +222,10 @@ void main() {
       expect(raised, isTrue);
     });
     test('More than just Wildcard in fragment', () {
-      const String topic = 'a/frag+/topic';
-      bool raised = false;
+      const topic = 'a/frag+/topic';
+      var raised = false;
       try {
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -248,14 +237,14 @@ void main() {
       expect(raised, isTrue);
     });
     test('Max length', () {
-      final StringBuffer sb = StringBuffer();
-      for (int i = 0; i < Topic.maxTopicLength + 1; i++) {
+      final sb = StringBuffer();
+      for (var i = 0; i < Topic.maxTopicLength + 1; i++) {
         sb.write('a');
       }
-      bool raised = false;
+      var raised = false;
       try {
-        final String topic = sb.toString();
-        final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+        final topic = sb.toString();
+        final subTopic = SubscriptionTopic(topic);
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
@@ -269,60 +258,60 @@ void main() {
     test(
         'MultiWildcard at end of topic is valid when preceeded by topic separator',
         () {
-      const String topic = 'a/topic/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'a/topic/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.rawTopic, topic);
     });
     test('No Wildcards of any type is valid', () {
-      const String topic = 'a/topic/with/no/wildcard/is/good';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'a/topic/with/no/wildcard/is/good';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.rawTopic, topic);
     });
     test('No separators is valid', () {
-      const String topic = 'ATopicWithNoSeparators';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'ATopicWithNoSeparators';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.rawTopic, topic);
     });
     test('Single level equal topics match', () {
-      const String topic = 'finance';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic(topic)), isTrue);
     });
     test('MultiWildcard only topic matches any random', () {
-      const String topic = '#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = '#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
           isTrue);
     });
     test('MultiWildcard only topic matches topic starting with separator', () {
-      const String topic = '#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = '#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('/finance/ibm/closingprice')),
           isTrue);
     });
     test('MultiWildcard at end matches topic that does not match same depth',
         () {
-      const String topic = 'finance/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance')), isTrue);
     });
     test('MultiWildcard at end matches topic with anything at Wildcard level',
         () {
-      const String topic = 'finance/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance/ibm')), isTrue);
     });
     test('Single Wildcard at end matches anything in same level', () {
-      const String topic = 'finance/+/closingprice';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+/closingprice';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
           isTrue);
     });
     test(
         'More than one single Wildcard at different levels matches topic with any value at those levels',
         () {
-      const String topic = 'finance/+/closingprice/month/+';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+/closingprice/month/+';
+      final subTopic = SubscriptionTopic(topic);
       expect(
           subTopic.matches(
               PublicationTopic('finance/ibm/closingprice/month/october')),
@@ -331,101 +320,101 @@ void main() {
     test(
         'Single and MultiWildcard matches topic with any value at those levels and deeper',
         () {
-      const String topic = 'finance/+/closingprice/month/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+/closingprice/month/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(
           subTopic.matches(
               PublicationTopic('finance/ibm/closingprice/month/october/2014')),
           isTrue);
     });
     test('Single Wildcard matches topic empty fragment at that point', () {
-      const String topic = 'finance/+/closingprice';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+/closingprice';
+      final subTopic = SubscriptionTopic(topic);
       expect(
           subTopic.matches(PublicationTopic('finance//closingprice')), isTrue);
     });
     test(
         'Single Wildcard at end matches topic with empty last fragment at that spot',
         () {
-      const String topic = 'finance/ibm/+';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/ibm/+';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance/ibm/')), isTrue);
     });
     test('Single level non equal topics do not match', () {
-      const String topic = 'finance';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('money')), isFalse);
     });
     test('Single Wildcard at end does not match topic that goes deeper', () {
-      const String topic = 'finance/+';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
           isFalse);
     });
     test(
         'Single Wildcard at end does not match topic that does not contain anything at same level',
         () {
-      const String topic = 'finance/+';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('finance')), isFalse);
     });
     test('Multi level non equal topics do not match', () {
-      const String topic = 'finance/ibm/closingprice';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/ibm/closingprice';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('some/random/topic')), isFalse);
     });
     test(
         'MultiWildcard does not match topic with difference before Wildcard level',
         () {
-      const String topic = 'finance/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('money/ibm')), isFalse);
     });
     test('Topics differing only by case do not match', () {
-      const String topic = 'finance';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('Finance')), isFalse);
     });
     test('To string', () {
-      const String topic = 'finance';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance';
+      final subTopic = SubscriptionTopic(topic);
       expect(topic, subTopic.toString());
     });
     test('Wildcard', () {
-      const String topic = 'finance/+';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/+';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.hasWildcards, isTrue);
     });
     test('MultiWildcard', () {
-      const String topic = 'finance/#';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance/#';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.hasWildcards, isTrue);
     });
     test('No Wildcard', () {
-      const String topic = 'finance';
-      final SubscriptionTopic subTopic = SubscriptionTopic(topic);
+      const topic = 'finance';
+      final subTopic = SubscriptionTopic(topic);
       expect(subTopic.hasWildcards, isFalse);
     });
   });
 
   group('ASCII String Data Convertor', () {
     test('ASCII string to byte array', () {
-      const String testString = 'testStringA-Z,1-9,a-z';
-      final AsciiPayloadConverter conv = AsciiPayloadConverter();
-      final typed.Uint8Buffer buff = conv.convertToBytes(testString);
+      const testString = 'testStringA-Z,1-9,a-z';
+      final conv = AsciiPayloadConverter();
+      final buff = conv.convertToBytes(testString);
       expect(testString.length, buff.length);
-      for (int i = 0; i < testString.length; i++) {
+      for (var i = 0; i < testString.length; i++) {
         expect(testString.codeUnitAt(i), buff[i]);
       }
     });
     test('Byte array to ASCII string', () {
-      final List<int> input = <int>[40, 41, 42, 43];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final input = <int>[40, 41, 42, 43];
+      final buff = typed.Uint8Buffer();
       buff.addAll(input);
-      final AsciiPayloadConverter conv = AsciiPayloadConverter();
-      final String output = conv.convertFromBytes(buff);
+      final conv = AsciiPayloadConverter();
+      final output = conv.convertFromBytes(buff);
       expect(input.length, output.length);
-      for (int i = 0; i < input.length; i++) {
+      for (var i = 0; i < input.length; i++) {
         expect(input[i], output.codeUnitAt(i));
       }
     });
@@ -433,8 +422,8 @@ void main() {
 
   group('Encoding', () {
     test('Get bytes', () {
-      final MqttEncoding enc = MqttEncoding();
-      final typed.Uint8Buffer bytes = enc.getBytes('abc');
+      final enc = MqttEncoding();
+      final bytes = enc.getBytes('abc');
       expect(bytes.length, 5);
       expect(bytes[0], 0);
       expect(bytes[1], 3);
@@ -443,46 +432,46 @@ void main() {
       expect(bytes[4], 'c'.codeUnits[0]);
     });
     test('Get byte count', () {
-      final MqttEncoding enc = MqttEncoding();
-      final int byteCount = enc.getByteCount('abc');
+      final enc = MqttEncoding();
+      final byteCount = enc.getByteCount('abc');
       print(byteCount);
       expect(byteCount, 5);
     });
     test('Get string', () {
-      final MqttEncoding enc = MqttEncoding();
-      final typed.Uint8Buffer buff = typed.Uint8Buffer(3);
+      final enc = MqttEncoding();
+      final buff = typed.Uint8Buffer(3);
       buff[0] = 'a'.codeUnits[0];
       buff[1] = 'b'.codeUnits[0];
       buff[2] = 'c'.codeUnits[0];
-      final String message = enc.getString(buff);
+      final message = enc.getString(buff);
       expect(message, 'abc');
     });
     test('Get char count valid length LSB', () {
-      final MqttEncoding enc = MqttEncoding();
-      final typed.Uint8Buffer buff = typed.Uint8Buffer(5);
+      final enc = MqttEncoding();
+      final buff = typed.Uint8Buffer(5);
       buff[0] = 0;
       buff[1] = 3;
       buff[2] = 'a'.codeUnits[0];
       buff[3] = 'b'.codeUnits[0];
       buff[4] = 'c'.codeUnits[0];
-      final int count = enc.getCharCount(buff);
+      final count = enc.getCharCount(buff);
       expect(count, 3);
     });
     test('Get char count valid length MSB', () {
-      final MqttEncoding enc = MqttEncoding();
-      final typed.Uint8Buffer buff = typed.Uint8Buffer(2);
+      final enc = MqttEncoding();
+      final buff = typed.Uint8Buffer(2);
       buff[0] = 0xFF;
       buff[1] = 0xFF;
-      final int count = enc.getCharCount(buff);
+      final count = enc.getCharCount(buff);
       expect(count, 65535);
     });
     test('Get char count invalid length', () {
-      final MqttEncoding enc = MqttEncoding();
-      bool raised = false;
-      final typed.Uint8Buffer buff = typed.Uint8Buffer(1);
+      final enc = MqttEncoding();
+      var raised = false;
+      final buff = typed.Uint8Buffer(1);
       buff[0] = 0;
       try {
-        final int count = enc.getCharCount(buff);
+        final count = enc.getCharCount(buff);
         print(count); // won't get here
       } on Exception catch (exception) {
         expect(exception.toString(),
@@ -492,11 +481,11 @@ void main() {
       expect(raised, isTrue);
     });
     test('Extended characters initiate failure', () {
-      final MqttEncoding enc = MqttEncoding();
-      bool raised = false;
-      const String extStr = '©';
+      final enc = MqttEncoding();
+      var raised = false;
+      const extStr = '©';
       try {
-        final typed.Uint8Buffer buff = enc.getBytes(extStr);
+        final buff = enc.getBytes(extStr);
         print(buff.toString()); // won't get here
       } on Exception catch (exception) {
         expect(
@@ -511,7 +500,7 @@ void main() {
 
   group('Utility', () {
     test('Protocol', () {
-      final MqttClient client = MqttClient('localhost', 'abcd');
+      final client = MqttClient('localhost', 'abcd');
       expect(Protocol.version, Constants.mqttV31ProtocolVersion);
       expect(Protocol.name, Constants.mqttV31ProtocolName);
       client.setProtocolV311();
@@ -519,16 +508,16 @@ void main() {
       expect(Protocol.name, Constants.mqttV311ProtocolName);
     });
     test('Byte Buffer', () {
-      final typed.Uint8Buffer uBuff = typed.Uint8Buffer(10);
-      final typed.Uint8Buffer uBuff1 = typed.Uint8Buffer(10);
-      final MqttByteBuffer buff = MqttByteBuffer(uBuff);
+      final uBuff = typed.Uint8Buffer(10);
+      final uBuff1 = typed.Uint8Buffer(10);
+      final buff = MqttByteBuffer(uBuff);
       expect(buff.length, 10);
       expect(buff.position, 0);
-      int tmp = buff.readByte();
+      var tmp = buff.readByte();
       tmp = buff.readShort();
       print(tmp);
       expect(buff.position, 3);
-      final typed.Uint8Buffer tmpBuff = buff.read(4);
+      final tmpBuff = buff.read(4);
       expect(tmpBuff.length, 4);
       expect(buff.position, 7);
       buff.writeByte(1);
@@ -541,29 +530,29 @@ void main() {
       buff.write(uBuff1);
       expect(buff.length, 10);
       expect(buff.position, 10);
-      final List<int> bytes = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      final MqttByteBuffer buff1 = MqttByteBuffer.fromList(bytes);
+      final bytes = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      final buff1 = MqttByteBuffer.fromList(bytes);
       expect(buff1.length, 10);
       expect(buff1.position, 0);
       buff1.seek(20);
       expect(buff1.position, 10);
     });
     test('Sleep Async', () async {
-      final DateTime start = DateTime.now();
+      final start = DateTime.now();
       await MqttUtilities.asyncSleep(1);
-      final DateTime end = DateTime.now();
-      final Duration difference = end.difference(start);
+      final end = DateTime.now();
+      final difference = end.difference(start);
       expect(difference.inSeconds, 1);
     });
     test('Sleep Sync', () {
-      final DateTime start = DateTime.now();
+      final start = DateTime.now();
       MqttUtilities.syncSleep(1);
-      final DateTime end = DateTime.now();
-      final Duration difference = end.difference(start);
+      final end = DateTime.now();
+      final difference = end.difference(start);
       expect(difference.inSeconds, 1);
     });
     test('Get Qos Level', () {
-      MqttQos qos = MqttUtilities.getQosLevel(0);
+      var qos = MqttUtilities.getQosLevel(0);
       expect(qos, MqttQos.atMostOnce);
       qos = MqttUtilities.getQosLevel(1);
       expect(qos, MqttQos.atLeastOnce);
@@ -578,36 +567,35 @@ void main() {
 
   group('Payload builder', () {
     test('Construction', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       expect(builder.payload, isNotNull);
       expect(builder.length, 0);
     });
 
     test('Add buffer', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      final typed.Uint8Buffer buffer = typed.Uint8Buffer()
-        ..addAll(<int>[1, 2, 3]);
+      final builder = MqttClientPayloadBuilder();
+      final buffer = typed.Uint8Buffer()..addAll(<int>[1, 2, 3]);
       builder.addBuffer(buffer);
       expect(builder.length, 3);
       expect(builder.payload, buffer);
     });
 
     test('Add byte', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addByte(129);
       expect(builder.length, 1);
       expect(builder.payload.toList(), <int>[129]);
     });
 
     test('Add byte - overflow', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addByte(300);
       expect(builder.length, 1);
       expect(builder.payload.toList(), <int>[44]);
     });
 
     test('Add bool', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addBool(val: true);
       expect(builder.length, 1);
       expect(builder.payload.toList(), <int>[1]);
@@ -617,35 +605,35 @@ void main() {
     });
 
     test('Add half', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addHalf(18000);
       expect(builder.length, 2);
       expect(builder.payload.toList(), <int>[0x50, 0x46]);
     });
 
     test('Add half - overflow', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addHalf(65539);
       expect(builder.length, 2);
       expect(builder.payload.toList(), <int>[0x3, 0x00]);
     });
 
     test('Add word', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addWord(123456789);
       expect(builder.length, 4);
       expect(builder.payload.toList(), <int>[0x15, 0xCD, 0x5B, 0x07]);
     });
 
     test('Add word - overflow', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addWord(4294967298);
       expect(builder.length, 4);
       expect(builder.payload.toList(), <int>[0x2, 0x00, 0x00, 0x00]);
     });
 
     test('Add int', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addInt(123456789030405);
       expect(builder.length, 8);
       expect(builder.payload.toList(),
@@ -653,29 +641,29 @@ void main() {
     });
 
     test('Add string', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addString('Hello');
       expect(builder.length, 5);
       expect(builder.payload.toList(), <int>[72, 101, 108, 108, 111]);
     });
 
     test('Add unicode string', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addUTF16String('\u{1D11E}');
       expect(builder.length, 4);
       expect(builder.payload.toList(), <int>[0x34, 0xD8, 0x1E, 0xDD]);
     });
 
     test('Add emoji', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addUTF16String('😁');
       expect(builder.length, 4);
       expect(builder.payload.toList(), <int>[0x3D, 0xD8, 0x1, 0xDE]);
     });
 
     test('Add arabic', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      const String arabic = 'سلام';
+      final builder = MqttClientPayloadBuilder();
+      const arabic = 'سلام';
       builder.addUTF16String(arabic);
       expect(builder.length, 8);
       expect(builder.payload.toList(),
@@ -683,8 +671,8 @@ void main() {
     });
 
     test('Add arabic string', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-      const String arabic = 'این یک پیام تستی هستش';
+      final builder = MqttClientPayloadBuilder();
+      const arabic = 'این یک پیام تستی هستش';
       builder.addString(arabic);
       expect(builder.length, 38);
       expect(builder.payload.toList(), <int>[
@@ -730,7 +718,7 @@ void main() {
     });
 
     test('Add UTF8 string', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addUTF8String(json
           .encode(<String, String>{'type': 'msgText', 'data': 'تست 😀 😁 '}));
       expect(builder.length, 45);
@@ -784,14 +772,14 @@ void main() {
     });
 
     test('Add half double', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addHalfDouble(10000.5);
       expect(builder.length, 4);
       expect(builder.payload.toList(), <int>[0, 66, 28, 70]);
     });
 
     test('Add double', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addDouble(1.5e43);
       expect(builder.length, 8);
       expect(
@@ -799,7 +787,7 @@ void main() {
     });
 
     test('Clear', () {
-      final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+      final builder = MqttClientPayloadBuilder();
       builder.addString('Hello');
       expect(builder.length, 5);
       builder.clear();
@@ -809,13 +797,13 @@ void main() {
 
   group('Cancellable async timer', () {
     test('Normal expiry', () async {
-      final DateTime start = DateTime.now();
-      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(200);
+      final start = DateTime.now();
+      final sleeper = MqttCancellableAsyncSleep(200);
       expect(sleeper.isRunning, false);
       expect(sleeper.timeout, 200);
       await sleeper.sleep();
       expect(sleeper.isRunning, false);
-      final DateTime now = DateTime.now();
+      final now = DateTime.now();
       expect(
           start.millisecondsSinceEpoch +
                   const Duration(milliseconds: 200).inMilliseconds <=
@@ -824,10 +812,10 @@ void main() {
       expect(sleeper.isRunning, false);
     });
     test('Normal expiry - check', () async {
-      final DateTime start = DateTime.now();
-      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(100);
+      final start = DateTime.now();
+      final sleeper = MqttCancellableAsyncSleep(100);
       await sleeper.sleep();
-      final DateTime now = DateTime.now();
+      final now = DateTime.now();
       expect(
           start.millisecondsSinceEpoch +
                   const Duration(milliseconds: 200).inMilliseconds <=
@@ -836,16 +824,16 @@ void main() {
     });
 
     test('Cancel', () async {
-      final MqttCancellableAsyncSleep sleeper = MqttCancellableAsyncSleep(200);
+      final sleeper = MqttCancellableAsyncSleep(200);
       void action() {
         sleeper.cancel();
         expect(sleeper.isRunning, false);
       }
 
-      final DateTime start = DateTime.now();
+      final start = DateTime.now();
       Future<void>.delayed(const Duration(milliseconds: 100), action);
       await sleeper.sleep();
-      final DateTime now = DateTime.now();
+      final now = DateTime.now();
       expect(now.millisecondsSinceEpoch - start.millisecondsSinceEpoch < 200,
           true);
     });
@@ -853,7 +841,7 @@ void main() {
 
   group('Connection Status', () {
     test('To String', () {
-      final MqttClientConnectionStatus status = MqttClientConnectionStatus();
+      final status = MqttClientConnectionStatus();
       expect(status.toString(),
           'Connection status is disconnected with return code noneSpecified');
       status.state = MqttConnectionState.faulted;

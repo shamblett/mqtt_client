@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// Implementation of an MQTT Publish Received Message.
 class MqttPublishReceivedMessage extends MqttMessage {
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
@@ -47,7 +43,7 @@ class MqttPublishReceivedMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

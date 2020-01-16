@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_returning_this
-
 /// Implementation of an MQTT Unsubscribe Ack Message.
 class MqttUnsubscribeAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
@@ -54,7 +48,7 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

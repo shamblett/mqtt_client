@@ -7,7 +7,6 @@
 
 part of mqtt_client;
 
-// ignore: avoid_classes_with_only_static_members
 /// Protocol selection helper class, protocol defaults V3.1
 class Protocol {
   /// Version

@@ -9,28 +9,17 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_types_on_closure_parameters
-// ignore_for_file: close_sinks
-
 void main() {
   group('Topic filtering', () {
-    final StreamController<List<MqttReceivedMessage<MqttMessage>>>
-        clientUpdates =
+    final clientUpdates =
         StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
             sync: true);
-    final MqttMessage payload = MqttMessage();
+    final payload = MqttMessage();
     test('Exact match', () {
-      const String topicToFilter = 'testtopic';
-      bool called = false;
-      final MqttReceivedMessage<MqttMessage> message =
-          MqttReceivedMessage<MqttMessage>(topicToFilter, payload);
-      final MqttClientTopicFilter filter =
-          MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
+      const topicToFilter = 'testtopic';
+      var called = false;
+      final message = MqttReceivedMessage<MqttMessage>(topicToFilter, payload);
+      final filter = MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
       filter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
         expect(c[0].topic, topicToFilter);
         called = true;
@@ -39,12 +28,10 @@ void main() {
       expect(called, isTrue);
     });
     test('No match', () {
-      const String topicToFilter = 'testtopic';
-      bool called = false;
-      final MqttReceivedMessage<MqttMessage> message =
-          MqttReceivedMessage<MqttMessage>('NoMatch', payload);
-      final MqttClientTopicFilter filter =
-          MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
+      const topicToFilter = 'testtopic';
+      var called = false;
+      final message = MqttReceivedMessage<MqttMessage>('NoMatch', payload);
+      final filter = MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
       filter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
         called = true;
       });
@@ -52,14 +39,11 @@ void main() {
       expect(called, isFalse);
     });
     test('Wildcard - All match', () {
-      const String topicToFilter = 'testtopic/#';
-      int called = 0;
-      final MqttReceivedMessage<MqttMessage> message0 =
-          MqttReceivedMessage<MqttMessage>('testtopic/0', payload);
-      final MqttReceivedMessage<MqttMessage> message1 =
-          MqttReceivedMessage<MqttMessage>('testtopic/1', payload);
-      final MqttClientTopicFilter filter =
-          MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
+      const topicToFilter = 'testtopic/#';
+      var called = 0;
+      final message0 = MqttReceivedMessage<MqttMessage>('testtopic/0', payload);
+      final message1 = MqttReceivedMessage<MqttMessage>('testtopic/1', payload);
+      final filter = MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
       filter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
         expect(c[called].topic, 'testtopic/$called');
         called++;
@@ -68,16 +52,13 @@ void main() {
       expect(called, 1);
     });
     test('Wildcard - Some match', () {
-      const String topicToFilter = 'testtopic/#';
-      int called = 0;
-      final MqttReceivedMessage<MqttMessage> message0 =
-          MqttReceivedMessage<MqttMessage>('testtopic/0', payload);
-      final MqttReceivedMessage<MqttMessage> message1 =
-          MqttReceivedMessage<MqttMessage>('testtopic/1', payload);
-      final MqttReceivedMessage<MqttMessage> message2 =
+      const topicToFilter = 'testtopic/#';
+      var called = 0;
+      final message0 = MqttReceivedMessage<MqttMessage>('testtopic/0', payload);
+      final message1 = MqttReceivedMessage<MqttMessage>('testtopic/1', payload);
+      final message2 =
           MqttReceivedMessage<MqttMessage>('testtopic1/1', payload);
-      final MqttClientTopicFilter filter =
-          MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
+      final filter = MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
       filter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
         expect(c[called].topic, 'testtopic/$called');
         called++;
@@ -87,21 +68,21 @@ void main() {
       expect(called, 1);
     });
     test('Multiple filters - valid topics received', () {
-      const String topicNumberOfSystems1 = 'PLCs/1/numberOfSystems';
-      const String topicNumberOfSystems2 = 'PLCs/2/numberOfSystems';
-      const String topicSystemStructure = 'PLCs/+/numberOfSystems';
-      int called = 0;
+      const topicNumberOfSystems1 = 'PLCs/1/numberOfSystems';
+      const topicNumberOfSystems2 = 'PLCs/2/numberOfSystems';
+      const topicSystemStructure = 'PLCs/+/numberOfSystems';
+      var called = 0;
       payload.header = MqttHeader();
       payload.header.qos = MqttQos.atLeastOnce;
       payload.header.retain = true;
 
-      final MqttReceivedMessage<MqttMessage> message0 =
+      final message0 =
           MqttReceivedMessage<MqttMessage>(topicNumberOfSystems1, payload);
 
-      final MqttReceivedMessage<MqttMessage> message1 =
+      final message1 =
           MqttReceivedMessage<MqttMessage>(topicNumberOfSystems2, payload);
 
-      final MqttClientTopicFilter topicFilterSystemStructure =
+      final topicFilterSystemStructure =
           MqttClientTopicFilter(topicSystemStructure, clientUpdates.stream);
       topicFilterSystemStructure.updates
           .listen((List<MqttReceivedMessage<MqttMessage>> c) {
@@ -113,21 +94,21 @@ void main() {
       expect(called, 1);
     });
     test('Multiple filters - invalid topic received', () {
-      const String topicNumberOfSystems = 'PLCs/numberOfSystems';
-      const String topicSystemStructure = 'PLCs/+/systemStructure';
-      int called1 = 0;
-      int called2 = 0;
+      const topicNumberOfSystems = 'PLCs/numberOfSystems';
+      const topicSystemStructure = 'PLCs/+/systemStructure';
+      var called1 = 0;
+      var called2 = 0;
       payload.header = MqttHeader();
       payload.header.qos = MqttQos.atLeastOnce;
       payload.header.retain = true;
 
-      final MqttReceivedMessage<MqttMessage> message0 =
+      final message0 =
           MqttReceivedMessage<MqttMessage>(topicNumberOfSystems, payload);
 
-      final MqttClientTopicFilter topicFilterSystemStructure =
+      final topicFilterSystemStructure =
           MqttClientTopicFilter(topicSystemStructure, clientUpdates.stream);
 
-      final MqttClientTopicFilter topicFilterNumberOfSystems =
+      final topicFilterNumberOfSystems =
           MqttClientTopicFilter(topicNumberOfSystems, clientUpdates.stream);
       topicFilterNumberOfSystems.updates
           .listen((List<MqttReceivedMessage<MqttMessage>> c) {

@@ -7,16 +7,11 @@
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-
 class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message) {
-    final Completer<MqttClientConnectionStatus> completer =
+    final completer =
         Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
@@ -32,7 +27,7 @@ class TestConnectionHandlerSend extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message) {
-    final Completer<MqttClientConnectionStatus> completer =
+    final completer =
         Completer<MqttClientConnectionStatus>();
     return completer.future;
   }

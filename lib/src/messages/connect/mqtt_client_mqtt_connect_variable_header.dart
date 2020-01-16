@@ -7,9 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttConnectVariableHeader extends MqttVariableHeader {
   /// Initializes a new instance of the MqttConnectVariableHeader class.
@@ -40,8 +37,8 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   /// Gets the length of the write data when WriteTo will be called.
   @override
   int getWriteLength() {
-    int headerLength = 0;
-    final MqttEncoding enc = MqttEncoding();
+    var headerLength = 0;
+    final enc = MqttEncoding();
     headerLength += enc.getByteCount(protocolName);
     headerLength += 1; // protocolVersion
     headerLength += MqttConnectFlags.getWriteLength();

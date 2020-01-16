@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: avoid_returning_this
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// An Mqtt message that is used to initiate a connection to a message broker.
 class MqttConnectMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectMessage class.
@@ -131,7 +126,7 @@ class MqttConnectMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

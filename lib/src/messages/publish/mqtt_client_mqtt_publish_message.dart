@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_returning_this
-
 /// Implementation of an MQTT Publish Message, used for publishing
 /// telemetry data along a live MQTT stream.
 class MqttPublishMessage extends MqttMessage {
@@ -48,8 +43,8 @@ class MqttPublishMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    final int variableHeaderLength = variableHeader.getWriteLength();
-    final int payloadLength = payload.getWriteLength();
+    final variableHeaderLength = variableHeader.getWriteLength();
+    final payloadLength = payload.getWriteLength();
     header.writeTo(variableHeaderLength + payloadLength, messageStream);
     variableHeader.writeTo(messageStream);
     payload.writeTo(messageStream);
@@ -94,7 +89,7 @@ class MqttPublishMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     sb.writeln(payload.toString());

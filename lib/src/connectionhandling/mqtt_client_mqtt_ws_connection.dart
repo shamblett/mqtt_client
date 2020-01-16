@@ -7,12 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_types_on_closure_parameters
-
 /// The MQTT connection class for the websocket interface
 class MqttWsConnection extends MqttConnection {
   /// Default constructor
@@ -42,27 +36,25 @@ class MqttWsConnection extends MqttConnection {
   /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
-    final Completer<MqttClientConnectionStatus> completer =
-        Completer<MqttClientConnectionStatus>();
+    final completer = Completer<MqttClientConnectionStatus>();
     // Add the port if present
     Uri uri;
     try {
       uri = Uri.parse(server);
     } on Exception {
-      final String message = 'MqttWsConnection::The URI supplied for the WS '
+      final message = 'MqttWsConnection::The URI supplied for the WS '
           'connection is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
-      final String message =
-          'MqttWsConnection::The URI supplied for the WS has '
+      final message = 'MqttWsConnection::The URI supplied for the WS has '
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
     if (port != null) {
       uri = uri.replace(port: port);
     }
-    final String uriString = uri.toString();
+    final uriString = uri.toString();
     MqttLogger.log(
         'MqttWsConnection:: WS URL is $uriString, protocols are $protocols');
     try {
@@ -80,8 +72,7 @@ class MqttWsConnection extends MqttConnection {
         completer.completeError(e);
       });
     } on Exception {
-      final String message =
-          'MqttWsConnection::The connection to the message broker '
+      final message = 'MqttWsConnection::The connection to the message broker '
           '{$uriString} could not be made.';
       throw NoConnectionException(message);
     }
