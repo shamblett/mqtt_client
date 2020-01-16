@@ -75,7 +75,7 @@ void main() {
       expect(ka.ka.pingTimer.isActive, isTrue);
       ka.ka.pingTimer.cancel();
     });
-  }, skip: false);
+  });
 
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
@@ -91,7 +91,7 @@ void main() {
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
-    }, skip: true);
+    });
     test('Connect invalid port', () async {
       bool cbCalled = false;
       void disconnectCB() {

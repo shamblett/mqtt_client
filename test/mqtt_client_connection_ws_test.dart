@@ -69,7 +69,7 @@ void main() {
             'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
-  }, skip: false);
+  });
 
   group('Connection Keep Alive - Mock broker WS', () {
     test('Successful response WS', () async {
@@ -116,5 +116,5 @@ void main() {
       ka.stop();
       ch.close();
     });
-  }, skip: false);
+  });
 }

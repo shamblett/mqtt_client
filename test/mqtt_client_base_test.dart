@@ -554,7 +554,7 @@ void main() {
       final DateTime end = DateTime.now();
       final Duration difference = end.difference(start);
       expect(difference.inSeconds, 1);
-    }, skip: false);
+    });
     test('Sleep Sync', () {
       final DateTime start = DateTime.now();
       MqttUtilities.syncSleep(1);
