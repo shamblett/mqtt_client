@@ -19,7 +19,6 @@ import 'records.dart';
 /// - Implement the interface yourself and provide your own implementation
 abstract class Observable<C extends ChangeRecord> {
   // To be removed when https://github.com/dart-lang/observable/issues/10
-  // ignore: unnecessary_final
   final ChangeNotifier<C> _delegate = ChangeNotifier<C>();
 
   /// Emits a list of changes when the state of the object changes.
@@ -32,7 +31,6 @@ abstract class Observable<C extends ChangeRecord> {
   @mustCallSuper
   @Deprecated('Use ChangeNotifier instead to have this method available')
   // REMOVE IGNORE when https://github.com/dart-lang/observable/issues/10
-  // ignore: invalid_use_of_protected_member
   void observed() => _delegate.observed();
 
   /// May override to be notified when [changes] is no longer observed.
@@ -40,7 +38,6 @@ abstract class Observable<C extends ChangeRecord> {
   @mustCallSuper
   @Deprecated('Use ChangeNotifier instead to have this method available')
   // REMOVE IGNORE when https://github.com/dart-lang/observable/issues/10
-  // ignore: invalid_use_of_protected_member
   void unobserved() => _delegate.unobserved();
 
   /// True if this object has any observers.
@@ -52,7 +49,6 @@ abstract class Observable<C extends ChangeRecord> {
   /// Returns `true` if changes were emitted.
   @Deprecated('Use ChangeNotifier instead to have this method available')
   // REMOVE IGNORE when https://github.com/dart-lang/observable/issues/10
-  // ignore: invalid_use_of_protected_member
   bool deliverChanges() => _delegate.deliverChanges();
 
   /// Schedules [change] to be delivered.

@@ -11,8 +11,7 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message) {
-    final completer =
-        Completer<MqttClientConnectionStatus>();
+    final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
 
@@ -27,8 +26,7 @@ class TestConnectionHandlerSend extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message) {
-    final completer =
-        Completer<MqttClientConnectionStatus>();
+    final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
 

@@ -52,7 +52,6 @@ class MqttClientTopicFilter {
       if (tmp.isNotEmpty) {
         _updates.add(tmp);
       }
-      // ignore: avoid_catching_errors
     } on RangeError catch (e) {
       MqttLogger.log('MqttClientTopicFilter::_topicIn - cannot process '
           'received topic: $lastTopic');

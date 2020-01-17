@@ -41,7 +41,6 @@ class MqttByteBuffer {
   }
 
   /// Skip bytes
-  // ignore: avoid_setters_without_getters
   set skipBytes(int bytes) => _position += bytes;
 
   /// Add a list

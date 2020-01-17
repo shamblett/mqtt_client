@@ -131,7 +131,6 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         MqttLogger.log('SynchronousMqttConnectionHandler::_connectAckProcessor '
             '- state = connected');
         connectionStatus.state = MqttConnectionState.connected;
-        // ignore: cascade_invocations
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
         // Call the connected callback if we have one
         if (onConnected != null) {

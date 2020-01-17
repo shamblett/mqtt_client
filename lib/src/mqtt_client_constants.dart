@@ -7,7 +7,6 @@
 
 part of mqtt_client;
 
-// ignore: avoid_classes_with_only_static_members
 /// Library wide constants
 class Constants {
   /// The Maximum allowed message size as defined by the MQTT v3 Spec (256MB).

@@ -25,10 +25,8 @@ class MqttConnectionKeepAlive {
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
         MqttMessageType.pingRequest, pingRequestReceived);
-    // ignore: cascade_invocations
     connectionHandler.registerForMessage(
         MqttMessageType.pingResponse, pingResponseReceived);
-    // ignore: cascade_invocations
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
