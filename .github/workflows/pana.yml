@@ -1,5 +1,10 @@
 name: Pana Analysis
-on: [push]
+on: 
+  push:
+    branches:
+      - master
+      - development
+      - webclient
 
 jobs:
 
