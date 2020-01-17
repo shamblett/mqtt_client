@@ -44,7 +44,6 @@ class MqttConnectAckMessage extends MqttMessage {
   }
 
   /// Sets the return code of the Variable Header.
-  // ignore: avoid_returning_this
   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
     variableHeader.returnCode = returnCode;
     return this;

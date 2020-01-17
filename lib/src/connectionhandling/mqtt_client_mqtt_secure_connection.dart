@@ -35,7 +35,6 @@ class MqttSecureConnection extends MqttConnection {
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)
-          // ignore: avoid_types_on_closure_parameters
           .then((SecureSocket socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;

@@ -77,7 +77,6 @@ class MqttConnectPayload extends MqttPayload {
     payloadStream.writeMqttStringM(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
       payloadStream.writeMqttStringM(willTopic);
-      // ignore: cascade_invocations
       payloadStream.writeMqttStringM(willMessage);
     }
     if (variableHeader.connectFlags.usernameFlag) {

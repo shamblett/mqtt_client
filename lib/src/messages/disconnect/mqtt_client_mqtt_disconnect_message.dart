@@ -22,7 +22,6 @@ class MqttDisconnectMessage extends MqttMessage {
   @override
   String toString() {
     final sb = StringBuffer();
-    // ignore: cascade_invocations
     sb.write(super.toString());
     return sb.toString();
   }

@@ -67,12 +67,10 @@ abstract class Topic {
 
   /// Serves as a hash function for a topics.
   @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode => rawTopic.hashCode;
 
   /// Checks if one topic equals another topic exactly.
   @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;

@@ -35,7 +35,6 @@ class MqttPublishReceivedMessage extends MqttMessage {
   }
 
   /// Sets the message identifier of the MqttMessage.
-  // ignore: avoid_returning_this
   MqttPublishReceivedMessage withMessageIdentifier(int messageIdentifier) {
     variableHeader.messageIdentifier = messageIdentifier;
     return this;

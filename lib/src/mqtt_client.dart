@@ -54,7 +54,6 @@ class MqttClient {
   /// in this case use the single protocol default. You can supply your own
   /// list, or to disable this entirely set the protocols to an
   /// empty list , i.e [].
-  // ignore: avoid_setters_without_getters
   set websocketProtocols(List<String> protocols) {
     _websocketProtocols = protocols;
     if (_connectionHandler != null) {
@@ -91,7 +90,6 @@ class MqttClient {
   /// stream on completion of the message publishing protocol for a Qos level.
   /// Attach listeners only after connect has been called.
   Stream<MqttPublishMessage> get published =>
-      // ignore: prefer_null_aware_operators
       _publishingManager != null ? _publishingManager.published.stream : null;
 
   /// Gets the current connection state of the Mqtt Client.
