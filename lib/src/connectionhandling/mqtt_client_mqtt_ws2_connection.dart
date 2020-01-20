@@ -6,7 +6,7 @@
  * 01/19/2019 : Don Edvalson - Added this alternate websocket class to work around AWS deficiencies.
  */
 
-part of mqtt_client;
+part of mqtt_server_client;
 
 class _DetachedSocket extends Stream<Uint8List> implements Socket {
   _DetachedSocket(this._socket, this._subscription);

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of mqtt_server_client;
 
 /// Ping response received callback
 typedef PongCallback = void Function();

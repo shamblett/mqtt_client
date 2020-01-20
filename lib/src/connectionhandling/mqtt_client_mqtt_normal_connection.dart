@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of mqtt_server_client;
 
 /// The MQTT normal(insecure TCP) connection class
 class MqttNormalConnection extends MqttConnection {

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of mqtt_server_client;
 
 /// Connection handler that performs connections and disconnections
 /// to the hostname in a synchronous manner.

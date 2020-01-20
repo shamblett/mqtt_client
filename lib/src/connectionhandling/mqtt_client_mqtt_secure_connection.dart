@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of mqtt_server_client;
 
 /// The MQTT secure connection class
 class MqttSecureConnection extends MqttConnection {
