@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of mqtt_client;
 
 /// Ping response received callback
 typedef PongCallback = void Function();
@@ -39,7 +39,7 @@ class MqttConnectionKeepAlive {
   Timer pingTimer;
 
   /// The connection handler
-  MqttConnectionHandler _connectionHandler;
+  IMqttConnectionHandler _connectionHandler;
 
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;

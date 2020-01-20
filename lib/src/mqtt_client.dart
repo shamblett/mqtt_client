@@ -72,7 +72,7 @@ class MqttClient {
   bool Function(X509Certificate certificate) onBadCertificate;
 
   /// The Handler that is managing the connection to the remote server.
-  MqttConnectionHandler _connectionHandler;
+  IMqttConnectionHandler _connectionHandler;
 
   /// The subscriptions manager responsible for tracking subscriptions.
   SubscriptionsManager _subscriptionsManager;
