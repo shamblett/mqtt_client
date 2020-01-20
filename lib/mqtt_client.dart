@@ -41,8 +41,6 @@ part 'src/connectionhandling/mqtt_client_connection_state.dart';
 
 part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
 
-part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
-
 part 'src/mqtt_client_topic.dart';
 
 part 'src/mqtt_client_connection_status.dart';
@@ -158,3 +156,6 @@ part 'src/messages/mqtt_client_mqtt_message_factory.dart';
 part 'src/messages/mqtt_client_mqtt_payload.dart';
 
 part 'src/management/mqtt_client_topic_filter.dart';
+
+part 'src/utility/mqtt_client_utilities.dart';
+

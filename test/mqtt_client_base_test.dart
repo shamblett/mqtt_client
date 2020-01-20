@@ -5,11 +5,18 @@
  * Copyright :  S.Hamblett
  */
 import 'dart:async';
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
+
+/// Sleep function that block asynchronous activity.
+/// Time units are seconds
+void syncSleep(int seconds) {
+sleep(Duration(seconds: seconds));
+}
 
 void main() {
   group('Exceptions', () {
@@ -546,7 +553,7 @@ void main() {
     });
     test('Sleep Sync', () {
       final start = DateTime.now();
-      MqttUtilities.syncSleep(1);
+      syncSleep(1);
       final end = DateTime.now();
       final difference = end.difference(start);
       expect(difference.inSeconds, 1);

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of mqtt_client;
 
 /// General library wide utilties
 class MqttUtilities {
@@ -13,12 +13,6 @@ class MqttUtilities {
   /// Time units are seconds
   static Future<void> asyncSleep(int seconds) =>
       Future<void>.delayed(Duration(seconds: seconds));
-
-  /// Sleep function that block asynchronous activity.
-  /// Time units are seconds
-  static void syncSleep(int seconds) {
-    sleep(Duration(seconds: seconds));
-  }
 
   /// Qos conversion, always use this to get a Qos
   /// enumeration from a value

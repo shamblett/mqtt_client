@@ -8,7 +8,9 @@
 library mqtt_server_client;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:event_bus/event_bus.dart' as events;
 import 'package:typed_data/typed_data.dart' as typed;
@@ -21,6 +23,8 @@ part 'src/connectionhandling/mqtt_client_mqtt_secure_connection.dart';
 part 'src/connectionhandling/mqtt_client_mqtt_ws2_connection.dart';
 part 'src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
 part 'src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';
-part 'src/utility/mqtt_client_utilities.dart';
+part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
 
-class MqttServerClient extends MqttClient {}
+class MqttServerClient extends MqttClient {
+
+}
