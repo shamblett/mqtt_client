@@ -39,64 +39,36 @@ class MqttClient {
   /// Client identifier
   String clientIdentifier;
 
-  /// If set use a websocket connection, otherwise use the default TCP one
-  bool useWebSocket = false;
-
-  /// If set use the alternate websocket implementation
-  bool useAlternateWebSocketImplementation = false;
-
-  List<String> _websocketProtocols;
-
-  /// User definable websocket protocols. Use this for non default websocket
-  /// protocols only if your broker needs this. There are two defaults in
-  /// MqttWsConnection class, the multiple protocol is the default. Some brokers
-  /// will not accept a list and only expect a single protocol identifier,
-  /// in this case use the single protocol default. You can supply your own
-  /// list, or to disable this entirely set the protocols to an
-  /// empty list , i.e [].
-  set websocketProtocols(List<String> protocols) {
-    _websocketProtocols = protocols;
-    if (_connectionHandler != null) {
-      _connectionHandler.websocketProtocols = protocols;
-    }
-  }
-
-  /// If set use a secure connection, note TCP only, do not use for
-  /// secure websockets(wss).
-  bool secure = false;
-
-  /// The security context for secure usage
-  SecurityContext securityContext = SecurityContext.defaultContext;
-
-  /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(X509Certificate certificate) onBadCertificate;
-
   /// The Handler that is managing the connection to the remote server.
-  IMqttConnectionHandler _connectionHandler;
+  @protected
+  IMqttConnectionHandler connectionHandler;
 
   /// The subscriptions manager responsible for tracking subscriptions.
-  SubscriptionsManager _subscriptionsManager;
+  @protected
+  SubscriptionsManager subscriptionsManager;
 
   /// Handles the connection management while idle.
-  MqttConnectionKeepAlive _keepAlive;
+  @protected
+  MqttConnectionKeepAlive keepAlive;
 
   /// Keep alive period, seconds
   int keepAlivePeriod = Constants.defaultKeepAlive;
 
   /// Handles everything to do with publication management.
-  PublishingManager _publishingManager;
+  @protected
+  PublishingManager publishingManager;
 
   /// Published message stream. A publish message is added to this
   /// stream on completion of the message publishing protocol for a Qos level.
   /// Attach listeners only after connect has been called.
   Stream<MqttPublishMessage> get published =>
-      _publishingManager != null ? _publishingManager.published.stream : null;
+      publishingManager != null ? publishingManager.published.stream : null;
 
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
   @Deprecated('Use ConnectionStatus, not this')
-  MqttConnectionState get connectionState => _connectionHandler != null
-      ? _connectionHandler.connectionStatus.state
+  MqttConnectionState get connectionState => connectionHandler != null
+      ? connectionHandler.connectionStatus.state
       : MqttConnectionState.disconnected;
 
   final MqttClientConnectionStatus _connectionStatus =
@@ -105,8 +77,8 @@ class MqttClient {
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
   /// Set after every connection attempt.
-  MqttClientConnectionStatus get connectionStatus => _connectionHandler != null
-      ? _connectionHandler.connectionStatus
+  MqttClientConnectionStatus get connectionStatus => connectionHandler != null
+      ? connectionHandler.connectionStatus
       : _connectionStatus;
 
   /// The connection message to use to override the default
@@ -127,7 +99,7 @@ class MqttClient {
 
   set onSubscribed(SubscribeCallback cb) {
     _onSubscribed = cb;
-    _subscriptionsManager?.onSubscribed = cb;
+    subscriptionsManager?.onSubscribed = cb;
   }
 
   /// Subscribed failed callback, function returns a void and takes a
@@ -141,7 +113,7 @@ class MqttClient {
 
   set onSubscribeFail(SubscribeFailCallback cb) {
     _onSubscribeFail = cb;
-    _subscriptionsManager?.onSubscribeFail = cb;
+    subscriptionsManager?.onSubscribeFail = cb;
   }
 
   /// Unsubscribed callback, function returns a void and takes a
@@ -153,7 +125,7 @@ class MqttClient {
 
   set onUnsubscribed(UnsubscribeCallback cb) {
     _onUnsubscribed = cb;
-    _subscriptionsManager?.onUnsubscribed = cb;
+    subscriptionsManager?.onUnsubscribed = cb;
   }
 
   /// Ping response received callback.
@@ -167,83 +139,22 @@ class MqttClient {
 
   set pongCallback(PongCallback cb) {
     _pongCallback = cb;
-    _keepAlive?.pongCallback = cb;
+    keepAlive?.pongCallback = cb;
   }
 
   /// The event bus
-  events.EventBus _clientEventBus;
+  @protected
+  events.EventBus clientEventBus;
 
   /// The stream on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
-
-  /// Performs a connect to the message broker with an optional
-  /// username and password for the purposes of authentication.
-  /// If a username and password are supplied these will override
-  /// any previously set in a supplied connection message so if you
-  /// supply your own connection message and use the authenticateAs method to
-  /// set these parameters do not set them again here.
-  Future<MqttClientConnectionStatus> connect(
-      [String username, String password]) async {
-    if (username != null) {
-      MqttLogger.log("Authenticating with username '{$username}' "
-          "and password '{$password}'");
-      if (username.trim().length >
-          Constants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log('Username length (${username.trim().length}) '
-            'exceeds the max recommended in the MQTT spec. ');
-      }
-    }
-    if (password != null &&
-        password.trim().length >
-            Constants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log('Password length (${password.trim().length}) '
-          'exceeds the max recommended in the MQTT spec. ');
-    }
-    // Set the authentication parameters in the connection
-    // message if we have one.
-    connectionMessage?.authenticateAs(username, password);
-
-    // Do the connection
-    _clientEventBus = events.EventBus();
-    _connectionHandler = SynchronousMqttConnectionHandler(_clientEventBus);
-    if (useWebSocket) {
-      _connectionHandler.secure = false;
-      _connectionHandler.useWebSocket = true;
-      _connectionHandler.useAlternateWebSocketImplementation =
-          useAlternateWebSocketImplementation;
-      if (_websocketProtocols != null) {
-        _connectionHandler.websocketProtocols = _websocketProtocols;
-      }
-    }
-    if (secure) {
-      _connectionHandler.secure = true;
-      _connectionHandler.useWebSocket = false;
-      _connectionHandler.useAlternateWebSocketImplementation = false;
-      _connectionHandler.securityContext = securityContext;
-      _connectionHandler.onBadCertificate = onBadCertificate;
-    }
-    _connectionHandler.onDisconnected = _internalDisconnect;
-    _connectionHandler.onConnected = onConnected;
-    _publishingManager = PublishingManager(_connectionHandler, _clientEventBus);
-    _subscriptionsManager = SubscriptionsManager(
-        _connectionHandler, _publishingManager, _clientEventBus);
-    _subscriptionsManager.onSubscribed = onSubscribed;
-    _subscriptionsManager.onUnsubscribed = onUnsubscribed;
-    _subscriptionsManager.onSubscribeFail = onSubscribeFail;
-    updates = _subscriptionsManager.subscriptionNotifier.changes;
-    _keepAlive = MqttConnectionKeepAlive(_connectionHandler, keepAlivePeriod);
-    if (pongCallback != null) {
-      _keepAlive.pongCallback = pongCallback;
-    }
-    final connectMessage = _getConnectMessage(username, password);
-    return _connectionHandler.connect(server, port, connectMessage);
-  }
 
   ///  Gets a pre-configured connect message if one has not been
   ///  supplied by the user.
   ///  Returns an MqttConnectMessage that can be used to connect to a
   ///  message broker.
-  MqttConnectMessage _getConnectMessage(String username, String password) =>
+  @protected
+  MqttConnectMessage getConnectMessage(String username, String password) =>
       connectionMessage ??= MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
           // Explicitly set the will flag
@@ -259,9 +170,9 @@ class MqttClient {
   /// Returns the subscription or null on failure
   Subscription subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus.state != MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
+      throw ConnectionException(connectionHandler?.connectionStatus?.state);
     }
-    return _subscriptionsManager.registerSubscription(topic, qosLevel);
+    return subscriptionsManager.registerSubscription(topic, qosLevel);
   }
 
   /// Publishes a message to the message broker.
@@ -271,13 +182,13 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (_connectionHandler?.connectionStatus?.state !=
+    if (connectionHandler?.connectionStatus?.state !=
         MqttConnectionState.connected) {
-      throw ConnectionException(_connectionHandler?.connectionStatus?.state);
+      throw ConnectionException(connectionHandler?.connectionStatus?.state);
     }
     try {
       final pubTopic = PublicationTopic(topic);
-      return _publishingManager.publish(
+      return publishingManager.publish(
           pubTopic, qualityOfService, data, retain);
     } on Exception catch (e) {
       throw InvalidTopicException(e.toString(), topic);
@@ -286,12 +197,12 @@ class MqttClient {
 
   /// Unsubscribe from a topic
   void unsubscribe(String topic) {
-    _subscriptionsManager.unsubscribe(topic);
+    subscriptionsManager.unsubscribe(topic);
   }
 
   /// Gets the current status of a subscription.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
-      _subscriptionsManager.getSubscriptionsStatus(topic);
+      subscriptionsManager.getSubscriptionsStatus(topic);
 
   /// Disconnect from the broker.
   /// This is a hard disconnect, a disconnect message is sent to the
@@ -309,7 +220,8 @@ class MqttClient {
   /// Internal disconnect
   /// This is always passed to the connection handler to allow the
   /// client to close itself down correctly on disconnect.
-  void _internalDisconnect() {
+  @protected
+  void internalDisconnect() {
     // Only call disconnect if we are connected, i.e. a connection to
     // the broker has been previously established.
     if (connectionStatus.state == MqttConnectionState.connected) {
@@ -324,17 +236,17 @@ class MqttClient {
     // need this.
     var returnCode = MqttConnectReturnCode.unsolicited;
     if (!unsolicited) {
-      _connectionHandler?.disconnect();
+      connectionHandler?.disconnect();
       returnCode = MqttConnectReturnCode.solicited;
     }
-    _publishingManager?.published?.close();
-    _publishingManager = null;
-    _subscriptionsManager = null;
-    _keepAlive?.stop();
-    _keepAlive = null;
-    _connectionHandler = null;
-    _clientEventBus?.destroy();
-    _clientEventBus = null;
+    publishingManager?.published?.close();
+    publishingManager = null;
+    subscriptionsManager = null;
+    keepAlive?.stop();
+    keepAlive = null;
+    connectionHandler = null;
+    clientEventBus?.destroy();
+    clientEventBus = null;
     // Set the connection status before calling onDisconnected
     _connectionStatus.state = MqttConnectionState.disconnected;
     _connectionStatus.returnCode = returnCode;

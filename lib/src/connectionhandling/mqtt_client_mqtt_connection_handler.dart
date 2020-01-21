@@ -28,39 +28,6 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 
-  /// Use a websocket rather than TCP
-  bool useWebSocket = false;
-
-  /// Alternate websocket implementation.
-  ///
-  /// The Amazon Web Services (AWS) IOT MQTT interface(and maybe others)
-  /// has a bug that causes it not to connect if unexpected message headers are
-  /// present in the initial GET message during the handshake.
-  /// Since the httpclient classes insist on adding those headers, an alternate
-  /// method is used to perform the handshake.
-  /// After the handshake everything goes back to the normal websocket class.
-  /// Only use this websocket implementation if you know it is needed
-  /// by your broker.
-  bool useAlternateWebSocketImplementation = false;
-
-  /// User supplied websocket protocols
-  List<String> websocketProtocols;
-
-  /// If set use a secure connection, note TCP only, not websocket.
-  bool secure = false;
-
-  /// The security context for secure usage
-  SecurityContext securityContext;
-
-  /// Successful connection callback
-  ConnectCallback onConnected;
-
-  /// Unsolicited disconnection callback
-  DisconnectCallback onDisconnected;
-
-  /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(X509Certificate certificate) onBadCertificate;
-
   /// Connect to the specific Mqtt Connection.
   @override
   Future<MqttClientConnectionStatus> connect(
@@ -97,10 +64,6 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       MqttLogger.log('MqttConnectionHandler::sendMessage - not connected');
     }
   }
-
-  /// Runs the disconnection process to stop communicating
-  /// with a message broker.
-  MqttConnectionState disconnect();
 
   /// Closes the connection to the Mqtt message broker.
   @override
