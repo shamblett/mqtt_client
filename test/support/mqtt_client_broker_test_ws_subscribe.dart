@@ -7,11 +7,12 @@
 
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
   // Create and connect the client for websocket usage. The scheme must be ws:// otherwise
   // Dart IO will not create the websocket
-  final client = MqttClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
+  final client = MqttServerClient('ws://iot.eclipse.org/ws', 'SJHMQTTClient');
   client.useWebSocket = true;
   client.port = 80;
   client.logging(on: true);

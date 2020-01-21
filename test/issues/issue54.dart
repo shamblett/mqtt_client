@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+  final client = MqttServerClient('test.mosquitto.org', '');
   client.logging(on: false);
   client.keepAlivePeriod = 60;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
   client.onUnsubscribed = onUnsubscribed;
 
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
       .keepAliveFor(60) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
@@ -36,18 +37,18 @@ Future<int> main() async {
     client.disconnect();
   }
 
-  const String topic = 'com/spl/mqtt/test';
+  const topic = 'com/spl/mqtt/test';
   client.subscribe(topic, MqttQos.atLeastOnce);
 
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
   });
-  final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+  final builder = MqttClientPayloadBuilder();
   builder.addString('Hello from spl');
   client.subscribe(topic, MqttQos.atLeastOnce);
   client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);
@@ -61,7 +62,7 @@ Future<int> main() async {
   /// subscribe again
   print('EXAMPLE::subscribe again....');
   client.subscribe(topic, MqttQos.atMostOnce);
-  final MqttClientPayloadBuilder builderM = MqttClientPayloadBuilder();
+  final builderM = MqttClientPayloadBuilder();
   builderM.addString('Hello from spl again');
   client.subscribe(topic, MqttQos.exactlyOnce);
   client.publishMessage(topic, MqttQos.exactlyOnce, builderM.payload);

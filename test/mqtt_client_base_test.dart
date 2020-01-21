@@ -15,7 +15,7 @@ import 'package:typed_data/typed_data.dart' as typed;
 /// Sleep function that block asynchronous activity.
 /// Time units are seconds
 void syncSleep(int seconds) {
-sleep(Duration(seconds: seconds));
+  sleep(Duration(seconds: seconds));
 }
 
 void main() {

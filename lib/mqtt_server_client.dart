@@ -134,5 +134,4 @@ class MqttServerClient extends MqttClient {
     final connectMessage = getConnectMessage(username, password);
     return connectionHandler.connect(server, port, connectMessage);
   }
-
 }

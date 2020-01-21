@@ -7,10 +7,11 @@
 import 'dart:async';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
   // Create and connect the client
-  final client = MqttClient('iot.eclipse.org', 'SJHMQTTClient');
+  final client = MqttServerClient('iot.eclipse.org', 'SJHMQTTClient');
   client.logging(on: true);
   await client.connect();
   if (client.connectionStatus.state == MqttConnectionState.connected) {
