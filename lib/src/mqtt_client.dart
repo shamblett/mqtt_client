@@ -13,7 +13,11 @@ typedef DisconnectCallback = void Function();
 /// The client Connect callback type
 typedef ConnectCallback = void Function();
 
-/// A client class for interacting with MQTT Data Packets
+/// A client class for interacting with MQTT Data Packets.
+/// Do not instantiate this class directly, instead instantiate
+/// either a [MqttClientServer] class or an [MqttBrowserClient] as needed.
+/// This class now provides common functionality between server side
+/// and web based clients.
 class MqttClient {
   /// Initializes a new instance of the MqttClient class using the
   /// default Mqtt Port.
@@ -252,6 +256,26 @@ class MqttClient {
     _connectionStatus.returnCode = returnCode;
     if (onDisconnected != null) {
       onDisconnected();
+    }
+  }
+
+  /// Check the username and password validity
+  @protected
+  void checkCredentials(String username, String password) {
+    if (username != null) {
+      MqttLogger.log("Authenticating with username '{$username}' "
+          "and password '{$password}'");
+      if (username.trim().length >
+          Constants.recommendedMaxUsernamePasswordLength) {
+        MqttLogger.log('Username length (${username.trim().length}) '
+            'exceeds the max recommended in the MQTT spec. ');
+      }
+    }
+    if (password != null &&
+        password.trim().length >
+            Constants.recommendedMaxUsernamePasswordLength) {
+      MqttLogger.log('Password length (${password.trim().length}) '
+          'exceeds the max recommended in the MQTT spec. ');
     }
   }
 
