@@ -1,0 +1,143 @@
+/*
+ * Package : mqtt_client
+ * Author : S. Hamblett <steve.hamblett@linux.com>
+ * Date   : 22/06/2017
+ * Copyright :  S.Hamblett
+ */
+
+part of mqtt_browser_client;
+
+/// State and logic used to read from the underlying network stream.
+class ReadWrapper {
+  /// Creates a new ReadWrapper that wraps the state used to read
+  /// a message from a stream.
+  ReadWrapper() {
+    messageBytes = <int>[];
+  }
+
+  /// The bytes associated with the message being read.
+  List<int> messageBytes;
+}
+
+/// The MQTT connection base class
+class MqttBrowserConnection {
+  /// Default constructor
+  MqttBrowserConnection(this._clientEventBus);
+
+  /// Initializes a new instance of the MqttBrowserConnection class.
+  MqttBrowserConnection.fromConnect(
+      String server, int port, this._clientEventBus) {
+    connect(server, port);
+  }
+
+  /// The web socket that maintains the connection to the MQTT broker.
+  dynamic client;
+
+  /// The read wrapper
+  ReadWrapper readWrapper;
+
+  ///The read buffer
+  MqttByteBuffer messageStream;
+
+  /// Unsolicited disconnection callback
+  DisconnectCallback onDisconnected;
+
+  /// The event bus
+  final events.EventBus _clientEventBus;
+
+  /// Connect, must be overridden in connection classes
+  Future<void> connect(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
+  }
+
+  /// Create the listening stream subscription and subscribe the callbacks
+  void _startListening() {
+    MqttLogger.log('MqttBrowserConnection::_startListening');
+    try {
+      client.listen(_onData, onError: _onError, onDone: _onDone);
+    } on Exception catch (e) {
+      print('MqttBrowserConnection::_startListening - exception raised $e');
+    }
+  }
+
+  /// OnData listener callback
+  void _onData(dynamic data) {
+    MqttLogger.log('MqttBrowserConnection::_onData');
+    // Protect against 0 bytes but should never happen.
+    if (data.length == 0) {
+      MqttLogger.log('MqttBrowserConnection::_ondata - Error - 0 byte message');
+      return;
+    }
+
+    messageStream.addAll(data);
+
+    while (messageStream.isMessageAvailable()) {
+      var messageIsValid = true;
+      MqttMessage msg;
+
+      try {
+        msg = MqttMessage.createFrom(messageStream);
+        if (msg == null) {
+          return;
+        }
+      } on Exception {
+        MqttLogger.log(
+            'MqttBrowserConnection::_ondata - message is not yet valid, '
+            'waiting for more data ...');
+        messageIsValid = false;
+      }
+      if (!messageIsValid) {
+        messageStream.reset();
+        return;
+      }
+      if (messageIsValid) {
+        messageStream.shrink();
+        MqttLogger.log(
+            'MqttBrowserConnection::_onData - message received $msg');
+        if (!_clientEventBus.streamController.isClosed) {
+          _clientEventBus.fire(MessageAvailable(msg));
+          MqttLogger.log('MqttBrowserConnection::_onData - message processed');
+        } else {
+          MqttLogger.log(
+              'MqttBrowserConnection::_onData - message not processed, disconnecting');
+        }
+      }
+    }
+  }
+
+  /// OnError listener callback
+  void _onError(dynamic error) {
+    _disconnect();
+    MqttLogger.log('MqttConnection::_onError - calling disconnected callback');
+    if (onDisconnected != null) {
+      onDisconnected();
+    }
+  }
+
+  /// OnDone listener callback
+  void _onDone() {
+    _disconnect();
+    MqttLogger.log('MqttConnection::_onDone - calling disconnected callback');
+    onDisconnected();
+  }
+
+  /// Disconnects from the message broker
+  void _disconnect() {
+    if (client != null) {
+      client.close();
+      client = null;
+    }
+  }
+
+  /// Sends the message in the stream to the broker.
+  void send(MqttByteBuffer message) {
+    final messageBytes = message.read(message.length);
+    client?.add(messageBytes.toList());
+  }
+
+  /// User requested disconnection
+  void disconnect() {
+    _onDone();
+  }
+}
