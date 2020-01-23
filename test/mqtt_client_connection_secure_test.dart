@@ -15,6 +15,8 @@ import 'package:path/path.dart' as path;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
+@TestOn('vm')
+
 // Mock classes
 class MockCH extends Mock implements MqttConnectionHandler {
   @override

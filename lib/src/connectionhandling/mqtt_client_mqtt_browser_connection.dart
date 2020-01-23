@@ -7,7 +7,7 @@
 
 part of mqtt_browser_client;
 
-/// The MQTT connection base class
+/// The MQTT browser connection base class
 class MqttBrowserConnection {
   /// Default constructor
   MqttBrowserConnection(this._clientEventBus);
@@ -43,9 +43,24 @@ class MqttBrowserConnection {
   void _startListening() {
     MqttLogger.log('MqttBrowserConnection::_startListening');
     try {
-      client.listen(_onData, onError: _onError, onDone: _onDone);
+      client.onOpen.listen((e) {
+        MqttLogger.log(
+            'MqttBrowserConnection::_startListening - websocket is open');
+      });
+      client.onClose.listen((e) {
+        MqttLogger.log(
+            'MqttBrowserConnection::_startListening - websocket is closed');
+        _onDone();
+      });
+      client.onMessage.listen((MessageEvent e) {
+        _onData(e.data);
+      });
+      client.onError.listen((e) {
+        _onError(e);
+      });
     } on Exception catch (e) {
-      print('MqttBrowserConnection::_startListening - exception raised $e');
+      MqttLogger.log(
+          'MqttBrowserConnection::_startListening - exception raised $e');
     }
   }
 
@@ -97,7 +112,8 @@ class MqttBrowserConnection {
   /// OnError listener callback
   void _onError(dynamic error) {
     _disconnect();
-    MqttLogger.log('MqttConnection::_onError - calling disconnected callback');
+    MqttLogger.log(
+        'MqttBrowserConnection::_onError - calling disconnected callback');
     if (onDisconnected != null) {
       onDisconnected();
     }
@@ -106,7 +122,8 @@ class MqttBrowserConnection {
   /// OnDone listener callback
   void _onDone() {
     _disconnect();
-    MqttLogger.log('MqttConnection::_onDone - calling disconnected callback');
+    MqttLogger.log(
+        'MqttBrowserConnection::_onDone - calling disconnected callback');
     onDisconnected();
   }
 
@@ -121,7 +138,7 @@ class MqttBrowserConnection {
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
-    client?.add(messageBytes.toList());
+    client?.send(messageBytes.toList());
   }
 
   /// User requested disconnection

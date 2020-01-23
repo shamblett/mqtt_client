@@ -12,6 +12,8 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
+@TestOn('vm')
+
 /// Sleep function that block asynchronous activity.
 /// Time units are seconds
 void syncSleep(int seconds) {
