@@ -23,6 +23,9 @@ class MqttServerClient extends MqttClient {
   MqttServerClient.withPort(String server, String clientIdentifier, int port)
       : super.withPort(server, clientIdentifier, port);
 
+  /// The server side connection handler
+  MqttConnectionHandler serverConnectionHandler;
+
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
@@ -46,8 +49,8 @@ class MqttServerClient extends MqttClient {
   /// empty list , i.e [].
   set websocketProtocols(List<String> protocols) {
     _websocketProtocols = protocols;
-    if (connectionHandler != null) {
-      connectionHandler.websocketProtocols = protocols;
+    if (serverConnectionHandler != null) {
+      serverConnectionHandler.websocketProtocols = protocols;
     }
   }
 
@@ -70,37 +73,40 @@ class MqttServerClient extends MqttClient {
 
     // Do the connection
     clientEventBus = events.EventBus();
-    connectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
+    serverConnectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
     if (useWebSocket) {
-      connectionHandler.secure = false;
-      connectionHandler.useWebSocket = true;
-      connectionHandler.useAlternateWebSocketImplementation =
+      serverConnectionHandler.secure = false;
+      serverConnectionHandler.useWebSocket = true;
+      serverConnectionHandler.useAlternateWebSocketImplementation =
           useAlternateWebSocketImplementation;
       if (_websocketProtocols != null) {
-        connectionHandler.websocketProtocols = _websocketProtocols;
+        serverConnectionHandler.websocketProtocols = _websocketProtocols;
       }
     }
     if (secure) {
-      connectionHandler.secure = true;
-      connectionHandler.useWebSocket = false;
-      connectionHandler.useAlternateWebSocketImplementation = false;
-      connectionHandler.securityContext = securityContext;
-      connectionHandler.onBadCertificate = onBadCertificate;
+      serverConnectionHandler.secure = true;
+      serverConnectionHandler.useWebSocket = false;
+      serverConnectionHandler.useAlternateWebSocketImplementation = false;
+      serverConnectionHandler.securityContext = securityContext;
+      serverConnectionHandler.onBadCertificate = onBadCertificate;
     }
-    connectionHandler.onDisconnected = internalDisconnect;
-    connectionHandler.onConnected = onConnected;
-    publishingManager = PublishingManager(connectionHandler, clientEventBus);
+    serverConnectionHandler.onDisconnected = internalDisconnect;
+    serverConnectionHandler.onConnected = onConnected;
+    publishingManager =
+        PublishingManager(serverConnectionHandler, clientEventBus);
     subscriptionsManager = SubscriptionsManager(
-        connectionHandler, publishingManager, clientEventBus);
+        serverConnectionHandler, publishingManager, clientEventBus);
     subscriptionsManager.onSubscribed = onSubscribed;
     subscriptionsManager.onUnsubscribed = onUnsubscribed;
     subscriptionsManager.onSubscribeFail = onSubscribeFail;
     updates = subscriptionsManager.subscriptionNotifier.changes;
-    keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
+    keepAlive =
+        MqttConnectionKeepAlive(serverConnectionHandler, keepAlivePeriod);
     if (pongCallback != null) {
       keepAlive.pongCallback = pongCallback;
     }
     final connectMessage = getConnectMessage(username, password);
-    return connectionHandler.connect(server, port, connectMessage);
+    connectionHandler = serverConnectionHandler;
+    return serverConnectionHandler.connect(server, port, connectMessage);
   }
 }
