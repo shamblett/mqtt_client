@@ -161,3 +161,5 @@ part 'src/management/mqtt_client_topic_filter.dart';
 part 'src/utility/mqtt_client_utilities.dart';
 
 part 'src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
+
+part 'src/connectionhandling/mqtt_client_read_wrapper.dart';
