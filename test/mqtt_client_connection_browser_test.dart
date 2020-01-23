@@ -14,6 +14,8 @@ void main() {
   const mockBrokerAddressWsNoScheme = 'localhost.com';
   const mockBrokerAddressWsBad = '://localhost.com';
   const testClientId = 'syncMqttTests';
+  const mosquittoServer = 'ws://test.mosquitto.org';
+  const mosquittoPort = 8080;
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
@@ -43,6 +45,24 @@ void main() {
             'mqtt-client::NoConnectionException: '
             'MqttBrowserWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
+    });
+  }, skip: true);
+
+  group('Mosquitto live tests', () {
+    test('Connect', () async {
+      final client = MqttBrowserClient(mosquittoServer, testClientId);
+      client.port = mosquittoPort;
+      client.logging(on: true);
+      await client.connect();
+      if (client.connectionStatus.state == MqttConnectionState.connected) {
+        print('Mosquitto client connected');
+      } else {
+        print(
+            'ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+        client.disconnect();
+      }
+      await MqttUtilities.asyncSleep(30);
+      client.disconnect();
     });
   });
 }
