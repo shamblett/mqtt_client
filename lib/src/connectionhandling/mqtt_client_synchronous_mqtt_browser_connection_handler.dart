@@ -52,11 +52,7 @@ class SynchronousMqttBrowserConnectionHandler
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'initiating connection try $connectionAttempts');
       connectionStatus.state = MqttConnectionState.connecting;
-
-      MqttLogger.log(
-          'SynchronousMqttBrowserConnectionHandler::internalConnect - '
-          'insecure TCP selected');
-      connection = MqttBrowserConnection(_clientEventBus);
+      connection = MqttBrowserWsConnection(_clientEventBus);
       connection.onDisconnected = onDisconnected;
 
       // Connect

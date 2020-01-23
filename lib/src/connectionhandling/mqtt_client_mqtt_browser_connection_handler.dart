@@ -10,7 +10,7 @@ part of mqtt_browser_client;
 ///  This class provides shared connection functionality
 ///  to connection handler implementations.
 abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
-  /// Initializes a new instance of the MqttConnectionHandler class.
+  /// Initializes a new instance of the MqttBrowserConnectionHandler class.
   MqttBrowserConnectionHandler();
 
   /// The connection
@@ -48,7 +48,7 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
   /// Sends a message to the broker through the current connection.
   @override
   void sendMessage(MqttMessage message) {
-    MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
+    MqttLogger.log('MqttBrowserConnectionHandler::sendMessage - $message');
     if ((connectionStatus.state == MqttConnectionState.connected) ||
         (connectionStatus.state == MqttConnectionState.connecting)) {
       final buff = typed.Uint8Buffer();
@@ -61,7 +61,8 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
         callback(message);
       }
     } else {
-      MqttLogger.log('MqttConnectionHandler::sendMessage - not connected');
+      MqttLogger.log(
+          'MqttBrowserConnectionHandler::sendMessage - not connected');
     }
   }
 

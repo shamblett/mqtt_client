@@ -18,6 +18,10 @@ dev_dependencies:
  mockito: '^4.1.1'
  pedantic: '^1.9.0'
  pana: '^0.13.4'
+ build_runner: '^1.7.3'
+ build_test: '^0.10.12'
+ build_web_compilers: '^2.8.0'
+
 
 
 

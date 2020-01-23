@@ -13,7 +13,6 @@ import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
 @TestOn('vm')
-
 void main() {
   // Test wide variables
   final brokerWs = MockBrokerWs();
