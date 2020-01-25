@@ -58,12 +58,15 @@ class SynchronousMqttBrowserConnectionHandler
       // Connect
       _connectTimer = MqttCancellableAsyncSleep(5000);
       await connection.connect(hostname, port);
+      MqttLogger.log(
+          'SynchronousMqttBrowserConnectionHandler::internalConnect - '
+          'connection complete');
       registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
       _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
       // Transmit the required connection message to the broker.
       MqttLogger.log('SynchronousMqttBrowserConnectionHandler::internalConnect '
           'sending connect message');
-      sendMessage(connectMessage);
+      sendBrowserMessage(connectMessage, connection);
       MqttLogger.log(
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'pre sleep, state = $connectionStatus');
@@ -148,4 +151,7 @@ class SynchronousMqttBrowserConnectionHandler
     _connectTimer.cancel();
     return true;
   }
+
+  @override
+  void sendMessage(MqttMessage message) {}
 }

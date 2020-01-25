@@ -46,16 +46,15 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
       String hostname, int port, MqttConnectMessage message);
 
   /// Sends a message to the broker through the current connection.
-  @override
-  void sendMessage(MqttMessage message) {
-    MqttLogger.log('MqttBrowserConnectionHandler::sendMessage - $message');
+  void sendBrowserMessage(MqttMessage message, dynamic theConnection) {
+    MqttLogger.log('MqttBrowserConnectionHandler::sendBrowserMessage - $message');
     if ((connectionStatus.state == MqttConnectionState.connected) ||
         (connectionStatus.state == MqttConnectionState.connecting)) {
       final buff = typed.Uint8Buffer();
       final stream = MqttByteBuffer(buff);
       message.writeTo(stream);
       stream.seek(0);
-      connection.send(stream);
+      theConnection.send(stream);
       // Let any registered people know we're doing a message.
       for (final callback in sentMessageCallbacks) {
         callback(message);

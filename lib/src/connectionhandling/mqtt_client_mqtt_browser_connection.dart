@@ -43,10 +43,6 @@ class MqttBrowserConnection {
   void _startListening() {
     MqttLogger.log('MqttBrowserConnection::_startListening');
     try {
-      client.onOpen.listen((e) {
-        MqttLogger.log(
-            'MqttBrowserConnection::_startListening - websocket is open');
-      });
       client.onClose.listen((e) {
         MqttLogger.log(
             'MqttBrowserConnection::_startListening - websocket is closed');
@@ -138,7 +134,8 @@ class MqttBrowserConnection {
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
-    client?.send(messageBytes.toList());
+    MqttLogger.log('MqttBrowserConnection::sending message');
+    client.send(messageBytes.toList());
   }
 
   /// User requested disconnection

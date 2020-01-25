@@ -53,16 +53,26 @@ void main() {
       final client = MqttBrowserClient(mosquittoServer, testClientId);
       client.port = mosquittoPort;
       client.logging(on: true);
+      final connMess = MqttConnectMessage()
+          .keepAliveFor(20)
+          .startClean() // Non persistent session for testing
+          .withWillQos(MqttQos.atLeastOnce);
+      client.connectionMessage = connMess;
       await client.connect();
+      var connectionOK = false;
       if (client.connectionStatus.state == MqttConnectionState.connected) {
         print('Mosquitto client connected');
+        connectionOK = true;
+        print('Mosquitto client connection failed OK');
       } else {
         print(
             'ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
         client.disconnect();
       }
-      await MqttUtilities.asyncSleep(30);
-      client.disconnect();
+      if (connectionOK) {
+        await MqttUtilities.asyncSleep(70);
+        client.disconnect();
+      }
     });
   });
 }

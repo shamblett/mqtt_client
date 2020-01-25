@@ -48,12 +48,17 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
       client = WebSocket(uriString);
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
       _startListening();
+      client.onOpen.listen((e) {
+        MqttLogger.log('MqttBrowserConnection::connect - websocket is open');
+        return completer.complete();
+      });
     } on Exception {
       final message =
           'MqttBrowserWsConnection::The connection to the message broker '
           '{$uriString} could not be made.';
       throw NoConnectionException(message);
     }
+    MqttLogger.log('MqttBrowserConnection::connect - connection is waiting');
     return completer.future;
   }
 }
