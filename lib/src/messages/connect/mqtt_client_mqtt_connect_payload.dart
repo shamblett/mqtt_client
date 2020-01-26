@@ -104,4 +104,8 @@ class MqttConnectPayload extends MqttPayload {
     }
     return length;
   }
+
+  @override
+  String toString() =>
+      'MqttConnectPayload - client identifier is : $clientIdentifier';
 }

@@ -66,7 +66,7 @@ class SynchronousMqttBrowserConnectionHandler
       // Transmit the required connection message to the broker.
       MqttLogger.log('SynchronousMqttBrowserConnectionHandler::internalConnect '
           'sending connect message');
-      sendBrowserMessage(connectMessage, connection);
+      sendMessage(connectMessage);
       MqttLogger.log(
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'pre sleep, state = $connectionStatus');
@@ -151,7 +151,4 @@ class SynchronousMqttBrowserConnectionHandler
     _connectTimer.cancel();
     return true;
   }
-
-  @override
-  void sendMessage(MqttMessage message) {}
 }

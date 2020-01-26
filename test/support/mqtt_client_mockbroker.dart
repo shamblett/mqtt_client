@@ -82,8 +82,8 @@ class MockBroker {
   }
 }
 
-/// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
-/// connection handlers that are difficult to test otherwise. websocket connection.
+/// Mocks a websocket broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
+/// connection handlers that are difficult to test otherwise.
 class MockBrokerWs {
   MockBrokerWs();
 

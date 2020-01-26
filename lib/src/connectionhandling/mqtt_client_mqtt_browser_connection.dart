@@ -134,8 +134,7 @@ class MqttBrowserConnection {
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
-    MqttLogger.log('MqttBrowserConnection::sending message');
-    client.send(messageBytes.toList());
+    client.sendByteBuffer(messageBytes.buffer);
   }
 
   /// User requested disconnection
