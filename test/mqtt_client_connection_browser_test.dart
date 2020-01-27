@@ -49,6 +49,8 @@ void main() {
   }, skip: true);
 
   group('Broker tests', () {
+    /// Local test, start the local mock WS broker found in support/mqtt_client_ws_broker
+    /// locally before running this test.
     test('Connect local mock brocker', () async {
       final client = MqttBrowserClient(localServer, testClientId);
       client.port = localPort;
