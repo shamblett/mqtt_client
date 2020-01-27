@@ -14,8 +14,8 @@ void main() {
   const mockBrokerAddressWsNoScheme = 'localhost.com';
   const mockBrokerAddressWsBad = '://localhost.com';
   const testClientId = 'syncMqttTests';
-  const mosquittoServer = 'ws://test.mosquitto.org';
-  const mosquittoPort = 8080;
+  const mosquittoServer = 'ws://127.0.0.1/ws';
+  const mosquittoPort = 8090;
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
