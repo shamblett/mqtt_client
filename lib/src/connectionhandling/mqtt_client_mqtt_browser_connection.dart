@@ -61,10 +61,11 @@ class MqttBrowserConnection {
   }
 
   /// OnData listener callback
-  void _onData(dynamic data) {
+  void _onData(dynamic byteData) {
     MqttLogger.log('MqttBrowserConnection::_onData');
     // Protect against 0 bytes but should never happen.
-    if (data.length == 0) {
+    var data = Uint8List.view(byteData);
+    if (data.isEmpty) {
       MqttLogger.log('MqttBrowserConnection::_ondata - Error - 0 byte message');
       return;
     }
@@ -134,7 +135,9 @@ class MqttBrowserConnection {
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
-    client.sendByteBuffer(messageBytes.buffer);
+    var buffer = messageBytes.buffer;
+    var bdata = ByteData.view(buffer);
+    client.sendTypedData(bdata);
   }
 
   /// User requested disconnection

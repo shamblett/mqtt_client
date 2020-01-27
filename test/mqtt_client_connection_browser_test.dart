@@ -14,8 +14,8 @@ void main() {
   const mockBrokerAddressWsNoScheme = 'localhost.com';
   const mockBrokerAddressWsBad = '://localhost.com';
   const testClientId = 'syncMqttTests';
-  const mosquittoServer = 'ws://127.0.0.1/ws';
-  const mosquittoPort = 8090;
+  const localServer = 'ws://127.0.0.1/ws';
+  const localPort = 8090;
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
@@ -48,10 +48,10 @@ void main() {
     });
   }, skip: true);
 
-  group('Mosquitto live tests', () {
-    test('Connect', () async {
-      final client = MqttBrowserClient(mosquittoServer, testClientId);
-      client.port = mosquittoPort;
+  group('Broker tests', () {
+    test('Connect local mock brocker', () async {
+      final client = MqttBrowserClient(localServer, testClientId);
+      client.port = localPort;
       client.logging(on: true);
       final connMess = MqttConnectMessage()
           .keepAliveFor(20)
@@ -61,16 +61,16 @@ void main() {
       await client.connect();
       var connectionOK = false;
       if (client.connectionStatus.state == MqttConnectionState.connected) {
-        print('Mosquitto client connected');
+        print('Browser client connected locally');
         connectionOK = true;
-        print('Mosquitto client connection failed OK');
       } else {
         print(
-            'ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+            'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
         client.disconnect();
       }
       if (connectionOK) {
-        await MqttUtilities.asyncSleep(70);
+        await MqttUtilities.asyncSleep(10);
+        print('Browser client disconnecting normally');
         client.disconnect();
       }
     });

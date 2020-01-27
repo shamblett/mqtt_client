@@ -46,6 +46,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     try {
       // Connect and save the socket.
       client = WebSocket(uriString);
+      client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
       _startListening();
       client.onOpen.listen((e) {
