@@ -45,7 +45,24 @@ class MqttClient {
 
   /// The Handler that is managing the connection to the remote server.
   @protected
-  IMqttConnectionHandler connectionHandler;
+  dynamic connectionHandler;
+
+  @protected
+  List<String> websocketProtocolString;
+
+  /// User definable websocket protocols. Use this for non default websocket
+  /// protocols only if your broker needs this. There are two defaults in
+  /// MqttWsConnection class, the multiple protocol is the default. Some brokers
+  /// will not accept a list and only expect a single protocol identifier,
+  /// in this case use the single protocol default. You can supply your own
+  /// list, or to disable this entirely set the protocols to an
+  /// empty list , i.e [].
+  set websocketProtocols(List<String> protocols) {
+    websocketProtocolString = protocols;
+    if (connectionHandler != null) {
+      connectionHandler.websocketProtocols = protocols;
+    }
+  }
 
   /// The subscriptions manager responsible for tracking subscriptions.
   @protected
@@ -230,6 +247,8 @@ class MqttClient {
     // the broker has been previously established.
     if (connectionStatus.state == MqttConnectionState.connected) {
       _disconnect(unsolicited: true);
+    } else {
+      _disconnect(unsolicited: false);
     }
   }
 

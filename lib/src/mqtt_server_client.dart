@@ -23,9 +23,6 @@ class MqttServerClient extends MqttClient {
   MqttServerClient.withPort(String server, String clientIdentifier, int port)
       : super.withPort(server, clientIdentifier, port);
 
-  /// The server side connection handler
-  MqttConnectionHandler serverConnectionHandler;
-
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
@@ -37,22 +34,6 @@ class MqttServerClient extends MqttClient {
 
   /// If set use the alternate websocket implementation
   bool useAlternateWebSocketImplementation = false;
-
-  List<String> _websocketProtocols;
-
-  /// User definable websocket protocols. Use this for non default websocket
-  /// protocols only if your broker needs this. There are two defaults in
-  /// MqttWsConnection class, the multiple protocol is the default. Some brokers
-  /// will not accept a list and only expect a single protocol identifier,
-  /// in this case use the single protocol default. You can supply your own
-  /// list, or to disable this entirely set the protocols to an
-  /// empty list , i.e [].
-  set websocketProtocols(List<String> protocols) {
-    _websocketProtocols = protocols;
-    if (serverConnectionHandler != null) {
-      serverConnectionHandler.websocketProtocols = protocols;
-    }
-  }
 
   /// If set use a secure connection, note TCP only, do not use for
   /// secure websockets(wss).
@@ -73,40 +54,37 @@ class MqttServerClient extends MqttClient {
 
     // Do the connection
     clientEventBus = events.EventBus();
-    serverConnectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
+    connectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
     if (useWebSocket) {
-      serverConnectionHandler.secure = false;
-      serverConnectionHandler.useWebSocket = true;
-      serverConnectionHandler.useAlternateWebSocketImplementation =
+      connectionHandler.secure = false;
+      connectionHandler.useWebSocket = true;
+      connectionHandler.useAlternateWebSocketImplementation =
           useAlternateWebSocketImplementation;
-      if (_websocketProtocols != null) {
-        serverConnectionHandler.websocketProtocols = _websocketProtocols;
+      if (websocketProtocolString != null) {
+        connectionHandler.websocketProtocols = websocketProtocolString;
       }
     }
     if (secure) {
-      serverConnectionHandler.secure = true;
-      serverConnectionHandler.useWebSocket = false;
-      serverConnectionHandler.useAlternateWebSocketImplementation = false;
-      serverConnectionHandler.securityContext = securityContext;
-      serverConnectionHandler.onBadCertificate = onBadCertificate;
+      connectionHandler.secure = true;
+      connectionHandler.useWebSocket = false;
+      connectionHandler.useAlternateWebSocketImplementation = false;
+      connectionHandler.securityContext = securityContext;
+      connectionHandler.onBadCertificate = onBadCertificate;
     }
-    serverConnectionHandler.onDisconnected = internalDisconnect;
-    serverConnectionHandler.onConnected = onConnected;
-    publishingManager =
-        PublishingManager(serverConnectionHandler, clientEventBus);
+    connectionHandler.onDisconnected = internalDisconnect;
+    connectionHandler.onConnected = onConnected;
+    publishingManager = PublishingManager(connectionHandler, clientEventBus);
     subscriptionsManager = SubscriptionsManager(
-        serverConnectionHandler, publishingManager, clientEventBus);
+        connectionHandler, publishingManager, clientEventBus);
     subscriptionsManager.onSubscribed = onSubscribed;
     subscriptionsManager.onUnsubscribed = onUnsubscribed;
     subscriptionsManager.onSubscribeFail = onSubscribeFail;
     updates = subscriptionsManager.subscriptionNotifier.changes;
-    keepAlive =
-        MqttConnectionKeepAlive(serverConnectionHandler, keepAlivePeriod);
+    keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
     if (pongCallback != null) {
       keepAlive.pongCallback = pongCallback;
     }
     final connectMessage = getConnectMessage(username, password);
-    connectionHandler = serverConnectionHandler;
-    return serverConnectionHandler.connect(server, port, connectMessage);
+    return connectionHandler.connect(server, port, connectMessage);
   }
 }

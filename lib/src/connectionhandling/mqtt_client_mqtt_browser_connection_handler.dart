@@ -16,6 +16,9 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
   /// The connection
   dynamic connection;
 
+  /// User supplied websocket protocols
+  List<String> websocketProtocols;
+
   /// Registry of message processors
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
       <MqttMessageType, MessageCallbackFunction>{};

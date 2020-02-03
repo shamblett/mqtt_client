@@ -9,6 +9,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:test/test.dart';
 
+
 @TestOn('browser')
 void main() {
   const mockBrokerAddressWsNoScheme = 'localhost.com';
@@ -46,9 +47,32 @@ void main() {
             'MqttBrowserWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
-  }, skip: true);
+  });
 
   group('Broker tests', () {
+    test('Connect non-existant broker', () async {
+      final client = MqttBrowserClient('ws://hhhhhhhhh/ws', testClientId);
+      var disconnectedCount = 0;
+
+      void disconnected() {
+        disconnectedCount++;
+        print('OnDisconnected client callback - call number $disconnectedCount');
+        if ( disconnectedCount == 2 ) {
+          //
+        }
+      }
+
+      client.port = localPort;
+      client.logging(on: true);
+      client.onDisconnected = disconnected;
+      final connMess = MqttConnectMessage()
+          .keepAliveFor(20)
+          .startClean() // Non persistent session for testing
+          .withWillQos(MqttQos.atLeastOnce);
+      client.connectionMessage = connMess;
+      await client.connect();
+    });
+
     /// Local test, start the local mock WS broker found in support/mqtt_client_ws_broker
     /// locally before running this test.
     test('Connect local mock brocker', () async {

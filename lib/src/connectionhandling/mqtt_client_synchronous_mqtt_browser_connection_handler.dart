@@ -54,6 +54,9 @@ class SynchronousMqttBrowserConnectionHandler
       connectionStatus.state = MqttConnectionState.connecting;
       connection = MqttBrowserWsConnection(_clientEventBus);
       connection.onDisconnected = onDisconnected;
+      if (websocketProtocols != null) {
+        connection.protocols = websocketProtocols;
+      }
 
       // Connect
       _connectTimer = MqttCancellableAsyncSleep(5000);

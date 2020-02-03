@@ -39,6 +39,9 @@ class MqttBrowserClient extends MqttClient {
     // Do the connection
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttBrowserConnectionHandler(clientEventBus);
+    if (websocketProtocolString != null) {
+      connectionHandler.websocketProtocols = websocketProtocolString;
+    }
     connectionHandler.onDisconnected = internalDisconnect;
     connectionHandler.onConnected = onConnected;
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
