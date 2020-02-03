@@ -16,7 +16,7 @@ void main() {
   const testClientId = 'syncMqttTests';
   const localServer = 'ws://127.0.0.1/ws';
   const localPort = 8090;
-  const mosquittoServer = 'test.mosquitto.org';
+  const mosquittoServer = 'ws://test.mosquitto.org';
   const mosquittoPort = 8080;
 
   group('Connection parameters', () {
@@ -110,7 +110,7 @@ void main() {
       }
       expect(ok, isTrue);
     });
-    test('Connect mosquitto test brocker', () async {
+    test('Connect mosquitto test broker', () async {
       var pongCount = 0;
       void connectCallback() {
         print('Browser client connected callback');
@@ -121,18 +121,23 @@ void main() {
         pongCount++;
       }
 
+      final sleeper = MqttCancellableAsyncSleep(25000);
       final client = MqttBrowserClient(mosquittoServer, testClientId);
       client.port = mosquittoPort;
       client.logging(on: true);
+      client.onConnected = connectCallback;
+      client.pongCallback = pongCallback;
+      client.keepAlivePeriod = 10;
       final connMess = MqttConnectMessage()
-          .keepAliveFor(20)
+          .withClientIdentifier(testClientId)
+          .keepAliveFor(10)
+          .withWillTopic('willtopic')
+          .withWillMessage('My Will message')
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;
       var ok = true;
       try {
-        expectAsync0(connectCallback, count: 1);
-        expectAsync0(pongCallback, count: 2);
         await client.connect();
         var connectionOK = false;
         if (client.connectionStatus.state == MqttConnectionState.connected) {
@@ -143,6 +148,7 @@ void main() {
               'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
           client.disconnect();
         }
+        await sleeper.sleep();
         if (connectionOK) {
           if (pongCount == 2) {
             print('Browser client disconnecting normally');
@@ -155,6 +161,6 @@ void main() {
         ok = false;
       }
       expect(ok, isTrue);
-    });
+    }, timeout: Timeout.factor(2));
   });
 }
