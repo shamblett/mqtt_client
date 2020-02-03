@@ -971,7 +971,7 @@ void main() {
       final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final byteBuffer = MqttByteBuffer(buff);
-      Protocol.version = Constants.mqttV311ProtocolVersion;
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
       final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish message.
@@ -1097,7 +1097,7 @@ void main() {
       payload[3] = 'l'.codeUnitAt(0);
       payload[4] = 'o'.codeUnitAt(0);
       payload[5] = '!'.codeUnitAt(0);
-      Protocol.version = Constants.mqttV311ProtocolVersion;
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
       final msg = MqttPublishMessage()
           .withQos(MqttQos.exactlyOnce)
           .withMessageIdentifier(10)
@@ -1892,7 +1892,7 @@ void main() {
       expect(bm.payload.subscriptions.contains('mark'), isTrue);
     });
     test('Serialisation - Single topic', () {
-      Protocol.version = Constants.mqttV31ProtocolVersion;
+      Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
       final expected = typed.Uint8Buffer(10);
       expected[0] = 0xAA;
       expected[1] = 0x08;
@@ -1924,7 +1924,7 @@ void main() {
       expect(actual[9], expected[9]); // d
     });
     test('Serialisation V311 - Single topic', () {
-      Protocol.version = Constants.mqttV311ProtocolVersion;
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
       final expected = typed.Uint8Buffer(10);
       expected[0] = 0xA2; // With V3.1.1 the header first byte changes to 162
       expected[1] = 0x08;
@@ -2420,7 +2420,7 @@ void main() {
         125,
         125
       ];
-      Protocol.version = Constants.mqttV311ProtocolVersion;
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
       final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final byteBuffer = MqttByteBuffer(buff);

@@ -9,7 +9,6 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:test/test.dart';
 
-
 @TestOn('browser')
 void main() {
   const mockBrokerAddressWsNoScheme = 'localhost.com';
@@ -56,8 +55,9 @@ void main() {
 
       void disconnected() {
         disconnectedCount++;
-        print('OnDisconnected client callback - call number $disconnectedCount');
-        if ( disconnectedCount == 2 ) {
+        print(
+            'OnDisconnected client callback - call number $disconnectedCount');
+        if (disconnectedCount == 2) {
           //
         }
       }

@@ -19,19 +19,8 @@ class MqttWsConnection extends MqttConnection {
     connect(server, port);
   }
 
-  /// The default websocket subprotocol list
-  static const List<String> protocolsMultipleDefault = <String>[
-    'mqtt',
-    'mqttv3.1',
-    'mqttv3.11'
-  ];
-
-  /// The default websocket subprotocol list for brokers who expect
-  /// this field to be a single entry
-  static const List<String> protocolsSingleDefault = <String>['mqtt'];
-
   /// The websocket subprotocol list
-  List<String> protocols = protocolsMultipleDefault;
+  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
 
   /// Connect
   @override

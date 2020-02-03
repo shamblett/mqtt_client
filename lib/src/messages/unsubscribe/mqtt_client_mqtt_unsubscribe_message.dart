@@ -35,7 +35,7 @@ class MqttUnsubscribeMessage extends MqttMessage {
   void writeTo(MqttByteBuffer messageStream) {
     // If the protocol is V3.1.1 the following header fields
     // must be set as below as in this protocol they are reserved.
-    if (Protocol.version == Constants.mqttV311ProtocolVersion) {
+    if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
       header.duplicate = false;
       header.qos = MqttQos.atLeastOnce;
       header.retain = false;

@@ -188,7 +188,7 @@ class MqttVariableHeader {
   void readTopicName(MqttByteBuffer stream) {
     topicName = MqttByteBuffer.readMqttString(stream);
     // If the protocol si V311 allow extended UTF8 characters
-    if (Protocol.version == Constants.mqttV311ProtocolVersion) {
+    if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
       length += _enc.getByteCount(topicName);
     } else {
       length = topicName.length + 2; // 2 for length short at front of string.

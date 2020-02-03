@@ -34,7 +34,7 @@ void main() {
       expect(
           exception.toString(),
           'mqtt-client::ClientIdentifierException: Client id $clid is too long at ${clid.length}, '
-          'Maximum ClientIdentifier length is ${Constants.maxClientIdentifierLength}');
+          'Maximum ClientIdentifier length is ${MqttClientConstants.maxClientIdentifierLength}');
     });
     test('Connection', () {
       const state = MqttConnectionState.disconnected;
@@ -510,11 +510,11 @@ void main() {
   group('Utility', () {
     test('Protocol', () {
       final client = MqttClient('localhost', 'abcd');
-      expect(Protocol.version, Constants.mqttV31ProtocolVersion);
-      expect(Protocol.name, Constants.mqttV31ProtocolName);
+      expect(Protocol.version, MqttClientConstants.mqttV31ProtocolVersion);
+      expect(Protocol.name, MqttClientConstants.mqttV31ProtocolName);
       client.setProtocolV311();
-      expect(Protocol.version, Constants.mqttV311ProtocolVersion);
-      expect(Protocol.name, Constants.mqttV311ProtocolName);
+      expect(Protocol.version, MqttClientConstants.mqttV311ProtocolVersion);
+      expect(Protocol.name, MqttClientConstants.mqttV311ProtocolName);
     });
     test('Byte Buffer', () {
       final uBuff = typed.Uint8Buffer(10);

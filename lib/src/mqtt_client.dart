@@ -24,7 +24,7 @@ class MqttClient {
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   MqttClient(this.server, this.clientIdentifier) {
-    port = Constants.defaultMqttPort;
+    port = MqttClientConstants.defaultMqttPort;
   }
 
   /// Initializes a new instance of the MqttClient class using
@@ -73,7 +73,7 @@ class MqttClient {
   MqttConnectionKeepAlive keepAlive;
 
   /// Keep alive period, seconds
-  int keepAlivePeriod = Constants.defaultKeepAlive;
+  int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
   /// Handles everything to do with publication management.
   @protected
@@ -180,7 +180,7 @@ class MqttClient {
           .withClientIdentifier(clientIdentifier)
           // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
-          .keepAliveFor(Constants.defaultKeepAlive)
+          .keepAliveFor(MqttClientConstants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
 
@@ -285,14 +285,14 @@ class MqttClient {
       MqttLogger.log("Authenticating with username '{$username}' "
           "and password '{$password}'");
       if (username.trim().length >
-          Constants.recommendedMaxUsernamePasswordLength) {
+          MqttClientConstants.recommendedMaxUsernamePasswordLength) {
         MqttLogger.log('Username length (${username.trim().length}) '
             'exceeds the max recommended in the MQTT spec. ');
       }
     }
     if (password != null &&
         password.trim().length >
-            Constants.recommendedMaxUsernamePasswordLength) {
+            MqttClientConstants.recommendedMaxUsernamePasswordLength) {
       MqttLogger.log('Password length (${password.trim().length}) '
           'exceeds the max recommended in the MQTT spec. ');
     }
@@ -308,13 +308,13 @@ class MqttClient {
 
   /// Set the protocol version to V3.1 - default
   void setProtocolV31() {
-    Protocol.version = Constants.mqttV31ProtocolVersion;
-    Protocol.name = Constants.mqttV31ProtocolName;
+    Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
+    Protocol.name = MqttClientConstants.mqttV31ProtocolName;
   }
 
   /// Set the protocol version to V3.1.1
   void setProtocolV311() {
-    Protocol.version = Constants.mqttV311ProtocolVersion;
-    Protocol.name = Constants.mqttV311ProtocolName;
+    Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+    Protocol.name = MqttClientConstants.mqttV311ProtocolName;
   }
 }

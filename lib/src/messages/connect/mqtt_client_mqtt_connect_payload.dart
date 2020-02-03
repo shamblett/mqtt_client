@@ -24,12 +24,12 @@ class MqttConnectPayload extends MqttPayload {
   String get clientIdentifier => _clientIdentifier;
 
   set clientIdentifier(String id) {
-    if (id.length > Constants.maxClientIdentifierLength) {
+    if (id.length > MqttClientConstants.maxClientIdentifierLength) {
       throw ClientIdentifierException(id);
     }
-    if (id.length > Constants.maxClientIdentifierLengthSpec) {
+    if (id.length > MqttClientConstants.maxClientIdentifierLengthSpec) {
       MqttLogger.log('MqttConnectPayload::Client id exceeds spec value of '
-          '${Constants.maxClientIdentifierLengthSpec}');
+          '${MqttClientConstants.maxClientIdentifierLengthSpec}');
     }
     _clientIdentifier = id;
   }
