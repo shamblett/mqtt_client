@@ -31,13 +31,14 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     try {
       uri = Uri.parse(server);
     } on Exception {
-      final message = 'MqttBrowserWsConnection::The URI supplied for the WS '
+      final message =
+          'MqttBrowserWsConnection::connect - The URI supplied for the WS '
           'connection is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final message =
-          'MqttBrowserWsConnection::The URI supplied for the WS has '
+          'MqttBrowserWsConnection::connect - The URI supplied for the WS has '
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
@@ -45,24 +46,43 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
       uri = uri.replace(port: port);
     }
     final uriString = uri.toString();
-    MqttLogger.log('MqttBrowserWsConnection:: WS URL is $uriString');
+    MqttLogger.log('MqttBrowserWsConnection::connect -  WS URL is $uriString');
     try {
       // Connect and save the socket.
       client = WebSocket(uriString, protocols);
       client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
-      _startListening();
+      var closeEvents;
+      var errorEvents;
       client.onOpen.listen((e) {
-        MqttLogger.log('MqttBrowserConnection::connect - websocket is open');
+        MqttLogger.log('MqttBrowserWsConnection::connect - websocket is open');
+        closeEvents.cancel();
+        errorEvents.cancel();
+        _startListening();
         return completer.complete();
+      });
+
+      closeEvents = client.onClose.listen((e) {
+        MqttLogger.log(
+            'MqttBrowserWsConnection::connect - websocket is closed $e');
+        closeEvents.cancel();
+        errorEvents.cancel();
+        return completer.complete(MqttClientConnectionStatus());
+      });
+      errorEvents = client.onError.listen((e) {
+        MqttLogger.log(
+            'MqttBrowserWsConnection::connect - websocket has errored $e');
+        closeEvents.cancel();
+        errorEvents.cancel();
+        return completer.complete(MqttClientConnectionStatus());
       });
     } on Exception {
       final message =
-          'MqttBrowserWsConnection::The connection to the message broker '
+          'MqttBrowserWsConnection::connect - The connection to the message broker '
           '{$uriString} could not be made.';
       throw NoConnectionException(message);
     }
-    MqttLogger.log('MqttBrowserConnection::connect - connection is waiting');
+    MqttLogger.log('MqttBrowserWsConnection::connect - connection is waiting');
     return completer.future;
   }
 }

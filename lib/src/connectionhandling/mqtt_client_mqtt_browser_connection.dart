@@ -52,6 +52,8 @@ class MqttBrowserConnection {
         _onData(e.data);
       });
       client.onError.listen((e) {
+        MqttLogger.log(
+            'MqttBrowserConnection::_startListening - websocket has errored');
         _onError(e);
       });
     } on Exception catch (e) {

@@ -16,6 +16,8 @@ void main() {
   const testClientId = 'syncMqttTests';
   const localServer = 'ws://127.0.0.1/ws';
   const localPort = 8090;
+  const mosquittoServer = 'test.mosquitto.org';
+  const mosquittoPort = 8080;
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
@@ -28,7 +30,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-            'MqttBrowserWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com');
+            'MqttBrowserWsConnection::connect - The URI supplied for the WS connection is not valid - ://localhost.com');
       }
     });
 
@@ -43,7 +45,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-            'MqttBrowserWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
+            'MqttBrowserWsConnection::connect - The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
   });
@@ -51,31 +53,32 @@ void main() {
   group('Broker tests', () {
     test('Connect non-existant broker', () async {
       final client = MqttBrowserClient('ws://hhhhhhhhh/ws', testClientId);
-      var disconnectedCount = 0;
-
-      void disconnected() {
-        disconnectedCount++;
-        print(
-            'OnDisconnected client callback - call number $disconnectedCount');
-        if (disconnectedCount == 2) {
-          //
-        }
-      }
-
-      client.port = localPort;
+      client.port = 10000;
       client.logging(on: true);
-      client.onDisconnected = disconnected;
       final connMess = MqttConnectMessage()
           .keepAliveFor(20)
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;
-      await client.connect();
-    });
+      var ok = false;
+      try {
+        await client.connect();
+      } on NoConnectionException {
+        print('>>>>> TEST OK - No connection exception thrown');
+        ok = true;
+      }
+      expect(ok, isTrue);
+    }, skip: true);
 
     /// Local test, start the local mock WS broker found in support/mqtt_client_ws_broker
     /// locally before running this test.
     test('Connect local mock brocker', () async {
+      var callbackOk = false;
+      void connectCallback() {
+        print('Browser client connected callback');
+        callbackOk = true;
+      }
+
       final client = MqttBrowserClient(localServer, testClientId);
       client.port = localPort;
       client.logging(on: true);
@@ -84,21 +87,74 @@ void main() {
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;
-      await client.connect();
-      var connectionOK = false;
-      if (client.connectionStatus.state == MqttConnectionState.connected) {
-        print('Browser client connected locally');
-        connectionOK = true;
-      } else {
+      client.websocketProtocols = [];
+      client.onConnected = connectCallback;
+      var ok = true;
+      try {
+        await client.connect();
+        var connectionOK = false;
+        if (client.connectionStatus.state == MqttConnectionState.connected) {
+          print('Browser client connected locally');
+          connectionOK = true;
+        } else {
+          print(
+              'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
+          client.disconnect();
+        }
+        expect(connectionOK, isTrue);
+        expect(callbackOk, isTrue);
+      } on NoConnectionException {
         print(
-            'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
-        client.disconnect();
+            '>>>>> TEST NOT OK - No connection exception thrown, is the local WS broker running?');
+        ok = false;
       }
-      if (connectionOK) {
-        await MqttUtilities.asyncSleep(10);
-        print('Browser client disconnecting normally');
-        client.disconnect();
+      expect(ok, isTrue);
+    });
+    test('Connect mosquitto test brocker', () async {
+      var pongCount = 0;
+      void connectCallback() {
+        print('Browser client connected callback');
       }
+
+      void pongCallback() {
+        print('Browser client pong callback');
+        pongCount++;
+      }
+
+      final client = MqttBrowserClient(mosquittoServer, testClientId);
+      client.port = mosquittoPort;
+      client.logging(on: true);
+      final connMess = MqttConnectMessage()
+          .keepAliveFor(20)
+          .startClean() // Non persistent session for testing
+          .withWillQos(MqttQos.atLeastOnce);
+      client.connectionMessage = connMess;
+      var ok = true;
+      try {
+        expectAsync0(connectCallback, count: 1);
+        expectAsync0(pongCallback, count: 2);
+        await client.connect();
+        var connectionOK = false;
+        if (client.connectionStatus.state == MqttConnectionState.connected) {
+          print('Browser client connected locally');
+          connectionOK = true;
+        } else {
+          print(
+              'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
+          client.disconnect();
+        }
+        if (connectionOK) {
+          if (pongCount == 2) {
+            print('Browser client disconnecting normally');
+            client.disconnect();
+          }
+        }
+      } on NoConnectionException {
+        print(
+            '>>>>> TEST NOT OK - No connection exception thrown, cannot connect to Mosquitto');
+        ok = false;
+      }
+      expect(ok, isTrue);
     });
   });
 }

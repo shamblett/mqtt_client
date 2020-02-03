@@ -59,7 +59,10 @@ class MockBrokerWs {
       print(
           'Mockbroker WS server is running on http://${server.address.address}:$port/');
       server.listen((HttpRequest request) {
+        print(
+            'Mockbroker WS server::listen - request received ${request.uri.path}');
         if (request.uri.path == '/ws') {
+          print('Mockbroker WS server::listen - upgrading');
           WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
             _webSocket = websocket;
             websocket.listen(_handleMessage);
