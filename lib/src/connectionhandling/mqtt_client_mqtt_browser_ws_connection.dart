@@ -64,14 +64,14 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
 
       closeEvents = client.onClose.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connect - websocket is closed $e');
+            'MqttBrowserWsConnection::connect - websocket is closed');
         closeEvents.cancel();
         errorEvents.cancel();
         return completer.complete(MqttClientConnectionStatus());
       });
       errorEvents = client.onError.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connect - websocket has errored $e');
+            'MqttBrowserWsConnection::connect - websocket has errored');
         closeEvents.cancel();
         errorEvents.cancel();
         return completer.complete(MqttClientConnectionStatus());
