@@ -29,33 +29,11 @@ class MqttBrowserClient extends MqttClient {
   /// any previously set in a supplied connection message so if you
   /// supply your own connection message and use the authenticateAs method to
   /// set these parameters do not set them again here.
+  @override
   Future<MqttClientConnectionStatus> connect(
       [String username, String password]) async {
-    checkCredentials(username, password);
-    // Set the authentication parameters in the connection
-    // message if we have one.
-    connectionMessage?.authenticateAs(username, password);
-
-    // Do the connection
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttBrowserConnectionHandler(clientEventBus);
-    if (websocketProtocolString != null) {
-      connectionHandler.websocketProtocols = websocketProtocolString;
-    }
-    connectionHandler.onDisconnected = internalDisconnect;
-    connectionHandler.onConnected = onConnected;
-    publishingManager = PublishingManager(connectionHandler, clientEventBus);
-    subscriptionsManager = SubscriptionsManager(
-        connectionHandler, publishingManager, clientEventBus);
-    subscriptionsManager.onSubscribed = onSubscribed;
-    subscriptionsManager.onUnsubscribed = onUnsubscribed;
-    subscriptionsManager.onSubscribeFail = onSubscribeFail;
-    updates = subscriptionsManager.subscriptionNotifier.changes;
-    keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
-    if (pongCallback != null) {
-      keepAlive.pongCallback = pongCallback;
-    }
-    final connectMessage = getConnectMessage(username, password);
-    return connectionHandler.connect(server, port, connectMessage);
+    return await super.connect(username, password);
   }
 }
