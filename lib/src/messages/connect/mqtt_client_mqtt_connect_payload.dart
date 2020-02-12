@@ -7,9 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Class that contains details related to an MQTT Connect messages payload.
 class MqttConnectPayload extends MqttPayload {
   /// Initializes a new instance of the MqttConnectPayload class.
@@ -27,12 +24,12 @@ class MqttConnectPayload extends MqttPayload {
   String get clientIdentifier => _clientIdentifier;
 
   set clientIdentifier(String id) {
-    if (id.length > Constants.maxClientIdentifierLength) {
+    if (id.length > MqttClientConstants.maxClientIdentifierLength) {
       throw ClientIdentifierException(id);
     }
-    if (id.length > Constants.maxClientIdentifierLengthSpec) {
+    if (id.length > MqttClientConstants.maxClientIdentifierLengthSpec) {
       MqttLogger.log('MqttConnectPayload::Client id exceeds spec value of '
-          '${Constants.maxClientIdentifierLengthSpec}');
+          '${MqttClientConstants.maxClientIdentifierLengthSpec}');
     }
     _clientIdentifier = id;
   }
@@ -80,7 +77,6 @@ class MqttConnectPayload extends MqttPayload {
     payloadStream.writeMqttStringM(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
       payloadStream.writeMqttStringM(willTopic);
-      // ignore: cascade_invocations
       payloadStream.writeMqttStringM(willMessage);
     }
     if (variableHeader.connectFlags.usernameFlag) {
@@ -93,8 +89,8 @@ class MqttConnectPayload extends MqttPayload {
 
   @override
   int getWriteLength() {
-    int length = 0;
-    final MqttEncoding enc = MqttEncoding();
+    var length = 0;
+    final enc = MqttEncoding();
     length += enc.getByteCount(clientIdentifier);
     if (variableHeader.connectFlags.willFlag) {
       length += enc.getByteCount(willTopic);
@@ -108,4 +104,8 @@ class MqttConnectPayload extends MqttPayload {
     }
     return length;
   }
+
+  @override
+  String toString() =>
+      'MqttConnectPayload - client identifier is : $clientIdentifier';
 }

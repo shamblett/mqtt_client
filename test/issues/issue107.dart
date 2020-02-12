@@ -1,18 +1,20 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+
+// ignore_for_file: deprecated_member_use_from_same_package
 
 Future<int> main() async {
-  MqttClient client;
+  MqttServerClient client;
 
   Future _connect() async {
-    final Completer completer = Completer();
-    client = MqttClient('iotcloud-mqtt.gz.tencentdevices.com', '');
+    final completer = Completer();
+    client = MqttServerClient('iotcloud-mqtt.gz.tencentdevices.com', '');
     client.logging(on: false);
     client.secure = true;
     client.onDisconnected = onDisconnected;
 
-    final MqttConnectMessage connMess = MqttConnectMessage()
+    final connMess = MqttConnectMessage()
         .withClientIdentifier('Mqtt_MyClientUniqueId')
         .startClean();
     print('EXAMPLE::Mosquitto client connecting....');
@@ -39,7 +41,7 @@ Future<int> main() async {
     return completer.future;
   }
 
-  _connect();
+  await _connect();
   await MqttUtilities.asyncSleep(1);
   print('Disconnecting 1');
   client.disconnect();
@@ -49,7 +51,7 @@ Future<int> main() async {
 
   await MqttUtilities.asyncSleep(1);
 
-  _connect();
+  await _connect();
   await MqttUtilities.asyncSleep(1);
   print('Disconnecting 2');
   client.disconnect();
@@ -58,7 +60,7 @@ Future<int> main() async {
 
   await MqttUtilities.asyncSleep(1);
 
-  _connect();
+  await _connect();
   await MqttUtilities.asyncSleep(1);
   print('Disconnecting 3');
   client.disconnect();
@@ -67,13 +69,13 @@ Future<int> main() async {
 
   await MqttUtilities.asyncSleep(1);
 
-  _connect();
+  await _connect();
   await MqttUtilities.asyncSleep(1);
   print('Connection state: ${client.connectionState}');
 
   client.updates.listen((List<MqttReceivedMessage> c) {
-    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
-    final String pt =
+    final recMess = c[0].payload as MqttPublishMessage;
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     print(
@@ -83,8 +85,8 @@ Future<int> main() async {
 
   print('EXAMPLE::Publishing our topic');
 
-  final String pubTopic = 'Dart/Mqtt_client/testtopic';
-  final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+  final pubTopic = 'Dart/Mqtt_client/testtopic';
+  final builder = MqttClientPayloadBuilder();
   builder.addString('Hello from mqtt_client');
 
   client.subscribe(pubTopic, MqttQos.exactlyOnce);

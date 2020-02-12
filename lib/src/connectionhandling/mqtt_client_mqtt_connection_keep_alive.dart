@@ -7,11 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 /// Ping response received callback
 typedef PongCallback = void Function();
 
@@ -30,10 +25,8 @@ class MqttConnectionKeepAlive {
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
         MqttMessageType.pingRequest, pingRequestReceived);
-    // ignore: cascade_invocations
     connectionHandler.registerForMessage(
         MqttMessageType.pingResponse, pingResponseReceived);
-    // ignore: cascade_invocations
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
@@ -46,7 +39,7 @@ class MqttConnectionKeepAlive {
   Timer pingTimer;
 
   /// The connection handler
-  MqttConnectionHandler _connectionHandler;
+  IMqttConnectionHandler _connectionHandler;
 
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;
@@ -62,8 +55,8 @@ class MqttConnectionKeepAlive {
     } else {
       _shutdownPadlock = true;
     }
-    bool pinged = false;
-    final MqttPingRequestMessage pingMsg = MqttPingRequestMessage();
+    var pinged = false;
+    final pingMsg = MqttPingRequestMessage();
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
       _connectionHandler.sendMessage(pingMsg);
@@ -85,7 +78,7 @@ class MqttConnectionKeepAlive {
     } else {
       _shutdownPadlock = true;
     }
-    final MqttPingResponseMessage pingMsg = MqttPingResponseMessage();
+    final pingMsg = MqttPingResponseMessage();
     _connectionHandler.sendMessage(pingMsg);
     _shutdownPadlock = false;
     return true;

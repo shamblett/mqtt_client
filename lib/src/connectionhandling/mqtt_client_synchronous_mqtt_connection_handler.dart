@@ -5,19 +5,29 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
-
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_types_on_closure_parameters
+part of mqtt_server_client;
 
 /// Connection handler that performs connections and disconnections
 /// to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
-  /// Initializes a new instance of the MqttConnectionHandler class.
+  /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttConnectionHandler(this._clientEventBus);
+
+  /// The connection status
+  @override
+  MqttClientConnectionStatus get connectionStatus;
+
+  /// Successful connection callback.
+  @override
+  ConnectCallback onConnected;
+
+  /// Unsolicited disconnection callback.
+  @override
+  DisconnectCallback onDisconnected;
+
+  /// Callback function to handle bad certificate. if true, ignore the error.
+  @override
+  bool Function(dynamic certificate) onBadCertificate;
 
   /// Max connection attempts
   static const int maxConnectionAttempts = 3;
@@ -32,7 +42,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
-    int connectionAttempts = 0;
+    var connectionAttempts = 0;
     MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect entered');
     do {
       // Initiate the connection
@@ -137,7 +147,6 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
         MqttLogger.log('SynchronousMqttConnectionHandler::_connectAckProcessor '
             '- state = connected');
         connectionStatus.state = MqttConnectionState.connected;
-        // ignore: cascade_invocations
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
         // Call the connected callback if we have one
         if (onConnected != null) {

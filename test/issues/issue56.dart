@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  const String broker = 'mq.meeo.xyz';
-  const String username = 'md-hi75gqj';
-  const String password = 'user_K8SzwBbLqBEwfIqM';
-  final MqttClient client = MqttClient(broker, '');
+  const broker = 'mq.meeo.xyz';
+  const username = 'md-hi75gqj';
+  const password = 'user_K8SzwBbLqBEwfIqM';
+  final client = MqttServerClient(broker, '');
   client.logging(on: true);
   client.onDisconnected = onDisconnected;
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
       .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message

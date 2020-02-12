@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  MqttClient client;
+  MqttServerClient client;
 
-  const String clientId = 'SJHMQTTTest_53';
-  client = MqttClient('test.mosquitto.org', clientId);
+  const clientId = 'SJHMQTTTest_53';
+  client = MqttServerClient('test.mosquitto.org', clientId);
   client.setProtocolV311();
   client.keepAlivePeriod = 20;
   client.port = 1883;
@@ -27,7 +28,7 @@ Future<int> main() async {
 
   await client.connect();
 
-  final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+  final builder = MqttClientPayloadBuilder();
   builder.addString(
     json.encode(
       <String, dynamic>{

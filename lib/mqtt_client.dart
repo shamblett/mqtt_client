@@ -9,11 +9,10 @@ library mqtt_client;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
+import 'package:meta/meta.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
-import 'package:crypto/crypto.dart';
 import 'src/observable/observable.dart' as observe;
 
 /// The mqtt_client package exported interface
@@ -42,22 +41,6 @@ part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 part 'src/connectionhandling/mqtt_client_connection_state.dart';
 
 part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_connection_handler.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_normal_connection.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_ws2_connection.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_secure_connection.dart';
-
-part 'src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
-
-part 'src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';
 
 part 'src/mqtt_client_topic.dart';
 
@@ -92,8 +75,6 @@ part 'src/encoding/mqtt_client_mqtt_encoding.dart';
 part 'src/dataconvertors/mqtt_client_ascii_payload_convertor.dart';
 
 part 'src/utility/mqtt_client_byte_buffer.dart';
-
-part 'src/utility/mqtt_client_utilities.dart';
 
 part 'src/utility/mqtt_client_logger.dart';
 
@@ -176,3 +157,9 @@ part 'src/messages/mqtt_client_mqtt_message_factory.dart';
 part 'src/messages/mqtt_client_mqtt_payload.dart';
 
 part 'src/management/mqtt_client_topic_filter.dart';
+
+part 'src/utility/mqtt_client_utilities.dart';
+
+part 'src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
+
+part 'src/connectionhandling/mqtt_client_read_wrapper.dart';

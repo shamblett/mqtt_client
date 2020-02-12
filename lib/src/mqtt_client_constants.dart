@@ -7,9 +7,8 @@
 
 part of mqtt_client;
 
-// ignore: avoid_classes_with_only_static_members
 /// Library wide constants
-class Constants {
+class MqttClientConstants {
   /// The Maximum allowed message size as defined by the MQTT v3 Spec (256MB).
   static const int maxMessageSize = 268435455;
 
@@ -43,4 +42,15 @@ class Constants {
 
   /// V4 name
   static const String mqttV311ProtocolName = 'MQTT';
+
+  /// The default websocket subprotocol list
+  static const List<String> protocolsMultipleDefault = <String>[
+    'mqtt',
+    'mqttv3.1',
+    'mqttv3.11'
+  ];
+
+  /// The default websocket subprotocol list for brokers who expect
+  /// this field to be a single entry
+  static const List<String> protocolsSingleDefault = <String>['mqtt'];
 }

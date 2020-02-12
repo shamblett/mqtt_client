@@ -8,22 +8,17 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_types_on_closure_parameters
+@TestOn('vm')
 
 /// Helper methods for test message serialization and deserialization
 class MessageSerializationHelper {
   /// Invokes the serialization of a message to get an array of bytes that represent the message.
   static typed.Uint8Buffer getMessageBytes(MqttMessage msg) {
-    final typed.Uint8Buffer buff = typed.Uint8Buffer();
-    final MqttByteBuffer ms = MqttByteBuffer(buff);
+    final buff = typed.Uint8Buffer();
+    final ms = MqttByteBuffer(buff);
     msg.writeTo(ms);
     ms.seek(0);
-    final typed.Uint8Buffer msgBytes = ms.read(ms.length);
+    final msgBytes = ms.read(ms.length);
     return msgBytes;
   }
 }
@@ -33,7 +28,7 @@ void main() {
     /// Test helper method to call Get Remaining Bytes with a specific value
     typed.Uint8Buffer callGetRemainingBytesWithValue(int value) {
       // validates a payload size of a single byte using the example values supplied in the MQTT spec
-      final MqttHeader header = MqttHeader();
+      final header = MqttHeader();
       header.messageSize = value;
       return header.getRemainingLengthBytes();
     }
@@ -42,7 +37,7 @@ void main() {
     /// byte1 - the first header byte
     /// length - the length byte
     typed.Uint8Buffer getHeaderBytes(int byte1, int length) {
-      final typed.Uint8Buffer tmp = typed.Uint8Buffer(2);
+      final tmp = typed.Uint8Buffer(2);
       tmp[0] = byte1;
       tmp[1] = length;
       return tmp;
@@ -50,51 +45,45 @@ void main() {
 
     /// Gets the MQTT header from a byte arrayed header.
     MqttHeader getMqttHeader(typed.Uint8Buffer headerBytes) {
-      final MqttByteBuffer buff = MqttByteBuffer(headerBytes);
+      final buff = MqttByteBuffer(headerBytes);
       return MqttHeader.fromByteBuffer(buff);
     }
 
     test('Single byte payload size', () {
       // Validates a payload size of a single byte using the example values supplied in the MQTT spec
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(127);
+      final returnedBytes = callGetRemainingBytesWithValue(127);
       // Check that the count of bytes returned is only 1, and the value of the byte is correct.
       expect(returnedBytes.length, 1);
       expect(returnedBytes[0], 127);
     });
     test('Double byte payload size lower boundary 128', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(128);
+      final returnedBytes = callGetRemainingBytesWithValue(128);
       expect(returnedBytes.length, 2);
       expect(returnedBytes[0], 0x80);
       expect(returnedBytes[1], 0x01);
     });
     test('Double byte payload size upper boundary 16383', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(16383);
+      final returnedBytes = callGetRemainingBytesWithValue(16383);
       expect(returnedBytes.length, 2);
       expect(returnedBytes[0], 0xFF);
       expect(returnedBytes[1], 0x7F);
     });
     test('Triple byte payload size lower boundary 16384', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(16384);
+      final returnedBytes = callGetRemainingBytesWithValue(16384);
       expect(returnedBytes.length, 3);
       expect(returnedBytes[0], 0x80);
       expect(returnedBytes[1], 0x80);
       expect(returnedBytes[2], 0x01);
     });
     test('Triple byte payload size upper boundary 2097151', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(2097151);
+      final returnedBytes = callGetRemainingBytesWithValue(2097151);
       expect(returnedBytes.length, 3);
       expect(returnedBytes[0], 0xFF);
       expect(returnedBytes[1], 0xFF);
       expect(returnedBytes[2], 0x7F);
     });
     test('Quadruple byte payload size lower boundary 2097152', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(2097152);
+      final returnedBytes = callGetRemainingBytesWithValue(2097152);
       expect(returnedBytes.length, 4);
       expect(returnedBytes[0], 0x80);
       expect(returnedBytes[1], 0x80);
@@ -102,8 +91,7 @@ void main() {
       expect(returnedBytes[3], 0x01);
     });
     test('Quadruple byte payload size upper boundary 268435455', () {
-      final typed.Uint8Buffer returnedBytes =
-          callGetRemainingBytesWithValue(268435455);
+      final returnedBytes = callGetRemainingBytesWithValue(268435455);
       expect(returnedBytes.length, 4);
       expect(returnedBytes[0], 0xFF);
       expect(returnedBytes[1], 0xFF);
@@ -111,8 +99,8 @@ void main() {
       expect(returnedBytes[3], 0x7F);
     });
     test('Payload size out of upper range', () {
-      final MqttHeader header = MqttHeader();
-      bool raised = false;
+      final header = MqttHeader();
+      var raised = false;
       header.messageSize = 2;
       try {
         header.messageSize = 268435456;
@@ -123,8 +111,8 @@ void main() {
       expect(header.messageSize, 2);
     });
     test('Payload size out of lower range', () {
-      final MqttHeader header = MqttHeader();
-      bool raised = false;
+      final header = MqttHeader();
+      var raised = false;
       header.messageSize = 2;
       try {
         header.messageSize = -1;
@@ -135,33 +123,32 @@ void main() {
       expect(header.messageSize, 2);
     });
     test('Duplicate', () {
-      final MqttHeader header = MqttHeader().isDuplicate();
+      final header = MqttHeader().isDuplicate();
       expect(header.duplicate, isTrue);
     });
     test('Qos', () {
-      final MqttHeader header = MqttHeader().withQos(MqttQos.atMostOnce);
+      final header = MqttHeader().withQos(MqttQos.atMostOnce);
       expect(header.qos, MqttQos.atMostOnce);
     });
     test('Message type', () {
-      final MqttHeader header =
-          MqttHeader().asType(MqttMessageType.publishComplete);
+      final header = MqttHeader().asType(MqttMessageType.publishComplete);
       expect(header.messageType, MqttMessageType.publishComplete);
     });
     test('Retain', () {
-      final MqttHeader header = MqttHeader().shouldBeRetained();
+      final header = MqttHeader().shouldBeRetained();
       expect(header.retain, isTrue);
     });
     test('Round trip', () {
-      final MqttHeader inputHeader = MqttHeader();
+      final inputHeader = MqttHeader();
       inputHeader.duplicate = true;
       inputHeader.retain = false;
       inputHeader.messageSize = 1;
       inputHeader.messageType = MqttMessageType.connect;
       inputHeader.qos = MqttQos.atLeastOnce;
-      final MqttByteBuffer buffer = MqttByteBuffer(typed.Uint8Buffer());
+      final buffer = MqttByteBuffer(typed.Uint8Buffer());
       inputHeader.writeTo(1, buffer);
       buffer.reset();
-      final MqttHeader outputHeader = MqttHeader.fromByteBuffer(buffer);
+      final outputHeader = MqttHeader.fromByteBuffer(buffer);
       expect(inputHeader.duplicate, outputHeader.duplicate);
       expect(inputHeader.retain, outputHeader.retain);
       expect(inputHeader.messageSize, outputHeader.messageSize);
@@ -169,13 +156,13 @@ void main() {
       expect(inputHeader.qos, outputHeader.qos);
     });
     test('Corrupt header', () {
-      final MqttHeader inputHeader = MqttHeader();
+      final inputHeader = MqttHeader();
       inputHeader.duplicate = true;
       inputHeader.retain = false;
       inputHeader.messageSize = 268435455;
       inputHeader.messageType = MqttMessageType.connect;
       inputHeader.qos = MqttQos.atLeastOnce;
-      final MqttByteBuffer buffer = MqttByteBuffer(typed.Uint8Buffer());
+      final buffer = MqttByteBuffer(typed.Uint8Buffer());
       inputHeader.writeTo(268435455, buffer);
       // Fudge the header by making the last bit of the 4th message size byte a 1, therefore making the header
       // invalid because the last bit of the 4th size byte should always be 0 (according to the spec). It's how
@@ -185,10 +172,10 @@ void main() {
       buffer.readByte();
       buffer.readByte();
       buffer.writeByte(buffer.readByte() | 0xFF);
-      bool raised = false;
+      var raised = false;
       buffer.seek(0);
       try {
-        final MqttHeader outputHeader = MqttHeader.fromByteBuffer(buffer);
+        final outputHeader = MqttHeader.fromByteBuffer(buffer);
         print(outputHeader.toString());
       } on Exception {
         raised = true;
@@ -196,12 +183,12 @@ void main() {
       expect(raised, true);
     });
     test('Corrupt header undersize', () {
-      final MqttByteBuffer buffer = MqttByteBuffer(typed.Uint8Buffer());
+      final buffer = MqttByteBuffer(typed.Uint8Buffer());
       buffer.writeByte(0);
       buffer.seek(0);
-      bool raised = false;
+      var raised = false;
       try {
-        final MqttHeader outputHeader = MqttHeader.fromByteBuffer(buffer);
+        final outputHeader = MqttHeader.fromByteBuffer(buffer);
         print(outputHeader.toString());
       } on Exception {
         raised = true;
@@ -209,123 +196,123 @@ void main() {
       expect(raised, true);
     });
     test('QOS at most once', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(1, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(1, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.qos, MqttQos.atMostOnce);
     });
     test('QOS at least once', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(2, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(2, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.qos, MqttQos.atLeastOnce);
     });
     test('QOS exactly once', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.qos, MqttQos.exactlyOnce);
     });
     test('QOS reserved1', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(6, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(6, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.qos, MqttQos.reserved1);
     });
     test('Message type reserved1', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(0, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.reserved1);
     });
     test('Message type connect', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(1 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(1 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.connect);
     });
     test('Message type connect ack', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(2 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(2 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.connectAck);
     });
     test('Message type publish', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(3 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(3 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.publish);
     });
     test('Message type publish ack', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(4 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(4 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.publishAck);
     });
     test('Message type publish received', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(5 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(5 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.publishReceived);
     });
     test('Message type publish release', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(6 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(6 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.publishRelease);
     });
     test('Message type publish complete', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(7 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(7 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.publishComplete);
     });
     test('Message type subscribe', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(8 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(8 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.subscribe);
     });
     test('Message type subscribe ack', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(9 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(9 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.subscribeAck);
     });
     test('Message type subscribe', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(8 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(8 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.subscribe);
     });
     test('Message type unsubscribe', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(10 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(10 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.unsubscribe);
     });
     test('Message type unsubscribe ack', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(11 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(11 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.unsubscribeAck);
     });
     test('Message type ping request', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(12 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(12 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.pingRequest);
     });
     test('Message type ping response', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(13 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(13 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.pingResponse);
     });
     test('Message type disconnect', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(14 << 4, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(14 << 4, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.messageType, MqttMessageType.disconnect);
     });
     test('Duplicate true', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(8, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(8, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.duplicate, isTrue);
     });
     test('Duplicate false', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(0, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.duplicate, isFalse);
     });
     test('Retain true', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(1, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(1, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.retain, isTrue);
     });
     test('Retain false', () {
-      final typed.Uint8Buffer headerBytes = getHeaderBytes(0, 0);
-      final MqttHeader header = getMqttHeader(headerBytes);
+      final headerBytes = getHeaderBytes(0, 0);
+      final header = getMqttHeader(headerBytes);
       expect(header.retain, isFalse);
     });
   });
@@ -333,9 +320,9 @@ void main() {
   group('Connect Flags', () {
     /// Gets the connect flags for a specific byte value
     MqttConnectFlags getConnectFlags(int value) {
-      final typed.Uint8Buffer tmp = typed.Uint8Buffer(1);
+      final tmp = typed.Uint8Buffer(1);
       tmp[0] = value;
-      final MqttByteBuffer buffer = MqttByteBuffer(tmp);
+      final buffer = MqttByteBuffer(tmp);
       return MqttConnectFlags.fromByteBuffer(buffer);
     }
 
@@ -391,22 +378,22 @@ void main() {
 
   group('Variable header', () {
     test('Base construction', () {
-      final MqttVariableHeader varHeader = MqttVariableHeader();
+      final varHeader = MqttVariableHeader();
       varHeader.messageIdentifier = 10;
       varHeader.keepAlive = 3;
       varHeader.topicName = 'Billy';
       varHeader.returnCode = MqttConnectReturnCode.identifierRejected;
       varHeader.connectFlags.cleanStart = true;
       varHeader.connectFlags.willFlag = true;
-      final typed.Uint8Buffer bBuff = typed.Uint8Buffer();
-      final MqttByteBuffer byteBuff = MqttByteBuffer(bBuff);
+      final bBuff = typed.Uint8Buffer();
+      final byteBuff = MqttByteBuffer(bBuff);
       expect(varHeader.length, 0);
       varHeader.writeTo(byteBuff);
       print(
           'Variable header::Base construction: byte buffer ${byteBuff.buffer.toString()}');
-      final MqttVariableHeader varHeader1 = MqttVariableHeader();
+      final varHeader1 = MqttVariableHeader();
       byteBuff.seek(0);
-      final int writeLength = varHeader.getWriteLength();
+      final writeLength = varHeader.getWriteLength();
       expect(writeLength, 22);
       varHeader1.readFrom(byteBuff);
       expect(varHeader1.returnCode, MqttConnectReturnCode.identifierRejected);
@@ -420,12 +407,12 @@ void main() {
       expect(varHeader1.connectFlags.willFlag, isTrue);
     });
     test('Not enough bytes in string', () {
-      final typed.Uint8Buffer tmp = typed.Uint8Buffer(3);
+      final tmp = typed.Uint8Buffer(3);
       tmp[0] = 0;
       tmp[1] = 2;
       tmp[2] = 'm'.codeUnitAt(0);
-      final MqttByteBuffer buffer = MqttByteBuffer(tmp);
-      bool raised = false;
+      final buffer = MqttByteBuffer(tmp);
+      var raised = false;
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
@@ -436,16 +423,15 @@ void main() {
       expect(raised, isTrue);
     });
     test('Long string is fully read', () {
-      final typed.Uint8Buffer tmp = typed.Uint8Buffer(65537);
+      final tmp = typed.Uint8Buffer(65537);
       tmp.fillRange(2, tmp.length, 'a'.codeUnitAt(0));
       tmp[0] = (tmp.length - 2) >> 8;
       tmp[1] = (tmp.length - 2) & 0xFF;
-      final MqttByteBuffer buffer = MqttByteBuffer(tmp);
-      final String expectedString =
-          String.fromCharCodes(tmp.getRange(2, tmp.length));
-      bool raised = false;
+      final buffer = MqttByteBuffer(tmp);
+      final expectedString = String.fromCharCodes(tmp.getRange(2, tmp.length));
+      var raised = false;
       try {
-        final String readString = MqttByteBuffer.readMqttString(buffer);
+        final readString = MqttByteBuffer.readMqttString(buffer);
         expect(readString.length, expectedString.length);
         expect(readString, expectedString);
       } on Exception catch (exception) {
@@ -455,10 +441,10 @@ void main() {
       expect(raised, isFalse);
     });
     test('Not enough bytes to form string', () {
-      final typed.Uint8Buffer tmp = typed.Uint8Buffer(1);
+      final tmp = typed.Uint8Buffer(1);
       tmp[0] = 0;
-      final MqttByteBuffer buffer = MqttByteBuffer(tmp);
-      bool raised = false;
+      final buffer = MqttByteBuffer(tmp);
+      var raised = false;
       try {
         MqttByteBuffer.readMqttString(buffer);
       } on Exception catch (exception) {
@@ -478,7 +464,7 @@ void main() {
       //
       // Message Specs________________
       // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x10,
         0x1B,
         0x00,
@@ -509,10 +495,10 @@ void main() {
         0x01,
         'a'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Connect - Basic deserialization::${baseMessage.toString()}');
       // Check that the message was correctly identified as a connect message.
       expect(baseMessage, const TypeMatcher<MqttConnectMessage>());
@@ -550,7 +536,7 @@ void main() {
       //
       // Message Specs________________
       // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111andy111andy111andy111
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x10,
         0x15,
         0x00,
@@ -598,12 +584,12 @@ void main() {
         '1'.codeUnitAt(0),
         '1'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      bool raised = false;
+      final byteBuffer = MqttByteBuffer(buff);
+      var raised = false;
       try {
-        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        final baseMessage = MqttMessage.createFrom(byteBuffer);
         print(baseMessage.toString());
       } on Exception {
         raised = true;
@@ -611,19 +597,18 @@ void main() {
       expect(raised, isTrue);
     });
     test('Basic serialization', () {
-      final MqttConnectMessage msg = MqttConnectMessage()
+      final msg = MqttConnectMessage()
           .withClientIdentifier('mark')
           .keepAliveFor(40)
           .startClean();
       print('Connect - Basic serialization::${msg.toString()}');
-      final typed.Uint8Buffer mb =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final mb = MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
       // VH will = 12, Msg = 6
       expect(mb[1], 0x12);
     });
     test('With will set', () {
-      final MqttConnectMessage msg = MqttConnectMessage()
+      final msg = MqttConnectMessage()
           .withProtocolName('MQIsdp')
           .withProtocolVersion(3)
           .withClientIdentifier('mark')
@@ -635,8 +620,7 @@ void main() {
           .withWillTopic('willTopic')
           .withWillMessage('willMessage');
       print('Connect - With will set::${msg.toString()}');
-      final typed.Uint8Buffer mb =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final mb = MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
       // VH will = 12, Msg = 6
       expect(mb[1], 0x2A);
@@ -651,13 +635,13 @@ void main() {
       //
       // Message Specs________________
       // <20><02><00><00>
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(4);
+      final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
       sampleMessage[2] = 0x0;
       sampleMessage[3] = 0x0;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Connect Ack - Connection accepted::${baseMessage.toString()}');
       // Check that the message was correctly identified as a connect ack message.
       expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
@@ -685,13 +669,13 @@ void main() {
       //
       // Message Specs________________
       // <20><02><00><00>
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(4);
+      final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
       sampleMessage[2] = 0x0;
       sampleMessage[3] = 0x1;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Connect Ack - Unacceptable protocol version::${baseMessage.toString()}');
       // Check that the message was correctly identified as a connect ack message.
@@ -720,13 +704,13 @@ void main() {
       //
       // Message Specs________________
       // <20><02><00><00>
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(4);
+      final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
       sampleMessage[2] = 0x0;
       sampleMessage[3] = 0x2;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Connect Ack - Identifier rejected::${baseMessage.toString()}');
       // Check that the message was correctly identified as a connect ack message.
       expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
@@ -754,13 +738,13 @@ void main() {
       //
       // Message Specs________________
       // <20><02><00><00>
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(4);
+      final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
       sampleMessage[2] = 0x0;
       sampleMessage[3] = 0x3;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Connect Ack - Broker unavailable::${baseMessage.toString()}');
       // Check that the message was correctly identified as a connect ack message.
       expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
@@ -783,16 +767,15 @@ void main() {
     });
   });
   test('Serialisation - Connection accepted', () {
-    final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+    final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
     expected[1] = 0x02;
     expected[2] = 0x0;
     expected[3] = 0x0;
-    final MqttConnectAckMessage msg = MqttConnectAckMessage()
+    final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.connectionAccepted);
     print('Connect Ack - Connection accepted::${msg.toString()}');
-    final typed.Uint8Buffer actual =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
     expect(actual.length, expected.length);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
@@ -800,16 +783,15 @@ void main() {
     expect(actual[3], expected[3]); // return code.
   });
   test('Serialisation - Unacceptable protocol version', () {
-    final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+    final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
     expected[1] = 0x02;
     expected[2] = 0x0;
     expected[3] = 0x1;
-    final MqttConnectAckMessage msg = MqttConnectAckMessage()
+    final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.unacceptedProtocolVersion);
     print('Connect Ack - Unacceptable protocol version::${msg.toString()}');
-    final typed.Uint8Buffer actual =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
     expect(actual.length, expected.length);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
@@ -817,16 +799,15 @@ void main() {
     expect(actual[3], expected[3]); // return code.
   });
   test('Serialisation - Identifier rejected', () {
-    final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+    final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
     expected[1] = 0x02;
     expected[2] = 0x0;
     expected[3] = 0x2;
-    final MqttConnectAckMessage msg = MqttConnectAckMessage()
+    final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.identifierRejected);
     print('Connect Ack - Identifier rejected::${msg.toString()}');
-    final typed.Uint8Buffer actual =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
     expect(actual.length, expected.length);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
@@ -834,16 +815,15 @@ void main() {
     expect(actual[3], expected[3]); // return code.
   });
   test('Serialisation - Broker unavailable', () {
-    final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+    final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
     expected[1] = 0x02;
     expected[2] = 0x0;
     expected[3] = 0x3;
-    final MqttConnectAckMessage msg = MqttConnectAckMessage()
+    final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.brokerUnavailable);
     print('Connect Ack - Broker unavailable::${msg.toString()}');
-    final typed.Uint8Buffer actual =
-        MessageSerializationHelper.getMessageBytes(msg);
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
     expect(actual.length, expected.length);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
@@ -853,23 +833,22 @@ void main() {
 
   group('Disconnect', () {
     test('Deserialisation', () {
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(2);
+      final sampleMessage = typed.Uint8Buffer(2);
       sampleMessage[0] = 0xE0;
       sampleMessage[1] = 0x0;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Disconnect  - Deserialisation::${baseMessage.toString()}');
       // Check that the message was correctly identified as a disconnect message.
       expect(baseMessage, const TypeMatcher<MqttDisconnectMessage>());
     });
     test('Serialisation', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(2);
+      final expected = typed.Uint8Buffer(2);
       expected[0] = 0xE0;
       expected[1] = 0x00;
-      final MqttDisconnectMessage msg = MqttDisconnectMessage();
+      final msg = MqttDisconnectMessage();
       print('Disconnect - Serialisation::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]);
       expect(actual[1], expected[1]);
@@ -878,23 +857,22 @@ void main() {
 
   group('Ping Request', () {
     test('Deserialisation', () {
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(2);
+      final sampleMessage = typed.Uint8Buffer(2);
       sampleMessage[0] = 0xC0;
       sampleMessage[1] = 0x0;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Ping Request  - Deserialisation::${baseMessage.toString()}');
       // Check that the message was correctly identified as a ping request message.
       expect(baseMessage, const TypeMatcher<MqttPingRequestMessage>());
     });
     test('Serialisation', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(2);
+      final expected = typed.Uint8Buffer(2);
       expected[0] = 0xC0;
       expected[1] = 0x00;
-      final MqttPingRequestMessage msg = MqttPingRequestMessage();
+      final msg = MqttPingRequestMessage();
       print('Ping Request - Serialisation::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]);
       expect(actual[1], expected[1]);
@@ -903,23 +881,22 @@ void main() {
 
   group('Ping Response', () {
     test('Deserialisation', () {
-      final typed.Uint8Buffer sampleMessage = typed.Uint8Buffer(2);
+      final sampleMessage = typed.Uint8Buffer(2);
       sampleMessage[0] = 0xD0;
       sampleMessage[1] = 0x00;
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(sampleMessage);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Ping Response  - Deserialisation::${baseMessage.toString()}');
       // Check that the message was correctly identified as a ping response message.
       expect(baseMessage, const TypeMatcher<MqttPingResponseMessage>());
     });
     test('Serialisation', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(2);
+      final expected = typed.Uint8Buffer(2);
       expected[0] = 0xD0;
       expected[1] = 0x00;
-      final MqttPingResponseMessage msg = MqttPingResponseMessage();
+      final msg = MqttPingResponseMessage();
       print('Ping Response - Serialisation::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]);
       expect(actual[1], expected[1]);
@@ -931,7 +908,7 @@ void main() {
       // Tests basic message deserialization from a raw byte array.
       // Message Specs________________
       // <30><0C><00><04>fredhello!
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x30,
         0x0C,
         0x00,
@@ -948,10 +925,10 @@ void main() {
         'o'.codeUnitAt(0),
         '!'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish message.
       expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
@@ -974,7 +951,7 @@ void main() {
       // Tests basic message deserialization from a raw byte array.
       // Message Specs________________
       // <30><0C><00><04>fredhello!
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x30,
         0x0C,
         0x00,
@@ -991,11 +968,11 @@ void main() {
         'o'.codeUnitAt(0),
         '!'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      Protocol.version = Constants.mqttV311ProtocolVersion;
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish message.
       expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
@@ -1015,7 +992,7 @@ void main() {
       expect(pm.payload.message[5], '!'.codeUnitAt(0));
     });
     test('Deserialisation - payload too short', () {
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x30,
         0x0C,
         0x00,
@@ -1031,12 +1008,12 @@ void main() {
         'l'.codeUnitAt(0),
         'o'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      bool raised = false;
+      final byteBuffer = MqttByteBuffer(buff);
+      var raised = false;
       try {
-        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        final baseMessage = MqttMessage.createFrom(byteBuffer);
         print(baseMessage.toString());
       } on Exception {
         raised = true;
@@ -1044,7 +1021,7 @@ void main() {
       expect(raised, isTrue);
     });
     test('Serialisation - Qos Level 2 Exactly Once', () {
-      final List<int> expected = <int>[
+      final expected = <int>[
         0x34,
         0x0E,
         0x00,
@@ -1063,21 +1040,20 @@ void main() {
         'o'.codeUnitAt(0),
         '!'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer payload = typed.Uint8Buffer(6);
+      final payload = typed.Uint8Buffer(6);
       payload[0] = 'h'.codeUnitAt(0);
       payload[1] = 'e'.codeUnitAt(0);
       payload[2] = 'l'.codeUnitAt(0);
       payload[3] = 'l'.codeUnitAt(0);
       payload[4] = 'o'.codeUnitAt(0);
       payload[5] = '!'.codeUnitAt(0);
-      final MqttMessage msg = MqttPublishMessage()
+      final msg = MqttPublishMessage()
           .withQos(MqttQos.exactlyOnce)
           .withMessageIdentifier(10)
           .toTopic('fred')
           .publishData(payload);
       print('Publish - Qos Level 2 Exactly Once::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1095,7 +1071,7 @@ void main() {
       expect(actual[13], expected[13]); // !
     });
     test('Serialisation - Topic has special characters', () {
-      final List<int> expected = <int>[
+      final expected = <int>[
         0x34,
         0x0E,
         0x00,
@@ -1114,23 +1090,22 @@ void main() {
         'o'.codeUnitAt(0),
         '!'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer payload = typed.Uint8Buffer(6);
+      final payload = typed.Uint8Buffer(6);
       payload[0] = 'h'.codeUnitAt(0);
       payload[1] = 'e'.codeUnitAt(0);
       payload[2] = 'l'.codeUnitAt(0);
       payload[3] = 'l'.codeUnitAt(0);
       payload[4] = 'o'.codeUnitAt(0);
       payload[5] = '!'.codeUnitAt(0);
-      Protocol.version = Constants.mqttV311ProtocolVersion;
-      final MqttMessage msg = MqttPublishMessage()
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final msg = MqttPublishMessage()
           .withQos(MqttQos.exactlyOnce)
           .withMessageIdentifier(10)
           .toTopic(
               '/hfp/v1/journey/ongoing/bus/0012/01314/2550/2/Itäkeskus(M)/19:16/1454121/3/60;25/20/14/83')
           .publishData(payload);
       print('Publish - Qos Level 2 Exactly Once::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, 102);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], 100); // remaining length
@@ -1142,7 +1117,7 @@ void main() {
       expect(actual[7], 112);
     });
     test('Serialisation - Qos Level 0 No MID', () {
-      final List<int> expected = <int>[
+      final expected = <int>[
         0x30,
         0x0C,
         0x00,
@@ -1159,18 +1134,16 @@ void main() {
         'o'.codeUnitAt(0),
         '!'.codeUnitAt(0)
       ];
-      final typed.Uint8Buffer payload = typed.Uint8Buffer(6);
+      final payload = typed.Uint8Buffer(6);
       payload[0] = 'h'.codeUnitAt(0);
       payload[1] = 'e'.codeUnitAt(0);
       payload[2] = 'l'.codeUnitAt(0);
       payload[3] = 'l'.codeUnitAt(0);
       payload[4] = 'o'.codeUnitAt(0);
       payload[5] = '!'.codeUnitAt(0);
-      final MqttMessage msg =
-          MqttPublishMessage().toTopic('fred').publishData(payload);
+      final msg = MqttPublishMessage().toTopic('fred').publishData(payload);
       print('Publish - Qos Level 0 No MID::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1188,20 +1161,19 @@ void main() {
       expect(actual[13], expected[13]); // !
     });
     test('Serialisation - With non-default Qos', () {
-      final MqttPublishMessage msg = MqttPublishMessage()
+      final msg = MqttPublishMessage()
           .toTopic('mark')
           .withQos(MqttQos.atLeastOnce)
           .withMessageIdentifier(4)
           .publishData(typed.Uint8Buffer(9));
-      final typed.Uint8Buffer msgBytes =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final msgBytes = MessageSerializationHelper.getMessageBytes(msg);
       expect(msgBytes.length, 19);
     });
     test('Clear publish data', () {
-      final typed.Uint8Buffer data = typed.Uint8Buffer(2);
+      final data = typed.Uint8Buffer(2);
       data[0] = 0;
       data[1] = 1;
-      final MqttPublishMessage msg = MqttPublishMessage().publishData(data);
+      final msg = MqttPublishMessage().publishData(data);
       expect(msg.payload.message.length, 2);
       msg.clearPublishData();
       expect(msg.payload.message.length, 0);
@@ -1213,16 +1185,16 @@ void main() {
       // Tests basic message deserialization from a raw byte array.
       // Message Specs________________
       // <30><0C><00><04>fredhello!
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x40,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish Ack - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish ack message.
       expect(baseMessage, const TypeMatcher<MqttPublishAckMessage>());
@@ -1234,16 +1206,14 @@ void main() {
     });
     test('Serialisation - Valid payload', () {
       // Publish ack msg with message identifier 4
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+      final expected = typed.Uint8Buffer(4);
       expected[0] = 0x40;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
-      final MqttPublishAckMessage msg =
-          MqttPublishAckMessage().withMessageIdentifier(4);
+      final msg = MqttPublishAckMessage().withMessageIdentifier(4);
       print('Publish Ack - Valid payload::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1256,16 +1226,16 @@ void main() {
     test('Deserialisation - Valid payload', () {
       // Message Specs________________
       // <40><02><00><04> (Pub complete for Message ID 4)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x70,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish Complete - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish complete message.
       expect(baseMessage, const TypeMatcher<MqttPublishCompleteMessage>());
@@ -1277,16 +1247,14 @@ void main() {
     });
     test('Serialisation - Valid payload', () {
       // Publish complete msg with message identifier 4
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+      final expected = typed.Uint8Buffer(4);
       expected[0] = 0x70;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
-      final MqttPublishCompleteMessage msg =
-          MqttPublishCompleteMessage().withMessageIdentifier(4);
+      final msg = MqttPublishCompleteMessage().withMessageIdentifier(4);
       print('Publish Complete - Valid payload::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1299,16 +1267,16 @@ void main() {
     test('Deserialisation - Valid payload', () {
       // Message Specs________________
       // <40><02><00><04> (Pub Received for Message ID 4)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x50,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish Received - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish received message.
       expect(baseMessage, const TypeMatcher<MqttPublishReceivedMessage>());
@@ -1320,16 +1288,14 @@ void main() {
     });
     test('Serialisation - Valid payload', () {
       // Publish complete msg with message identifier 4
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+      final expected = typed.Uint8Buffer(4);
       expected[0] = 0x50;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
-      final MqttPublishReceivedMessage msg =
-          MqttPublishReceivedMessage().withMessageIdentifier(4);
+      final msg = MqttPublishReceivedMessage().withMessageIdentifier(4);
       print('Publish Received - Valid payload::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1342,16 +1308,16 @@ void main() {
     test('Deserialisation - Valid payload', () {
       // Message Specs________________
       // <40><02><00><04> (Pub Release for Message ID 4)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x60,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Publish Release - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish release message.
       expect(baseMessage, const TypeMatcher<MqttPublishReleaseMessage>());
@@ -1363,16 +1329,14 @@ void main() {
     });
     test('Serialisation - Valid payload', () {
       // Publish complete msg with message identifier 4
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+      final expected = typed.Uint8Buffer(4);
       expected[0] = 0x62;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
-      final MqttPublishReleaseMessage msg =
-          MqttPublishReleaseMessage().withMessageIdentifier(4);
+      final msg = MqttPublishReleaseMessage().withMessageIdentifier(4);
       print('Publish Release - Valid payload::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1385,7 +1349,7 @@ void main() {
     test('Deserialisation - Single topic', () {
       // Message Specs________________
       // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x09,
         0x00,
@@ -1398,10 +1362,10 @@ void main() {
         'd'.codeUnitAt(0),
         0x00
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Subscribe - Single topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
@@ -1413,7 +1377,7 @@ void main() {
     test('Deserialisation - Multi topic', () {
       // Message Specs________________
       // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x10,
         0x00,
@@ -1433,10 +1397,10 @@ void main() {
         'k'.codeUnitAt(0),
         0x00
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Subscribe - Multi topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeMessage>());
@@ -1450,7 +1414,7 @@ void main() {
     test('Deserialisation - Single topic at least once Qos', () {
       // Message Specs________________
       // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x09,
         0x00,
@@ -1463,10 +1427,10 @@ void main() {
         'd'.codeUnitAt(0),
         0x01
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe - Single topic at least once Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
@@ -1479,7 +1443,7 @@ void main() {
     test('Deserialisation - Multi topic at least once Qos', () {
       // Message Specs________________
       // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x10,
         0x00,
@@ -1499,10 +1463,10 @@ void main() {
         'k'.codeUnitAt(0),
         0x01
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe - Multi topic at least once Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
@@ -1517,7 +1481,7 @@ void main() {
     test('Deserialisation - Single topic exactly once Qos', () {
       // Message Specs________________
       // <82><09><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x09,
         0x00,
@@ -1530,10 +1494,10 @@ void main() {
         'd'.codeUnitAt(0),
         0x02
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe - Single topic exactly once Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
@@ -1546,7 +1510,7 @@ void main() {
     test('Deserialisation - Multi topic exactly once Qos', () {
       // Message Specs________________
       // <82><10><00><02><00><04>fred<00> (subscribe to topic fred at qos 0)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0x82,
         0x10,
         0x00,
@@ -1566,10 +1530,10 @@ void main() {
         'k'.codeUnitAt(0),
         0x02
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe - Multi topic exactly once Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe message.
@@ -1582,7 +1546,7 @@ void main() {
       expect(bm.payload.subscriptions['mark'], MqttQos.exactlyOnce);
     });
     test('Serialisation - Single topic', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(11);
+      final expected = typed.Uint8Buffer(11);
       expected[0] = 0x8A;
       expected[1] = 0x09;
       expected[2] = 0x00;
@@ -1594,15 +1558,14 @@ void main() {
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
       expected[10] = 0x01;
-      final MqttMessage msg = MqttSubscribeMessage()
+      final msg = MqttSubscribeMessage()
           .toTopic('fred')
           .atQos(MqttQos.atLeastOnce)
           .withMessageIdentifier(2)
           .expectAcknowledgement()
           .isDuplicate();
       print('Subscribe - Single topic::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1616,7 +1579,7 @@ void main() {
       expect(actual[9], expected[9]); // d
     });
     test('Serialisation - multi topic', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(18);
+      final expected = typed.Uint8Buffer(18);
       expected[0] = 0x82;
       expected[1] = 0x10;
       expected[2] = 0x00;
@@ -1635,7 +1598,7 @@ void main() {
       expected[15] = 'r'.codeUnitAt(0);
       expected[16] = 'k'.codeUnitAt(0);
       expected[17] = 0x02;
-      final MqttMessage msg = MqttSubscribeMessage()
+      final msg = MqttSubscribeMessage()
           .toTopic('fred')
           .atQos(MqttQos.atLeastOnce)
           .toTopic('mark')
@@ -1643,8 +1606,7 @@ void main() {
           .withMessageIdentifier(3)
           .expectAcknowledgement();
       print('Subscribe - multi topic::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1666,13 +1628,13 @@ void main() {
       expect(actual[17], expected[17]); // Qos (ExactlyOnce)
     });
     test('Add subscription over existing subscription', () {
-      final MqttSubscribeMessage msg = MqttSubscribeMessage();
+      final msg = MqttSubscribeMessage();
       msg.payload.addSubscription('A/Topic', MqttQos.atMostOnce);
       msg.payload.addSubscription('A/Topic', MqttQos.atLeastOnce);
       expect(msg.payload.subscriptions['A/Topic'], MqttQos.atLeastOnce);
     });
     test('Clear subscription', () {
-      final MqttSubscribeMessage msg = MqttSubscribeMessage();
+      final msg = MqttSubscribeMessage();
       msg.payload.addSubscription('A/Topic', MqttQos.atMostOnce);
       msg.payload.clearSubscriptions();
       expect(msg.payload.subscriptions.length, 0);
@@ -1683,11 +1645,11 @@ void main() {
     test('Deserialisation - Single Qos at most once', () {
       // Message Specs________________
       // <90><03><00><02><00>
-      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x00];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x00];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe Ack - Single Qos at most once::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
@@ -1699,11 +1661,11 @@ void main() {
     test('Deserialisation - Single Qos at least once', () {
       // Message Specs________________
       // <90><03><00><02><01>
-      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x01];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x01];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe Ack - Single Qos at least once::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
@@ -1715,11 +1677,11 @@ void main() {
     test('Deserialisation - Single Qos exactly once', () {
       // Message Specs________________
       // <90><03><00><02><02>
-      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x02];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x02];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(
           'Subscribe Ack - Single Qos exactly once::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
@@ -1731,11 +1693,11 @@ void main() {
     test('Deserialisation - Single Qos failure', () {
       // Message Specs________________
       // <90><03><00><02><0x80>
-      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x80];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x80];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
@@ -1746,11 +1708,11 @@ void main() {
     test('Deserialisation - Single Qos reserved1', () {
       // Message Specs________________
       // <90><03><00><02><0x55>
-      final List<int> sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x55];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x03, 0x00, 0x02, 0x55];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Subscribe Ack - Single Qos failure::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
@@ -1761,19 +1723,11 @@ void main() {
     test('Deserialisation - Multi Qos', () {
       // Message Specs________________
       // <90><03><00><02><00> <01><02>
-      final List<int> sampleMessage = <int>[
-        0x90,
-        0x05,
-        0x00,
-        0x02,
-        0x0,
-        0x01,
-        0x02
-      ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final sampleMessage = <int>[0x90, 0x05, 0x00, 0x02, 0x0, 0x01, 0x02];
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Subscribe Ack - multi Qos::${baseMessage.toString()}');
       // Check that the message was correctly identified as a subscribe ack message.
       expect(baseMessage, const TypeMatcher<MqttSubscribeAckMessage>());
@@ -1784,18 +1738,17 @@ void main() {
       expect(bm.payload.qosGrants[2], MqttQos.exactlyOnce);
     });
     test('Serialisation - Single Qos at most once', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(5);
+      final expected = typed.Uint8Buffer(5);
       expected[0] = 0x90;
       expected[1] = 0x03;
       expected[2] = 0x00;
       expected[3] = 0x02;
       expected[4] = 0x00;
-      final MqttMessage msg = MqttSubscribeAckMessage()
+      final msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atMostOnce);
       print('Subscribe Ack - Single Qos at most once::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1804,18 +1757,17 @@ void main() {
       expect(actual[4], expected[4]); // QOS
     });
     test('Serialisation - Single Qos at least once', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(5);
+      final expected = typed.Uint8Buffer(5);
       expected[0] = 0x90;
       expected[1] = 0x03;
       expected[2] = 0x00;
       expected[3] = 0x02;
       expected[4] = 0x01;
-      final MqttMessage msg = MqttSubscribeAckMessage()
+      final msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atLeastOnce);
       print('Subscribe Ack - Single Qos at least once::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1824,18 +1776,17 @@ void main() {
       expect(actual[4], expected[4]); // QOS
     });
     test('Serialisation - Single Qos exactly once', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(5);
+      final expected = typed.Uint8Buffer(5);
       expected[0] = 0x90;
       expected[1] = 0x03;
       expected[2] = 0x00;
       expected[3] = 0x02;
       expected[4] = 0x02;
-      final MqttMessage msg = MqttSubscribeAckMessage()
+      final msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.exactlyOnce);
       print('Subscribe Ack - Single Qos exactly once::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1844,7 +1795,7 @@ void main() {
       expect(actual[4], expected[4]); // QOS
     });
     test('Serialisation - Multi QOS', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(7);
+      final expected = typed.Uint8Buffer(7);
       expected[0] = 0x90;
       expected[1] = 0x05;
       expected[2] = 0x00;
@@ -1852,14 +1803,13 @@ void main() {
       expected[4] = 0x00;
       expected[5] = 0x01;
       expected[6] = 0x02;
-      final MqttMessage msg = MqttSubscribeAckMessage()
+      final msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atMostOnce)
           .addQosGrant(MqttQos.atLeastOnce)
           .addQosGrant(MqttQos.exactlyOnce);
       print('Subscribe Ack - Multi QOS::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1870,7 +1820,7 @@ void main() {
       expect(actual[6], expected[6]); // QOS 3 (Exactly)
     });
     test('Serialisation - Clear grants', () {
-      final MqttSubscribeAckMessage msg = MqttSubscribeAckMessage()
+      final msg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
           .addQosGrant(MqttQos.atMostOnce)
           .addQosGrant(MqttQos.atLeastOnce)
@@ -1885,7 +1835,7 @@ void main() {
     test('Deserialisation - Single topic', () {
       // Message Specs________________
       // <A2><08><00><03><00><04>fred (Unsubscribe to topic fred)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0xA2,
         0x08,
         0x00,
@@ -1897,10 +1847,10 @@ void main() {
         'e'.codeUnitAt(0),
         'd'.codeUnitAt(0),
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Unsubscribe - Single topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as an unsubscribe message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
@@ -1911,7 +1861,7 @@ void main() {
     test('Deserialisation - Multi topic', () {
       // Message Specs________________
       // <A2><0E><00><03><00><04>fred<00><04>mark (Unsubscribe to topic fred, mark)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0xA2,
         0x0E,
         0x00,
@@ -1929,10 +1879,10 @@ void main() {
         'r'.codeUnitAt(0),
         'k'.codeUnitAt(0),
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Unsubscribe - Multi topic::${baseMessage.toString()}');
       // Check that the message was correctly identified as an unsubscribe message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeMessage>());
@@ -1942,8 +1892,8 @@ void main() {
       expect(bm.payload.subscriptions.contains('mark'), isTrue);
     });
     test('Serialisation - Single topic', () {
-      Protocol.version = Constants.mqttV31ProtocolVersion;
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(10);
+      Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
+      final expected = typed.Uint8Buffer(10);
       expected[0] = 0xAA;
       expected[1] = 0x08;
       expected[2] = 0x00;
@@ -1954,14 +1904,13 @@ void main() {
       expected[7] = 'r'.codeUnitAt(0);
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
-      final MqttMessage msg = MqttUnsubscribeMessage()
+      final msg = MqttUnsubscribeMessage()
           .fromTopic('fred')
           .withMessageIdentifier(3)
           .expectAcknowledgement()
           .isDuplicate();
       print('Unsubscribe - Single topic::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -1975,8 +1924,8 @@ void main() {
       expect(actual[9], expected[9]); // d
     });
     test('Serialisation V311 - Single topic', () {
-      Protocol.version = Constants.mqttV311ProtocolVersion;
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(10);
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final expected = typed.Uint8Buffer(10);
       expected[0] = 0xA2; // With V3.1.1 the header first byte changes to 162
       expected[1] = 0x08;
       expected[2] = 0x00;
@@ -1987,14 +1936,13 @@ void main() {
       expected[7] = 'r'.codeUnitAt(0);
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
-      final MqttMessage msg = MqttUnsubscribeMessage()
+      final msg = MqttUnsubscribeMessage()
           .fromTopic('fred')
           .withMessageIdentifier(3)
           .expectAcknowledgement()
           .isDuplicate();
       print('Unsubscribe - Single topic::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -2008,7 +1956,7 @@ void main() {
       expect(actual[9], expected[9]); // d
     });
     test('Serialisation - multi topic', () {
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(16);
+      final expected = typed.Uint8Buffer(16);
       expected[0] = 0xA2;
       expected[1] = 0x0E;
       expected[2] = 0x00;
@@ -2025,14 +1973,13 @@ void main() {
       expected[13] = 'a'.codeUnitAt(0);
       expected[14] = 'r'.codeUnitAt(0);
       expected[15] = 'k'.codeUnitAt(0);
-      final MqttMessage msg = MqttUnsubscribeMessage()
+      final msg = MqttUnsubscribeMessage()
           .fromTopic('fred')
           .fromTopic('mark')
           .withMessageIdentifier(3)
           .expectAcknowledgement();
       print('Unubscribe - multi topic::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -2052,7 +1999,7 @@ void main() {
       expect(actual[15], expected[15]); // k
     });
     test('Clear subscription', () {
-      final MqttUnsubscribeMessage msg = MqttUnsubscribeMessage();
+      final msg = MqttUnsubscribeMessage();
       msg.payload.addSubscription('A/Topic');
       msg.payload.clearSubscriptions();
       expect(msg.payload.subscriptions.length, 0);
@@ -2063,16 +2010,16 @@ void main() {
     test('Deserialisation - Valid payload', () {
       // Message Specs________________
       // <B0><02><00><04> (Subscribe ack for message id 4)
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0xB0,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Unsubscribe Ack - Valid payload::${baseMessage.toString()}');
       // Check that the message was correctly identified as a publish release message.
       expect(baseMessage, const TypeMatcher<MqttUnsubscribeAckMessage>());
@@ -2084,16 +2031,14 @@ void main() {
     });
     test('Serialisation - Valid payload', () {
       // Publish complete msg with message identifier 4
-      final typed.Uint8Buffer expected = typed.Uint8Buffer(4);
+      final expected = typed.Uint8Buffer(4);
       expected[0] = 0xB0;
       expected[1] = 0x02;
       expected[2] = 0x0;
       expected[3] = 0x4;
-      final MqttUnsubscribeAckMessage msg =
-          MqttUnsubscribeAckMessage().withMessageIdentifier(4);
+      final msg = MqttUnsubscribeAckMessage().withMessageIdentifier(4);
       print('Unsubscribe Ack - Valid payload::${msg.toString()}');
-      final typed.Uint8Buffer actual =
-          MessageSerializationHelper.getMessageBytes(msg);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], expected[1]); // remaining length
@@ -2104,18 +2049,18 @@ void main() {
 
   group('Unimplemented', () {
     test('Deserialisation - Invalid payload', () {
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         0xFF,
         0x02,
         0x00,
         0x04,
       ];
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      bool raised = false;
+      final byteBuffer = MqttByteBuffer(buff);
+      var raised = false;
       try {
-        final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+        final baseMessage = MqttMessage.createFrom(byteBuffer);
         print(baseMessage.toString());
       } on Exception {
         raised = true;
@@ -2126,7 +2071,7 @@ void main() {
 
   group('Issues', () {
     test('81 - extended UTF8 characters must use version V3.1.1', () {
-      final List<int> sampleMessage = <int>[
+      final sampleMessage = <int>[
         48,
         216,
         2,
@@ -2475,11 +2420,11 @@ void main() {
         125,
         125
       ];
-      Protocol.version = Constants.mqttV311ProtocolVersion;
-      final typed.Uint8Buffer buff = typed.Uint8Buffer();
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
-      final MqttByteBuffer byteBuffer = MqttByteBuffer(buff);
-      final MqttMessage baseMessage = MqttMessage.createFrom(byteBuffer);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
       print(baseMessage);
     });
   });

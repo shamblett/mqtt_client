@@ -7,12 +7,11 @@
 
 part of mqtt_client;
 
-// ignore: avoid_classes_with_only_static_members
 /// Protocol selection helper class, protocol defaults V3.1
 class Protocol {
   /// Version
-  static int version = Constants.mqttV31ProtocolVersion;
+  static int version = MqttClientConstants.mqttV31ProtocolVersion;
 
   /// Name
-  static String name = Constants.mqttV31ProtocolName;
+  static String name = MqttClientConstants.mqttV31ProtocolName;
 }

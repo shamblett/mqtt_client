@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
-const String clientId = '5bc71e3ea74ad804cc04a856';
-const String token = '2844865:b08b650bdef3774426b2b718f6ab2d6e';
-const String id = '2844865';
+const clientId = '5bc71e3ea74ad804cc04a856';
+const token = '2844865:b08b650bdef3774426b2b718f6ab2d6e';
+const id = '2844865';
 
 void main() async {
   Mqtt.init();
@@ -15,7 +16,7 @@ void main() async {
   print('===> Connection Result: $val');
   if (val != null) {
     Mqtt.subscribe();
-    for (int i = 0; i <= 10; i++) {
+    for (var i = 0; i <= 10; i++) {
       await Mqtt.subAndPub();
       print('Publish Attempt $i ......\n');
       await MqttUtilities.asyncSleep(2);
@@ -24,10 +25,10 @@ void main() async {
 }
 
 class Mqtt {
-  static MqttClient client;
+  static MqttServerClient client;
 
-  static init() {
-    client = MqttClient('wss://m4.gap.im/mqtt', clientId);
+  static void init() {
+    client = MqttServerClient('wss://m4.gap.im/mqtt', clientId);
     client.setProtocolV311();
     client.keepAlivePeriod = 60;
     client.port = 443;
@@ -59,15 +60,15 @@ class Mqtt {
     }
   }
 
-  static subscribe() {
-    client.subscribe('u/$id', MqttQos.exactlyOnce);
+  static dynamic subscribe() {
+    return client.subscribe('u/$id', MqttQos.exactlyOnce);
   }
 
-  static subAndPub() async {
+  static void subAndPub() async {
     // await MqttUtilities.asyncSleep(1);
 
     // This Works!
-    MqttClientPayloadBuilder builder1 = MqttClientPayloadBuilder();
+    var builder1 = MqttClientPayloadBuilder();
     builder1.addString(
       json.encode(
         {

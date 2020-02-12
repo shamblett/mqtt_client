@@ -5,12 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
-
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
+part of mqtt_server_client;
 
 /// The MQTT secure connection class
 class MqttSecureConnection extends MqttConnection {
@@ -35,13 +30,11 @@ class MqttSecureConnection extends MqttConnection {
   /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
-    final Completer<MqttClientConnectionStatus> completer =
-        Completer<MqttClientConnectionStatus>();
+    final completer = Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttSecureConnection::connect');
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)
-          // ignore: avoid_types_on_closure_parameters
           .then((SecureSocket socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;
@@ -55,20 +48,19 @@ class MqttSecureConnection extends MqttConnection {
         completer.completeError(e);
       });
     } on SocketException catch (e) {
-      final String message =
+      final message =
           'MqttSecureConnection::The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
-      final String message =
+      final message =
           'MqttSecureConnection::Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on TlsException catch (e) {
-      final String message =
-          'MqttSecureConnection::TLS exception raised on secure '
+      final message = 'MqttSecureConnection::TLS exception raised on secure '
           'connection. Error is ${e.toString()}';
       throw NoConnectionException(message);
     }

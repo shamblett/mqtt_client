@@ -8,12 +8,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -28,7 +23,7 @@ Future<int> main() async {
   /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
   /// of 1883 is used.
   /// If you want to use websockets rather than TCP see below.
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+  final client = MqttServerClient('test.mosquitto.org', '');
 
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
   /// for details.
@@ -50,7 +45,7 @@ Future<int> main() async {
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueIdWildcard')
       .keepAliveFor(30) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
@@ -81,9 +76,9 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription or two, note these may change/cease to exist on the broker
-  const String topic = 'test/#'; // Wildcard topic
+  const topic = 'test/#'; // Wildcard topic
   client.subscribe(topic, MqttQos.atMostOnce);
-  const String topic1 = 'ebcon/#'; // Wildcard topic
+  const topic1 = 'ebcon/#'; // Wildcard topic
   client.subscribe(topic1, MqttQos.atMostOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
@@ -91,7 +86,7 @@ Future<int> main() async {
   // ignore: avoid_types_on_closure_parameters
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     /// The above may seem a little convoluted for users only interested in the

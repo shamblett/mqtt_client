@@ -15,6 +15,19 @@ abstract class IMqttConnectionHandler {
   /// The connection status
   MqttClientConnectionStatus get connectionStatus;
 
+  /// Successful connection callback
+  ConnectCallback onConnected;
+
+  /// Unsolicited disconnection callback
+  DisconnectCallback onDisconnected;
+
+  /// Callback function to handle bad certificate. if true, ignore the error.
+  bool Function(dynamic certificate) onBadCertificate;
+
+  /// Runs the disconnection process to stop communicating
+  /// with a message broker.
+  MqttConnectionState disconnect();
+
   /// Closes a connection.
   void close();
 

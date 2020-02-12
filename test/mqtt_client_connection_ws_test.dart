@@ -6,32 +6,27 @@
  */
 
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-
+@TestOn('vm')
 void main() {
   // Test wide variables
-  final MockBrokerWs brokerWs = MockBrokerWs();
-  const String mockBrokerAddressWs = 'ws://localhost/ws';
-  const String mockBrokerAddressWsNoScheme = 'localhost.com';
-  const String mockBrokerAddressWsBad = '://localhost.com';
-  const int mockBrokerPortWs = 8090;
-  const String testClientId = 'syncMqttTests';
+  final brokerWs = MockBrokerWs();
+  const mockBrokerAddressWs = 'ws://localhost/ws';
+  const mockBrokerAddressWsNoScheme = 'localhost.com';
+  const mockBrokerAddressWsBad = '://localhost.com';
+  const mockBrokerPortWs = 8090;
+  const testClientId = 'syncMqttTests';
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
       try {
-        final events.EventBus clientEventBus = events.EventBus();
-        final SynchronousMqttConnectionHandler ch =
-            SynchronousMqttConnectionHandler(clientEventBus);
+        final clientEventBus = events.EventBus();
+        final ch = SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -45,9 +40,9 @@ void main() {
     });
 
     test('Web Protocol string', () {
-      List<String> protocols = MqttWs2Connection.protocolsMultipleDefault;
+      var protocols = MqttClientConstants.protocolsMultipleDefault;
       expect(protocols.join(' ').trim(), 'mqtt mqttv3.1 mqttv3.11');
-      protocols = MqttWs2Connection.protocolsSingleDefault;
+      protocols = MqttClientConstants.protocolsSingleDefault;
       expect(protocols.join(' ').trim(), 'mqtt');
       protocols = <String>[];
       expect(protocols.join(' ').trim(), '');
@@ -55,9 +50,8 @@ void main() {
 
     test('Invalid URL - bad scheme', () async {
       try {
-        final events.EventBus clientEventBus = events.EventBus();
-        final SynchronousMqttConnectionHandler ch =
-            SynchronousMqttConnectionHandler(clientEventBus);
+        final clientEventBus = events.EventBus();
+        final ch = SynchronousMqttConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -69,21 +63,21 @@ void main() {
             'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
-  }, skip: false);
+  });
 
   group('Connection Keep Alive - Mock broker WS', () {
     test('Successful response WS', () async {
-      int expectRequest = 0;
+      var expectRequest = 0;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
-        final MqttConnectAckMessage ack = MqttConnectAckMessage()
+        final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         brokerWs.sendMessage(ack);
       }
 
       void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
-        final MqttByteBuffer headerStream = MqttByteBuffer(messageArrived);
-        final MqttHeader header = MqttHeader.fromByteBuffer(headerStream);
+        final headerStream = MqttByteBuffer(messageArrived);
+        final header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
           print(
               'WS Connection Keep Alive - Successful response - Ping Request received $expectRequest');
@@ -93,9 +87,8 @@ void main() {
       }
 
       await brokerWs.start();
-      final events.EventBus clientEventBus = events.EventBus();
-      final SynchronousMqttConnectionHandler ch =
-          SynchronousMqttConnectionHandler(clientEventBus);
+      final clientEventBus = events.EventBus();
+      final ch = SynchronousMqttConnectionHandler(clientEventBus);
       MqttLogger.loggingOn = true;
       ch.useWebSocket = true;
       ch.websocketProtocols = <String>['SJHprotocol'];
@@ -104,17 +97,17 @@ void main() {
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, MqttConnectionState.connected);
       brokerWs.setMessageHandler = messageHandlerPingRequest;
-      final MqttConnectionKeepAlive ka = MqttConnectionKeepAlive(ch, 2);
+      final ka = MqttConnectionKeepAlive(ch, 2);
       print(
           'WS Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
           'WS Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
-      final Stopwatch stopwatch = Stopwatch()..start();
+      final stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('WS Connection Keep Alive - Successful response - Elapsed time '
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');
       ka.stop();
       ch.close();
     });
-  }, skip: false);
+  });
 }

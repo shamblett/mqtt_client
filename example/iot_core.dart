@@ -9,35 +9,29 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:typed_data/typed_data.dart' as typed;
-
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
 
 /// An example of connecting to the google iot-core MQTT bridge server and publishing to a devices topic.
 /// Full setup instructions can be found here https://cloud.google.com/iot/docs/how-tos/mqtt-bridge, please read this
 /// before setting up and running this example.
 Future<int> main() async {
   // Create and connect the client
-  const String url =
-      'mqtt.googleapis.com'; // The google iot-core MQTT bridge server
-  const int port = 443; // You can also use 8883 if you so wish
+  const url = 'mqtt.googleapis.com'; // The google iot-core MQTT bridge server
+  const port = 443; // You can also use 8883 if you so wish
   // The client id is a path to your device, example given below, note this contravenes the 23 character client id length
   // from the MQTT specification, the mqtt_client allows this, if exceeded and logging is turned on  a warning is given.
-  const String clientId =
+  const clientId =
       'projects/warm-actor-356/locations/europe-west1/registries/home-sensors/devices/dummy-sensor';
   // User name is not used and can be set to anything, it is needed because the password field contains the encoded JWT token for the device
-  const String username = 'unused';
+  const username = 'unused';
   // Password contains the encoded JWT token, example below, the JWT token when generated should be encoded with the private key coresponding
   // to the public key you have set for your device.
-  const String password =
+  const password =
       'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDcyMTM0NzMsImlhdCI6MTUwNzIwOTg3MywiYXVkIjoid2FybS1hY3Rvci0zNTYifQ.NGLiu9svhI6BhGeodGfbBQGGRjiX4j-9bxQdWWYa_2LEjCHdbmDTQC6eHoDHf6nTMMADiQa3sKqD9cZ1gtdT-wfAzEqvJX1Hy5w0Ex8jqe_qidS8Iwtj1TVsvnlXr6OPyHuwW9hAcuOFdlNIXYqDyXDSFl--qa7HS1zqXEy9FMbg20Y8xNSMk1MLG22i8STvYrQmNfm-ib47WayUojllgy2ukMee_N67G2bXq91U3gU0YhlDX4_INjwSTaAtJ4p70Vvd21NFsVBaf0FdJAix5Zsdk165XXjLU6FsfOAzcdeiazzlPFTC-HvQ1eXz4BLn0AaMIFoOkwV9SgBuTdLX8IU3T2hKchtsNw4r5YJa8qw3hu-egsH8bHmSX1cVhjbdWHWihjOnJO_0ef8jWQ6K87Pwhjrc_mBaKo1REllvGV7bOgXoFXW2t1vnb4MtiC7ZpYo5bR9FUsbO_CVMNYHIld6YSmOeO6GCP7OF9kkhEeHGgIIFjsLiAQaqoTCm0EGTh8dTZoYnpv3mRrOw61BgTjPAFvP9OK0hDw4EWXwINoT1UTCQTXF1no_7TZn4wgy-Glx1RA_EGqgEuDSe77H5Oc0aQHj3c01mwlbHJxsmguhSWgdOdc1WPbXqYkJJhcQ-PUvCGuJL5Ut5500dBztdsYaVaRpReOstj0W-a2AF1nU';
   // Create the client
-  final MqttClient client = MqttClient(url, clientId);
+  final client = MqttServerClient(url, clientId);
   // Set the port
   client.port = port;
   // Set secure
@@ -45,9 +39,8 @@ Future<int> main() async {
   // Set the security context as you need, note this is the standard Dart SecurityContext class.
   // If this is incorrect the TLS handshake will abort and a Handshake exception will be raised,
   // no connect ack message will be received and the broker will disconnect.
-  final String currDir =
-      '${path.current}${path.separator}example${path.separator}';
-  final SecurityContext context = SecurityContext.defaultContext;
+  final currDir = '${path.current}${path.separator}example${path.separator}';
+  final context = SecurityContext.defaultContext;
   context.setTrustedCertificates(currDir + path.join('pem', 'roots.pem'));
   // If needed set the private key file path and the optional passphrase and any other supported security features
   // Note that for flutter users the parameters above can be set in byte format rather than file paths.
@@ -71,9 +64,9 @@ Future<int> main() async {
   }
   // Troubleshooting tips can be found here https://cloud.google.com/iot/docs/troubleshooting
   // Publish to the topic you have associated with your device
-  const String topic = '/devices/dummy-sensor/events';
+  const topic = '/devices/dummy-sensor/events';
   // Use a raw buffer here, see MqttClientPayloadBuilder for payload building assistance.
-  final typed.Uint8Buffer buff = typed.Uint8Buffer(4);
+  final buff = typed.Uint8Buffer(4);
   buff[0] = 'a'.codeUnitAt(0);
   buff[1] = 'b'.codeUnitAt(0);
   buff[2] = 'c'.codeUnitAt(0);

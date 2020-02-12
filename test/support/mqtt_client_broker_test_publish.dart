@@ -7,17 +7,11 @@
 import 'dart:async';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
-
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_types_on_closure_parameters
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
   // Create and connect the client
-  final MqttClient client = MqttClient('iot.eclipse.org', 'SJHMQTTClient');
+  final client = MqttServerClient('iot.eclipse.org', 'SJHMQTTClient');
   client.logging(on: true);
   await client.connect();
   if (client.connectionStatus.state == MqttConnectionState.connected) {
@@ -28,8 +22,8 @@ Future<int> main() async {
     client.disconnect();
   }
   // Publish a known topic
-  const String topic = 'Dart/SJH/mqtt_client';
-  final typed.Uint8Buffer buff = typed.Uint8Buffer(5);
+  const topic = 'Dart/SJH/mqtt_client';
+  final buff = typed.Uint8Buffer(5);
   buff[0] = 'h'.codeUnitAt(0);
   buff[1] = 'e'.codeUnitAt(0);
   buff[2] = 'l'.codeUnitAt(0);

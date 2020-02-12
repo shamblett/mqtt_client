@@ -8,6 +8,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
@@ -30,7 +31,7 @@ String getHostname() {
   }
 }
 
-final MqttClient client = MqttClient(getHostname(), '');
+final client = MqttServerClient(getHostname(), '');
 
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -58,7 +59,7 @@ Future<int> main() async {
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
       .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
@@ -71,7 +72,7 @@ Future<int> main() async {
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
-  MqttClientConnectionStatus status = MqttClientConnectionStatus();
+  var status = MqttClientConnectionStatus();
   try {
     status = await client.connect();
   } on Exception catch (e) {

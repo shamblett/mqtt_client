@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('localhost', '');
+  final client = MqttServerClient('localhost', '');
   client.logging(on: false);
   client.keepAlivePeriod = 60;
 
@@ -12,7 +13,7 @@ Future<int> main() async {
 
   client.onSubscribed = onSubscribed;
 
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_spl_id')
       .keepAliveFor(60) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
@@ -38,12 +39,12 @@ Future<int> main() async {
     exit(-1);
   }
 
-  const String topic = 'com/spl/mqtt/connect'; // Not a wildcard topic
+  const topic = 'com/spl/mqtt/connect'; // Not a wildcard topic
   client.subscribe(topic, MqttQos.atLeastOnce);
 
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     print(
@@ -53,7 +54,7 @@ Future<int> main() async {
 
   print('EXAMPLE::Publishing our topic');
 
-  final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
+  final builder = MqttClientPayloadBuilder();
   builder.addString('Hello from sql connect');
 
   /// Subscribe to it
@@ -74,7 +75,7 @@ Future<int> main() async {
   client.subscribe(topic, MqttQos.exactlyOnce);
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     print(

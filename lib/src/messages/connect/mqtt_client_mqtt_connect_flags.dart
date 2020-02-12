@@ -7,9 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
   /// Initializes a new instance of the MqttConnectFlags class.
@@ -59,7 +56,7 @@ class MqttConnectFlags {
 
   /// Reads the connect flags from the underlying stream.
   void readFrom(MqttByteBuffer stream) {
-    final int connectFlagsByte = stream.readByte();
+    final connectFlagsByte = stream.readByte();
 
     reserved1 = (connectFlagsByte & 1) == 1;
     cleanStart = (connectFlagsByte & 2) == 2;

@@ -7,22 +7,12 @@
 
 part of mqtt_client;
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// General library wide utilties
 class MqttUtilities {
   /// Sleep function that allows asynchronous activity to continue.
   /// Time units are seconds
   static Future<void> asyncSleep(int seconds) =>
       Future<void>.delayed(Duration(seconds: seconds));
-
-  /// Sleep function that block asynchronous activity.
-  /// Time units are seconds
-  static void syncSleep(int seconds) {
-    sleep(Duration(seconds: seconds));
-  }
 
   /// Qos conversion, always use this to get a Qos
   /// enumeration from a value

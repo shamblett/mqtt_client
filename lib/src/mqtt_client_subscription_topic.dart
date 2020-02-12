@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_types_on_closure_parameters
-
 /// Implementation of a Subscription topic that performs additional validations
 /// of topics that are subscribed to.
 class SubscriptionTopic extends Topic {
@@ -29,7 +25,7 @@ class SubscriptionTopic extends Topic {
     // If any fragment contains a wildcard or a multi wildcard
     // but is greater than 1 character long, then it's an error -
     // wildcards must appear by themselves.
-    final bool invalidFragment = topicInstance.topicFragments.any(
+    final invalidFragment = topicInstance.topicFragments.any(
         (String fragment) =>
             (fragment.contains(Topic.multiWildcard) ||
                 fragment.contains(Topic.wildcard)) &&
@@ -75,15 +71,15 @@ class SubscriptionTopic extends Topic {
       return true;
     }
     // no match yet so we need to check each fragment
-    for (int i = 0; i < topicFragments.length; i++) {
-      final String lhsFragment = topicFragments[i];
+    for (var i = 0; i < topicFragments.length; i++) {
+      final lhsFragment = topicFragments[i];
       // If we've reached a multi wildcard in the lhs rawTopic,
       // we have a match.
       // (this is the mqtt spec rule finance matches finance or finance/#)
       if (lhsFragment == Topic.multiWildcard) {
         return true;
       }
-      final bool isLhsWildcard = lhsFragment == Topic.wildcard;
+      final isLhsWildcard = lhsFragment == Topic.wildcard;
       // If we've reached a wildcard match but the matchee does
       // not have anything at this fragment level then it's not a match.
       // (this is the MQTT spec rule 'finance does not match finance/+'
@@ -93,7 +89,7 @@ class SubscriptionTopic extends Topic {
       // if lhs is not a wildcard we need to check whether the
       // two fragments match each other.
       if (!isLhsWildcard) {
-        final String rhsFragment = matcheeTopic.topicFragments[i];
+        final rhsFragment = matcheeTopic.topicFragments[i];
         // If the hs fragment is not wildcard then we need an exact match
         if (lhsFragment != rhsFragment) {
           return false;

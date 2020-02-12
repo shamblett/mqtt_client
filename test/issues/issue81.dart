@@ -8,9 +8,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('mqtt.hsl.fi', '8883');
+  final client = MqttServerClient('mqtt.hsl.fi', '8883');
 
   /// Version must be V3.1.1
   client.setProtocolV311();
@@ -33,7 +34,7 @@ Future<int> main() async {
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
-  MqttClientConnectionStatus status = MqttClientConnectionStatus();
+  var status = MqttClientConnectionStatus();
   try {
     status = await client.connect();
   } on Exception catch (e) {
@@ -53,14 +54,14 @@ Future<int> main() async {
   /// Ok, lets try a subscription
   print(
       'EXAMPLE::Subscribing to the /hfp/v1/journey/ongoing/+/+/+/2550/2/# topic');
-  const String topic = '/hfp/v1/journey/ongoing/+/+/+/2550/2/#';
+  const topic = '/hfp/v1/journey/ongoing/+/+/+/2550/2/#';
   client.subscribe(topic, MqttQos.atMostOnce);
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');

@@ -6,13 +6,7 @@
  * 01/19/2019 : Don Edvalson - Added this alternate websocket class to work around AWS deficiencies.
  */
 
-part of mqtt_client;
-
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: avoid_types_on_closure_parameters
+part of mqtt_server_client;
 
 class _DetachedSocket extends Stream<Uint8List> implements Socket {
   _DetachedSocket(this._socket, this._subscription);
@@ -108,19 +102,8 @@ class MqttWs2Connection extends MqttConnection {
     connect(server, port);
   }
 
-  /// The default websocket subprotocol list
-  static const List<String> protocolsMultipleDefault = <String>[
-    'mqtt',
-    'mqttv3.1',
-    'mqttv3.11'
-  ];
-
-  /// The default websocket subprotocol list for brokers who expect
-  /// this field to be a single entry.
-  static const List<String> protocolsSingleDefault = <String>['mqtt'];
-
   /// The websocket subprotocol list
-  List<String> protocols = protocolsMultipleDefault;
+  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
 
   /// The security context for secure usage
   SecurityContext context;
@@ -130,28 +113,26 @@ class MqttWs2Connection extends MqttConnection {
   /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
-    final Completer<MqttClientConnectionStatus> completer =
-        Completer<MqttClientConnectionStatus>();
+    final completer = Completer<MqttClientConnectionStatus>();
     MqttLogger.log('MqttWs2Connection::connect');
     Uri uri;
     try {
       uri = Uri.parse(server);
     } on Exception {
-      final String message =
+      final message =
           'MqttWsConnection::The URI supplied for the WS2 connection '
           'is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'wss') {
-      final String message =
-          'MqttWsConnection::The URI supplied for the WS2 has an '
+      final message = 'MqttWsConnection::The URI supplied for the WS2 has an '
           'incorrect scheme - $server';
       throw NoConnectionException(message);
     }
     if (port != null) {
       uri = uri.replace(port: port);
     }
-    final String uriString = uri.toString();
+    final uriString = uri.toString();
     MqttLogger.log(
         'MqttWs2Connection:: WS URL is $uriString, protocols are $protocols');
 
@@ -174,19 +155,18 @@ class MqttWs2Connection extends MqttConnection {
         });
       });
     } on SocketException catch (e) {
-      final String message =
-          'MqttWs2Connection::The connection to the message broker '
+      final message = 'MqttWs2Connection::The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
-      final String message =
+      final message =
           'MqttWs2Connection::Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on TlsException catch (e) {
-      final String message =
+      final message =
           'MqttWs2Connection::TLS exception raised on secure connection. '
           'Error is ${e.toString()}';
       throw NoConnectionException(message);
@@ -196,15 +176,15 @@ class MqttWs2Connection extends MqttConnection {
 
   Future<bool> _performWSHandshake(Socket socket, Uri uri) async {
     _response = '';
-    final Completer<bool> c = Completer<bool>();
-    const String endL = '\r\n';
-    final String path = '${uri.path}?${uri.query}';
-    final String host = '${uri.host}:${uri.port.toString()}';
-    final int now = DateTime.now().millisecondsSinceEpoch;
-    final String key = 'mqtt-$now';
-    final String key64 = base64.encode(utf8.encode(key));
+    final c = Completer<bool>();
+    const endL = '\r\n';
+    final path = '${uri.path}?${uri.query}';
+    final host = '${uri.host}:${uri.port.toString()}';
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final key = 'mqtt-$now';
+    final key64 = base64.encode(utf8.encode(key));
 
-    String request = 'GET $path HTTP/1.1 $endL';
+    var request = 'GET $path HTTP/1.1 $endL';
     request += 'Host: $host$endL';
     request += 'Upgrade: websocket$endL';
     request += 'Connection: Upgrade$endL';
@@ -214,15 +194,14 @@ class MqttWs2Connection extends MqttConnection {
     request += endL;
     socket.write(request);
     _subscription = socket.listen((Uint8List data) {
-      String s = String.fromCharCodes(data);
+      var s = String.fromCharCodes(data);
       s = s.replaceAll('\r', '');
       if (!_parseResponse(s, key64)) {
         c.complete(true);
       }
     }, onDone: () {
       _subscription.cancel();
-      const String message =
-          'MqttWs2Connection::TLS connection unexpectedly closed';
+      const message = 'MqttWs2Connection::TLS connection unexpectedly closed';
       throw NoConnectionException(message);
     });
     return c.future;
@@ -232,37 +211,37 @@ class MqttWs2Connection extends MqttConnection {
 String _response;
 bool _parseResponse(String resp, String key) {
   _response += resp;
-  final int bodyOffset = _response.indexOf('\n\n');
+  final bodyOffset = _response.indexOf('\n\n');
   // if we don't have a double newline yet we need to go back for more.
   if (bodyOffset < 0) {
     return true;
   }
-  final List<String> lines = _response.substring(0, bodyOffset).split('\n');
+  final lines = _response.substring(0, bodyOffset).split('\n');
   if (lines.isEmpty) {
     throw NoConnectionException(
         'MqttWs2Connection::server returned invalid response');
   }
   // split apart the status line
-  final List<String> status = lines[0].split(' ');
+  final status = lines[0].split(' ');
   if (status.length < 3) {
     throw NoConnectionException(
         'MqttWs2Connection::server returned malformed status line');
   }
   // make a map of the headers
-  final Map<String, String> headers = <String, String>{};
+  final headers = <String, String>{};
   lines.removeAt(0);
-  for (final String l in lines) {
-    final int space = l.indexOf(' ');
+  for (final l in lines) {
+    final space = l.indexOf(' ');
     if (space < 0) {
       throw NoConnectionException(
           'MqttWs2Connection::server returned malformed header line');
     }
     headers[l.substring(0, space - 1).toLowerCase()] = l.substring(space + 1);
   }
-  String body = '';
+  var body = '';
   // if we have a Content-Length key we can't stop till we read the body.
   if (headers.containsKey('content-length')) {
-    final int bodyLength = int.parse(headers['content-length']);
+    final bodyLength = int.parse(headers['content-length']);
     if (_response.length < bodyOffset + bodyLength + 2) {
       return true;
     }
@@ -298,10 +277,10 @@ bool _parseResponse(String resp, String key) {
   // then we check that the response is the same.
 
   // Do not change: https://tools.ietf.org/html/rfc6455#section-1.3
-  const String acceptSalt = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
+  const acceptSalt = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 
-  final Digest sha1Bytes = sha1.convert(utf8.encode(key + acceptSalt));
-  final String encodedSha1Bytes = base64.encode(sha1Bytes.bytes);
+  final sha1Bytes = sha1.convert(utf8.encode(key + acceptSalt));
+  final encodedSha1Bytes = base64.encode(sha1Bytes.bytes);
   if (encodedSha1Bytes != headers['sec-websocket-accept']) {
     throw NoConnectionException('MqttWs2Connection::handshake mismatch');
   }

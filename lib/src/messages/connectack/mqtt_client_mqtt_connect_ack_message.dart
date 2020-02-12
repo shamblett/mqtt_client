@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: cascade_invocations
-
 /// Message that indicates a connection acknowledgement.
 class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
@@ -48,7 +44,6 @@ class MqttConnectAckMessage extends MqttMessage {
   }
 
   /// Sets the return code of the Variable Header.
-  // ignore: avoid_returning_this
   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
     variableHeader.returnCode = returnCode;
     return this;
@@ -56,7 +51,7 @@ class MqttConnectAckMessage extends MqttMessage {
 
   @override
   String toString() {
-    final StringBuffer sb = StringBuffer();
+    final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
     return sb.toString();

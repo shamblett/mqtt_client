@@ -8,22 +8,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-
-// ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// A QOS2 publishing example, two QOS two topics are subscribed to and published in quick succession,
 /// tests QOS2 protocol handling.
 Future<int> main() async {
-  final MqttClient client = MqttClient('test.mosquitto.org', '');
+  final client = MqttServerClient('test.mosquitto.org', '');
   client.logging(on: true);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueIdQ2')
       .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
@@ -52,16 +47,16 @@ Future<int> main() async {
 
   /// Lets try our subscriptions
   print('EXAMPLE:: <<<< SUBCRIBE 1 >>>>');
-  const String topic1 = 'SJHTopic1'; // Not a wildcard topic
+  const topic1 = 'SJHTopic1'; // Not a wildcard topic
   client.subscribe(topic1, MqttQos.exactlyOnce);
   print('EXAMPLE:: <<<< SUBCRIBE 2 >>>>');
-  const String topic2 = 'SJHTopic2'; // Not a wildcard topic
+  const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
   // ignore: avoid_annotating_with_dynamic
   client.updates.listen((dynamic c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
@@ -77,12 +72,12 @@ Future<int> main() async {
         'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
   });
 
-  final MqttClientPayloadBuilder builder1 = MqttClientPayloadBuilder();
+  final builder1 = MqttClientPayloadBuilder();
   builder1.addString('Hello from mqtt_client topic 1');
   print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
   client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload);
 
-  final MqttClientPayloadBuilder builder2 = MqttClientPayloadBuilder();
+  final builder2 = MqttClientPayloadBuilder();
   builder2.addString('Hello from mqtt_client topic 2');
   print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
   client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload);

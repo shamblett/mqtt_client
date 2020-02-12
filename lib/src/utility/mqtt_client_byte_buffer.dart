@@ -7,10 +7,6 @@
 
 part of mqtt_client;
 
-// ignore_for_file: cascade_invocations
-// ignore_for_file: unnecessary_final
-// ignore_for_file: omit_local_variable_types
-
 /// Utility class to allow stream like access to a sized byte buffer.
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
@@ -45,7 +41,6 @@ class MqttByteBuffer {
   }
 
   /// Skip bytes
-  // ignore: avoid_setters_without_getters
   set skipBytes(int bytes) => _position += bytes;
 
   /// Add a list
@@ -71,7 +66,7 @@ class MqttByteBuffer {
   /// Reads a byte from the buffer and advances the position
   /// within the buffer by one byte, or returns -1 if at the end of the buffer.
   int readByte() {
-    final int tmp = buffer[_position];
+    final tmp = buffer[_position];
     if (_position <= (length - 1)) {
       _position++;
     } else {
@@ -82,8 +77,8 @@ class MqttByteBuffer {
 
   /// Read a short int(16 bits)
   int readShort() {
-    final int high = readByte();
-    final int low = readByte();
+    final high = readByte();
+    final low = readByte();
     return (high << 8) + low;
   }
 
@@ -96,10 +91,10 @@ class MqttByteBuffer {
           'enough bytes for the read operation '
           'length $length, count $count, position $_position, buffer $buffer');
     }
-    final typed.Uint8Buffer tmp = typed.Uint8Buffer();
+    final tmp = typed.Uint8Buffer();
     tmp.addAll(buffer.getRange(_position, _position + count));
     _position += count;
-    final typed.Uint8Buffer tmp2 = typed.Uint8Buffer();
+    final tmp2 = typed.Uint8Buffer();
     tmp2.addAll(tmp);
     return tmp2;
   }
@@ -153,8 +148,8 @@ class MqttByteBuffer {
   /// stringToWrite - The string to write.
   static void writeMqttString(
       MqttByteBuffer stringStream, String stringToWrite) {
-    final MqttEncoding enc = MqttEncoding();
-    final typed.Uint8Buffer stringBytes = enc.getBytes(stringToWrite);
+    final enc = MqttEncoding();
+    final stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);
   }
 
@@ -164,10 +159,10 @@ class MqttByteBuffer {
   /// Reads an MQTT string from the underlying stream.
   static String readMqttString(MqttByteBuffer buffer) {
     // Read and check the length
-    final typed.Uint8Buffer lengthBytes = buffer.read(2);
-    final MqttEncoding enc = MqttEncoding();
-    final int stringLength = enc.getCharCount(lengthBytes);
-    final typed.Uint8Buffer stringBuff = buffer.read(stringLength);
+    final lengthBytes = buffer.read(2);
+    final enc = MqttEncoding();
+    final stringLength = enc.getCharCount(lengthBytes);
+    final stringBuff = buffer.read(stringLength);
     return enc.getString(stringBuff);
   }
 

@@ -8,9 +8,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 Future<int> main() async {
-  final MqttClient client = MqttClient('ws://alitest.fflux.tech/mqtt', '');
+  final client = MqttServerClient('ws://alitest.fflux.tech/mqtt', '');
 
   /// Version must be V3.1.1
   //client.setProtocolV311();
@@ -37,7 +38,7 @@ Future<int> main() async {
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
-  final MqttConnectMessage connMess = MqttConnectMessage()
+  final connMess = MqttConnectMessage()
       .withClientIdentifier('2222')
       .keepAliveFor(10) // Must agree with the keep alive set above or not set
       .withWillTopic(
@@ -52,13 +53,10 @@ Future<int> main() async {
   /// Connect the client, any errors here are communicated by raising of the appropriate exception. Note
   /// in some circumstances the broker will just disconnect us, see the spec about this, we however eill
   /// never send malformed messages.
-  MqttClientConnectionStatus status = MqttClientConnectionStatus();
-  const String password1 =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBUFAiLCJ1c2VyX2lkIjoiMTM2IiwiaXNzIjoiU2VydmljZSIsImV4cCI6MTU1MjMyMDA0MSwiaWF0IjoxNTUxNDU2MDQxfQ.4ewl7d2y7koxW2dNoRT_rHS7LAN7neMvhwGFxH-FDHk';
-  const String userName1 = '00000088';
-  const String password2 =
+  var status = MqttClientConnectionStatus();
+  const password2 =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBUFAiLCJ1c2VyX2lkIjoiMTMzIiwiaXNzIjoiU2VydmljZSIsImV4cCI6MTU1MjQ1ODA5OCwiaWF0IjoxNTUxNTk0MDk4fQ.XAsj5X_oq-eaFjgi8KwsYi-Q926qNwOamxMgJK2YJWk';
-  const String userName2 = '00000085';
+  const userName2 = '00000085';
   try {
     status = await client.connect(userName2, password2);
   } on Exception catch (e) {
@@ -79,7 +77,7 @@ Future<int> main() async {
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final String pt =
+    final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
