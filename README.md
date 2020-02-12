@@ -28,6 +28,6 @@ An example using the adafruit MQTT broker for flutter can be found [here](https:
 
 The code is originally a port from the C# [nMQTT](https://www.openhub.net/p/nMQTT) client library to Dart.
 
-
+Please read the changelog for detatils related to specific versions.
 
 

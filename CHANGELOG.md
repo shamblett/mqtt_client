@@ -1,6 +1,12 @@
 # 6.0.0
 Addition of web based client, issue 144
 
+If you are an existing user this is a breaking update, the MqttClient class has
+now been replaced by the MqttServerClient class. This has exactly the same API as the 
+MqttClient class so except for the class rename there should be no other changes.
+If you are setting your own websocket protocols the protocol strings now reside
+in the MqttConstants class.
+
 # 5.6.3
 Issue 142, correct misleading logging.
 Issue 145, disconnection code tidy up.
