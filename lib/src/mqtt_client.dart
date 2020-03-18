@@ -43,6 +43,10 @@ class MqttClient {
   /// Client identifier
   String clientIdentifier;
 
+  /// Incorrect instantiation protection
+  @protected
+  var instantiationCorrect = false;
+
   /// The Handler that is managing the connection to the remote server.
   @protected
   dynamic connectionHandler;
@@ -173,6 +177,10 @@ class MqttClient {
   /// Comon client connection method.
   Future<MqttClientConnectionStatus> connect(
       [String username, String password]) async {
+    // Protect against an incorrect instantiation
+    if (!instantiationCorrect) {
+      throw IncorrectInstantiationException();
+    }
     checkCredentials(username, password);
     // Set the authentication parameters in the connection
     // message if we have one.

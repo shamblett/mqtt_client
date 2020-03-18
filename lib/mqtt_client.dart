@@ -38,6 +38,8 @@ part 'src/exception/mqtt_client_invalid_payload_size_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_topic_exception.dart';
 
+part 'src/exception/mqtt_client_incorrect_instantiation_exception.dart';
+
 part 'src/connectionhandling/mqtt_client_connection_state.dart';
 
 part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';

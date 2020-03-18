@@ -1,3 +1,6 @@
+# 6.1.0
+Issue 163
+
 # 6.0.0
 Addition of web based client, issue 144
 

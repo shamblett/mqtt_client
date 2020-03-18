@@ -48,6 +48,7 @@ class MqttServerClient extends MqttClient {
   @override
   Future<MqttClientConnectionStatus> connect(
       [String username, String password]) async {
+    instantiationCorrect = true;
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
     if (useWebSocket) {

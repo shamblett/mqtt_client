@@ -77,6 +77,13 @@ void main() {
       expect(exception.toString(),
           'mqtt-client::InvalidTopicException: Topic $topic is $message');
     });
+    test('Invalid Instantiation', () {
+      final exception = IncorrectInstantiationException();
+      expect(
+          exception.toString(),
+          'mqtt-client::ClientIncorrectInstantiationException: Incorrect instantiation, do not'
+          'instantiate MqttClient directly, use MqttServerClient or MqttBrowserClient');
+    });
   });
 
   group('Publication Topic', () {
@@ -857,6 +864,19 @@ void main() {
       status.returnCode = MqttConnectReturnCode.identifierRejected;
       expect(status.toString(),
           'Connection status is faulted with return code identifierRejected');
+    });
+  });
+
+  group('Mqtt Client', () {
+    test('Invalid instantiation', () async {
+      var ok = false;
+      try {
+        var client = MqttClient('aaaa', 'bbbb');
+        await client.connect();
+      } on IncorrectInstantiationException {
+        ok = true;
+      }
+      expect(ok, isTrue);
     });
   });
 }
