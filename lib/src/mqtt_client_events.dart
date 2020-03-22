@@ -36,3 +36,13 @@ class MessageReceived {
   /// Topic
   PublicationTopic get topic => _topic;
 }
+
+/// Auto reconnect event
+class AutoReconnect {
+  /// Constructor
+  AutoReconnect(this.userRequested);
+
+  /// If set auto reconnect has been invoked through the client
+  /// [doAutoReconnect] method.
+  var userRequested = false;
+}

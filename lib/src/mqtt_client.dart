@@ -13,6 +13,9 @@ typedef DisconnectCallback = void Function();
 /// The client Connect callback type
 typedef ConnectCallback = void Function();
 
+/// The client auto reconnect callback type
+typedef AutoReconnectCallback = void Function();
+
 /// A client class for interacting with MQTT Data Packets.
 /// Do not instantiate this class directly, instead instantiate
 /// either a [MqttClientServer] class or an [MqttBrowserClient] as needed.
@@ -46,6 +49,9 @@ class MqttClient {
   /// Incorrect instantiation protection
   @protected
   var instantiationCorrect = false;
+
+  /// Auto reconnect, the client will auto reconnect if set true.
+  var autoReconnect = false;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -110,10 +116,19 @@ class MqttClient {
   MqttConnectMessage connectionMessage;
 
   /// Client disconnect callback, called on unsolicited disconnect.
+  /// This will not be called even if set if [autoReconnect} is set,instead
+  /// [AutoReconnectCallback] will be called instead.
   DisconnectCallback onDisconnected;
 
   /// Client connect callback, called on successful connect
   ConnectCallback onConnected;
+
+  /// Auto reconnect callback, if auto reconnect is selected this callback will
+  /// be called before auto reconnect processing is invoked to allow the user to
+  /// perform any pre auto reconnect actions. Note that if this callback is invoked
+  /// the [onDisconnect] callback will not be invoked even if set. If auto reconnect
+  /// is not set this callback will not be invoked even if set.
+  AutoReconnectCallback onAutoReconnect;
 
   /// Subscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been subscribed to.
@@ -220,6 +235,20 @@ class MqttClient {
           .keepAliveFor(MqttClientConstants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
+
+  /// Auto reconnect method, used to invoke a manual auto reconnect sequence.
+  /// if [autoReconnect] is not set this method does nothing.
+  /// If the client is not disconnected this method will have no effect, otherwise
+  /// auto reconnect will try indefinitely to reconnect to the broker.
+  void doAutoReconnect() {
+    if (!autoReconnect) {
+      MqttLogger.log('doAutoReconnect - auto reconnect is not set, exiting');
+      return;
+    }
+
+    // Fire a manual auto reconnect request
+    clientEventBus.fire(AutoReconnect(true));
+  }
 
   /// Initiates a topic subscription request to the connected broker
   /// with a strongly typed data processor callback.

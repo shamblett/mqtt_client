@@ -11,7 +11,9 @@ part of mqtt_server_client;
 /// to the hostname in a synchronous manner.
 class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
-  SynchronousMqttConnectionHandler(this._clientEventBus);
+  SynchronousMqttConnectionHandler(this._clientEventBus) {
+    _clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+  }
 
   /// The connection status
   @override

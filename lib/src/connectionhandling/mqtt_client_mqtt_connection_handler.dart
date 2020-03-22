@@ -69,6 +69,9 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message);
 
+  /// Auto reconnect
+  void autoReconnect(AutoReconnect reconnectEvent) {}
+
   /// Sends a message to the broker through the current connection.
   @override
   void sendMessage(MqttMessage message) {
