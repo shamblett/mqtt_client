@@ -13,15 +13,6 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
-  // Server name, needed for auto reconnect.
-  String _server;
-
-  // Port number, needed for auto reconnect.
-  int _port;
-
-  // Connection message, needed for auto reconnect.
-  MqttConnectMessage _connectionMessage;
-
   /// Use a websocket rather than TCP
   bool useWebSocket = false;
 
@@ -66,9 +57,10 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   Future<MqttClientConnectionStatus> connect(
       String server, int port, MqttConnectMessage message) async {
     // Save the parameters for auto reconnect.
-    _server = server;
-    _port = port;
-    _connectionMessage = message;
+    this.server = server;
+    this.port = port;
+    // ignore: unnecessary_this
+    this.connectionMessage = message;
     try {
       await internalConnect(server, port, message);
       return connectionStatus;
@@ -99,7 +91,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       MqttLogger.log(
           'MqttConnectionHandler::autoReconnect - attempting reconnection');
       connection.disconnect();
-      await internalConnect(_server, _port, _connectionMessage);
+      await internalConnect(server, port, connectionMessage);
     }
     MqttLogger.log('MqttConnectionHandler::autoReconnect - reconnected');
   }

@@ -12,7 +12,11 @@ part of mqtt_browser_client;
 class SynchronousMqttBrowserConnectionHandler
     extends MqttBrowserConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
-  SynchronousMqttBrowserConnectionHandler(this._clientEventBus);
+  SynchronousMqttBrowserConnectionHandler(this._clientEventBus) {
+    _clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+    registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
+    _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
+  }
 
   /// The connection status
   @override
@@ -29,6 +33,18 @@ class SynchronousMqttBrowserConnectionHandler
   /// Auto reconnect callback
   @override
   AutoReconnectCallback onAutoReconnect;
+
+  // Server name, needed for auto reconnect.
+  @override
+  String server;
+
+  // Port number, needed for auto reconnect.
+  @override
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  @override
+  MqttConnectMessage connectionMessage;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
@@ -68,8 +84,6 @@ class SynchronousMqttBrowserConnectionHandler
       MqttLogger.log(
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'connection complete');
-      registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
-      _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
       // Transmit the required connection message to the broker.
       MqttLogger.log('SynchronousMqttBrowserConnectionHandler::internalConnect '
           'sending connect message');

@@ -13,6 +13,8 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttConnectionHandler(this._clientEventBus) {
     _clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+    registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
+    _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
   }
 
   /// The connection status
@@ -30,6 +32,18 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   /// Auto reconnect callback
   @override
   AutoReconnectCallback onAutoReconnect;
+
+  // Server name, needed for auto reconnect.
+  @override
+  String server;
+
+  // Port number, needed for auto reconnect.
+  @override
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  @override
+  MqttConnectMessage connectionMessage;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
@@ -83,8 +97,6 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       // Connect
       _connectTimer = MqttCancellableAsyncSleep(5000);
       await connection.connect(hostname, port);
-      registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
-      _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
       // Transmit the required connection message to the broker.
       MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect '
           'sending connect message');

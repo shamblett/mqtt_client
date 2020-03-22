@@ -24,6 +24,15 @@ abstract class IMqttConnectionHandler {
   /// Auto reconnect callback
   AutoReconnectCallback onAutoReconnect;
 
+  // Server name, needed for auto reconnect.
+  String server;
+
+  // Port number, needed for auto reconnect.
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  MqttConnectMessage connectionMessage;
+
   /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(dynamic certificate) onBadCertificate;
 
