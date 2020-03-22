@@ -4,7 +4,7 @@ on:
     branches:
       - master
       - development
-      - webclient
+      - autoreconnect
 
 jobs:
 
