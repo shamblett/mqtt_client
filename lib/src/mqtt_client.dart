@@ -207,6 +207,8 @@ class MqttClient {
     }
     connectionHandler.onDisconnected = internalDisconnect;
     connectionHandler.onConnected = onConnected;
+    connectionHandler.onAutoReconnect = onAutoReconnect;
+    //
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
     subscriptionsManager = SubscriptionsManager(
         connectionHandler, publishingManager, clientEventBus);

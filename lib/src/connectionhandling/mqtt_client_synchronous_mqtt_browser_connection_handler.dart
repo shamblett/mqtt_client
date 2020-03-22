@@ -26,6 +26,10 @@ class SynchronousMqttBrowserConnectionHandler
   @override
   DisconnectCallback onDisconnected;
 
+  /// Auto reconnect callback
+  @override
+  AutoReconnectCallback onAutoReconnect;
+
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
   bool Function(dynamic certificate) onBadCertificate;

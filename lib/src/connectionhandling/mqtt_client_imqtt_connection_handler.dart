@@ -21,6 +21,9 @@ abstract class IMqttConnectionHandler {
   /// Unsolicited disconnection callback
   DisconnectCallback onDisconnected;
 
+  /// Auto reconnect callback
+  AutoReconnectCallback onAutoReconnect;
+
   /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(dynamic certificate) onBadCertificate;
 

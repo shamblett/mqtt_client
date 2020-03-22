@@ -104,10 +104,11 @@ class MqttConnection {
   void _onDone() {
     _disconnect();
     MqttLogger.log('MqttConnection::_onDone - calling disconnected callback');
-    onDisconnected();
+    if (onDisconnected != null) {
+      onDisconnected();
+    }
   }
 
-  /// Disconnects from the message broker
   void _disconnect() {
     if (client != null) {
       client.close();
@@ -121,7 +122,7 @@ class MqttConnection {
     client?.add(messageBytes.toList());
   }
 
-  /// User requested disconnection
+  /// User requested or auto disconnect disconnection
   void disconnect() {
     _onDone();
   }

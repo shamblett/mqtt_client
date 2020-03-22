@@ -13,6 +13,15 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
   MqttConnectionHandler();
 
+  // Server name, needed for auto reconnect.
+  String _server;
+
+  // Port number, needed for auto reconnect.
+  int _port;
+
+  // Connection message, needed for auto reconnect.
+  MqttConnectMessage _connectionMessage;
+
   /// Use a websocket rather than TCP
   bool useWebSocket = false;
 
@@ -56,6 +65,10 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   @override
   Future<MqttClientConnectionStatus> connect(
       String server, int port, MqttConnectMessage message) async {
+    // Save the parameters for auto reconnect.
+    _server = server;
+    _port = port;
+    _connectionMessage = message;
     try {
       await internalConnect(server, port, message);
       return connectionStatus;
@@ -70,7 +83,26 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
       String hostname, int port, MqttConnectMessage message);
 
   /// Auto reconnect
-  void autoReconnect(AutoReconnect reconnectEvent) {}
+  void autoReconnect(AutoReconnect reconnectEvent) async {
+    // Check the connection state, if connected do nothing
+    if (connectionStatus.state == MqttConnectionState.connected) {
+      MqttLogger.log(
+          'MqttConnectionHandler::autoReconnect - connected, exiting');
+      return;
+    }
+    // If the auto reconnect callback is set call it
+    if (onAutoReconnect != null) {
+      onAutoReconnect();
+    }
+    // Disconnect and call internal connect indefinitely
+    while (connectionStatus.state != MqttConnectionState.connected) {
+      MqttLogger.log(
+          'MqttConnectionHandler::autoReconnect - attempting reconnection');
+      connection.disconnect();
+      await internalConnect(_server, _port, _connectionMessage);
+    }
+    MqttLogger.log('MqttConnectionHandler::autoReconnect - reconnected');
+  }
 
   /// Sends a message to the broker through the current connection.
   @override
