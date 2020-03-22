@@ -9,9 +9,21 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class TestConnectionHandlerNoSend extends MqttConnectionHandler {
+  /// Auto reconnect callback
+  AutoReconnectCallback onAutoReconnect;
+
   /// Use a websocket rather than TCP
   @override
   bool useWebSocket = false;
+
+  // Server name, needed for auto reconnect.
+  String server;
+
+  // Port number, needed for auto reconnect.
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  MqttConnectMessage connectionMessage;
 
   /// Alternate websocket implementation.
   ///
@@ -63,9 +75,21 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
 }
 
 class TestConnectionHandlerSend extends MqttConnectionHandler {
+  // Server name, needed for auto reconnect.
+  String server;
+
+  // Port number, needed for auto reconnect.
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  MqttConnectMessage connectionMessage;
+
   /// Use a websocket rather than TCP
   @override
   bool useWebSocket = false;
+
+  /// Auto reconnect callback
+  AutoReconnectCallback onAutoReconnect;
 
   /// Alternate websocket implementation.
   ///

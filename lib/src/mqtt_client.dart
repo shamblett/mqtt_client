@@ -249,7 +249,7 @@ class MqttClient {
     }
 
     // Fire a manual auto reconnect request
-    clientEventBus.fire(AutoReconnect(true));
+    clientEventBus.fire(AutoReconnect(userReconnect: true));
   }
 
   /// Initiates a topic subscription request to the connected broker
@@ -302,6 +302,8 @@ class MqttClient {
   ///
   /// Do NOT call this in any onDisconnect callback that may be set,
   /// this will result in a loop situation.
+  ///
+  /// This method will disconnect regardles of the [autoReconnect] state.
   void disconnect() {
     _disconnect(unsolicited: false);
   }
@@ -311,11 +313,17 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
-    // Only call disconnect if we are connected, i.e. a connection to
-    // the broker has been previously established.
+    // Only call disconnect/auto reconnect if we are connected, i.e.
+    // a connection to the broker has been previously established.
     if (connectionStatus.state == MqttConnectionState.connected) {
-      _disconnect(unsolicited: true);
+      if (autoReconnect) {
+        // Fire an automatic auto reconnect request
+        clientEventBus.fire(AutoReconnect(userReconnect: false));
+      } else {
+        _disconnect(unsolicited: true);
+      }
     } else {
+      // Solicited request, no need to check for auto reconnect
       _disconnect(unsolicited: false);
     }
   }
