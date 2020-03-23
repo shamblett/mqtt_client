@@ -24,7 +24,11 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// of 1883 is used.
 /// If you want to use websockets rather than TCP see below.
 
-final client = MqttServerClient('test.mosquitto.org', '');
+/// To test the auto reconnect feature this example uses a Mosquitto broker running on local host, any will do
+/// as long as you can break its connection to this process. You could wait for the first pong callback to print out
+/// (these are every 5 seconds) then stop/break connection to the server and reinstate it.
+///
+final client = MqttServerClient('127.0.0.1', '');
 
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -39,11 +43,11 @@ Future<int> main() async {
   /// list so in most cases you can ignore this.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: false);
+  client.logging(on: true);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
-  client.keepAlivePeriod = 20;
+  client.keepAlivePeriod = 5;
 
   /// Set auto reconnect
   client.autoReconnect = true;
@@ -70,7 +74,7 @@ Future<int> main() async {
   /// and clean session, an example of a specific one below.
   final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .keepAliveFor(20) // Must agree with the keep alive set above or not set
+      .keepAliveFor(5) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
