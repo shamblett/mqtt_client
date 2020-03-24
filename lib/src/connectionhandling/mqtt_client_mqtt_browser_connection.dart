@@ -142,8 +142,12 @@ class MqttBrowserConnection {
     client?.sendTypedData(bdata);
   }
 
-  /// User requested disconnection
-  void disconnect() {
-    _onDone();
+  /// User requested or auto disconnect disconnection
+  void disconnect({bool auto = false}) {
+    if (auto) {
+      _disconnect();
+    } else {
+      _onDone();
+    }
   }
 }

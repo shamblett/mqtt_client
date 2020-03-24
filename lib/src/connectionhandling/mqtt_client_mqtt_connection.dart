@@ -123,7 +123,11 @@ class MqttConnection {
   }
 
   /// User requested or auto disconnect disconnection
-  void disconnect() {
-    _onDone();
+  void disconnect({bool auto = false}) {
+    if (auto) {
+      _disconnect();
+    } else {
+      _onDone();
+    }
   }
 }

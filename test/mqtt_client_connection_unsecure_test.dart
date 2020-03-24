@@ -254,7 +254,39 @@ void main() {
   });
 
   group('Auto Reconnect', () {
-    test('Using mock broker', () async {
+    test('Connected', () async {
+      var autoReconnectCallbackCalled = false;
+
+      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final ack = MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      void autoReconnect() {
+        autoReconnectCallbackCalled = true;
+      }
+
+      broker.setMessageHandler = messageHandlerConnect;
+      final client = MqttServerClient('localhost', 'SJHMQTTClient');
+      client.logging(on: true);
+      client.autoReconnect = true;
+      client.onAutoReconnect = autoReconnect;
+      const username = 'unused';
+      print(username);
+      const password = 'password';
+      print(password);
+      await client.connect();
+      expect(client.connectionStatus.state == MqttConnectionState.connected,
+          isTrue);
+      await MqttUtilities.asyncSleep(5);
+      client.doAutoReconnect();
+      expect(autoReconnectCallbackCalled, isFalse);
+      expect(client.connectionStatus.state == MqttConnectionState.connected,
+          isTrue);
+    });
+
+    test('Connected Forced', () async {
       var autoReconnectCallbackCalled = false;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
@@ -281,6 +313,7 @@ void main() {
           isTrue);
       broker.close();
       await MqttUtilities.asyncSleep(5);
+      client.doAutoReconnect();
       expect(autoReconnectCallbackCalled, isTrue);
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);

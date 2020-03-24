@@ -245,10 +245,11 @@ class MqttClient {
           .startClean();
 
   /// Auto reconnect method, used to invoke a manual auto reconnect sequence.
-  /// if [autoReconnect] is not set this method does nothing.
-  /// If the client is not disconnected this method will have no effect, otherwise
+  /// If [autoReconnect] is not set this method does nothing.
+  /// If the client is not disconnected this method will have no effect
+  /// unless the [force] parameter is set to true, otherwise
   /// auto reconnect will try indefinitely to reconnect to the broker.
-  void doAutoReconnect() {
+  void doAutoReconnect({bool force = false}) {
     if (!autoReconnect) {
       MqttLogger.log('doAutoReconnect - auto reconnect is not set, exiting');
       return;

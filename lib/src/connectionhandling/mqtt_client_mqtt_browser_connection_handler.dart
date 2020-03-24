@@ -46,11 +46,15 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
 
   /// Auto reconnect
   void autoReconnect(AutoReconnect reconnectEvent) async {
-    // Check the connection state, if connected do nothing
-    if (connectionStatus.state == MqttConnectionState.connected) {
-      MqttLogger.log(
-          'MqttConnectionHandler::autoReconnect - connected, exiting');
-      return;
+    // Check if user requested, if not do not auto reconnect if we are
+    // connected.
+    if (!reconnectEvent.userRequested) {
+      // Check the connection state, if connected do nothing
+      if (connectionStatus.state == MqttConnectionState.connected) {
+        MqttLogger.log(
+            'MqttBrowserConnectionHandler::autoReconnect - connected, exiting');
+        return;
+      }
     }
     // If the auto reconnect callback is set call it
     if (onAutoReconnect != null) {
@@ -59,11 +63,11 @@ abstract class MqttBrowserConnectionHandler implements IMqttConnectionHandler {
     // Disconnect and call internal connect indefinitely
     while (connectionStatus.state != MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionHandler::autoReconnect - attempting reconnection');
-      connection.disconnect();
+          'MqttBrowserConnectionHandler::autoReconnect - attempting reconnection');
+      connection.disconnect(auto: true);
       await internalConnect(server, port, connectionMessage);
     }
-    MqttLogger.log('MqttConnectionHandler::autoReconnect - reconnected');
+    MqttLogger.log('MqttBrowserConnectionHandler::autoReconnect - reconnected');
   }
 
   /// Connect to the specific Mqtt Connection.
