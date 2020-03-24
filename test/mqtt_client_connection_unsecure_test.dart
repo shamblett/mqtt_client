@@ -252,4 +252,38 @@ void main() {
       broker.close();
     });
   });
+
+  group('Auto Reconnect', () {
+    test('Using mock broker', () async {
+      var autoReconnectCallbackCalled = false;
+
+      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+        final ack = MqttConnectAckMessage()
+            .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+        broker.sendMessage(ack);
+      }
+
+      void autoReconnect() {
+        autoReconnectCallbackCalled = true;
+      }
+
+      broker.setMessageHandler = messageHandlerConnect;
+      final client = MqttServerClient('localhost', 'SJHMQTTClient');
+      client.logging(on: true);
+      client.autoReconnect = true;
+      client.onAutoReconnect = autoReconnect;
+      const username = 'unused';
+      print(username);
+      const password = 'password';
+      print(password);
+      await client.connect();
+      expect(client.connectionStatus.state == MqttConnectionState.connected,
+          isTrue);
+      broker.close();
+      await MqttUtilities.asyncSleep(5);
+      expect(autoReconnectCallbackCalled, isTrue);
+      expect(client.connectionStatus.state == MqttConnectionState.connected,
+          isTrue);
+    });
+  });
 }

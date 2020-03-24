@@ -51,6 +51,14 @@ class MqttClient {
   var instantiationCorrect = false;
 
   /// Auto reconnect, the client will auto reconnect if set true.
+  ///
+  /// The auto reconnect mechanism will not be invoked either for a client
+  /// that has not been connected, i.e. you must have established an initial
+  /// connection to the broker or for a solicited disconnect request.
+  ///
+  /// Once invoked the mechanism will try forever to reconnect to the broker with its
+  /// original connection parameters. This can be stopped only by calling
+  /// [disconnect()] on the client.
   var autoReconnect = false;
 
   /// The Handler that is managing the connection to the remote server.
@@ -117,7 +125,7 @@ class MqttClient {
 
   /// Client disconnect callback, called on unsolicited disconnect.
   /// This will not be called even if set if [autoReconnect} is set,instead
-  /// [AutoReconnectCallback] will be called instead.
+  /// [AutoReconnectCallback] will be called.
   DisconnectCallback onDisconnected;
 
   /// Client connect callback, called on successful connect
@@ -125,9 +133,7 @@ class MqttClient {
 
   /// Auto reconnect callback, if auto reconnect is selected this callback will
   /// be called before auto reconnect processing is invoked to allow the user to
-  /// perform any pre auto reconnect actions. Note that if this callback is invoked
-  /// the [onDisconnect] callback will not be invoked even if set. If auto reconnect
-  /// is not set this callback will not be invoked even if set.
+  /// perform any pre auto reconnect actions.
   AutoReconnectCallback onAutoReconnect;
 
   /// Subscribed callback, function returns a void and takes a
@@ -313,18 +319,17 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
-    // Only call disconnect/auto reconnect if we are connected, i.e.
-    // a connection to the broker has been previously established.
     if (connectionStatus.state == MqttConnectionState.connected) {
+      // Solicited disconnect
+      _disconnect(unsolicited: false);
+    } else {
       if (autoReconnect) {
         // Fire an automatic auto reconnect request
         clientEventBus.fire(AutoReconnect(userReconnect: false));
       } else {
+        // Unsolicited disconnect
         _disconnect(unsolicited: true);
       }
-    } else {
-      // Solicited request, no need to check for auto reconnect
-      _disconnect(unsolicited: false);
     }
   }
 
