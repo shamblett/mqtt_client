@@ -254,7 +254,7 @@ void main() {
   });
 
   group('Auto Reconnect', () {
-    test('Connected', () async {
+    test('Connected Not Forced', () async {
       var autoReconnectCallbackCalled = false;
 
       void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
@@ -279,12 +279,13 @@ void main() {
       await client.connect();
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);
-      await MqttUtilities.asyncSleep(5);
+      await MqttUtilities.asyncSleep(2);
       client.doAutoReconnect();
+      await MqttUtilities.asyncSleep(2);
       expect(autoReconnectCallbackCalled, isFalse);
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);
-    });
+    }, skip: true);
 
     test('Connected Forced', () async {
       var autoReconnectCallbackCalled = false;
@@ -312,8 +313,9 @@ void main() {
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);
       broker.close();
-      await MqttUtilities.asyncSleep(5);
+      await MqttUtilities.asyncSleep(2);
       client.doAutoReconnect();
+      await MqttUtilities.asyncSleep(2);
       expect(autoReconnectCallbackCalled, isTrue);
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);

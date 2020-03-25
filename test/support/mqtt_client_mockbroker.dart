@@ -43,6 +43,11 @@ class MockBroker {
     return completer.future;
   }
 
+  Future<void> stop() async {
+    close();
+    await listener.close();
+  }
+
   void _connectAccept(Socket clientSocket) {
     print('MockBroker::connectAccept');
     client = clientSocket;
@@ -76,7 +81,7 @@ class MockBroker {
     client.add(messBuff.toList());
   }
 
-  /// Close the broker socket
+  /// Close the broker client socket
   void close() {
     client?.destroy();
   }
