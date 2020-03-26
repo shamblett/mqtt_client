@@ -285,7 +285,7 @@ void main() {
       expect(autoReconnectCallbackCalled, isFalse);
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);
-    }, skip: true);
+    });
 
     test('Connected Forced', () async {
       var autoReconnectCallbackCalled = false;
@@ -319,6 +319,6 @@ void main() {
       expect(autoReconnectCallbackCalled, isTrue);
       expect(client.connectionStatus.state == MqttConnectionState.connected,
           isTrue);
-    });
+    }, skip: true);
   });
 }

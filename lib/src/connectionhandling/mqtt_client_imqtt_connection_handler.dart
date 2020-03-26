@@ -24,6 +24,9 @@ abstract class IMqttConnectionHandler {
   /// Auto reconnect callback
   AutoReconnectCallback onAutoReconnect;
 
+  /// Auto reconnect in progress
+  bool autoReconnectInProgress;
+
   // Server name, needed for auto reconnect.
   String server;
 

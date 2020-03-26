@@ -33,6 +33,10 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
   @override
   AutoReconnectCallback onAutoReconnect;
 
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
+
   // Server name, needed for auto reconnect.
   @override
   String server;

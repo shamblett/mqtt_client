@@ -25,6 +25,10 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
   @override
   int port;
 
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
+
   // Connection message, needed for auto reconnect.
   @override
   MqttConnectMessage connectionMessage;
@@ -90,6 +94,10 @@ class TestConnectionHandlerSend extends MqttConnectionHandler {
   // Connection message, needed for auto reconnect.
   @override
   MqttConnectMessage connectionMessage;
+
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
 
   /// Use a websocket rather than TCP
   @override

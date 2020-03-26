@@ -255,8 +255,10 @@ class MqttClient {
       return;
     }
 
-    // Fire a manual auto reconnect request
-    clientEventBus.fire(AutoReconnect(userReconnect: true));
+    if (connectionStatus.state != MqttConnectionState.connected || force) {
+      // Fire a manual auto reconnect request
+      clientEventBus.fire(AutoReconnect(userReconnect: true));
+    }
   }
 
   /// Initiates a topic subscription request to the connected broker
