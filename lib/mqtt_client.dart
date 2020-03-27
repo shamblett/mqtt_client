@@ -42,6 +42,8 @@ part 'src/exception/mqtt_client_incorrect_instantiation_exception.dart';
 
 part 'src/connectionhandling/mqtt_client_connection_state.dart';
 
+part 'src/connectionhandling/mqtt_client_mqtt_connection_handler_base.dart';
+
 part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
 
 part 'src/mqtt_client_topic.dart';

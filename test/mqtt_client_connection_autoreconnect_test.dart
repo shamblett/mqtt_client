@@ -12,7 +12,6 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'support/mqtt_client_mockbroker.dart';
 
 @TestOn('vm')
-
 void main() {
   // Test wide variables
   final broker = MockBroker();

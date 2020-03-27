@@ -1,41 +1,20 @@
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
- * Date   : 22/06/2017
+ * Date   : 27/03/2020
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of mqtt_client;
 
 ///  This class provides shared connection functionality
-///  to connection handler implementations.
-abstract class MqttConnectionHandler implements IMqttConnectionHandler {
-  /// Initializes a new instance of the MqttConnectionHandler class.
-  MqttConnectionHandler();
-
-  /// Use a websocket rather than TCP
-  bool useWebSocket = false;
-
-  /// Alternate websocket implementation.
-  ///
-  /// The Amazon Web Services (AWS) IOT MQTT interface(and maybe others)
-  /// has a bug that causes it not to connect if unexpected message headers are
-  /// present in the initial GET message during the handshake.
-  /// Since the httpclient classes insist on adding those headers, an alternate
-  /// method is used to perform the handshake.
-  /// After the handshake everything goes back to the normal websocket class.
-  /// Only use this websocket implementation if you know it is needed
-  /// by your broker.
-  bool useAlternateWebSocketImplementation = false;
+///  to serverand browser connection handler implementations.
+abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
+  /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
+  MqttConnectionHandlerBase();
 
   /// User supplied websocket protocols
   List<String> websocketProtocols;
-
-  /// If set use a secure connection, note TCP only, not websocket.
-  bool secure = false;
-
-  /// The security context for secure usage
-  dynamic securityContext;
 
   /// The connection
   dynamic connection;
@@ -70,7 +49,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     }
   }
 
-  /// Connect to the specific Mqtt Connection.
+  /// Connect to the specific Mqtt Connection internally.
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message);
 
@@ -91,7 +70,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     autoReconnectInProgress = true;
     while (connectionStatus.state != MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionHandler::autoReconnect - attempting reconnection');
+          'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
       await internalConnect(server, port, connectionMessage);
     }
     autoReconnectInProgress = false;
@@ -102,7 +81,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
   /// Sends a message to the broker through the current connection.
   @override
   void sendMessage(MqttMessage message) {
-    MqttLogger.log('MqttConnectionHandler::sendMessage - $message');
+    MqttLogger.log('MqttConnectionHandlerBase::sendMessage - $message');
     if ((connectionStatus.state == MqttConnectionState.connected) ||
         (connectionStatus.state == MqttConnectionState.connecting)) {
       final buff = typed.Uint8Buffer();

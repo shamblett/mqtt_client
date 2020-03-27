@@ -8,7 +8,7 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-class TestConnectionHandlerNoSend extends MqttConnectionHandler {
+class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
   /// Auto reconnect callback
   @override
   AutoReconnectCallback onAutoReconnect;
@@ -82,7 +82,7 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
       connectionStatus.state = MqttConnectionState.disconnected;
 }
 
-class TestConnectionHandlerSend extends MqttConnectionHandler {
+class TestConnectionHandlerSend extends MqttServerConnectionHandler {
   // Server name, needed for auto reconnect.
   @override
   String server;

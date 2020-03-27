@@ -9,7 +9,7 @@ part of mqtt_server_client;
 
 /// Connection handler that performs connections and disconnections
 /// to the hostname in a synchronous manner.
-class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
+class SynchronousMqttConnectionHandler extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttConnectionHandler(this._clientEventBus) {
     _clientEventBus.on<AutoReconnect>().listen(autoReconnect);
