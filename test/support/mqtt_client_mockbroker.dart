@@ -44,6 +44,7 @@ class MockBroker {
   }
 
   Future<void> stop() async {
+    print('MockBroker:: stopping server');
     close();
     await listener.close();
   }
@@ -83,6 +84,7 @@ class MockBroker {
 
   /// Close the broker client socket
   void close() {
+    print('MockBroker:: closing client socket');
     client?.destroy();
   }
 }
