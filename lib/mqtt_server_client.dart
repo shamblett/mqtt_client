@@ -16,11 +16,11 @@ import 'package:event_bus/event_bus.dart' as events;
 import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client.dart';
 
-part 'src/connectionhandling/mqtt_client_mqtt_server_connection_handler.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_normal_connection.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_secure_connection.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_ws2_connection.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_ws_connection.dart';
-part 'src/connectionhandling/mqtt_client_synchronous_mqtt_connection_handler.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_connection.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_connection_handler.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_normal_connection.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_secure_connection.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_ws2_connection.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_ws_connection.dart';
+part 'src/connectionhandling/server/mqtt_client_synchronous_mqtt_server_connection_handler.dart';
+part 'src/connectionhandling/server/mqtt_client_mqtt_server_connection.dart';
 part 'src/mqtt_server_client.dart';

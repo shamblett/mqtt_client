@@ -7,13 +7,14 @@
 
 part of mqtt_server_client;
 
-/// The MQTT connection base class
-class MqttConnection {
+/// The MQTT client server connection base class
+class MqttServerConnection {
   /// Default constructor
-  MqttConnection(this._clientEventBus);
+  MqttServerConnection(this._clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttConnection.fromConnect(String server, int port, this._clientEventBus) {
+  MqttServerConnection.fromConnect(
+      String server, int port, this._clientEventBus) {
     connect(server, port);
   }
 

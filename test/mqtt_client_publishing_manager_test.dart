@@ -17,7 +17,7 @@ import 'support/mqtt_client_test_connection_handler.dart';
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {}
 
-class MockCON extends Mock implements MqttNormalConnection {}
+class MockCON extends Mock implements MqttServerNormalConnection {}
 
 final TestConnectionHandlerNoSend testCHNS = TestConnectionHandlerNoSend();
 final TestConnectionHandlerSend testCHS = TestConnectionHandlerSend();

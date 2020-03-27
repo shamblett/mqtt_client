@@ -50,7 +50,7 @@ class MqttServerClient extends MqttClient {
       [String username, String password]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
-    connectionHandler = SynchronousMqttConnectionHandler(clientEventBus);
+    connectionHandler = SynchronousMqttServerConnectionHandler(clientEventBus);
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;

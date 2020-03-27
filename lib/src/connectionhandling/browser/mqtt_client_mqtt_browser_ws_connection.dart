@@ -7,7 +7,7 @@
 
 part of mqtt_browser_client;
 
-/// The MQTT connection class for the websocket interface
+/// The MQTT connection class for the browser websocket interface
 class MqttBrowserWsConnection extends MqttBrowserConnection {
   /// Default constructor
   MqttBrowserWsConnection(events.EventBus eventBus) : super(eventBus);

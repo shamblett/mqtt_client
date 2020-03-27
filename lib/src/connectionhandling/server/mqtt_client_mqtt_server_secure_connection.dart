@@ -7,15 +7,15 @@
 
 part of mqtt_server_client;
 
-/// The MQTT secure connection class
-class MqttSecureConnection extends MqttConnection {
+/// The MQTT server secure connection class
+class MqttServerSecureConnection extends MqttServerConnection {
   /// Default constructor
-  MqttSecureConnection(
+  MqttServerSecureConnection(
       this.context, events.EventBus eventBus, this.onBadCertificate)
       : super(eventBus);
 
   /// Initializes a new instance of the MqttSecureConnection class.
-  MqttSecureConnection.fromConnect(
+  MqttServerSecureConnection.fromConnect(
       String server, int port, events.EventBus eventBus)
       : super(eventBus) {
     connect(server, port);

@@ -7,11 +7,12 @@
 
 part of mqtt_server_client;
 
-/// Connection handler that performs connections and disconnections
+/// Connection handler that performs server based connections and disconnections
 /// to the hostname in a synchronous manner.
-class SynchronousMqttConnectionHandler extends MqttServerConnectionHandler {
+class SynchronousMqttServerConnectionHandler
+    extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
-  SynchronousMqttConnectionHandler(this._clientEventBus) {
+  SynchronousMqttServerConnectionHandler(this._clientEventBus) {
     _clientEventBus.on<AutoReconnect>().listen(autoReconnect);
     registerForMessage(MqttMessageType.connectAck, _connectAckProcessor);
     _clientEventBus.on<MessageAvailable>().listen(messageAvailable);
@@ -77,11 +78,12 @@ class SynchronousMqttConnectionHandler extends MqttServerConnectionHandler {
         if (useAlternateWebSocketImplementation) {
           MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
               'alternate websocket implementation selected');
-          connection = MqttWs2Connection(securityContext, _clientEventBus);
+          connection =
+              MqttServerWs2Connection(securityContext, _clientEventBus);
         } else {
           MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
               'websocket selected');
-          connection = MqttWsConnection(_clientEventBus);
+          connection = MqttServerWsConnection(_clientEventBus);
         }
         if (websocketProtocols != null) {
           connection.protocols = websocketProtocols;
@@ -89,12 +91,12 @@ class SynchronousMqttConnectionHandler extends MqttServerConnectionHandler {
       } else if (secure) {
         MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
             'secure selected');
-        connection = MqttSecureConnection(
+        connection = MqttServerSecureConnection(
             securityContext, _clientEventBus, onBadCertificate);
       } else {
         MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
             'insecure TCP selected');
-        connection = MqttNormalConnection(_clientEventBus);
+        connection = MqttServerNormalConnection(_clientEventBus);
       }
       connection.onDisconnected = onDisconnected;
 
