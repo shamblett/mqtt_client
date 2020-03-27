@@ -80,17 +80,7 @@ abstract class MqttConnectionHandler implements IMqttConnectionHandler {
     if (autoReconnectInProgress) {
       return;
     }
-    // Check if user requested, if not do not auto reconnect if we are
-    // connected.
-    if (!reconnectEvent.userRequested) {
-      // Check the connection state, if connected do nothing
-      if (connectionStatus.state == MqttConnectionState.connected) {
-        MqttLogger.log(
-            'MqttConnectionHandler::autoReconnect - connected and not user '
-            'requested, exiting');
-        return;
-      }
-    }
+
     // If the auto reconnect callback is set call it
     if (onAutoReconnect != null) {
       onAutoReconnect();

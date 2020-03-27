@@ -322,10 +322,6 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
-    if (connectionStatus.state == MqttConnectionState.connected) {
-      // Solicited disconnect
-      _disconnect(unsolicited: false);
-    } else {
       if (autoReconnect) {
         // Fire an automatic auto reconnect request
         clientEventBus.fire(AutoReconnect(userReconnect: false));
@@ -333,7 +329,6 @@ class MqttClient {
         // Unsolicited disconnect
         _disconnect(unsolicited: true);
       }
-    }
   }
 
   /// Actual disconnect processing
