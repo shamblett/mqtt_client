@@ -111,8 +111,14 @@ class SynchronousMqttServerConnectionHandler
       try {
         await connection.connect(hostname, port);
       } on Exception {
-        MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect'
-            ' exception thrown - ignoring');
+        // Ignore exceptions in an auto reconnect sequence
+        if (autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect'
+              ' exception thrown - ignoring');
+        } else {
+          rethrow;
+        }
       }
       // Transmit the required connection message to the broker.
       MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect '

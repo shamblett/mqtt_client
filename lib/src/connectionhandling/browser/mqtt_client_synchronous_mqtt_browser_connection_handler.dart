@@ -87,9 +87,14 @@ class SynchronousMqttBrowserConnectionHandler
       try {
         await connection.connect(hostname, port);
       } on Exception {
-        MqttLogger.log(
-            'SynchronousMqttBrowserConnectionHandler::internalConnect'
-            ' exception thrown - ignoring');
+        // Ignore exceptions in an auto reconnect sequence
+        if (autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttBrowserConnectionHandler::internalConnect'
+              ' exception thrown during auto reconnect - ignoring');
+        } else {
+          rethrow;
+        }
       }
       MqttLogger.log(
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
