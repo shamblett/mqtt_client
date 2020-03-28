@@ -121,9 +121,11 @@ class MqttBrowserConnection {
   /// OnDone listener callback
   void _onDone() {
     _disconnect();
-    MqttLogger.log(
-        'MqttBrowserConnection::_onDone - calling disconnected callback');
-    onDisconnected();
+    if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttBrowserConnection::_onDone - calling disconnected callback');
+      onDisconnected();
+    }
   }
 
   /// Disconnects from the message broker

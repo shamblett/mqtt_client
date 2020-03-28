@@ -251,7 +251,8 @@ class MqttClient {
   /// auto reconnect will try indefinitely to reconnect to the broker.
   void doAutoReconnect({bool force = false}) {
     if (!autoReconnect) {
-      MqttLogger.log('doAutoReconnect - auto reconnect is not set, exiting');
+      MqttLogger.log(
+          'MqttClient::doAutoReconnect - auto reconnect is not set, exiting');
       return;
     }
 
@@ -323,8 +324,13 @@ class MqttClient {
   @protected
   void internalDisconnect() {
     if (autoReconnect) {
-      // Fire an automatic auto reconnect request
-      clientEventBus.fire(AutoReconnect(userReconnect: false));
+      if (!connectionHandler.autoReconnectInProgress) {
+        // Fire an automatic auto reconnect request
+        clientEventBus.fire(AutoReconnect(userReconnect: false));
+      } else {
+        MqttLogger.log(
+            'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
+      }
     } else {
       // Unsolicited disconnect
       _disconnect(unsolicited: true);
@@ -365,14 +371,16 @@ class MqttClient {
           "and password '{$password}'");
       if (username.trim().length >
           MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log('Username length (${username.trim().length}) '
+        MqttLogger.log(
+            'MqttClient::checkCredentials - Username length (${username.trim().length}) '
             'exceeds the max recommended in the MQTT spec. ');
       }
     }
     if (password != null &&
         password.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log('Password length (${password.trim().length}) '
+      MqttLogger.log(
+          'MqttClient::checkCredentials - Password length (${password.trim().length}) '
           'exceeds the max recommended in the MQTT spec. ');
     }
   }

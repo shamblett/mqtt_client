@@ -41,11 +41,11 @@ class MqttServerConnection {
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
-    MqttLogger.log('MqttConnection::_startListening');
+    MqttLogger.log('MqttServerConnection::_startListening');
     try {
       client.listen(_onData, onError: _onError, onDone: _onDone);
     } on Exception catch (e) {
-      print('MqttConnection::_startListening - exception raised $e');
+      print('MqttServerConnection::_startListening - exception raised $e');
     }
   }
 
@@ -54,7 +54,7 @@ class MqttServerConnection {
     MqttLogger.log('MqttConnection::_onData');
     // Protect against 0 bytes but should never happen.
     if (data.length == 0) {
-      MqttLogger.log('MqttConnection::_ondata - Error - 0 byte message');
+      MqttLogger.log('MqttServerConnection::_ondata - Error - 0 byte message');
       return;
     }
 
@@ -70,7 +70,8 @@ class MqttServerConnection {
           return;
         }
       } on Exception {
-        MqttLogger.log('MqttConnection::_ondata - message is not yet valid, '
+        MqttLogger.log(
+            'MqttServerConnection::_ondata - message is not yet valid, '
             'waiting for more data ...');
         messageIsValid = false;
       }
@@ -80,13 +81,13 @@ class MqttServerConnection {
       }
       if (messageIsValid) {
         messageStream.shrink();
-        MqttLogger.log('MqttConnection::_onData - message received $msg');
+        MqttLogger.log('MqttServerConnection::_onData - message received $msg');
         if (!_clientEventBus.streamController.isClosed) {
           _clientEventBus.fire(MessageAvailable(msg));
-          MqttLogger.log('MqttConnection::_onData - message processed');
+          MqttLogger.log('MqttServerConnection::_onData - message processed');
         } else {
           MqttLogger.log(
-              'MqttConnection::_onData - message not processed, disconnecting');
+              'MqttServerConnection::_onData - message not processed, disconnecting');
         }
       }
     }
@@ -95,8 +96,9 @@ class MqttServerConnection {
   /// OnError listener callback
   void _onError(dynamic error) {
     _disconnect();
-    MqttLogger.log('MqttConnection::_onError - calling disconnected callback');
     if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttServerConnection::_onError - calling disconnected callback');
       onDisconnected();
     }
   }
@@ -104,8 +106,9 @@ class MqttServerConnection {
   /// OnDone listener callback
   void _onDone() {
     _disconnect();
-    MqttLogger.log('MqttConnection::_onDone - calling disconnected callback');
     if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttServerConnection::_onDone - calling disconnected callback');
       onDisconnected();
     }
   }

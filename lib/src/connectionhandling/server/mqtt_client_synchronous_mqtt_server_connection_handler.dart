@@ -68,20 +68,24 @@ class SynchronousMqttServerConnectionHandler
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
     var connectionAttempts = 0;
-    MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect entered');
+    MqttLogger.log(
+        'SynchronousMqttServerConnectionHandler::internalConnect entered');
     do {
       // Initiate the connection
-      MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+      MqttLogger.log(
+          'SynchronousMqttServerConnectionHandler::internalConnect - '
           'initiating connection try $connectionAttempts');
       connectionStatus.state = MqttConnectionState.connecting;
       if (useWebSocket) {
         if (useAlternateWebSocketImplementation) {
-          MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - '
               'alternate websocket implementation selected');
           connection =
               MqttServerWs2Connection(securityContext, _clientEventBus);
         } else {
-          MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - '
               'websocket selected');
           connection = MqttServerWsConnection(_clientEventBus);
         }
@@ -89,12 +93,14 @@ class SynchronousMqttServerConnectionHandler
           connection.protocols = websocketProtocols;
         }
       } else if (secure) {
-        MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::internalConnect - '
             'secure selected');
         connection = MqttServerSecureConnection(
             securityContext, _clientEventBus, onBadCertificate);
       } else {
-        MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::internalConnect - '
             'insecure TCP selected');
         connection = MqttServerNormalConnection(_clientEventBus);
       }
@@ -102,30 +108,39 @@ class SynchronousMqttServerConnectionHandler
 
       // Connect
       _connectTimer = MqttCancellableAsyncSleep(5000);
-      await connection.connect(hostname, port);
+      try {
+        await connection.connect(hostname, port);
+      } on Exception {
+        MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect'
+            ' exception thrown - ignoring');
+      }
       // Transmit the required connection message to the broker.
-      MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect '
+      MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect '
           'sending connect message');
       sendMessage(connectMessage);
-      MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+      MqttLogger.log(
+          'SynchronousMqttServerConnectionHandler::internalConnect - '
           'pre sleep, state = $connectionStatus');
       // We're the sync connection handler so we need to wait for the
       // brokers acknowledgement of the connections
       await _connectTimer.sleep();
-      MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect - '
+      MqttLogger.log(
+          'SynchronousMqttServerConnectionHandler::internalConnect - '
           'post sleep, state = $connectionStatus');
     } while (connectionStatus.state != MqttConnectionState.connected &&
         ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionStatus.state != MqttConnectionState.connected) {
-      MqttLogger.log(
-          'SynchronousMqttConnectionHandler::internalConnect failed');
-      throw NoConnectionException('The maximum allowed connection attempts '
-          '({$maxConnectionAttempts}) were exceeded. '
-          'The broker is not responding to the connection request message '
-          '(Missing Connection Acknowledgement');
+      if (!autoReconnectInProgress) {
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::internalConnect failed');
+        throw NoConnectionException('The maximum allowed connection attempts '
+            '({$maxConnectionAttempts}) were exceeded. '
+            'The broker is not responding to the connection request message '
+            '(Missing Connection Acknowledgement');
+      }
     }
-    MqttLogger.log('SynchronousMqttConnectionHandler::internalConnect '
+    MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect '
         'exited with state $connectionStatus');
     return connectionStatus;
   }
@@ -133,7 +148,7 @@ class SynchronousMqttServerConnectionHandler
   /// Disconnects
   @override
   MqttConnectionState disconnect() {
-    MqttLogger.log('SynchronousMqttConnectionHandler::disconnect');
+    MqttLogger.log('SynchronousMqttServerConnectionHandler::disconnect');
     // Send a disconnect message to the broker
     sendMessage(MqttDisconnectMessage());
     // Disconnect
@@ -148,7 +163,8 @@ class SynchronousMqttServerConnectionHandler
 
   /// Processes the connect acknowledgement message.
   bool _connectAckProcessor(MqttMessage msg) {
-    MqttLogger.log('SynchronousMqttConnectionHandler::_connectAckProcessor');
+    MqttLogger.log(
+        'SynchronousMqttServerConnectionHandler::_connectAckProcessor');
     try {
       final MqttConnectAckMessage ackMsg = msg;
       // Drop the connection if our connect request has been rejected.
@@ -162,13 +178,15 @@ class SynchronousMqttServerConnectionHandler
               MqttConnectReturnCode.notAuthorized ||
           ackMsg.variableHeader.returnCode ==
               MqttConnectReturnCode.badUsernameOrPassword) {
-        MqttLogger.log('SynchronousMqttConnectionHandler::_connectAckProcessor '
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::_connectAckProcessor '
             'connection rejected');
         connectionStatus.returnCode = ackMsg.variableHeader.returnCode;
         _performConnectionDisconnect();
       } else {
         // Initialize the keepalive to start the ping based keepalive process.
-        MqttLogger.log('SynchronousMqttConnectionHandler::_connectAckProcessor '
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::_connectAckProcessor '
             '- state = connected');
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
@@ -182,7 +200,7 @@ class SynchronousMqttServerConnectionHandler
     }
     // Cancel the connect timer;
     MqttLogger.log(
-        'SynchronousMqttConnectionHandler:: cancelling connect timer');
+        'SynchronousMqttServerConnectionHandler:: cancelling connect timer');
     _connectTimer.cancel();
     return true;
   }
