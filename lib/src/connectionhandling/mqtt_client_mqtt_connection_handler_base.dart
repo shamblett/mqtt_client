@@ -13,17 +13,64 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
   MqttConnectionHandlerBase();
 
+  /// Successful connection callback.
+  @override
+  ConnectCallback onConnected;
+
+  /// Unsolicited disconnection callback.
+  @override
+  DisconnectCallback onDisconnected;
+
+  /// Auto reconnect callback
+  @override
+  AutoReconnectCallback onAutoReconnect;
+
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
+
+  // Server name, needed for auto reconnect.
+  @override
+  String server;
+
+  // Port number, needed for auto reconnect.
+  @override
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  @override
+  MqttConnectMessage connectionMessage;
+
+  /// Callback function to handle bad certificate. if true, ignore the error.
+  @override
+  bool Function(dynamic certificate) onBadCertificate;
+
+  /// Max connection attempts
+  static const int maxConnectionAttempts = 3;
+
+  /// The broker connection acknowledgment timer
+  @protected
+  MqttCancellableAsyncSleep connectTimer;
+
+  /// The event bus
+  @protected
+  events.EventBus clientEventBus;
+
   /// User supplied websocket protocols
+  @protected
   List<String> websocketProtocols;
 
   /// The connection
+  @protected
   dynamic connection;
 
   /// Registry of message processors
+  @protected
   Map<MqttMessageType, MessageCallbackFunction> messageProcessorRegistry =
       <MqttMessageType, MessageCallbackFunction>{};
 
   /// Registry of sent message callbacks
+  @protected
   List<MessageCallbackFunction> sentMessageCallbacks =
       <MessageCallbackFunction>[];
 
@@ -50,10 +97,12 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   }
 
   /// Connect to the specific Mqtt Connection internally.
+  @protected
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage message);
 
   /// Auto reconnect
+  @protected
   void autoReconnect(AutoReconnect reconnectEvent) async {
     // If already in progress exit
     if (autoReconnectInProgress) {
@@ -134,8 +183,71 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
 
   /// Handles the Message Available event of the connection control for
   /// handling non connection messages.
+  @protected
   void messageAvailable(MessageAvailable event) {
     final callback = messageProcessorRegistry[event.message.header.messageType];
     callback(event.message);
+  }
+
+  /// Disconnects
+  @override
+  MqttConnectionState disconnect() {
+    MqttLogger.log('SynchronousMqttServerConnectionHandler::disconnect');
+    // Send a disconnect message to the broker
+    sendMessage(MqttDisconnectMessage());
+    // Disconnect
+    _performConnectionDisconnect();
+    return connectionStatus.state;
+  }
+
+  /// Disconnects the underlying connection object.
+  @protected
+  void _performConnectionDisconnect() {
+    connectionStatus.state = MqttConnectionState.disconnected;
+  }
+
+  /// Processes the connect acknowledgement message.
+  @protected
+  bool connectAckProcessor(MqttMessage msg) {
+    MqttLogger.log(
+        'SynchronousMqttServerConnectionHandler::_connectAckProcessor');
+    try {
+      final MqttConnectAckMessage ackMsg = msg;
+      // Drop the connection if our connect request has been rejected.
+      if (ackMsg.variableHeader.returnCode ==
+              MqttConnectReturnCode.brokerUnavailable ||
+          ackMsg.variableHeader.returnCode ==
+              MqttConnectReturnCode.identifierRejected ||
+          ackMsg.variableHeader.returnCode ==
+              MqttConnectReturnCode.unacceptedProtocolVersion ||
+          ackMsg.variableHeader.returnCode ==
+              MqttConnectReturnCode.notAuthorized ||
+          ackMsg.variableHeader.returnCode ==
+              MqttConnectReturnCode.badUsernameOrPassword) {
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::_connectAckProcessor '
+            'connection rejected');
+        connectionStatus.returnCode = ackMsg.variableHeader.returnCode;
+        _performConnectionDisconnect();
+      } else {
+        // Initialize the keepalive to start the ping based keepalive process.
+        MqttLogger.log(
+            'SynchronousMqttServerConnectionHandler::_connectAckProcessor '
+            '- state = connected');
+        connectionStatus.state = MqttConnectionState.connected;
+        connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
+        // Call the connected callback if we have one
+        if (onConnected != null) {
+          onConnected();
+        }
+      }
+    } on Exception {
+      _performConnectionDisconnect();
+    }
+    // Cancel the connect timer;
+    MqttLogger.log(
+        'SynchronousMqttServerConnectionHandler:: cancelling connect timer');
+    connectTimer.cancel();
+    return true;
   }
 }
