@@ -8,32 +8,18 @@
 part of mqtt_server_client;
 
 /// The MQTT client server connection base class
-class MqttServerConnection {
+class MqttServerConnection extends MqttConnectionBase {
   /// Default constructor
-  MqttServerConnection(this._clientEventBus);
+  MqttServerConnection(var clientEventBus) : super(clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttServerConnection.fromConnect(
-      String server, int port, this._clientEventBus) {
+  MqttServerConnection.fromConnect(String server, int port, var clientEventBus)
+      : super(clientEventBus) {
     connect(server, port);
   }
 
-  /// The socket that maintains the connection to the MQTT broker.
-  dynamic client;
-
-  /// The read wrapper
-  ReadWrapper readWrapper;
-
-  ///The read buffer
-  MqttByteBuffer messageStream;
-
-  /// Unsolicited disconnection callback
-  DisconnectCallback onDisconnected;
-
-  /// The event bus
-  final events.EventBus _clientEventBus;
-
   /// Connect, must be overridden in connection classes
+  @override
   Future<void> connect(String server, int port) {
     final completer = Completer<void>();
     return completer.future;
@@ -43,7 +29,7 @@ class MqttServerConnection {
   void _startListening() {
     MqttLogger.log('MqttServerConnection::_startListening');
     try {
-      client.listen(_onData, onError: _onError, onDone: _onDone);
+      client.listen(_onData, onError: onError, onDone: onDone);
     } on Exception catch (e) {
       print('MqttServerConnection::_startListening - exception raised $e');
     }
@@ -82,8 +68,8 @@ class MqttServerConnection {
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log('MqttServerConnection::_onData - message received $msg');
-        if (!_clientEventBus.streamController.isClosed) {
-          _clientEventBus.fire(MessageAvailable(msg));
+        if (!clientEventBus.streamController.isClosed) {
+          clientEventBus.fire(MessageAvailable(msg));
           MqttLogger.log('MqttServerConnection::_onData - message processed');
         } else {
           MqttLogger.log(
@@ -93,45 +79,9 @@ class MqttServerConnection {
     }
   }
 
-  /// OnError listener callback
-  void _onError(dynamic error) {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttServerConnection::_onError - calling disconnected callback');
-      onDisconnected();
-    }
-  }
-
-  /// OnDone listener callback
-  void _onDone() {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttServerConnection::_onDone - calling disconnected callback');
-      onDisconnected();
-    }
-  }
-
-  void _disconnect() {
-    if (client != null) {
-      client.close();
-      client = null;
-    }
-  }
-
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
     client?.add(messageBytes.toList());
-  }
-
-  /// User requested or auto disconnect disconnection
-  void disconnect({bool auto = false}) {
-    if (auto) {
-      _disconnect();
-    } else {
-      _onDone();
-    }
   }
 }

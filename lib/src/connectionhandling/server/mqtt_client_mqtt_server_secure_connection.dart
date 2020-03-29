@@ -44,7 +44,7 @@ class MqttServerSecureConnection extends MqttServerConnection {
         _startListening();
         completer.complete();
       }).catchError((dynamic e) {
-        _onError(e);
+        onError(e);
         completer.completeError(e);
       });
     } on SocketException catch (e) {

@@ -57,7 +57,7 @@ class MqttServerWsConnection extends MqttServerConnection {
         _startListening();
         completer.complete();
       }).catchError((dynamic e) {
-        _onError(e);
+        onError(e);
         completer.completeError(e);
       });
     } on Exception {

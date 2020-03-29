@@ -12,6 +12,8 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
+// ignore_for_file: invalid_use_of_protected_member
+
 @TestOn('vm')
 void main() {
   // Test wide variables
