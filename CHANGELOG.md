@@ -1,3 +1,6 @@
+# 6.2.0
+Issue 90
+
 # 6.1.0
 Issue 163 and Issue 90
 
