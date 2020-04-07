@@ -183,5 +183,5 @@ void onConnected() {
 
 /// Pong callback
 void pong() {
-  print('EXAMPLE::Ping response client callback invoked');
+  print('EXAMPLE::Ping response client callback invoked - you may want to disconnect your broker here');
 }
