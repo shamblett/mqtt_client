@@ -8,35 +8,14 @@
 part of mqtt_browser_client;
 
 /// The MQTT browser connection base class
-class MqttBrowserConnection {
+class MqttBrowserConnection extends MqttConnectionBase {
   /// Default constructor
-  MqttBrowserConnection(this._clientEventBus);
+  MqttBrowserConnection(var clientEventBus) : super(clientEventBus);
 
   /// Initializes a new instance of the MqttBrowserConnection class.
-  MqttBrowserConnection.fromConnect(
-      String server, int port, this._clientEventBus) {
+  MqttBrowserConnection.fromConnect(String server, int port, var clientEventBus)
+      : super(clientEventBus) {
     connect(server, port);
-  }
-
-  /// The web socket that maintains the connection to the MQTT broker.
-  dynamic client;
-
-  /// The read wrapper
-  ReadWrapper readWrapper;
-
-  ///The read buffer
-  MqttByteBuffer messageStream;
-
-  /// Unsolicited disconnection callback
-  DisconnectCallback onDisconnected;
-
-  /// The event bus
-  final events.EventBus _clientEventBus;
-
-  /// Connect, must be overridden in connection classes
-  Future<void> connect(String server, int port) {
-    final completer = Completer<void>();
-    return completer.future;
   }
 
   /// Create the listening stream subscription and subscribe the callbacks
@@ -46,7 +25,7 @@ class MqttBrowserConnection {
       client.onClose.listen((e) {
         MqttLogger.log(
             'MqttBrowserConnection::_startListening - websocket is closed');
-        _onDone();
+        onDone();
       });
       client.onMessage.listen((MessageEvent e) {
         _onData(e.data);
@@ -54,7 +33,7 @@ class MqttBrowserConnection {
       client.onError.listen((e) {
         MqttLogger.log(
             'MqttBrowserConnection::_startListening - websocket has errored');
-        _onError(e);
+        onError(e);
       });
     } on Exception catch (e) {
       MqttLogger.log(
@@ -97,8 +76,8 @@ class MqttBrowserConnection {
         messageStream.shrink();
         MqttLogger.log(
             'MqttBrowserConnection::_onData - message received $msg');
-        if (!_clientEventBus.streamController.isClosed) {
-          _clientEventBus.fire(MessageAvailable(msg));
+        if (!clientEventBus.streamController.isClosed) {
+          clientEventBus.fire(MessageAvailable(msg));
           MqttLogger.log('MqttBrowserConnection::_onData - message processed');
         } else {
           MqttLogger.log(
@@ -108,42 +87,11 @@ class MqttBrowserConnection {
     }
   }
 
-  /// OnError listener callback
-  void _onError(dynamic error) {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttBrowserConnection::_onError - calling disconnected callback');
-      onDisconnected();
-    }
-  }
-
-  /// OnDone listener callback
-  void _onDone() {
-    _disconnect();
-    MqttLogger.log(
-        'MqttBrowserConnection::_onDone - calling disconnected callback');
-    onDisconnected();
-  }
-
-  /// Disconnects from the message broker
-  void _disconnect() {
-    if (client != null) {
-      client.close();
-      client = null;
-    }
-  }
-
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
     var buffer = messageBytes.buffer;
-    var bdata = ByteData.view(buffer);
-    client?.sendTypedData(bdata);
-  }
-
-  /// User requested disconnection
-  void disconnect() {
-    _onDone();
+    var bData = ByteData.view(buffer);
+    client?.sendTypedData(bData);
   }
 }

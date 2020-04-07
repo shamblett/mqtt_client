@@ -13,6 +13,9 @@ typedef DisconnectCallback = void Function();
 /// The client Connect callback type
 typedef ConnectCallback = void Function();
 
+/// The client auto reconnect callback type
+typedef AutoReconnectCallback = void Function();
+
 /// A client class for interacting with MQTT Data Packets.
 /// Do not instantiate this class directly, instead instantiate
 /// either a [MqttClientServer] class or an [MqttBrowserClient] as needed.
@@ -46,6 +49,17 @@ class MqttClient {
   /// Incorrect instantiation protection
   @protected
   var instantiationCorrect = false;
+
+  /// Auto reconnect, the client will auto reconnect if set true.
+  ///
+  /// The auto reconnect mechanism will not be invoked either for a client
+  /// that has not been connected, i.e. you must have established an initial
+  /// connection to the broker or for a solicited disconnect request.
+  ///
+  /// Once invoked the mechanism will try forever to reconnect to the broker with its
+  /// original connection parameters. This can be stopped only by calling
+  /// [disconnect()] on the client.
+  var autoReconnect = false;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -110,10 +124,17 @@ class MqttClient {
   MqttConnectMessage connectionMessage;
 
   /// Client disconnect callback, called on unsolicited disconnect.
+  /// This will not be called even if set if [autoReconnect} is set,instead
+  /// [AutoReconnectCallback] will be called.
   DisconnectCallback onDisconnected;
 
   /// Client connect callback, called on successful connect
   ConnectCallback onConnected;
+
+  /// Auto reconnect callback, if auto reconnect is selected this callback will
+  /// be called before auto reconnect processing is invoked to allow the user to
+  /// perform any pre auto reconnect actions.
+  AutoReconnectCallback onAutoReconnect;
 
   /// Subscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been subscribed to.
@@ -192,6 +213,8 @@ class MqttClient {
     }
     connectionHandler.onDisconnected = internalDisconnect;
     connectionHandler.onConnected = onConnected;
+    connectionHandler.onAutoReconnect = onAutoReconnect;
+    //
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
     subscriptionsManager = SubscriptionsManager(
         connectionHandler, publishingManager, clientEventBus);
@@ -220,6 +243,24 @@ class MqttClient {
           .keepAliveFor(MqttClientConstants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
+
+  /// Auto reconnect method, used to invoke a manual auto reconnect sequence.
+  /// If [autoReconnect] is not set this method does nothing.
+  /// If the client is not disconnected this method will have no effect
+  /// unless the [force] parameter is set to true, otherwise
+  /// auto reconnect will try indefinitely to reconnect to the broker.
+  void doAutoReconnect({bool force = false}) {
+    if (!autoReconnect) {
+      MqttLogger.log(
+          'MqttClient::doAutoReconnect - auto reconnect is not set, exiting');
+      return;
+    }
+
+    if (connectionStatus.state != MqttConnectionState.connected || force) {
+      // Fire a manual auto reconnect request
+      clientEventBus.fire(AutoReconnect(userReconnect: true));
+    }
+  }
 
   /// Initiates a topic subscription request to the connected broker
   /// with a strongly typed data processor callback.
@@ -271,6 +312,8 @@ class MqttClient {
   ///
   /// Do NOT call this in any onDisconnect callback that may be set,
   /// this will result in a loop situation.
+  ///
+  /// This method will disconnect regardles of the [autoReconnect] state.
   void disconnect() {
     _disconnect(unsolicited: false);
   }
@@ -280,12 +323,17 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
-    // Only call disconnect if we are connected, i.e. a connection to
-    // the broker has been previously established.
-    if (connectionStatus.state == MqttConnectionState.connected) {
-      _disconnect(unsolicited: true);
+    if (autoReconnect) {
+      if (!connectionHandler.autoReconnectInProgress) {
+        // Fire an automatic auto reconnect request
+        clientEventBus.fire(AutoReconnect(userReconnect: false));
+      } else {
+        MqttLogger.log(
+            'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
+      }
     } else {
-      _disconnect(unsolicited: false);
+      // Unsolicited disconnect
+      _disconnect(unsolicited: true);
     }
   }
 
@@ -323,14 +371,16 @@ class MqttClient {
           "and password '{$password}'");
       if (username.trim().length >
           MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log('Username length (${username.trim().length}) '
+        MqttLogger.log(
+            'MqttClient::checkCredentials - Username length (${username.trim().length}) '
             'exceeds the max recommended in the MQTT spec. ');
       }
     }
     if (password != null &&
         password.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log('Password length (${password.trim().length}) '
+      MqttLogger.log(
+          'MqttClient::checkCredentials - Password length (${password.trim().length}) '
           'exceeds the max recommended in the MQTT spec. ');
     }
   }

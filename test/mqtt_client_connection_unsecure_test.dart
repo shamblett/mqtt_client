@@ -16,7 +16,7 @@ import 'support/mqtt_client_mockbroker.dart';
 @TestOn('vm')
 
 // Mock classes
-class MockCH extends Mock implements MqttConnectionHandler {
+class MockCH extends Mock implements MqttServerConnectionHandler {
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 }
@@ -76,7 +76,7 @@ void main() {
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -95,7 +95,7 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       ch.onDisconnected = disconnectCB;
       try {
         await ch.connect(mockBrokerAddress, badPort,
@@ -111,7 +111,7 @@ void main() {
     test('Connect no connect ack', () async {
       await broker.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       try {
         await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -135,7 +135,7 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandler;
       ch.onConnected = connectCb;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
@@ -155,7 +155,7 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandler;
       final status = await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
@@ -191,7 +191,7 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));

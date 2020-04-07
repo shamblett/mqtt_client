@@ -14,6 +14,8 @@ script:
   - pub run test test/mqtt_client_connection_unsecure_test.dart
   - pub run test test/mqtt_client_connection_secure_test.dart
   - pub run test test/mqtt_client_connection_ws_test.dart
+  - pub run test test/mqtt_client_connection_autoreconnect_test.dart
+  - pub run test test/mqtt_client_connection_autoreconnect_nobroker_test.dart
 branches:
     only:
     - master

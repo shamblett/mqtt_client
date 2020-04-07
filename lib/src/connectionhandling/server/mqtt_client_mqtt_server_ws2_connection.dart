@@ -8,6 +8,7 @@
 
 part of mqtt_server_client;
 
+/// Detatched socket class for alternative websocket support
 class _DetachedSocket extends Stream<Uint8List> implements Socket {
   _DetachedSocket(this._socket, this._subscription);
 
@@ -90,13 +91,14 @@ class _DetachedSocket extends Stream<Uint8List> implements Socket {
   void setRawOption(RawSocketOption option) => _socket.setRawOption(option);
 }
 
-/// The MQTT secure connection class
-class MqttWs2Connection extends MqttConnection {
+/// The MQTT server alternative websocket connection class
+class MqttServerWs2Connection extends MqttServerConnection {
   /// Default constructor
-  MqttWs2Connection(this.context, events.EventBus eventBus) : super(eventBus);
+  MqttServerWs2Connection(this.context, events.EventBus eventBus)
+      : super(eventBus);
 
   /// Initializes a new instance of the MqttWs2Connection class.
-  MqttWs2Connection.fromConnect(
+  MqttServerWs2Connection.fromConnect(
       String server, int port, events.EventBus eventBus)
       : super(eventBus) {
     connect(server, port);
@@ -150,7 +152,7 @@ class MqttWs2Connection extends MqttConnection {
           _startListening();
           completer.complete();
         }).catchError((dynamic e) {
-          _onError(e);
+          onError(e);
           completer.completeError(e);
         });
       });

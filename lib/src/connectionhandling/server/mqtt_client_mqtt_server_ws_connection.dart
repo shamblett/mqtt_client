@@ -7,13 +7,13 @@
 
 part of mqtt_server_client;
 
-/// The MQTT connection class for the websocket interface
-class MqttWsConnection extends MqttConnection {
+/// The MQTT server connection class for the websocket interface
+class MqttServerWsConnection extends MqttServerConnection {
   /// Default constructor
-  MqttWsConnection(events.EventBus eventBus) : super(eventBus);
+  MqttServerWsConnection(events.EventBus eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttWsConnection.fromConnect(
+  MqttServerWsConnection.fromConnect(
       String server, int port, events.EventBus eventBus)
       : super(eventBus) {
     connect(server, port);
@@ -57,7 +57,7 @@ class MqttWsConnection extends MqttConnection {
         _startListening();
         completer.complete();
       }).catchError((dynamic e) {
-        _onError(e);
+        onError(e);
         completer.completeError(e);
       });
     } on Exception {

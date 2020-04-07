@@ -15,7 +15,7 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'mqtt_client.dart';
 
 part 'src/mqtt_browser_client.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_browser_connection_handler.dart';
-part 'src/connectionhandling/mqtt_client_synchronous_mqtt_browser_connection_handler.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_browser_ws_connection.dart';
-part 'src/connectionhandling/mqtt_client_mqtt_browser_connection.dart';
+part 'src/connectionhandling/browser/mqtt_client_mqtt_browser_connection_handler.dart';
+part 'src/connectionhandling/browser/mqtt_client_synchronous_mqtt_browser_connection_handler.dart';
+part 'src/connectionhandling/browser/mqtt_client_mqtt_browser_ws_connection.dart';
+part 'src/connectionhandling/browser/mqtt_client_mqtt_browser_connection.dart';

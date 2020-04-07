@@ -12,12 +12,14 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_test_connection_handler.dart';
 
+// ignore_for_file: invalid_use_of_protected_member
+
 @TestOn('vm')
 
 // Mock classes
-class MockCH extends Mock implements MqttConnectionHandler {}
+class MockCH extends Mock implements MqttServerConnectionHandler {}
 
-class MockCON extends Mock implements MqttNormalConnection {}
+class MockCON extends Mock implements MqttServerNormalConnection {}
 
 final TestConnectionHandlerNoSend testCHNS = TestConnectionHandlerNoSend();
 final TestConnectionHandlerSend testCHS = TestConnectionHandlerSend();

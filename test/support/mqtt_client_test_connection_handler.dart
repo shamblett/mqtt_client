@@ -8,10 +8,30 @@ import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-class TestConnectionHandlerNoSend extends MqttConnectionHandler {
+class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
+  /// Auto reconnect callback
+  @override
+  AutoReconnectCallback onAutoReconnect;
+
   /// Use a websocket rather than TCP
   @override
   bool useWebSocket = false;
+
+  // Server name, needed for auto reconnect.
+  @override
+  String server;
+
+  // Port number, needed for auto reconnect.
+  @override
+  int port;
+
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
+
+  // Connection message, needed for auto reconnect.
+  @override
+  MqttConnectMessage connectionMessage;
 
   /// Alternate websocket implementation.
   ///
@@ -62,10 +82,30 @@ class TestConnectionHandlerNoSend extends MqttConnectionHandler {
       connectionStatus.state = MqttConnectionState.disconnected;
 }
 
-class TestConnectionHandlerSend extends MqttConnectionHandler {
+class TestConnectionHandlerSend extends MqttServerConnectionHandler {
+  // Server name, needed for auto reconnect.
+  @override
+  String server;
+
+  // Port number, needed for auto reconnect.
+  @override
+  int port;
+
+  // Connection message, needed for auto reconnect.
+  @override
+  MqttConnectMessage connectionMessage;
+
+  /// Auto reconnect in progress
+  @override
+  bool autoReconnectInProgress = false;
+
   /// Use a websocket rather than TCP
   @override
   bool useWebSocket = false;
+
+  /// Auto reconnect callback
+  @override
+  AutoReconnectCallback onAutoReconnect;
 
   /// Alternate websocket implementation.
   ///

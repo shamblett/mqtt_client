@@ -12,6 +12,8 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
 
+// ignore_for_file: invalid_use_of_protected_member
+
 @TestOn('vm')
 void main() {
   // Test wide variables
@@ -26,7 +28,7 @@ void main() {
     test('Invalid URL', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttConnectionHandler(clientEventBus);
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -51,7 +53,7 @@ void main() {
     test('Invalid URL - bad scheme', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttConnectionHandler(clientEventBus);
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -88,7 +90,7 @@ void main() {
 
       await brokerWs.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
       MqttLogger.loggingOn = true;
       ch.useWebSocket = true;
       ch.websocketProtocols = <String>['SJHprotocol'];

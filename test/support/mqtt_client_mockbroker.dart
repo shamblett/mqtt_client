@@ -20,7 +20,7 @@ class MessageSerializationHelper {
 }
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
-/// connection handlers that are difficult to test otherwise. standard TCP connection.
+/// connection handlers that are difficult to test otherwise. Uses a standard TCP connection.
 class MockBroker {
   MockBroker();
 
@@ -41,6 +41,12 @@ class MockBroker {
       return completer.complete();
     });
     return completer.future;
+  }
+
+  Future<void> stop() async {
+    print('MockBroker:: stopping server');
+    close();
+    await listener.close();
   }
 
   void _connectAccept(Socket clientSocket) {
@@ -76,8 +82,9 @@ class MockBroker {
     client.add(messBuff.toList());
   }
 
-  /// Close the broker socket
+  /// Close the broker client socket
   void close() {
+    print('MockBroker:: closing client socket');
     client?.destroy();
   }
 }
