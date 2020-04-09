@@ -19,21 +19,22 @@ import 'package:mqtt_client/mqtt_browser_client.dart';
 /// to be hold by the broker, in MQTT 3.1.1 you can set an empty ClientId, which results in a connection without any state.
 /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
 /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
-/// of 1883 is used.
-/// If you want to use websockets rather than TCP see below.
+/// of 1883 is used. Only web sockets are supported in the browser client.
 
-final client = MqttBrowserClient('test.mosquitto.org', '');
+/// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
+/// for details.
+final client = MqttBrowserClient('ws://test.mosquitto.org', '');
 
 Future<int> main() async {
-  /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
-  /// for details.
-
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
   client.keepAlivePeriod = 20;
+
+  /// The ws port for Mosquitto is 8080, for wss it is 8081
+  client.port = 8080;
 
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
