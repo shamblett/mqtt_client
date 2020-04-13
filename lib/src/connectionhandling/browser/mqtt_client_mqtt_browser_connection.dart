@@ -94,4 +94,22 @@ class MqttBrowserConnection extends MqttConnectionBase {
     var bData = ByteData.view(buffer);
     client?.sendTypedData(bData);
   }
+
+  void _disconnect() {
+    if (client != null) {
+      client.close();
+      client = null;
+    }
+  }
+
+  /// OnDone listener callback
+  @override
+  void onDone() {
+    _disconnect();
+    if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttBrowserConnection::_onDone - calling disconnected callback');
+      onDisconnected();
+    }
+  }
 }
