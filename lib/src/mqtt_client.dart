@@ -193,7 +193,12 @@ class MqttClient {
   events.EventBus clientEventBus;
 
   /// The stream on which all subscribed topic updates are published to
-  Stream<List<MqttReceivedMessage<MqttMessage>>> updates;
+  Stream<List<MqttReceivedMessage<MqttMessage>>> get updates {
+    if (null == subscriptionsManager) {
+      return null;
+    }
+    return subscriptionsManager.subscriptionNotifier.changes;
+  }
 
   /// Comon client connection method.
   Future<MqttClientConnectionStatus> connect(
@@ -221,7 +226,6 @@ class MqttClient {
     subscriptionsManager.onSubscribed = onSubscribed;
     subscriptionsManager.onUnsubscribed = onUnsubscribed;
     subscriptionsManager.onSubscribeFail = onSubscribeFail;
-    updates = subscriptionsManager.subscriptionNotifier.changes;
     keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
     if (pongCallback != null) {
       keepAlive.pongCallback = pongCallback;
