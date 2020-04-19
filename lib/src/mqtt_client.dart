@@ -193,12 +193,8 @@ class MqttClient {
   events.EventBus clientEventBus;
 
   /// The stream on which all subscribed topic updates are published to
-  Stream<List<MqttReceivedMessage<MqttMessage>>> get updates {
-    if (null == subscriptionsManager) {
-      return null;
-    }
-    return subscriptionsManager.subscriptionNotifier.changes;
-  }
+  Stream<List<MqttReceivedMessage<MqttMessage>>> get updates =>
+      subscriptionsManager?.subscriptionNotifier?.changes;
 
   /// Comon client connection method.
   Future<MqttClientConnectionStatus> connect(
