@@ -63,6 +63,9 @@ Future<int> main() async {
   /// from the broker.
   client.pongCallback = pong;
 
+  /// Set an on bad certificate callback, note that the parameter is needed.
+  client.onBadCertificate = (dynamic a) => true;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password, the default keepalive interval(60s)
   /// and clean session, an example of a specific one below.
