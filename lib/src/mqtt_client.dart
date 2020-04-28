@@ -342,10 +342,10 @@ class MqttClient {
     // Only disconnect the connection handler if the request is
     // solicited, unsolicited requests, ie broker termination don't
     // need this.
-    var returnCode = MqttConnectReturnCode.unsolicited;
+    var disconnectOrigin = MqttDisconnectionOrigin.unsolicited;
     if (!unsolicited) {
       connectionHandler?.disconnect();
-      returnCode = MqttConnectReturnCode.solicited;
+      disconnectOrigin = MqttDisconnectionOrigin.solicited;
     }
     publishingManager?.published?.close();
     publishingManager = null;
@@ -357,7 +357,7 @@ class MqttClient {
     clientEventBus = null;
     // Set the connection status before calling onDisconnected
     _connectionStatus.state = MqttConnectionState.disconnected;
-    _connectionStatus.returnCode = returnCode;
+    _connectionStatus.disconnectionOrigin = disconnectOrigin;
     if (onDisconnected != null) {
       onDisconnected();
     }

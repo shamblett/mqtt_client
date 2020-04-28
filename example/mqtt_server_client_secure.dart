@@ -169,7 +169,8 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
-  if (client.connectionStatus.returnCode == MqttConnectReturnCode.solicited) {
+  if (client.connectionStatus.disconnectionOrigin ==
+      MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   }
   exit(-1);
