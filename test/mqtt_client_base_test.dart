@@ -858,12 +858,16 @@ void main() {
   group('Connection Status', () {
     test('To String', () {
       final status = MqttClientConnectionStatus();
-      expect(status.toString(),
-          'Connection status is disconnected with return code noneSpecified');
+      expect(
+          status.toString(),
+          'Connection status is disconnected with return code of noneSpecified and '
+          'a disconnection origin of none');
       status.state = MqttConnectionState.faulted;
       status.returnCode = MqttConnectReturnCode.identifierRejected;
-      expect(status.toString(),
-          'Connection status is faulted with return code identifierRejected');
+      expect(
+          status.toString(),
+          'Connection status is faulted with return code of identifierRejected '
+          'and a disconnection origin of none');
     });
   });
 

@@ -7,7 +7,7 @@
 
 part of mqtt_client;
 
-/// Enumeration of allowable connection request return codes.
+/// Enumeration of allowable connection request return codes from a broker.
 enum MqttConnectReturnCode {
   /// Connection accepted
   connectionAccepted,
@@ -26,12 +26,6 @@ enum MqttConnectReturnCode {
 
   /// Not authorised
   notAuthorized,
-
-  /// Unsolicited, i.e. not requested by the client
-  unsolicited,
-
-  /// Solicited, i.e. requested by the client
-  solicited,
 
   /// Default
   noneSpecified

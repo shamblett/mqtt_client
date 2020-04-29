@@ -7,6 +7,20 @@
 
 part of mqtt_client;
 
+/// Enumeration that indicates the origin of a client disconnection
+enum MqttDisconnectionOrigin {
+  /// Unsolicited, i.e. not requested by the client,
+  /// for example a broker/network initiated disconnect
+  unsolicited,
+
+  /// Solicited, i.e. requested by the client,
+  /// for example disconnect called on the client.
+  solicited,
+
+  /// None set
+  none
+}
+
 /// Enumeration that indicates various client connection states
 enum MqttConnectionState {
   /// The MQTT Connection is in the process of disconnecting from the broker.

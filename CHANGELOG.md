@@ -1,3 +1,8 @@
+# 7.0.0
+Issue 172 + 177 + 181
+issue 172 introduces a breaking API change in the connection 
+status class MqttClientConnectionStatus
+
 # 6.2.1
 Issue 173
 
