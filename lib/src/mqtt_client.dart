@@ -352,6 +352,7 @@ class MqttClient {
     subscriptionsManager = null;
     keepAlive?.stop();
     keepAlive = null;
+    _connectionStatus.returnCode = connectionStatus?.returnCode;
     connectionHandler = null;
     clientEventBus?.destroy();
     clientEventBus = null;
