@@ -1,3 +1,6 @@
+# 7.1.0
+Issue 172 bug fix
+
 # 7.0.0
 Issue 172 + 177 + 181
 issue 172 introduces a breaking API change in the connection 
