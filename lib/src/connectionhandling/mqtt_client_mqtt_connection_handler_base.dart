@@ -193,8 +193,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   MqttConnectionState disconnect() {
     MqttLogger.log('SynchronousMqttServerConnectionHandler::disconnect');
-    // Send a disconnect message to the broker
-    sendMessage(MqttDisconnectMessage());
+    if (connectionStatus.state == MqttConnectionState.connected) {
+      // Send a disconnect message to the broker
+      sendMessage(MqttDisconnectMessage());
+    }
     // Disconnect
     _performConnectionDisconnect();
     return connectionStatus.state;
