@@ -1,3 +1,6 @@
+# 7.1.1
+Issue 190 bug fix
+
 # 7.1.0
 Issue 172 bug fix
 
