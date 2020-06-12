@@ -1,5 +1,8 @@
+# 7.2.0
+Pull request 191, mac connection attempts is now configurable.
+
 # 7.1.1
-Issue 190 bug fix
+Pull request 190 bug fix
 
 # 7.1.0
 Issue 172 bug fix
