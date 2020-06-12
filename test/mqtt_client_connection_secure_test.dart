@@ -77,7 +77,10 @@ void main() {
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       ch.secure = true;
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
@@ -95,7 +98,10 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       ch.secure = true;
       ch.onDisconnected = disconnectCB;
       try {
@@ -144,7 +150,10 @@ void main() {
 
       await broker.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       ch.secure = true;
       final context = SecurityContext.defaultContext;
       final currDir = path.current + path.separator;
@@ -179,7 +188,10 @@ void main() {
       broker.pemName = 'self_signed';
       await broker.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       ch.secure = true;
       ch.onDisconnected = disconnectCB;
       final context = SecurityContext();
@@ -201,7 +213,10 @@ void main() {
       broker.pemName = 'self_signed';
       await broker.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       ch.secure = true;
       // Skip bad certificate
       ch.onBadCertificate = (_) => true;

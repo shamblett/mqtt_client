@@ -12,16 +12,23 @@ class MqttServerClient extends MqttClient {
   /// default Mqtt Port.
   /// The server hostname to connect to
   /// The client identifier to use to connect with
-  MqttServerClient(String server, String clientIdentifier)
-      : super(server, clientIdentifier);
+  MqttServerClient(
+    String server,
+    String clientIdentifier, {
+    this.maxConnectionAttempts = 3,
+  }) : super(server, clientIdentifier);
 
   /// Initializes a new instance of the MqttServerClient class using
   /// the supplied Mqtt Port.
   /// The server hostname to connect to
   /// The client identifier to use to connect with
   /// The port to use
-  MqttServerClient.withPort(String server, String clientIdentifier, int port)
-      : super.withPort(server, clientIdentifier, port);
+  MqttServerClient.withPort(
+    String server,
+    String clientIdentifier,
+    int port, {
+    this.maxConnectionAttempts = 3,
+  }) : super.withPort(server, clientIdentifier, port);
 
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
@@ -39,6 +46,9 @@ class MqttServerClient extends MqttClient {
   /// secure websockets(wss).
   bool secure = false;
 
+  /// Max connection attempts
+  final int maxConnectionAttempts;
+
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.
   /// If a username and password are supplied these will override
@@ -50,7 +60,10 @@ class MqttServerClient extends MqttClient {
       [String username, String password]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
-    connectionHandler = SynchronousMqttServerConnectionHandler(clientEventBus);
+    connectionHandler = SynchronousMqttServerConnectionHandler(
+      clientEventBus,
+      maxConnectionAttempts: 3,
+    );
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;
