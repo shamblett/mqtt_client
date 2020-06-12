@@ -62,7 +62,7 @@ class MqttServerClient extends MqttClient {
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttServerConnectionHandler(
       clientEventBus,
-      maxConnectionAttempts: 3,
+      maxConnectionAttempts: maxConnectionAttempts,
     );
     if (useWebSocket) {
       connectionHandler.secure = false;
