@@ -52,6 +52,7 @@ Future<int> main() async {
   print('EXAMPLE:: <<<< SUBCRIBE 2 >>>>');
   const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.atLeastOnce);
+  const topic3 = 'SJHTopic3'; // Not a wildcard topic - no subscription
 
   // ignore: avoid_annotating_with_dynamic
   client.updates.listen((dynamic c) {
@@ -66,10 +67,12 @@ Future<int> main() async {
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
-  // ignore: avoid_types_on_closure_parameters
   client.published.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+    if (message.variableHeader.topicName == topic3) {
+      print('EXAMPLE:: Non subscribed topic received.');
+    }
   });
 
   final builder1 = MqttClientPayloadBuilder();
@@ -82,14 +85,19 @@ Future<int> main() async {
   print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
   client.publishMessage(topic2, MqttQos.atLeastOnce, builder2.payload);
 
+  final builder3 = MqttClientPayloadBuilder();
+  builder3.addString('Hello from mqtt_client topic 3');
+  print('EXAMPLE:: <<<< PUBLISH 3 - NO SUBSCRIPTION >>>>');
+  client.publishMessage(topic3, MqttQos.atLeastOnce, builder3.payload);
+
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(60);
 
   print('EXAMPLE::Unsubscribing');
-  client.unsubscribe(topic1);
+  //client.unsubscribe(topic1);
   client.unsubscribe(topic2);
 
-  await MqttUtilities.asyncSleep(2);
+  await MqttUtilities.asyncSleep(10);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;

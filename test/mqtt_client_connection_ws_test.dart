@@ -28,7 +28,10 @@ void main() {
     test('Invalid URL', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+        final ch = SynchronousMqttServerConnectionHandler(
+          clientEventBus,
+          maxConnectionAttempts: 3,
+        );
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -53,7 +56,10 @@ void main() {
     test('Invalid URL - bad scheme', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+        final ch = SynchronousMqttServerConnectionHandler(
+          clientEventBus,
+          maxConnectionAttempts: 3,
+        );
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -90,7 +96,10 @@ void main() {
 
       await brokerWs.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus);
+      final ch = SynchronousMqttServerConnectionHandler(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
       MqttLogger.loggingOn = true;
       ch.useWebSocket = true;
       ch.websocketProtocols = <String>['SJHprotocol'];

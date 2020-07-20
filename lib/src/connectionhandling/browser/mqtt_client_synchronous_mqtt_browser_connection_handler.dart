@@ -12,7 +12,10 @@ part of mqtt_browser_client;
 class SynchronousMqttBrowserConnectionHandler
     extends MqttBrowserConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
-  SynchronousMqttBrowserConnectionHandler(clientEventBus) {
+  SynchronousMqttBrowserConnectionHandler(
+    clientEventBus, {
+    @required int maxConnectionAttempts,
+  }) : super(maxConnectionAttempts: maxConnectionAttempts) {
     this.clientEventBus = clientEventBus;
     clientEventBus.on<AutoReconnect>().listen(autoReconnect);
     registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
@@ -69,16 +72,24 @@ class SynchronousMqttBrowserConnectionHandler
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'post sleep, state = $connectionStatus');
     } while (connectionStatus.state != MqttConnectionState.connected &&
-        ++connectionAttempts < MqttConnectionHandlerBase.maxConnectionAttempts);
+        ++connectionAttempts < maxConnectionAttempts);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionStatus.state != MqttConnectionState.connected) {
       if (!autoReconnectInProgress) {
         MqttLogger.log(
             'SynchronousMqttBrowserConnectionHandler::internalConnect failed');
-        throw NoConnectionException('The maximum allowed connection attempts '
-            '({$MqttConnectionHandlerBase.maxConnectionAttempts}) were exceeded. '
-            'The broker is not responding to the connection request message '
-            '(Missing Connection Acknowledgement');
+        if (connectionStatus.returnCode ==
+            MqttConnectReturnCode.noneSpecified) {
+          throw NoConnectionException('The maximum allowed connection attempts '
+              '({$maxConnectionAttempts}) were exceeded. '
+              'The broker is not responding to the connection request message '
+              '(Missing Connection Acknowledgement?');
+        } else {
+          throw NoConnectionException('The maximum allowed connection attempts '
+              '({$maxConnectionAttempts}) were exceeded. '
+              'The broker is not responding to the connection request message correctly'
+              'The return code is ${connectionStatus.returnCode}');
+        }
       }
     }
     MqttLogger.log('SynchronousMqttBrowserConnectionHandler::internalConnect '

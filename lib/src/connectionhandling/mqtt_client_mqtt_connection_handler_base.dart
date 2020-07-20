@@ -11,7 +11,7 @@ part of mqtt_client;
 ///  to serverand browser connection handler implementations.
 abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
-  MqttConnectionHandlerBase();
+  MqttConnectionHandlerBase({@required this.maxConnectionAttempts});
 
   /// Successful connection callback.
   @override
@@ -46,7 +46,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   bool Function(dynamic certificate) onBadCertificate;
 
   /// Max connection attempts
-  static const int maxConnectionAttempts = 3;
+  final int maxConnectionAttempts;
 
   /// The broker connection acknowledgment timer
   @protected
@@ -193,8 +193,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   MqttConnectionState disconnect() {
     MqttLogger.log('SynchronousMqttServerConnectionHandler::disconnect');
-    // Send a disconnect message to the broker
-    sendMessage(MqttDisconnectMessage());
+    if (connectionStatus.state == MqttConnectionState.connected) {
+      // Send a disconnect message to the broker
+      sendMessage(MqttDisconnectMessage());
+    }
     // Disconnect
     _performConnectionDisconnect();
     return connectionStatus.state;

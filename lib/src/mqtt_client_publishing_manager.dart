@@ -108,9 +108,10 @@ class PublishingManager implements IPublishingManager {
   bool handlePublishAcknowledgement(MqttMessage msg) {
     final MqttPublishAckMessage ackMsg = msg;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
-    if (publishedMessages.keys
-        .contains(ackMsg.variableHeader.messageIdentifier)) {
-      publishedMessages.remove(ackMsg.variableHeader.messageIdentifier);
+    final messageIdentifier = ackMsg.variableHeader.messageIdentifier;
+    if (publishedMessages.keys.contains(messageIdentifier)) {
+      _notifyPublish(publishedMessages[messageIdentifier]);
+      publishedMessages.remove(messageIdentifier);
     }
     return true;
   }
@@ -153,7 +154,7 @@ class PublishingManager implements IPublishingManager {
     return publishSuccess;
   }
 
-  /// Handles the publish complete, for messages that are undergoing Qos ExactlyOnce processing.
+  /// Handles the publish release, for messages that are undergoing Qos ExactlyOnce processing.
   bool handlePublishRelease(MqttMessage msg) {
     final MqttPublishReleaseMessage pubRelMsg = msg;
     var publishSuccess = true;
@@ -180,11 +181,8 @@ class PublishingManager implements IPublishingManager {
     final MqttPublishCompleteMessage compMsg = msg;
     final publishMessage =
         publishedMessages.remove(compMsg.variableHeader.messageIdentifier);
-    if (publishMessage != null) {
-      _notifyPublish(publishMessage);
-      return true;
-    }
-    return false;
+    _notifyPublish(publishMessage);
+    return true;
   }
 
   /// Handles publish received messages during processing of QOS level 2 (Exactly once) messages.
@@ -203,7 +201,7 @@ class PublishingManager implements IPublishingManager {
 
   /// On publish complete add the message to the published stream if needed
   void _notifyPublish(MqttPublishMessage message) {
-    if (_published.hasListener) {
+    if (_published.hasListener && message != null) {
       _published.add(message);
     }
   }

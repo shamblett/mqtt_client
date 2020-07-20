@@ -1,5 +1,22 @@
-# 6.3.0
+# 7.3.0
+Issue 203
+
+# 7.2.1
+Pull request 191 bug fix
+
+# 7.2.0
+Pull request 191, mac connection attempts is now configurable.
+
+# 7.1.1
+Pull request 190 bug fix
+
+# 7.1.0
+Issue 172 bug fix
+
+# 7.0.0
 Issue 172 + 177 + 181
+issue 172 introduces a breaking API change in the connection 
+status class MqttClientConnectionStatus
 
 # 6.2.1
 Issue 173
