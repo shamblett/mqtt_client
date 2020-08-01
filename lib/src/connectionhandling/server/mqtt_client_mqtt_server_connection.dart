@@ -10,10 +10,10 @@ part of mqtt_server_client;
 /// The MQTT client server connection base class
 class MqttServerConnection extends MqttConnectionBase {
   /// Default constructor
-  MqttServerConnection(var clientEventBus) : super(clientEventBus);
+  MqttServerConnection(clientEventBus) : super(clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttServerConnection.fromConnect(String server, int port, var clientEventBus)
+  MqttServerConnection.fromConnect(server, port, clientEventBus)
       : super(clientEventBus) {
     connect(server, port);
   }

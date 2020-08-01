@@ -15,8 +15,7 @@ class SynchronousMqttBrowserConnectionHandler
   SynchronousMqttBrowserConnectionHandler(
     clientEventBus, {
     @required int maxConnectionAttempts,
-  }) : super(maxConnectionAttempts: maxConnectionAttempts) {
-    this.clientEventBus = clientEventBus;
+  }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
     clientEventBus.on<AutoReconnect>().listen(autoReconnect);
     registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
     clientEventBus.on<MessageAvailable>().listen(messageAvailable);

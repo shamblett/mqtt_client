@@ -11,7 +11,8 @@ part of mqtt_client;
 ///  to serverand browser connection handler implementations.
 abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
-  MqttConnectionHandlerBase({@required this.maxConnectionAttempts});
+  MqttConnectionHandlerBase(this.clientEventBus,
+      {@required this.maxConnectionAttempts});
 
   /// Successful connection callback.
   @override
@@ -108,20 +109,20 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     if (autoReconnectInProgress) {
       return;
     }
-
+    autoReconnectInProgress = true;
     // If the auto reconnect callback is set call it
     if (onAutoReconnect != null) {
       onAutoReconnect();
     }
     // Disconnect and call internal connect indefinitely
     connection.disconnect(auto: true);
+    // Reset the connection status
     connectionStatus = MqttClientConnectionStatus();
-    autoReconnectInProgress = true;
     connection.onDisconnected = null;
     while (connectionStatus.state != MqttConnectionState.connected) {
       MqttLogger.log(
           'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
-      await internalConnect(server, port, connectionMessage);
+      connectionStatus = await internalConnect(server, port, connectionMessage);
     }
     autoReconnectInProgress = false;
     MqttLogger.log(

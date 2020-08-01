@@ -16,7 +16,7 @@ Future<int> main() async {
     final client = MqttServerClient.withPort(
         'broker.hivemq.com', 'client-id-123456789', 1883);
     client.autoReconnect = true;
-    client.logging(on: false);
+    client.logging(on: true);
     const topic = 'xd/+';
     void subCB(subTopic) async {
       if (topic == subTopic) {
