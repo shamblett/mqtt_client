@@ -6,41 +6,56 @@
  */
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
-
-/// Sleep function that block asynchronous activity.
-/// Time units are seconds
-void syncSleep(int seconds) {
-  sleep(Duration(seconds: seconds));
-}
 
 Future<int> main() async {
   test('should maintain subscriptions after autoReconnect', () async {
     final client = MqttServerClient.withPort(
         'broker.hivemq.com', 'client-id-123456789', 1883);
     client.autoReconnect = true;
-    client.logging(on: true);
-    await client.connect('user', 'password');
-    client.subscribe('xd/+', MqttQos.exactlyOnce);
+    client.logging(on: false);
+    const topic = 'xd/+';
+    void subCB(subTopic) async {
+      if (topic == subTopic) {
+        print(
+            'ISSUE: Received subscribe callback for our topic - auto reconnecting');
+        client.doAutoReconnect(force: true);
+        // Wait for reconnection
+        do {
+          if (client.connectionStatus.state != MqttConnectionState.connected) {
+            await MqttUtilities.asyncSleep(1);
+          } else {
+            print(
+                'ISSUE: Received subscribe callback for our topic - reconnected - publishing');
+            // Now publish the message
+            client.publishMessage('xd/light', MqttQos.exactlyOnce,
+                (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
+            break;
+          }
+        } while (true);
+      } else {
+        print('ISSUE: Received subscribe callback for unknown topic $subTopic');
+      }
+      print('ISSUE: Exiting subscribe callback');
+    }
 
-    client.doAutoReconnect(force: true); // this line breaks the test
-    //client.subscribe('xd/+', MqttQos.exactlyOnce); // uncommenting this line doesn't help
+    client.onSubscribed = subCB;
+    print('ISSUE: Connecting');
+    await client.connect('user', 'password');
+    client.subscribe(topic, MqttQos.exactlyOnce);
 
     final stream = client.updates.expand((event) sync* {
       for (var e in event) {
         MqttPublishMessage message = e.payload;
         yield utf8.decode(message.payload.message);
       }
-    }).timeout(Duration(seconds: 5));
-
-    client.publishMessage('xd/light', MqttQos.exactlyOnce,
-        (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
+    }).timeout(Duration(seconds: 20));
 
     expect(await stream.first, equals('xd'));
+    print('ISSUE - test complete');
   });
 
   return 0;
