@@ -24,6 +24,7 @@ Future<int> main() async {
             'ISSUE: Received subscribe callback for our topic - auto reconnecting');
         client.doAutoReconnect(force: true);
         // Wait for reconnection
+        await MqttUtilities.asyncSleep(1);
         do {
           if (client.connectionStatus.state != MqttConnectionState.connected) {
             await MqttUtilities.asyncSleep(1);
@@ -47,15 +48,16 @@ Future<int> main() async {
     await client.connect('user', 'password');
     client.subscribe(topic, MqttQos.exactlyOnce);
 
+    print('ISSUE: Listening >>>>');
     final stream = client.updates.expand((event) sync* {
       for (var e in event) {
         MqttPublishMessage message = e.payload;
         yield utf8.decode(message.payload.message);
       }
-    }).timeout(Duration(seconds: 20));
+    }).timeout(Duration(seconds: 5));
 
     expect(await stream.first, equals('xd'));
-    print('ISSUE - test complete');
+    print('ISSUE: Test complete');
   });
 
   return 0;
