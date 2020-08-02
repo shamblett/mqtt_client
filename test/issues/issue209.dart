@@ -23,18 +23,6 @@ Future<int> main() async {
         print(
             'ISSUE: Received subscribe callback for our topic - auto reconnecting');
         client.doAutoReconnect(force: true);
-        do {
-          if (client.connectionStatus.state != MqttConnectionState.connected) {
-            await MqttUtilities.asyncSleep(1);
-          } else {
-            print(
-                'ISSUE: Received subscribe callback for our topic - reconnected - publishing');
-            // Now publish the message
-            client.publishMessage('xd/light', MqttQos.exactlyOnce,
-                (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
-            break;
-          }
-        } while (true);
       } else {
         print('ISSUE: Received subscribe callback for unknown topic $subTopic');
       }
@@ -45,6 +33,11 @@ Future<int> main() async {
     print('ISSUE: Connecting');
     await client.connect('user', 'password');
     client.subscribe(topic, MqttQos.exactlyOnce);
+
+    print('ISSUE: Publishing');
+    // Now publish the message
+    client.publishMessage('xd/light', MqttQos.exactlyOnce,
+        (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
 
     print('ISSUE: Listening >>>>');
     final stream = client.updates.expand((event) sync* {

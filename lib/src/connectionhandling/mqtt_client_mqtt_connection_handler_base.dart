@@ -118,9 +118,14 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     // If we are connected disconnect from the broker. This will trigger
     // the on done disconnection processing.
     if (reconnectEvent.wasConnected) {
+      MqttLogger.log(
+          'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect');
       sendMessage(MqttDisconnectMessage());
+      connectionStatus.state = MqttConnectionState.disconnecting;
     } else {
       // Force a disconnect
+      MqttLogger.log(
+          'MqttConnectionHandlerBase::autoReconnect - forcing disconnect');
       connection.disconnect(auto: true);
     }
 
@@ -149,7 +154,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
         callback(message);
       }
     } else {
-      MqttLogger.log('MqttConnectionHandler::sendMessage - not connected');
+      MqttLogger.log('MqttConnectionHandlerBase::sendMessage - not connected');
     }
   }
 
