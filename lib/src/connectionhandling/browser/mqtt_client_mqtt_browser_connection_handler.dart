@@ -11,6 +11,7 @@ part of mqtt_browser_client;
 ///  for browser based connection handler implementations.
 abstract class MqttBrowserConnectionHandler extends MqttConnectionHandlerBase {
   /// Initializes a new instance of the [MqttBrowserConnectionHandler] class.
-  MqttBrowserConnectionHandler(var clientEventBus, {@required int maxConnectionAttempts})
+  MqttBrowserConnectionHandler(var clientEventBus,
+      {@required int maxConnectionAttempts})
       : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts);
 }

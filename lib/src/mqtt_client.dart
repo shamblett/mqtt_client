@@ -257,8 +257,12 @@ class MqttClient {
     }
 
     if (connectionStatus.state != MqttConnectionState.connected || force) {
-      // Fire a manual auto reconnect request
-      clientEventBus.fire(AutoReconnect(userReconnect: true));
+      // Fire a manual auto reconnect request after setting the status to disconnected.
+      final wasConnected =
+          connectionStatus.state == MqttConnectionState.connected;
+      connectionStatus.state = MqttConnectionState.disconnecting;
+      clientEventBus
+          .fire(AutoReconnect(userReconnect: true, wasConnected: wasConnected));
     }
   }
 

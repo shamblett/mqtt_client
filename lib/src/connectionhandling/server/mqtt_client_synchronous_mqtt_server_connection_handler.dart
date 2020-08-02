@@ -16,15 +16,14 @@ class SynchronousMqttServerConnectionHandler
     clientEventBus, {
     @required int maxConnectionAttempts,
   }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
-    clientEventBus.on<AutoReconnect>().listen(autoReconnect);
     registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
-    clientEventBus.on<MessageAvailable>().listen(messageAvailable);
   }
 
   /// Synchronously connect to the specific Mqtt Connection.
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
+    initialiseListeners();
     var connectionAttempts = 0;
     MqttLogger.log(
         'SynchronousMqttServerConnectionHandler::internalConnect entered');
@@ -32,7 +31,7 @@ class SynchronousMqttServerConnectionHandler
       // Initiate the connection
       MqttLogger.log(
           'SynchronousMqttServerConnectionHandler::internalConnect - '
-          'initiating connection try $connectionAttempts, autoconnect in progress $autoReconnectInProgress');
+          'initiating connection try $connectionAttempts, auto reconnect in progress $autoReconnectInProgress');
       connectionStatus.state = MqttConnectionState.connecting;
       // Don't reallocate the connection if this is an auto reconnect
       if (!autoReconnectInProgress) {

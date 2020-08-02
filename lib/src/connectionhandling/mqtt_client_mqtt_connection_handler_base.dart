@@ -114,16 +114,20 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     if (onAutoReconnect != null) {
       onAutoReconnect();
     }
-    // Disconnect and call internal connect indefinitely
-    connection.disconnect(auto: true);
-    // Reset the connection status
-    connectionStatus = MqttClientConnectionStatus();
-    connection.onDisconnected = null;
-    while (connectionStatus.state != MqttConnectionState.connected) {
-      MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
-      connectionStatus = await internalConnect(server, port, connectionMessage);
+
+    // If we are connected disconnect from the broker. This will trigger
+    // the on done disconnection processing.
+    if (reconnectEvent.wasConnected) {
+      sendMessage(MqttDisconnectMessage());
+    } else {
+      // Force a disconnect
+      connection.disconnect(auto: true);
     }
+
+    connection.onDisconnected = null;
+    MqttLogger.log(
+        'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
+    connectionStatus = await internalConnect(server, port, connectionMessage);
     autoReconnectInProgress = false;
     MqttLogger.log(
         'MqttConnectionHandler::autoReconnect - auto reconnect complete');
@@ -252,5 +256,11 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
         'SynchronousMqttServerConnectionHandler:: cancelling connect timer');
     connectTimer.cancel();
     return true;
+  }
+
+  /// Initialise the event listeners;
+  void initialiseListeners() {
+    clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+    clientEventBus.on<MessageAvailable>().listen(messageAvailable);
   }
 }
