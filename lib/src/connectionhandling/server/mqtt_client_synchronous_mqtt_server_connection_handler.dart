@@ -13,19 +13,17 @@ class SynchronousMqttServerConnectionHandler
     extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttServerConnectionHandler(
-    var clientEventBus, {
+    clientEventBus, {
     @required int maxConnectionAttempts,
-  }) : super(maxConnectionAttempts: maxConnectionAttempts) {
-    this.clientEventBus = clientEventBus;
-    clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+  }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
     registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
-    clientEventBus.on<MessageAvailable>().listen(messageAvailable);
   }
 
   /// Synchronously connect to the specific Mqtt Connection.
   @override
   Future<MqttClientConnectionStatus> internalConnect(
       String hostname, int port, MqttConnectMessage connectMessage) async {
+    initialiseListeners();
     var connectionAttempts = 0;
     MqttLogger.log(
         'SynchronousMqttServerConnectionHandler::internalConnect entered');
@@ -33,36 +31,40 @@ class SynchronousMqttServerConnectionHandler
       // Initiate the connection
       MqttLogger.log(
           'SynchronousMqttServerConnectionHandler::internalConnect - '
-          'initiating connection try $connectionAttempts');
+          'initiating connection try $connectionAttempts, auto reconnect in progress $autoReconnectInProgress');
       connectionStatus.state = MqttConnectionState.connecting;
-      if (useWebSocket) {
-        if (useAlternateWebSocketImplementation) {
+      // Don't reallocate the connection if this is an auto reconnect
+      if (!autoReconnectInProgress) {
+        if (useWebSocket) {
+          if (useAlternateWebSocketImplementation) {
+            MqttLogger.log(
+                'SynchronousMqttServerConnectionHandler::internalConnect - '
+                'alternate websocket implementation selected');
+            connection =
+                MqttServerWs2Connection(securityContext, clientEventBus);
+          } else {
+            MqttLogger.log(
+                'SynchronousMqttServerConnectionHandler::internalConnect - '
+                'websocket selected');
+            connection = MqttServerWsConnection(clientEventBus);
+          }
+          if (websocketProtocols != null) {
+            connection.protocols = websocketProtocols;
+          }
+        } else if (secure) {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '
-              'alternate websocket implementation selected');
-          connection = MqttServerWs2Connection(securityContext, clientEventBus);
+              'secure selected');
+          connection = MqttServerSecureConnection(
+              securityContext, clientEventBus, onBadCertificate);
         } else {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '
-              'websocket selected');
-          connection = MqttServerWsConnection(clientEventBus);
+              'insecure TCP selected');
+          connection = MqttServerNormalConnection(clientEventBus);
         }
-        if (websocketProtocols != null) {
-          connection.protocols = websocketProtocols;
-        }
-      } else if (secure) {
-        MqttLogger.log(
-            'SynchronousMqttServerConnectionHandler::internalConnect - '
-            'secure selected');
-        connection = MqttServerSecureConnection(
-            securityContext, clientEventBus, onBadCertificate);
-      } else {
-        MqttLogger.log(
-            'SynchronousMqttServerConnectionHandler::internalConnect - '
-            'insecure TCP selected');
-        connection = MqttServerNormalConnection(clientEventBus);
+        connection.onDisconnected = onDisconnected;
       }
-      connection.onDisconnected = onDisconnected;
 
       // Connect
       connectTimer = MqttCancellableAsyncSleep(5000);

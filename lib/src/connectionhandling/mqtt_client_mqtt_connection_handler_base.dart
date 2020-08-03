@@ -11,7 +11,8 @@ part of mqtt_client;
 ///  to serverand browser connection handler implementations.
 abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
-  MqttConnectionHandlerBase({@required this.maxConnectionAttempts});
+  MqttConnectionHandlerBase(this.clientEventBus,
+      {@required this.maxConnectionAttempts});
 
   /// Successful connection callback.
   @override
@@ -108,21 +109,30 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     if (autoReconnectInProgress) {
       return;
     }
-
+    autoReconnectInProgress = true;
     // If the auto reconnect callback is set call it
     if (onAutoReconnect != null) {
       onAutoReconnect();
     }
-    // Disconnect and call internal connect indefinitely
-    connection.disconnect(auto: true);
-    connectionStatus = MqttClientConnectionStatus();
-    autoReconnectInProgress = true;
-    connection.onDisconnected = null;
-    while (connectionStatus.state != MqttConnectionState.connected) {
+
+    // If we are connected disconnect from the broker. This will trigger
+    // the on done disconnection processing.
+    if (reconnectEvent.wasConnected) {
       MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
-      await internalConnect(server, port, connectionMessage);
+          'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect');
+      sendMessage(MqttDisconnectMessage());
+      connectionStatus.state = MqttConnectionState.disconnecting;
+    } else {
+      // Force a disconnect
+      MqttLogger.log(
+          'MqttConnectionHandlerBase::autoReconnect - forcing disconnect');
+      connection.disconnect(auto: true);
     }
+
+    connection.onDisconnected = null;
+    MqttLogger.log(
+        'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
+    connectionStatus = await internalConnect(server, port, connectionMessage);
     autoReconnectInProgress = false;
     MqttLogger.log(
         'MqttConnectionHandler::autoReconnect - auto reconnect complete');
@@ -144,7 +154,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
         callback(message);
       }
     } else {
-      MqttLogger.log('MqttConnectionHandler::sendMessage - not connected');
+      MqttLogger.log('MqttConnectionHandlerBase::sendMessage - not connected');
     }
   }
 
@@ -251,5 +261,11 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
         'SynchronousMqttServerConnectionHandler:: cancelling connect timer');
     connectTimer.cancel();
     return true;
+  }
+
+  /// Initialise the event listeners;
+  void initialiseListeners() {
+    clientEventBus.on<AutoReconnect>().listen(autoReconnect);
+    clientEventBus.on<MessageAvailable>().listen(messageAvailable);
   }
 }

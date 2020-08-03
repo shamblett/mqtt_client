@@ -257,8 +257,11 @@ class MqttClient {
     }
 
     if (connectionStatus.state != MqttConnectionState.connected || force) {
-      // Fire a manual auto reconnect request
-      clientEventBus.fire(AutoReconnect(userReconnect: true));
+      // Fire a manual auto reconnect request.
+      final wasConnected =
+          connectionStatus.state == MqttConnectionState.connected;
+      clientEventBus
+          .fire(AutoReconnect(userRequested: true, wasConnected: wasConnected));
     }
   }
 
@@ -326,7 +329,7 @@ class MqttClient {
     if (autoReconnect) {
       if (!connectionHandler.autoReconnectInProgress) {
         // Fire an automatic auto reconnect request
-        clientEventBus.fire(AutoReconnect(userReconnect: false));
+        clientEventBus.fire(AutoReconnect(userRequested: false));
       } else {
         MqttLogger.log(
             'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
