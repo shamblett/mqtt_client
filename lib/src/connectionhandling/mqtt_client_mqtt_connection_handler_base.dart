@@ -115,8 +115,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       onAutoReconnect();
     }
 
-    // If we are connected disconnect from the broker. This will trigger
-    // the on done disconnection processing.
+    // If we are connected disconnect from the broker.
     if (reconnectEvent.wasConnected) {
       MqttLogger.log(
           'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect');
@@ -221,8 +220,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Processes the connect acknowledgement message.
   @protected
   bool connectAckProcessor(MqttMessage msg) {
-    MqttLogger.log(
-        'MqttConnectionHandlerBase::_connectAckProcessor');
+    MqttLogger.log('MqttConnectionHandlerBase::_connectAckProcessor');
     try {
       final MqttConnectAckMessage ackMsg = msg;
       // Drop the connection if our connect request has been rejected.
@@ -236,15 +234,13 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
               MqttConnectReturnCode.notAuthorized ||
           ackMsg.variableHeader.returnCode ==
               MqttConnectReturnCode.badUsernameOrPassword) {
-        MqttLogger.log(
-            'MqttConnectionHandlerBase::_connectAckProcessor '
+        MqttLogger.log('MqttConnectionHandlerBase::_connectAckProcessor '
             'connection rejected');
         connectionStatus.returnCode = ackMsg.variableHeader.returnCode;
         _performConnectionDisconnect();
       } else {
         // Initialize the keepalive to start the ping based keepalive process.
-        MqttLogger.log(
-            'MqttConnectionHandlerBase:_connectAckProcessor '
+        MqttLogger.log('MqttConnectionHandlerBase:_connectAckProcessor '
             '- state = connected');
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
@@ -257,8 +253,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       _performConnectionDisconnect();
     }
     // Cancel the connect timer;
-    MqttLogger.log(
-        'MqttConnectionHandlerBase:: cancelling connect timer');
+    MqttLogger.log('MqttConnectionHandlerBase:: cancelling connect timer');
     connectTimer.cancel();
     return true;
   }
