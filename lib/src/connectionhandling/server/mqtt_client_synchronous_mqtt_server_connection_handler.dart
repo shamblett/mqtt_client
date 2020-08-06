@@ -33,6 +33,7 @@ class SynchronousMqttServerConnectionHandler
           'SynchronousMqttServerConnectionHandler::internalConnect - '
           'initiating connection try $connectionAttempts, auto reconnect in progress $autoReconnectInProgress');
       connectionStatus.state = MqttConnectionState.connecting;
+      connectionStatus.returnCode = MqttConnectReturnCode.noneSpecified;
       // Don't reallocate the connection if this is an auto reconnect
       if (!autoReconnectInProgress) {
         if (useWebSocket) {
