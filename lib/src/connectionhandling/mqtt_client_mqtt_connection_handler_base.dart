@@ -86,6 +86,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     // Save the parameters for auto reconnect.
     this.server = server;
     this.port = port;
+    MqttLogger.log(
+        'MqttConnectionHandlerBase::connect - server $server, port $port');
     // ignore: unnecessary_this
     this.connectionMessage = message;
     try {
@@ -105,6 +107,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Auto reconnect
   @protected
   void autoReconnect(AutoReconnect reconnectEvent) async {
+    MqttLogger.log('MqttConnectionHandlerBase::autoReconnect entered');
     // If already in progress exit
     if (autoReconnectInProgress) {
       return;
@@ -194,14 +197,22 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// handling non connection messages.
   @protected
   void messageAvailable(MessageAvailable event) {
-    final callback = messageProcessorRegistry[event.message.header.messageType];
-    callback(event.message);
+    final messageType = event.message.header.messageType;
+    MqttLogger.log(
+        'MqttConnectionHandlerBase::messageAvailable - message type is $messageType');
+    final callback = messageProcessorRegistry[messageType];
+    if (callback != null) {
+      callback(event.message);
+    } else {
+      MqttLogger.log(
+          'MqttConnectionHandlerBase::messageAvailable - WARN - no registered callback for this message type');
+    }
   }
 
   /// Disconnects
   @override
   MqttConnectionState disconnect() {
-    MqttLogger.log('MqttConnectionHandlerBase::disconnect');
+    MqttLogger.log('MqttConnectionHandlerBase::disconnect - entered');
     if (connectionStatus.state == MqttConnectionState.connected) {
       // Send a disconnect message to the broker
       sendMessage(MqttDisconnectMessage());
@@ -214,6 +225,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Disconnects the underlying connection object.
   @protected
   void _performConnectionDisconnect() {
+    MqttLogger.log(
+        'MqttConnectionHandlerBase::_performConnectionDisconnect entered');
     connectionStatus.state = MqttConnectionState.disconnected;
   }
 
