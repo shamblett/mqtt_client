@@ -17,6 +17,7 @@ class SynchronousMqttServerConnectionHandler
     @required int maxConnectionAttempts,
   }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
     registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
+    connectTimer = MqttCancellableAsyncSleep(5000);
   }
 
   /// Synchronously connect to the specific Mqtt Connection.
@@ -68,7 +69,6 @@ class SynchronousMqttServerConnectionHandler
       }
 
       // Connect
-      connectTimer = MqttCancellableAsyncSleep(5000);
       try {
         await connection.connect(hostname, port);
       } on Exception {
