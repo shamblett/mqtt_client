@@ -124,17 +124,12 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
           'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect');
       sendMessage(MqttDisconnectMessage());
       connectionStatus.state = MqttConnectionState.disconnecting;
-    } else {
-      // Force a disconnect
-      MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - forcing disconnect');
-      connection.disconnect(auto: true);
     }
-
+    connection.disconnect(auto: true);
     connection.onDisconnected = null;
     MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
-    connectionStatus = await internalConnect(server, port, connectionMessage);
+    connectionStatus = await connect(server, port, connectionMessage);
     autoReconnectInProgress = false;
     MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete');
@@ -271,9 +266,15 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     return true;
   }
 
+  /// Connect acknowledge recieved
+  void connectAckReceived(ConnectAckMessageAvailable event) {
+    connectAckProcessor(event.message);
+  }
+
   /// Initialise the event listeners;
   void initialiseListeners() {
     clientEventBus.on<AutoReconnect>().listen(autoReconnect);
     clientEventBus.on<MessageAvailable>().listen(messageAvailable);
+    clientEventBus.on<ConnectAckMessageAvailable>().listen(connectAckReceived);
   }
 }

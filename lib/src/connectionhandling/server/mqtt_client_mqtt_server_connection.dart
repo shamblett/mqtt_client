@@ -25,6 +25,13 @@ class MqttServerConnection extends MqttConnectionBase {
     return completer.future;
   }
 
+  /// Connect for auto reconnect , must be overridden in connection classes
+  @override
+  Future<void> connectAuto(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
+  }
+
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
     MqttLogger.log('MqttServerConnection::_startListening');
@@ -69,7 +76,11 @@ class MqttServerConnection extends MqttConnectionBase {
         messageStream.shrink();
         MqttLogger.log('MqttServerConnection::_onData - message received $msg');
         if (!clientEventBus.streamController.isClosed) {
-          clientEventBus.fire(MessageAvailable(msg));
+          if (msg.header.messageType == MqttMessageType.connectAck) {
+            clientEventBus.fire(ConnectAckMessageAvailable(msg));
+          } else {
+            clientEventBus.fire(MessageAvailable(msg));
+          }
           MqttLogger.log(
               'MqttServerConnection::_onData - message available event fired');
         } else {

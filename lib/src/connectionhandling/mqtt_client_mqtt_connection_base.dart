@@ -37,6 +37,13 @@ class MqttConnectionBase {
   @protected
   events.EventBus clientEventBus;
 
+  /// Connect for auto reconnect , must be overridden in connection classes
+  @protected
+  Future<void> connectAuto(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
+  }
+
   /// Connect, must be overridden in connection classes
   @protected
   Future<void> connect(String server, int port) {

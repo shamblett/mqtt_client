@@ -19,6 +19,18 @@ class MessageAvailable {
   MqttMessage get message => _message;
 }
 
+/// The connect acknowledge message available event raised by the Connection class
+class ConnectAckMessageAvailable {
+  /// Constructor
+  ConnectAckMessageAvailable(this._message);
+
+  /// The message associated with the event
+  final MqttMessage _message;
+
+  /// Message
+  MqttMessage get message => _message;
+}
+
 /// Message recieved class for publishing
 class MessageReceived {
   /// Constructor
