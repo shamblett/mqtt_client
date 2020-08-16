@@ -20,9 +20,6 @@ class MockCH extends Mock implements MqttServerConnectionHandler {}
 
 class MockCON extends Mock implements MqttServerNormalConnection {}
 
-final TestConnectionHandlerNoSend testCHNS = TestConnectionHandlerNoSend();
-final TestConnectionHandlerSend testCHS = TestConnectionHandlerSend();
-
 void main() {
   group('Manager', () {
     test('Invalid topic returns null subscription', () {
@@ -32,8 +29,8 @@ void main() {
         cbCalled = true;
       }
 
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'house#';
@@ -45,8 +42,8 @@ void main() {
       expect(cbCalled, isTrue);
     });
     test('Subscription request creates pending subscription', () {
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -70,8 +67,8 @@ void main() {
         cbCalled = true;
       }
 
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -100,8 +97,8 @@ void main() {
     test(
         'Acknowledged subscription request for no pending subscription is ignored',
         () {
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -135,8 +132,8 @@ void main() {
         cbCalled = true;
       }
 
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -164,8 +161,8 @@ void main() {
       expect(cbCalled, isTrue);
     });
     test('Get subscription with valid topic returns subscription', () {
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -191,8 +188,8 @@ void main() {
       expect(subs.subscriptions[topic], const TypeMatcher<Subscription>());
     });
     test('Get subscription with invalid topic returns null', () {
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -217,8 +214,8 @@ void main() {
       expect(subs.subscriptions['abc_badTopic'], isNull);
     });
     test('Get subscription for pending subscription returns null', () {
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -243,8 +240,8 @@ void main() {
         cbCalled = true;
       }
 
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -318,8 +315,8 @@ void main() {
 
       // Wrap the callback
       final dynamic t1 = expectAsync1(subRec, count: 2);
-      testCHS.sentMessages.clear();
       final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       const qos = MqttQos.atLeastOnce;
       final subs = SubscriptionsManager(testCHS, pm, clientEventBus);

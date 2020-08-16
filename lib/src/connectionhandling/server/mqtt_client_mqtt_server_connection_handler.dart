@@ -10,6 +10,7 @@ part of mqtt_server_client;
 ///  This class provides specific connection functionality
 ///  for server based connections.
 abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
+
   /// Initializes a new instance of the [MqttServerConnectionHandler] class.
   MqttServerConnectionHandler(var clientEventBus,
       {@required int maxConnectionAttempts})
