@@ -37,7 +37,8 @@ class MqttServerNormalConnection extends MqttServerConnection {
       });
     } on Exception catch (e) {
       completer.completeError(e);
-      final message = 'MqttNormalConnection::Connect - The connection to the message '
+      final message =
+          'MqttNormalConnection::Connect - The connection to the message '
           'broker {$server}:{$port} could not be made.';
       throw NoConnectionException(message);
     }
@@ -60,7 +61,8 @@ class MqttServerNormalConnection extends MqttServerConnection {
       });
     } on Exception catch (e) {
       completer.completeError(e);
-      final message = 'MqttNormalConnection::ConnectAuto - The connection to the message '
+      final message =
+          'MqttNormalConnection::ConnectAuto - The connection to the message '
           'broker {$server}:{$port} could not be made.';
       throw NoConnectionException(message);
     }

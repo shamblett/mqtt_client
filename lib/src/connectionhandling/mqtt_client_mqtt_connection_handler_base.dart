@@ -26,6 +26,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   AutoReconnectCallback onAutoReconnect;
 
+  /// Auto reconnected callback
+  @override
+  AutoReconnectCompleteCallback onAutoReconnected;
+
   /// Auto reconnect in progress
   @override
   bool autoReconnectInProgress = false;
@@ -133,6 +137,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     autoReconnectInProgress = false;
     MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete');
+    // If the auto reconnect callback is set call it
+    if (onAutoReconnected != null) {
+      onAutoReconnected();
+    }
   }
 
   /// Sends a message to the broker through the current connection.
