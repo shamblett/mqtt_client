@@ -135,6 +135,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
         'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
     connectionStatus = await connect(server, port, connectionMessage);
     autoReconnectInProgress = false;
+    // Fire the re subscribe event.
+    clientEventBus.fire(Resubscribe(fromAutoReconnect: true));
     MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete');
     // If the auto reconnect callback is set call it

@@ -61,3 +61,12 @@ class AutoReconnect {
   /// True if the previous state was connected
   bool wasConnected = false;
 }
+
+/// Re subscribe event
+class Resubscribe {
+  /// Constructor
+  Resubscribe({this.fromAutoReconnect = false});
+
+  /// If set re sunscribe has been triggered from auto reconnect.
+  bool fromAutoReconnect = false;
+}

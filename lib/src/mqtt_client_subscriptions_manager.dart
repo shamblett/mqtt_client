@@ -22,8 +22,9 @@ class SubscriptionsManager {
         MqttMessageType.subscribeAck, confirmSubscription);
     connectionHandler.registerForMessage(
         MqttMessageType.unsubscribeAck, confirmUnsubscribe);
-    // Start listening for published messages
+    // Start listening for published messages and re subscribe events.
     _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
+    _clientEventBus.on<Resubscribe>().listen(_resubscribe);
   }
 
   /// Dispenser used for keeping track of subscription ids
@@ -199,5 +200,17 @@ class SubscriptionsManager {
       }
     });
     return status;
+  }
+
+  // Re subscribe.
+  // Takes all active completed subscriptions and re subscribes them.
+  // Automatically fired after auto reconnect has completed.
+  void _resubscribe(Resubscribe resubscribeEvent) {
+    MqttLogger.log(
+        'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}');
+    for (final subscription in subscriptions.values) {
+      createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+    }
+    subscriptions.clear();
   }
 }

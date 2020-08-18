@@ -38,28 +38,9 @@ Future<int> main() async {
       print('ISSUE: Exiting subscribe callback');
     }
 
-    // New call back for when auto reconnect is complete
-    void autoReconnected() async {
-      // First unsubscribe
-      print('ISSUE: Auto reconnected - Unsubscribing');
-      client.unsubscribe(topic);
-      await MqttUtilities.asyncSleep(1);
-
-      // Now resubscribe
-      print('ISSUE: Auto reconnected - Subscribing');
-      client.subscribe(topic, MqttQos.exactlyOnce);
-      await MqttUtilities.asyncSleep(1);
-
-      // Now re publish
-      print('ISSUE: Auto reconnected - Publishing');
-      client.publishMessage('xd/light', MqttQos.exactlyOnce,
-          (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
-    }
-
     // Main test starts here
     print('ISSUE: Main test start');
     client.onSubscribed = subCB; // Subscribe callback
-    client.onAutoReconnected = autoReconnected; // Auto reconnected callback
     print('ISSUE: Connecting');
     await client.connect('user', 'password');
     client.subscribe(topic, MqttQos.exactlyOnce);
