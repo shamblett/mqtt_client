@@ -62,7 +62,14 @@ class MqttClient {
   /// Once invoked the mechanism will try forever to reconnect to the broker with its
   /// original connection parameters. This can be stopped only by calling
   /// [disconnect()] on the client.
-  var autoReconnect = false;
+  bool autoReconnect = false;
+
+  /// Re subscribe on auto reconnect.
+  /// Auto reconnect will perform automatic re subscription of existing confirmed subscriptions
+  /// unless this is set to false.
+  /// In this case the caller must perform their own re subscriptions manually using [unsubscribe],
+  /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
+  bool resubscribeOnAutoReconnect = true;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -231,6 +238,8 @@ class MqttClient {
     subscriptionsManager.onSubscribed = onSubscribed;
     subscriptionsManager.onUnsubscribed = onUnsubscribed;
     subscriptionsManager.onSubscribeFail = onSubscribeFail;
+    subscriptionsManager.resubscribeOnAutoReconnect =
+        resubscribeOnAutoReconnect;
     keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
     if (pongCallback != null) {
       keepAlive.pongCallback = pongCallback;
@@ -285,6 +294,16 @@ class MqttClient {
     }
     return subscriptionsManager.registerSubscription(topic, qosLevel);
   }
+
+  /// Re subscribe.
+  /// Unsubscribes all confirmed subscriptions and re subscribes them
+  /// without sending unsubscribe messages to the broker.
+  /// If an unsubscribe message to the broker is needed then use
+  /// [unsubscribe] followed by [subscribe] for each subscription.
+  /// Can be used in auto reconnect processing to force manual re subscription of all existing
+  /// confirmed subscriptions.
+  void resubscribe(String topic, MqttQos qosLevel) =>
+      subscriptionsManager.resubscribe();
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
