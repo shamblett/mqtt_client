@@ -354,6 +354,12 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
+    // if we don't have a connection Handler we are already disconnected.
+    if (connectionHandler = null) {
+      MqttLogger.log(
+          'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
+      return;
+    }
     if (autoReconnect) {
       if (!connectionHandler.autoReconnectInProgress) {
         // Fire an automatic auto reconnect request
