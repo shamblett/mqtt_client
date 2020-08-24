@@ -344,7 +344,7 @@ class MqttClient {
   /// Do NOT call this in any onDisconnect callback that may be set,
   /// this will result in a loop situation.
   ///
-  /// This method will disconnect regardles of the [autoReconnect] state.
+  /// This method will disconnect regardless of the [autoReconnect] state.
   void disconnect() {
     _disconnect(unsolicited: false);
   }
@@ -355,7 +355,7 @@ class MqttClient {
   @protected
   void internalDisconnect() {
     // if we don't have a connection Handler we are already disconnected.
-    if (connectionHandler = null) {
+    if (connectionHandler == null) {
       MqttLogger.log(
           'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
       return;
