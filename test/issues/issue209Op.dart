@@ -19,7 +19,7 @@ Future<int> main() async {
     client.logging(on: true);
     await client.connect('user', 'password');
     client.subscribe('xd/+', MqttQos.exactlyOnce);
-   await MqttUtilities.asyncSleep(1);
+    await MqttUtilities.asyncSleep(1);
     client.doAutoReconnect(force: true); // this line breaks the test
     // client.subscribe('xd/+', MqttQos.exactlyOnce); // uncommenting this line doesn't help
 
