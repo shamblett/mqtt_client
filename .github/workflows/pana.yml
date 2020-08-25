@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: axel-op/dart-package-analyzer/with-full-sdk@v3
+      - uses: axel-op/dart-package-analyzer@v3
         id: analysis # set an id for the current step
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
