@@ -10,12 +10,26 @@ part of mqtt_browser_client;
 /// The MQTT browser connection base class
 class MqttBrowserConnection extends MqttConnectionBase {
   /// Default constructor
-  MqttBrowserConnection(var clientEventBus) : super(clientEventBus);
+  MqttBrowserConnection(clientEventBus) : super(clientEventBus);
 
   /// Initializes a new instance of the MqttBrowserConnection class.
-  MqttBrowserConnection.fromConnect(String server, int port, var clientEventBus)
+  MqttBrowserConnection.fromConnect(server, port, clientEventBus)
       : super(clientEventBus) {
     connect(server, port);
+  }
+
+  /// Connect, must be overridden in connection classes
+  @override
+  Future<void> connect(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
+  }
+
+  /// Connect for auto reconnect , must be overridden in connection classes
+  @override
+  Future<void> connectAuto(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
   }
 
   /// Create the listening stream subscription and subscribe the callbacks
@@ -77,11 +91,16 @@ class MqttBrowserConnection extends MqttConnectionBase {
         MqttLogger.log(
             'MqttBrowserConnection::_onData - message received $msg');
         if (!clientEventBus.streamController.isClosed) {
-          clientEventBus.fire(MessageAvailable(msg));
-          MqttLogger.log('MqttBrowserConnection::_onData - message processed');
+          if (msg.header.messageType == MqttMessageType.connectAck) {
+            clientEventBus.fire(ConnectAckMessageAvailable(msg));
+          } else {
+            clientEventBus.fire(MessageAvailable(msg));
+          }
+          MqttLogger.log(
+              'MqttBrowserConnection::_onData - message available event fired');
         } else {
           MqttLogger.log(
-              'MqttBrowserConnection::_onData - message not processed, disconnecting');
+              'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed');
         }
       }
     }
@@ -93,23 +112,5 @@ class MqttBrowserConnection extends MqttConnectionBase {
     var buffer = messageBytes.buffer;
     var bData = ByteData.view(buffer);
     client?.sendTypedData(bData);
-  }
-
-  void _disconnect() {
-    if (client != null) {
-      client.close();
-      client = null;
-    }
-  }
-
-  /// OnDone listener callback
-  @override
-  void onDone() {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttBrowserConnection::_onDone - calling disconnected callback');
-      onDisconnected();
-    }
   }
 }
