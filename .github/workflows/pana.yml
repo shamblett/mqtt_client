@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      - uses: axel-op/dart-package-analyzer/with-full-sdk@stable
+      - uses: axel-op/dart-package-analyzer/with-full-sdk@v3
         id: analysis # set an id for the current step
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
