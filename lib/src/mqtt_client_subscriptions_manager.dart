@@ -22,8 +22,9 @@ class SubscriptionsManager {
         MqttMessageType.subscribeAck, confirmSubscription);
     connectionHandler.registerForMessage(
         MqttMessageType.unsubscribeAck, confirmUnsubscribe);
-    // Start listening for published messages
+    // Start listening for published messages and re subscribe events.
     _clientEventBus.on<MessageReceived>().listen(publishMessageReceived);
+    _clientEventBus.on<Resubscribe>().listen(_resubscribe);
   }
 
   /// Dispenser used for keeping track of subscription ids
@@ -56,6 +57,9 @@ class SubscriptionsManager {
 
   /// Subscription failed callback
   SubscribeFailCallback onSubscribeFail;
+
+  /// Re subscribe on auto reconnect.
+  bool resubscribeOnAutoReconnect = true;
 
   /// The event bus
   final events.EventBus _clientEventBus;
@@ -139,6 +143,16 @@ class SubscriptionsManager {
         topic;
   }
 
+  /// Re subscribe.
+  /// Unsubscribes all confirmed subscriptions and re subscribes them
+  /// without sending unsubscribe messages to the broker.
+  void resubscribe() {
+    for (final subscription in subscriptions.values) {
+      createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+    }
+    subscriptions.clear();
+  }
+
   /// Confirms a subscription has been made with the broker.
   /// Marks the sub as confirmed in the subs storage.
   /// Returns true on successful subscription, false on fail.
@@ -199,5 +213,23 @@ class SubscriptionsManager {
       }
     });
     return status;
+  }
+
+  // Re subscribe.
+  // Takes all active completed subscriptions and re subscribes them if
+  // [resubscribeOnAutoReconnect] is true.
+  // Automatically fired after auto reconnect has completed.
+  void _resubscribe(Resubscribe resubscribeEvent) {
+    if (resubscribeOnAutoReconnect) {
+      MqttLogger.log(
+          'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}');
+      for (final subscription in subscriptions.values) {
+        createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+      }
+      subscriptions.clear();
+    } else {
+      MqttLogger.log('Subscriptionsmanager::_resubscribe - '
+          'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false');
+    }
   }
 }

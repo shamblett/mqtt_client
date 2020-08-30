@@ -37,7 +37,32 @@ class MqttServerNormalConnection extends MqttServerConnection {
       });
     } on Exception catch (e) {
       completer.completeError(e);
-      final message = 'MqttNormalConnection::The connection to the message '
+      final message =
+          'MqttNormalConnection::Connect - The connection to the message '
+          'broker {$server}:{$port} could not be made.';
+      throw NoConnectionException(message);
+    }
+    return completer.future;
+  }
+
+  /// ConnectAuto - overridden
+  @override
+  Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
+    final completer = Completer<MqttClientConnectionStatus>();
+    try {
+      // Connect and save the socket.
+      Socket.connect(server, port).then((dynamic socket) {
+        client = socket;
+        _startListening();
+        completer.complete();
+      }).catchError((dynamic e) {
+        onError(e);
+        completer.completeError(e);
+      });
+    } on Exception catch (e) {
+      completer.completeError(e);
+      final message =
+          'MqttNormalConnection::ConnectAuto - The connection to the message '
           'broker {$server}:{$port} could not be made.';
       throw NoConnectionException(message);
     }

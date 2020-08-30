@@ -19,6 +19,18 @@ class MessageAvailable {
   MqttMessage get message => _message;
 }
 
+/// The connect acknowledge message available event raised by the Connection class
+class ConnectAckMessageAvailable {
+  /// Constructor
+  ConnectAckMessageAvailable(this._message);
+
+  /// The message associated with the event
+  final MqttMessage _message;
+
+  /// Message
+  MqttMessage get message => _message;
+}
+
 /// Message recieved class for publishing
 class MessageReceived {
   /// Constructor
@@ -40,11 +52,21 @@ class MessageReceived {
 /// Auto reconnect event
 class AutoReconnect {
   /// Constructor
-  AutoReconnect({userReconnect = false}) {
-    userRequested = userReconnect;
-  }
+  AutoReconnect({this.userRequested = false, this.wasConnected = false});
 
   /// If set auto reconnect has been invoked through the client
   /// [doAutoReconnect] method, i.e. a user request.
-  var userRequested;
+  bool userRequested = false;
+
+  /// True if the previous state was connected
+  bool wasConnected = false;
+}
+
+/// Re subscribe event
+class Resubscribe {
+  /// Constructor
+  Resubscribe({this.fromAutoReconnect = false});
+
+  /// If set re sunscribe has been triggered from auto reconnect.
+  bool fromAutoReconnect = false;
 }

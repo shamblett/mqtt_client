@@ -86,6 +86,8 @@ class PublishingManager implements IPublishingManager {
   int publish(
       PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       [bool retain = false]) {
+    MqttLogger.log(
+        'PublishingManager::publish - enetered with topic ${topic.rawTopic}');
     final msgId = messageIdentifierDispenser.getNextMessageIdentifier();
     final msg = MqttPublishMessage()
         .toTopic(topic.toString())
@@ -109,6 +111,8 @@ class PublishingManager implements IPublishingManager {
     final MqttPublishAckMessage ackMsg = msg;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
     final messageIdentifier = ackMsg.variableHeader.messageIdentifier;
+    MqttLogger.log(
+        'PublishingManager::handlePublishAcknowledgement for message id $messageIdentifier');
     if (publishedMessages.keys.contains(messageIdentifier)) {
       _notifyPublish(publishedMessages[messageIdentifier]);
       publishedMessages.remove(messageIdentifier);
@@ -122,6 +126,8 @@ class PublishingManager implements IPublishingManager {
     var publishSuccess = true;
     try {
       final topic = PublicationTopic(pubMsg.variableHeader.topicName);
+      MqttLogger.log(
+          'PublishingManager::handlePublish - publish received from broker with topic $topic');
       if (pubMsg.header.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
@@ -157,10 +163,12 @@ class PublishingManager implements IPublishingManager {
   /// Handles the publish release, for messages that are undergoing Qos ExactlyOnce processing.
   bool handlePublishRelease(MqttMessage msg) {
     final MqttPublishReleaseMessage pubRelMsg = msg;
+    final messageIdentifier = pubRelMsg.variableHeader.messageIdentifier;
+    MqttLogger.log(
+        'PublishingManager::handlePublishRelease - for message identifier $messageIdentifier');
     var publishSuccess = true;
     try {
-      final pubMsg =
-          receivedMessages.remove(pubRelMsg.variableHeader.messageIdentifier);
+      final pubMsg = receivedMessages.remove(messageIdentifier);
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
         final topic = PublicationTopic(pubMsg.variableHeader.topicName);
@@ -179,8 +187,10 @@ class PublishingManager implements IPublishingManager {
   /// Returns true if the message flow completed successfully, otherwise false.
   bool handlePublishComplete(MqttMessage msg) {
     final MqttPublishCompleteMessage compMsg = msg;
-    final publishMessage =
-        publishedMessages.remove(compMsg.variableHeader.messageIdentifier);
+    final messageIdentifier = compMsg.variableHeader.messageIdentifier;
+    MqttLogger.log(
+        'PublishingManager::handlePublishComplete - for message identifier $messageIdentifier');
+    final publishMessage = publishedMessages.remove(messageIdentifier);
     _notifyPublish(publishMessage);
     return true;
   }
@@ -189,9 +199,11 @@ class PublishingManager implements IPublishingManager {
   /// Returns true or false, depending on the success of message processing.
   bool handlePublishReceived(MqttMessage msg) {
     final MqttPublishReceivedMessage recvMsg = msg;
+    final messageIdentifier = recvMsg.variableHeader.messageIdentifier;
+    MqttLogger.log(
+        'PublishingManager::handlePublishReceived - for message identifier $messageIdentifier');
     // If we've got a matching message, respond with a "ok release it for processing"
-    if (publishedMessages
-        .containsKey(recvMsg.variableHeader.messageIdentifier)) {
+    if (publishedMessages.containsKey(messageIdentifier)) {
       final relMsg = MqttPublishReleaseMessage()
           .withMessageIdentifier(recvMsg.variableHeader.messageIdentifier);
       connectionHandler.sendMessage(relMsg);
@@ -202,6 +214,8 @@ class PublishingManager implements IPublishingManager {
   /// On publish complete add the message to the published stream if needed
   void _notifyPublish(MqttPublishMessage message) {
     if (_published.hasListener && message != null) {
+      MqttLogger.log(
+          'PublishingManager::_notifyPublish - adding message to published stream for topic ${message.variableHeader.topicName}');
       _published.add(message);
     }
   }

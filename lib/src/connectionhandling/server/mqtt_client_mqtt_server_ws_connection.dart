@@ -67,22 +67,4 @@ class MqttServerWsConnection extends MqttServerConnection {
     }
     return completer.future;
   }
-
-  /// OnDone listener callback
-  @override
-  void onDone() {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttWsConnection::_onDone - calling disconnected callback');
-      onDisconnected();
-    }
-  }
-
-  void _disconnect() {
-    if (client != null) {
-      client.close();
-      client = null;
-    }
-  }
 }

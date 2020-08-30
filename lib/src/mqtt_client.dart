@@ -16,6 +16,9 @@ typedef ConnectCallback = void Function();
 /// The client auto reconnect callback type
 typedef AutoReconnectCallback = void Function();
 
+/// The client auto reconnect complete callback type
+typedef AutoReconnectCompleteCallback = void Function();
+
 /// A client class for interacting with MQTT Data Packets.
 /// Do not instantiate this class directly, instead instantiate
 /// either a [MqttClientServer] class or an [MqttBrowserClient] as needed.
@@ -59,7 +62,14 @@ class MqttClient {
   /// Once invoked the mechanism will try forever to reconnect to the broker with its
   /// original connection parameters. This can be stopped only by calling
   /// [disconnect()] on the client.
-  var autoReconnect = false;
+  bool autoReconnect = false;
+
+  /// Re subscribe on auto reconnect.
+  /// Auto reconnect will perform automatic re subscription of existing confirmed subscriptions
+  /// unless this is set to false.
+  /// In this case the caller must perform their own re subscriptions manually using [unsubscribe],
+  /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
+  bool resubscribeOnAutoReconnect = true;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -135,6 +145,11 @@ class MqttClient {
   /// be called before auto reconnect processing is invoked to allow the user to
   /// perform any pre auto reconnect actions.
   AutoReconnectCallback onAutoReconnect;
+
+  /// Auto reconnected callback, if auto reconnect is selected this callback will
+  /// be called after auto reconnect processing is completed to allow the user to
+  /// perform any post auto reconnect actions.
+  AutoReconnectCompleteCallback onAutoReconnected;
 
   /// Subscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been subscribed to.
@@ -215,13 +230,16 @@ class MqttClient {
     connectionHandler.onDisconnected = internalDisconnect;
     connectionHandler.onConnected = onConnected;
     connectionHandler.onAutoReconnect = onAutoReconnect;
-    //
+    connectionHandler.onAutoReconnected = onAutoReconnected;
+
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
     subscriptionsManager = SubscriptionsManager(
         connectionHandler, publishingManager, clientEventBus);
     subscriptionsManager.onSubscribed = onSubscribed;
     subscriptionsManager.onUnsubscribed = onUnsubscribed;
     subscriptionsManager.onSubscribeFail = onSubscribeFail;
+    subscriptionsManager.resubscribeOnAutoReconnect =
+        resubscribeOnAutoReconnect;
     keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
     if (pongCallback != null) {
       keepAlive.pongCallback = pongCallback;
@@ -257,8 +275,11 @@ class MqttClient {
     }
 
     if (connectionStatus.state != MqttConnectionState.connected || force) {
-      // Fire a manual auto reconnect request
-      clientEventBus.fire(AutoReconnect(userReconnect: true));
+      // Fire a manual auto reconnect request.
+      final wasConnected =
+          connectionStatus.state == MqttConnectionState.connected;
+      clientEventBus
+          .fire(AutoReconnect(userRequested: true, wasConnected: wasConnected));
     }
   }
 
@@ -273,6 +294,16 @@ class MqttClient {
     }
     return subscriptionsManager.registerSubscription(topic, qosLevel);
   }
+
+  /// Re subscribe.
+  /// Unsubscribes all confirmed subscriptions and re subscribes them
+  /// without sending unsubscribe messages to the broker.
+  /// If an unsubscribe message to the broker is needed then use
+  /// [unsubscribe] followed by [subscribe] for each subscription.
+  /// Can be used in auto reconnect processing to force manual re subscription of all existing
+  /// confirmed subscriptions.
+  void resubscribe(String topic, MqttQos qosLevel) =>
+      subscriptionsManager.resubscribe();
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
@@ -313,7 +344,7 @@ class MqttClient {
   /// Do NOT call this in any onDisconnect callback that may be set,
   /// this will result in a loop situation.
   ///
-  /// This method will disconnect regardles of the [autoReconnect] state.
+  /// This method will disconnect regardless of the [autoReconnect] state.
   void disconnect() {
     _disconnect(unsolicited: false);
   }
@@ -323,10 +354,16 @@ class MqttClient {
   /// client to close itself down correctly on disconnect.
   @protected
   void internalDisconnect() {
+    // if we don't have a connection Handler we are already disconnected.
+    if (connectionHandler == null) {
+      MqttLogger.log(
+          'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
+      return;
+    }
     if (autoReconnect) {
       if (!connectionHandler.autoReconnectInProgress) {
         // Fire an automatic auto reconnect request
-        clientEventBus.fire(AutoReconnect(userReconnect: false));
+        clientEventBus.fire(AutoReconnect(userRequested: false));
       } else {
         MqttLogger.log(
             'MqttClient::internalDisconnect - not invoking auto connect, already in progress');

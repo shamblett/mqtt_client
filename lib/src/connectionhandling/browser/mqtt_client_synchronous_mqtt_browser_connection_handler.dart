@@ -15,11 +15,9 @@ class SynchronousMqttBrowserConnectionHandler
   SynchronousMqttBrowserConnectionHandler(
     clientEventBus, {
     @required int maxConnectionAttempts,
-  }) : super(maxConnectionAttempts: maxConnectionAttempts) {
-    this.clientEventBus = clientEventBus;
-    clientEventBus.on<AutoReconnect>().listen(autoReconnect);
-    registerForMessage(MqttMessageType.connectAck, connectAckProcessor);
-    clientEventBus.on<MessageAvailable>().listen(messageAvailable);
+  }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
+    connectTimer = MqttCancellableAsyncSleep(5000);
+    initialiseListeners();
   }
 
   /// Synchronously connect to the specific Mqtt Connection.
@@ -35,16 +33,22 @@ class SynchronousMqttBrowserConnectionHandler
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
           'initiating connection try $connectionAttempts');
       connectionStatus.state = MqttConnectionState.connecting;
-      connection = MqttBrowserWsConnection(clientEventBus);
-      connection.onDisconnected = onDisconnected;
-      if (websocketProtocols != null) {
-        connection.protocols = websocketProtocols;
+      connectionStatus.returnCode = MqttConnectReturnCode.noneSpecified;
+      // Don't reallocate the connection if this is an auto reconnect
+      if (!autoReconnectInProgress) {
+        connection = MqttBrowserWsConnection(clientEventBus);
+        if (websocketProtocols != null) {
+          connection.protocols = websocketProtocols;
+        }
+        connection.onDisconnected = onDisconnected;
       }
-
       // Connect
-      connectTimer = MqttCancellableAsyncSleep(5000);
       try {
-        await connection.connect(hostname, port);
+        if (!autoReconnectInProgress) {
+          await connection.connect(hostname, port);
+        } else {
+          await connection.connectAuto(hostname, port);
+        }
       } on Exception {
         // Ignore exceptions in an auto reconnect sequence
         if (autoReconnectInProgress) {

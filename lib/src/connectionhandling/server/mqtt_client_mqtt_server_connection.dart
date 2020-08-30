@@ -10,10 +10,10 @@ part of mqtt_server_client;
 /// The MQTT client server connection base class
 class MqttServerConnection extends MqttConnectionBase {
   /// Default constructor
-  MqttServerConnection(var clientEventBus) : super(clientEventBus);
+  MqttServerConnection(clientEventBus) : super(clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttServerConnection.fromConnect(String server, int port, var clientEventBus)
+  MqttServerConnection.fromConnect(server, port, clientEventBus)
       : super(clientEventBus) {
     connect(server, port);
   }
@@ -21,6 +21,13 @@ class MqttServerConnection extends MqttConnectionBase {
   /// Connect, must be overridden in connection classes
   @override
   Future<void> connect(String server, int port) {
+    final completer = Completer<void>();
+    return completer.future;
+  }
+
+  /// Connect for auto reconnect , must be overridden in connection classes
+  @override
+  Future<void> connectAuto(String server, int port) {
     final completer = Completer<void>();
     return completer.future;
   }
@@ -69,11 +76,16 @@ class MqttServerConnection extends MqttConnectionBase {
         messageStream.shrink();
         MqttLogger.log('MqttServerConnection::_onData - message received $msg');
         if (!clientEventBus.streamController.isClosed) {
-          clientEventBus.fire(MessageAvailable(msg));
-          MqttLogger.log('MqttServerConnection::_onData - message processed');
+          if (msg.header.messageType == MqttMessageType.connectAck) {
+            clientEventBus.fire(ConnectAckMessageAvailable(msg));
+          } else {
+            clientEventBus.fire(MessageAvailable(msg));
+          }
+          MqttLogger.log(
+              'MqttServerConnection::_onData - message available event fired');
         } else {
           MqttLogger.log(
-              'MqttServerConnection::_onData - message not processed, disconnecting');
+              'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed');
         }
       }
     }
