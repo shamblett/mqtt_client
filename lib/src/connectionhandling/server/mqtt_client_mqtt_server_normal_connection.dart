@@ -19,7 +19,7 @@ class MqttServerNormalConnection extends MqttServerConnection {
     connect(server, port);
   }
 
-  /// Connect - overridden
+  /// Connect
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
@@ -45,7 +45,7 @@ class MqttServerNormalConnection extends MqttServerConnection {
     return completer.future;
   }
 
-  /// ConnectAuto - overridden
+  /// Connect Auto
   @override
   Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();

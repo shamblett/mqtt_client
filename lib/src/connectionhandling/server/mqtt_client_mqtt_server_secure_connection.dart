@@ -49,18 +49,57 @@ class MqttServerSecureConnection extends MqttServerConnection {
       });
     } on SocketException catch (e) {
       final message =
-          'MqttSecureConnection::The connection to the message broker '
+          'MqttSecureConnection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
       final message =
-          'MqttSecureConnection::Handshake exception to the message broker '
+          'MqttSecureConnection::connect - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on TlsException catch (e) {
       final message = 'MqttSecureConnection::TLS exception raised on secure '
+          'connection. Error is ${e.toString()}';
+      throw NoConnectionException(message);
+    }
+    return completer.future;
+  }
+
+  /// Connect Auto
+  @override
+  Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
+    final completer = Completer<MqttClientConnectionStatus>();
+    MqttLogger.log('MqttSecureConnection::connectAuto');
+    try {
+      SecureSocket.connect(server, port,
+              onBadCertificate: onBadCertificate, context: context)
+          .then((SecureSocket socket) {
+        MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
+        client = socket;
+        MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
+        _startListening();
+        completer.complete();
+      }).catchError((dynamic e) {
+        onError(e);
+        completer.completeError(e);
+      });
+    } on SocketException catch (e) {
+      final message =
+          'MqttSecureConnection::connectAuto - The connection to the message broker '
+          '{$server}:{$port} could not be made. Error is ${e.toString()}';
+      completer.completeError(e);
+      throw NoConnectionException(message);
+    } on HandshakeException catch (e) {
+      final message =
+          'MqttSecureConnection::connectAuto - Handshake exception to the message broker '
+          '{$server}:{$port}. Error is ${e.toString()}';
+      completer.completeError(e);
+      throw NoConnectionException(message);
+    } on TlsException catch (e) {
+      final message =
+          'MqttSecureConnection::connectAuto - TLS exception raised on secure '
           'connection. Error is ${e.toString()}';
       throw NoConnectionException(message);
     }

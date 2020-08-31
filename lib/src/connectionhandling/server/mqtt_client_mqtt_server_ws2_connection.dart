@@ -122,12 +122,13 @@ class MqttServerWs2Connection extends MqttServerConnection {
       uri = Uri.parse(server);
     } on Exception {
       final message =
-          'MqttWsConnection::The URI supplied for the WS2 connection '
+          'MqttWsConnection::connect - The URI supplied for the WS2 connection '
           'is not valid - $server';
       throw NoConnectionException(message);
     }
     if (uri.scheme != 'wss') {
-      final message = 'MqttWsConnection::The URI supplied for the WS2 has an '
+      final message =
+          'MqttWsConnection::connect - The URI supplied for the WS2 has an '
           'incorrect scheme - $server';
       throw NoConnectionException(message);
     }
@@ -136,7 +137,7 @@ class MqttServerWs2Connection extends MqttServerConnection {
     }
     final uriString = uri.toString();
     MqttLogger.log(
-        'MqttWs2Connection:: WS URL is $uriString, protocols are $protocols');
+        'MqttWs2Connection::connect - WS URL is $uriString, protocols are $protocols');
 
     try {
       SecureSocket.connect(uri.host, uri.port, context: context)
@@ -157,19 +158,84 @@ class MqttServerWs2Connection extends MqttServerConnection {
         });
       });
     } on SocketException catch (e) {
-      final message = 'MqttWs2Connection::The connection to the message broker '
+      final message =
+          'MqttWs2Connection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on HandshakeException catch (e) {
       final message =
-          'MqttWs2Connection::Handshake exception to the message broker '
+          'MqttWs2Connection::connect - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
       throw NoConnectionException(message);
     } on TlsException catch (e) {
       final message =
-          'MqttWs2Connection::TLS exception raised on secure connection. '
+          'MqttWs2Connection::connect - TLS exception raised on secure connection. '
+          'Error is ${e.toString()}';
+      throw NoConnectionException(message);
+    }
+    return completer.future;
+  }
+
+  /// Connect Auto
+  @override
+  Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
+    final completer = Completer<MqttClientConnectionStatus>();
+    MqttLogger.log('MqttWs2Connection::connectAuto');
+    Uri uri;
+    try {
+      uri = Uri.parse(server);
+    } on Exception {
+      final message =
+          'MqttWsConnection::connectAuto - The URI supplied for the WS2 connection '
+          'is not valid - $server';
+      throw NoConnectionException(message);
+    }
+    if (uri.scheme != 'wss') {
+      final message =
+          'MqttWsConnection::connectAuto - The URI supplied for the WS2 has an '
+          'incorrect scheme - $server';
+      throw NoConnectionException(message);
+    }
+    if (port != null) {
+      uri = uri.replace(port: port);
+    }
+    final uriString = uri.toString();
+    MqttLogger.log(
+        'MqttWs2Connection::connectAuto - WS URL is $uriString, protocols are $protocols');
+
+    try {
+      SecureSocket.connect(uri.host, uri.port, context: context)
+          .then((Socket socket) {
+        MqttLogger.log('MqttWs2Connection::connectAuto - securing socket');
+        _performWSHandshake(socket, uri).then((bool b) {
+          client = WebSocket.fromUpgradedSocket(
+              _DetachedSocket(socket, _subscription),
+              serverSide: false);
+          MqttLogger.log('MqttWs2Connection::connectAuto - start listening');
+          _startListening();
+          completer.complete();
+        }).catchError((dynamic e) {
+          onError(e);
+          completer.completeError(e);
+        });
+      });
+    } on SocketException catch (e) {
+      final message =
+          'MqttWs2Connection::connectAuto - The connection to the message broker '
+          '{$server}:{$port} could not be made. Error is ${e.toString()}';
+      completer.completeError(e);
+      throw NoConnectionException(message);
+    } on HandshakeException catch (e) {
+      final message =
+          'MqttWs2Connection::connectAuto - Handshake exception to the message broker '
+          '{$server}:{$port}. Error is ${e.toString()}';
+      completer.completeError(e);
+      throw NoConnectionException(message);
+    } on TlsException catch (e) {
+      final message =
+          'MqttWs2Connection::connectAuto - TLS exception raised on secure connection. '
           'Error is ${e.toString()}';
       throw NoConnectionException(message);
     }
