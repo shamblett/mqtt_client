@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - development
-      - autoreconnect
 
 jobs:
 
@@ -23,11 +22,14 @@ jobs:
       # You can then use this id to retrieve the outputs in the next steps.
       # The following step shows how to exit the workflow with an error if a score is below 100:
       - name: Check scores
+        env:
+        # NB: "analysis" is the id set above. Replace it with the one you used if different.
+        TOTAL: ${{ steps.analysis.outputs.total }}
+        TOTAL_MAX: ${{ steps.analysis.outputs.total_max }}
         run: |
-          MAINTENANCE_SCORE=${{ steps.analysis.outputs.maintenance }}
-          HEALTH_SCORE=${{ steps.analysis.outputs.health }}
-          if (( $(echo "$MAINTENANCE_SCORE < 100" | bc) )) || (( $(echo "$HEALTH_SCORE < 100" | bc) ))
+          PERCENTAGE=$(( $TOTAL * 100 / $TOTAL_MAX ))
+          if (( $PERCENTAGE < 50 ))
           then
-            echo "Scores are not both equal to 100"
+            echo Score too low!
             exit 1
           fi

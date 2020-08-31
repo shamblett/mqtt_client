@@ -116,4 +116,20 @@ class MqttServerWsConnection extends MqttServerConnection {
     }
     return completer.future;
   }
+
+  /// User requested or auto disconnect disconnection
+  @override
+  void disconnect({bool auto = false}) {
+    if (auto) {
+      _disconnect();
+    } else {
+      onDone();
+    }
+  }
+
+  void _disconnect() {
+    if (client != null) {
+      client = null;
+    }
+  }
 }

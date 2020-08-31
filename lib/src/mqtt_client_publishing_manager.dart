@@ -87,7 +87,7 @@ class PublishingManager implements IPublishingManager {
       PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       [bool retain = false]) {
     MqttLogger.log(
-        'PublishingManager::publish - enetered with topic ${topic.rawTopic}');
+        'PublishingManager::publish - entered with topic ${topic.rawTopic}');
     final msgId = messageIdentifierDispenser.getNextMessageIdentifier();
     final msg = MqttPublishMessage()
         .toTopic(topic.toString())
