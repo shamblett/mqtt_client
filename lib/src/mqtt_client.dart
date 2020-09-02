@@ -302,8 +302,7 @@ class MqttClient {
   /// [unsubscribe] followed by [subscribe] for each subscription.
   /// Can be used in auto reconnect processing to force manual re subscription of all existing
   /// confirmed subscriptions.
-  void resubscribe(String topic, MqttQos qosLevel) =>
-      subscriptionsManager.resubscribe();
+  void resubscribe() => subscriptionsManager.resubscribe();
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
