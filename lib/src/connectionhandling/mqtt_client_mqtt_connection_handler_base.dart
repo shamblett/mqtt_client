@@ -112,8 +112,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @protected
   void autoReconnect(AutoReconnect reconnectEvent) async {
     MqttLogger.log('MqttConnectionHandlerBase::autoReconnect entered');
-    // If already in progress exit
-    if (autoReconnectInProgress) {
+    // If already in progress exit and we were not connected return
+    if (autoReconnectInProgress && !reconnectEvent.wasConnected) {
       return;
     }
     autoReconnectInProgress = true;

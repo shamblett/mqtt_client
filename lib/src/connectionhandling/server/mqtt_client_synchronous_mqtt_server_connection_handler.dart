@@ -70,8 +70,12 @@ class SynchronousMqttServerConnectionHandler
       // Connect
       try {
         if (!autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - calling connect');
           await connection.connect(hostname, port);
         } else {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - calling connectAuto');
           await connection.connectAuto(hostname, port);
         }
       } on Exception {

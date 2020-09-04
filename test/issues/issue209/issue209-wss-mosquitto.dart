@@ -12,19 +12,22 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
 
 Future<int> main() async {
-  test('should maintain subscriptions after autoReconnect', () async {
+  test('Should maintain subscriptions after autoReconnect', () async {
     final client = MqttServerClient.withPort(
-        'broker.hivemq.com', 'client-id-123456789', 1883);
+        'wss://test.mosquitto.org', 'client-id-123456789', 8081);
     client.autoReconnect = true;
     client.logging(on: true);
     const topic = 'xd/+';
 
     // Subscribe callback, we do the auto reconnect when we know we have subscribed
-    // second time is from the resubscribe so we ignore it.
+    // second time is from the resubscribe so re publish.
     var ignoreSubscribe = false;
     void subCB(subTopic) async {
       if (ignoreSubscribe) {
-        print('ISSUE: Received re-subscribe callback for our topic - ignoring');
+        print(
+            'ISSUE: Received re-subscribe callback for our topic - re publishing');
+        client.publishMessage('xd/light', MqttQos.exactlyOnce,
+            (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
         return;
       }
       if (topic == subTopic) {
@@ -41,8 +44,9 @@ Future<int> main() async {
     // Main test starts here
     print('ISSUE: Main test start');
     client.onSubscribed = subCB; // Subscribe callback
+    client.useWebSocket = true;
     print('ISSUE: Connecting');
-    await client.connect('user', 'password');
+    await client.connect();
     client.subscribe(topic, MqttQos.exactlyOnce);
 
     // Now publish the message
@@ -57,7 +61,7 @@ Future<int> main() async {
         MqttPublishMessage message = e.payload;
         yield utf8.decode(message.payload.message);
       }
-    }).timeout(Duration(seconds: 20));
+    }).timeout(Duration(seconds: 15));
 
     expect(await stream.first, equals('xd'));
     print('ISSUE: Test complete');
