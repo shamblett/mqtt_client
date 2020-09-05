@@ -31,7 +31,7 @@ class MqttServerSecureConnection extends MqttServerConnection {
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
-    MqttLogger.log('MqttSecureConnection::connect');
+    MqttLogger.log('MqttSecureConnection::connect - entered');
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)
@@ -71,7 +71,7 @@ class MqttServerSecureConnection extends MqttServerConnection {
   @override
   Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
-    MqttLogger.log('MqttSecureConnection::connectAuto');
+    MqttLogger.log('MqttSecureConnection::connectAuto - entered');
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)

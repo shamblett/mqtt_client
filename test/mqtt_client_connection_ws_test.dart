@@ -40,7 +40,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-            'MqttWsConnection::The URI supplied for the WS connection is not valid - ://localhost.com');
+            'MqttWsConnection::connect - The URI supplied for the WS connection is not valid - ://localhost.com');
       }
     });
 
@@ -68,7 +68,7 @@ void main() {
         expect(
             e.toString(),
             'mqtt-client::NoConnectionException: '
-            'MqttWsConnection::The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
+            'MqttWsConnection::connect - The URI supplied for the WS has an incorrect scheme - $mockBrokerAddressWsNoScheme');
       }
     });
   });

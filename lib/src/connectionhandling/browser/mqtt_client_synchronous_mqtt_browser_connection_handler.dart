@@ -31,7 +31,7 @@ class SynchronousMqttBrowserConnectionHandler
       // Initiate the connection
       MqttLogger.log(
           'SynchronousMqttBrowserConnectionHandler::internalConnect - '
-          'initiating connection try $connectionAttempts');
+          'initiating connection try $connectionAttempts, auto reconnect in progress $autoReconnectInProgress');
       connectionStatus.state = MqttConnectionState.connecting;
       connectionStatus.returnCode = MqttConnectReturnCode.noneSpecified;
       // Don't reallocate the connection if this is an auto reconnect
@@ -45,8 +45,12 @@ class SynchronousMqttBrowserConnectionHandler
       // Connect
       try {
         if (!autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttBrowserConnectionHandler::internalConnect - calling connect');
           await connection.connect(hostname, port);
         } else {
+          MqttLogger.log(
+              'SynchronousMqttBrowserConnectionHandler::internalConnect - calling connectAuto');
           await connection.connectAuto(hostname, port);
         }
       } on Exception {

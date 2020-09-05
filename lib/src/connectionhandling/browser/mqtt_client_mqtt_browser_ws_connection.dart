@@ -26,6 +26,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
+    MqttLogger.log('MqttBrowserWsConnection::connect - entered');
     // Add the port if present
     Uri uri;
     try {
@@ -71,7 +72,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
       });
       errorEvents = client.onError.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connect - websocket has errored');
+            'MqttBrowserWsConnection::connect - websocket has erred');
         closeEvents.cancel();
         errorEvents.cancel();
         return completer.complete(MqttClientConnectionStatus());
@@ -90,6 +91,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
   @override
   Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
+    MqttLogger.log('MqttBrowserWsConnection::connectAuto - entered');
     // Add the port if present
     Uri uri;
     try {

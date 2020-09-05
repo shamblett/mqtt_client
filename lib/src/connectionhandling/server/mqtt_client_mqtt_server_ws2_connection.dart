@@ -116,7 +116,7 @@ class MqttServerWs2Connection extends MqttServerConnection {
   @override
   Future<MqttClientConnectionStatus> connect(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
-    MqttLogger.log('MqttWs2Connection::connect');
+    MqttLogger.log('MqttWs2Connection::connect - entered');
     Uri uri;
     try {
       uri = Uri.parse(server);
@@ -182,7 +182,7 @@ class MqttServerWs2Connection extends MqttServerConnection {
   @override
   Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
     final completer = Completer<MqttClientConnectionStatus>();
-    MqttLogger.log('MqttWs2Connection::connectAuto');
+    MqttLogger.log('MqttWs2Connection::connectAuto - entered');
     Uri uri;
     try {
       uri = Uri.parse(server);
