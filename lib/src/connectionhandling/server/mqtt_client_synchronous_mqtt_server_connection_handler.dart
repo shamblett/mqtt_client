@@ -70,8 +70,12 @@ class SynchronousMqttServerConnectionHandler
       // Connect
       try {
         if (!autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - calling connect');
           await connection.connect(hostname, port);
         } else {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect - calling connectAuto');
           await connection.connectAuto(hostname, port);
         }
       } on Exception {
@@ -116,13 +120,14 @@ class SynchronousMqttServerConnectionHandler
         } else {
           throw NoConnectionException('The maximum allowed connection attempts '
               '({$maxConnectionAttempts}) were exceeded. '
-              'The broker is not responding to the connection request message correctly'
+              'The broker is not responding to the connection request message correctly '
               'The return code is ${connectionStatus.returnCode}');
         }
       }
     }
     MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect '
         'exited with state $connectionStatus');
+    initialConnectionComplete = true;
     return connectionStatus;
   }
 }

@@ -302,8 +302,7 @@ class MqttClient {
   /// [unsubscribe] followed by [subscribe] for each subscription.
   /// Can be used in auto reconnect processing to force manual re subscription of all existing
   /// confirmed subscriptions.
-  void resubscribe(String topic, MqttQos qosLevel) =>
-      subscriptionsManager.resubscribe();
+  void resubscribe() => subscriptionsManager.resubscribe();
 
   /// Publishes a message to the message broker.
   /// Returns The message identifer assigned to the message.
@@ -360,7 +359,7 @@ class MqttClient {
           'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
       return;
     }
-    if (autoReconnect) {
+    if (autoReconnect && connectionHandler.initialConnectionComplete) {
       if (!connectionHandler.autoReconnectInProgress) {
         // Fire an automatic auto reconnect request
         clientEventBus.fire(AutoReconnect(userRequested: false));
@@ -369,8 +368,10 @@ class MqttClient {
             'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
       }
     } else {
-      // Unsolicited disconnect
-      _disconnect(unsolicited: true);
+      // Unsolicited disconnect only if we are connected initially
+      if (connectionHandler.initialConnectionComplete) {
+        _disconnect(unsolicited: true);
+      }
     }
   }
 

@@ -79,6 +79,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   List<MessageCallbackFunction> sentMessageCallbacks =
       <MessageCallbackFunction>[];
 
+  /// We have had an initial connection
+  @protected
+  bool initialConnectionComplete = false;
+
   /// Connection status
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
@@ -112,8 +116,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @protected
   void autoReconnect(AutoReconnect reconnectEvent) async {
     MqttLogger.log('MqttConnectionHandlerBase::autoReconnect entered');
-    // If already in progress exit
-    if (autoReconnectInProgress) {
+    // If already in progress exit and we were not connected return
+    if (autoReconnectInProgress && !reconnectEvent.wasConnected) {
       return;
     }
     autoReconnectInProgress = true;
