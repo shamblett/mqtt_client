@@ -7,16 +7,18 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
 
 Future<int> main() async {
   test('Should maintain subscriptions after autoReconnect', () async {
-    final client = MqttServerClient.withPort(
-        'wss://test.mosquitto.org', 'client-id-123456789', 8081);
+    final client =
+        MqttServerClient.withPort('localhost', 'client-id-123456789', 1883);
     client.autoReconnect = true;
     client.logging(on: true);
+    client.keepAlivePeriod = 3;
     const topic = 'xd/+';
 
     // Subscribe callback, we do the auto reconnect when we know we have subscribed
@@ -32,19 +34,22 @@ Future<int> main() async {
       }
       if (topic == subTopic) {
         print(
-            'ISSUE: Received subscribe callback for our topic - auto reconnecting');
-        client.doAutoReconnect(force: true);
+            'ISSUE: Received subscribe callback for our topic - disconnect the broker');
+        print(
+            '<<<<<<<<<<<<<<<<<<<<<< DISCONNECT THE BROKER >>>>>>>>>>>>>>>>>>>>>');
+        sleep(Duration(seconds: 7));
+        client.publishMessage('xd/light', MqttQos.exactlyOnce,
+            (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
       } else {
         print('ISSUE: Received subscribe callback for unknown topic $subTopic');
       }
       ignoreSubscribe = true;
-      print('ISSUE: Exiting subscribe callback');
+      print('ISSUE: Exiting subscribe callback - reconnect the broker');
     }
 
     // Main test starts here
     print('ISSUE: Main test start');
     client.onSubscribed = subCB; // Subscribe callback
-    client.useWebSocket = true;
     print('ISSUE: Connecting');
     await client.connect();
     client.subscribe(topic, MqttQos.exactlyOnce);
@@ -61,7 +66,7 @@ Future<int> main() async {
         MqttPublishMessage message = e.payload;
         yield utf8.decode(message.payload.message);
       }
-    }).timeout(Duration(seconds: 30));
+    }).timeout(Duration(seconds: 35));
 
     expect(await stream.first, equals('xd'));
     print('ISSUE: Test complete');
