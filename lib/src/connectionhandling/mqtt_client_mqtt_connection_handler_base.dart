@@ -79,6 +79,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   List<MessageCallbackFunction> sentMessageCallbacks =
       <MessageCallbackFunction>[];
 
+  /// We have had an initial connection
+  @protected
+  bool initialConnectionComplete = false;
+
   /// Connection status
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();

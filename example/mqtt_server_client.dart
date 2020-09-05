@@ -80,8 +80,13 @@ Future<int> main() async {
   /// never send malformed messages.
   try {
     await client.connect();
-  } on Exception catch (e) {
+  } on NoConnectionException catch (e) {
+    // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
+    client.disconnect();
+  } on SocketException catch (e) {
+    // Raised by the socket layer
+    print('EXAMPLE::socket exception - $e');
     client.disconnect();
   }
 

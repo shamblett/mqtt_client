@@ -359,7 +359,7 @@ class MqttClient {
           'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
       return;
     }
-    if (autoReconnect) {
+    if (autoReconnect && connectionHandler.initialConnectionComplete) {
       if (!connectionHandler.autoReconnectInProgress) {
         // Fire an automatic auto reconnect request
         clientEventBus.fire(AutoReconnect(userRequested: false));
@@ -368,8 +368,10 @@ class MqttClient {
             'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
       }
     } else {
-      // Unsolicited disconnect
-      _disconnect(unsolicited: true);
+      // Unsolicited disconnect only if we are connected initially
+      if (connectionHandler.initialConnectionComplete) {
+        _disconnect(unsolicited: true);
+      }
     }
   }
 
