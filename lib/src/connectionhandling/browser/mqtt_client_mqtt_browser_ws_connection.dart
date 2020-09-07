@@ -154,4 +154,33 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
         'MqttBrowserWsConnection::connectAuto - connection is waiting');
     return completer.future;
   }
+
+  /// OnError listener callback
+  @override
+  void onError(dynamic error) {
+    _disconnect();
+    if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttConnectionBase::_onError - calling disconnected callback');
+      onDisconnected();
+    }
+  }
+
+  /// OnDone listener callback
+  @override
+  void onDone() {
+    _disconnect();
+    if (onDisconnected != null) {
+      MqttLogger.log(
+          'MqttConnectionBase::_onDone - calling disconnected callback');
+      onDisconnected();
+    }
+  }
+
+  void _disconnect() {
+    if (client != null) {
+      client.close();
+      client = null;
+    }
+  }
 }
