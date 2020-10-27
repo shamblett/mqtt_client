@@ -169,9 +169,9 @@ class MqttByteBuffer {
   @override
   String toString() {
     if (buffer != null && buffer.isNotEmpty) {
-      return 'null or empty';
-    } else {
       return buffer.toList().toString();
+    } else {
+      return 'null or empty';
     }
   }
 }

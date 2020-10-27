@@ -553,6 +553,15 @@ void main() {
       buff1.seek(20);
       expect(buff1.position, 10);
     });
+    test('Byte Buffer To String', () {
+      final uBuff = typed.Uint8Buffer();
+      final buff = MqttByteBuffer(uBuff);
+      expect(buff.toString(), 'null or empty');
+      final bytes = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      final buff1 = MqttByteBuffer.fromList(bytes);
+      expect(buff1.toString(), '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]');
+
+    });
     test('Sleep Async', () async {
       final start = DateTime.now();
       await MqttUtilities.asyncSleep(1);
