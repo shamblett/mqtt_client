@@ -218,6 +218,9 @@ class MqttClient {
     if (!instantiationCorrect) {
       throw IncorrectInstantiationException();
     }
+    // Generate the client id for logging
+    MqttLogger.clientId++;
+
     checkCredentials(username, password);
     // Set the authentication parameters in the connection
     // message if we have one.

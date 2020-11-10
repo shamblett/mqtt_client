@@ -1,3 +1,6 @@
+#8.1.0
+Issues 213, 230, 229
+
 # 8.0.0
 Issues 209, 210<br>
 Note that auto reconnect will now automatically re subscribe

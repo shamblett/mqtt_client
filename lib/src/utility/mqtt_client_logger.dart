@@ -12,11 +12,14 @@ class MqttLogger {
   /// Log or not
   static bool loggingOn = false;
 
+  /// Unique per client identifier
+  static int clientId = 0;
+
   /// Log method
   static void log(String message) {
     if (loggingOn) {
       final now = DateTime.now();
-      print('$now -- $message');
+      print('${clientId.toString()}-$now -- $message');
     }
   }
 }
