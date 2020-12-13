@@ -18,6 +18,7 @@ Future<int> main() async {
     client.autoReconnect = true;
     client.logging(on: false);
     const topic = 'xd/+';
+    var autoCompleteCount = 0;
 
     // Subscribe callback, we do the auto reconnect when we know we have subscribed
     // second time is from the resubscribe so re publish.
@@ -41,9 +42,14 @@ Future<int> main() async {
       print('ISSUE: Exiting subscribe callback');
     }
 
+    void autoComplete() {
+      autoCompleteCount++;
+    }
+
     // Main test starts here
     print('ISSUE: Main test start');
     client.onSubscribed = subCB; // Subscribe callback
+    client.onAutoReconnected = autoComplete; // Auto Reconnected callback
     print('ISSUE: Connecting');
     await client.connect();
     client.subscribe(topic, MqttQos.exactlyOnce);
@@ -63,8 +69,16 @@ Future<int> main() async {
     }).timeout(Duration(seconds: 7));
 
     expect(await stream.first, equals('xd'));
+
+    final delay = MqttCancellableAsyncSleep(10000);
+    await delay.sleep();
+    print('ISSUE: Second disconnect .....');
+    client.doAutoReconnect(force: true);
+    await delay.sleep();
+    expect(autoCompleteCount, 2);
+
     print('ISSUE: Test complete');
-  });
+  }, timeout: Timeout.factor(2));
 
   return 0;
 }
