@@ -46,10 +46,21 @@ Future<int> main() async {
       autoCompleteCount++;
     }
 
+    void disconnected() {
+      print('ISSUE: Client is disconnected');
+    }
+
+    void preAuto() {
+      print('ISSUE: Pre auto reconnect entered');
+    }
+
     // Main test starts here
     print('ISSUE: Main test start');
     client.onSubscribed = subCB; // Subscribe callback
     client.onAutoReconnected = autoComplete; // Auto Reconnected callback
+    client.onDisconnected = disconnected;
+    client.onAutoReconnect = preAuto;
+
     print('ISSUE: Connecting');
     await client.connect();
     client.subscribe(topic, MqttQos.exactlyOnce);
@@ -70,11 +81,10 @@ Future<int> main() async {
 
     expect(await stream.first, equals('xd'));
 
-    final delay = MqttCancellableAsyncSleep(10000);
+    var delay = MqttCancellableAsyncSleep(10000);
     print('ISSUE: Second disconnect ..... <<< Stop and restart the broker here');
     await delay.sleep();
-    expect(autoCompleteCount, 2);
-
+    expect(autoCompleteCount, 1);
     print('ISSUE: Test complete');
   }, timeout: Timeout.factor(2));
 
