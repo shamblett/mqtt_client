@@ -10,7 +10,7 @@ import 'dart:io';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:mqtt_client/mqtt_client.dart';
 
-typedef MessageHandlerFunction = void Function(typed.Uint8Buffer message);
+typedef MessageHandlerFunction = void Function(typed.Uint8Buffer? message);
 
 /// Helper methods for test message serialization and deserialization
 class MessageSerializationHelper {
@@ -30,10 +30,10 @@ class MockBrokerWs {
   MockBrokerWs();
 
   int port = 8090;
-  MessageHandlerFunction handler;
-  MqttByteBuffer networkstream;
+  late MessageHandlerFunction handler;
+  MqttByteBuffer? networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-  WebSocket _webSocket;
+  late WebSocket _webSocket;
 
   void _handleMessage(dynamic data) {
     // Listen for incoming data.
@@ -43,13 +43,13 @@ class MockBrokerWs {
     if (networkstream == null) {
       networkstream = MqttByteBuffer(dataBytesBuff);
     } else {
-      networkstream.write(dataBytesBuff);
+      networkstream!.write(dataBytesBuff);
     }
-    networkstream.seek(0);
+    networkstream!.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream!);
     print(msg.toString());
-    handler(networkstream.buffer);
+    handler(networkstream!.buffer);
     networkstream = null;
   }
 
@@ -95,7 +95,7 @@ class MockBrokerWs {
 Future<void> main(List<String> argv) async {
   final brokerWs = MockBrokerWs();
 
-  void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+  void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
     final ack = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.connectionAccepted);
     print('WS Broker - sending connect ack');

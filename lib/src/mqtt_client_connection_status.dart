@@ -13,7 +13,7 @@ class MqttClientConnectionStatus {
   MqttConnectionState state = MqttConnectionState.disconnected;
 
   /// Return code
-  MqttConnectReturnCode returnCode = MqttConnectReturnCode.noneSpecified;
+  MqttConnectReturnCode? returnCode = MqttConnectReturnCode.noneSpecified;
 
   /// Disconnection origin
   MqttDisconnectionOrigin disconnectionOrigin = MqttDisconnectionOrigin.none;

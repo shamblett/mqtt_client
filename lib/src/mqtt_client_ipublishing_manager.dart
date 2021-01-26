@@ -20,5 +20,5 @@ abstract class IPublishingManager {
       PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data);
 
   /// The message received event
-  MessageReceived publishEvent;
+  MessageReceived? publishEvent;
 }

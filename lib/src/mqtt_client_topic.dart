@@ -39,7 +39,7 @@ abstract class Topic {
   String rawTopic;
 
   /// Topic fragments
-  List<String> topicFragments;
+  late List<String> topicFragments;
 
   /// Validates that the topic does not exceed the maximum length.
   /// topicInstance - The instance to check.

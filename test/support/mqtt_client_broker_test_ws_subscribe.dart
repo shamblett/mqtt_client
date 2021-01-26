@@ -17,7 +17,7 @@ Future<int> main() async {
   client.port = 80;
   client.logging(on: true);
   await client.connect();
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('Mosquitto client connected');
   } else {
     print(
@@ -27,10 +27,10 @@ Future<int> main() async {
   // Subscribe to a known topic
   const topic = 'test/hw';
   client.subscribe(topic, MqttQos.exactlyOnce);
-  client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-    final MqttPublishMessage recMess = c[0].payload;
+  client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+    final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
     print('Change notification:: payload is <$pt> for topic <$topic>');
   });
   print('Sleeping....');

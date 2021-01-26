@@ -28,7 +28,7 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
 
-  MqttConnectionKeepAlive ka;
+  late MqttConnectionKeepAlive ka;
 }
 
 void main() {
@@ -69,8 +69,8 @@ void main() {
       expect(ka.pingRequired(), false);
       verify(ka.pingRequired());
       expect(ka.ka.pingTimer, isNotNull);
-      expect(ka.ka.pingTimer.isActive, isTrue);
-      ka.ka.pingTimer.cancel();
+      expect(ka.ka.pingTimer!.isActive, isTrue);
+      ka.ka.pingTimer!.cancel();
     });
   });
 
@@ -116,12 +116,12 @@ void main() {
   });
 
   group('MockBroker', () {
-    MockBrokerSecure broker;
+    late MockBrokerSecure broker;
 
     setUp(() async {
       broker = MockBrokerSecure();
       broker.pemName = 'localhost';
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -137,7 +137,7 @@ void main() {
     test('Connection Keep Alive - Successful response', () async {
       var expectRequest = 0;
 
-      void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
+      void messageHandlerPingRequest(typed.Uint8Buffer? messageArrived) {
         final headerStream = MqttByteBuffer(messageArrived);
         final header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
@@ -168,7 +168,7 @@ void main() {
       print(
           'Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer!.isActive.toString()}');
       final stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('Connection Keep Alive - Successful response - Elapsed time '

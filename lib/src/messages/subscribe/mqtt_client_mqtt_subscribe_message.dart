@@ -12,7 +12,7 @@ class MqttSubscribeMessage extends MqttMessage {
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
     header = MqttHeader().asType(MqttMessageType.subscribe);
-    header.qos = MqttQos.atLeastOnce;
+    header!.qos = MqttQos.atLeastOnce;
     variableHeader = MqttSubscribeVariableHeader();
     payload = MqttSubscribePayload();
   }
@@ -21,25 +21,25 @@ class MqttSubscribeMessage extends MqttMessage {
   MqttSubscribeMessage.fromByteBuffer(
       MqttHeader header, MqttByteBuffer messageStream) {
     this.header = header;
-    this.header.qos = MqttQos.atLeastOnce;
+    this.header!.qos = MqttQos.atLeastOnce;
     readFrom(messageStream);
   }
 
   /// Gets or sets the variable header contents. Contains extended
   /// metadata about the message.
-  MqttSubscribeVariableHeader variableHeader;
+  MqttSubscribeVariableHeader? variableHeader;
 
   /// Gets or sets the payload of the Mqtt Message.
-  MqttSubscribePayload payload;
+  late MqttSubscribePayload payload;
 
-  String _lastTopic;
+  String? _lastTopic;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
+    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    variableHeader.writeTo(messageStream);
+    variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
 
@@ -62,7 +62,7 @@ class MqttSubscribeMessage extends MqttMessage {
 
   /// Sets the Qos level of the last topic added to the subscription
   /// list via a call to ToTopic(string).
-  MqttSubscribeMessage atQos(MqttQos qos) {
+  MqttSubscribeMessage atQos(MqttQos? qos) {
     if (payload.subscriptions.containsKey(_lastTopic)) {
       payload.subscriptions[_lastTopic] = qos;
     }
@@ -70,15 +70,15 @@ class MqttSubscribeMessage extends MqttMessage {
   }
 
   /// Sets the message identifier on the subscribe message.
-  MqttSubscribeMessage withMessageIdentifier(int messageIdentifier) {
-    variableHeader.messageIdentifier = messageIdentifier;
+  MqttSubscribeMessage withMessageIdentifier(int? messageIdentifier) {
+    variableHeader!.messageIdentifier = messageIdentifier;
     return this;
   }
 
   /// Sets the message up to request acknowledgement from the
   /// broker for each topic subscription.
   MqttSubscribeMessage expectAcknowledgement() {
-    header.withQos(MqttQos.atLeastOnce);
+    header!.withQos(MqttQos.atLeastOnce);
     return this;
   }
 
@@ -86,7 +86,7 @@ class MqttSubscribeMessage extends MqttMessage {
   /// duplicate of a previous message type
   /// with the same message identifier.
   MqttSubscribeMessage isDuplicate() {
-    header.isDuplicate();
+    header!.isDuplicate();
     return this;
   }
 

@@ -66,11 +66,11 @@ Future<int> main() async {
   }
 
   /// Check we are connected
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus.state}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
     client.disconnect();
     exit(-1);
   }
@@ -91,10 +91,10 @@ Future<int> main() async {
   final topicFilter = MqttClientTopicFilter('ebcon/#', client.updates);
   // Now listen on the filtered updates, not the client updates
   // ignore: avoid_types_on_closure_parameters
-  topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-    final MqttPublishMessage recMess = c[0].payload;
+  topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage?>> c) {
+    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
 
     print(
         'EXAMPLE::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');

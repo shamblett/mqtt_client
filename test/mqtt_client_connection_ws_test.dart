@@ -77,13 +77,13 @@ void main() {
     test('Successful response WS', () async {
       var expectRequest = 0;
 
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         brokerWs.sendMessage(ack);
       }
 
-      void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
+      void messageHandlerPingRequest(typed.Uint8Buffer? messageArrived) {
         final headerStream = MqttByteBuffer(messageArrived);
         final header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
@@ -112,7 +112,7 @@ void main() {
       print(
           'WS Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'WS Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+          'WS Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer!.isActive.toString()}');
       final stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('WS Connection Keep Alive - Successful response - Elapsed time '

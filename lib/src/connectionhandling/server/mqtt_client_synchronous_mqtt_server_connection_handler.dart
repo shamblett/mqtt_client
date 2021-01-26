@@ -14,7 +14,7 @@ class SynchronousMqttServerConnectionHandler
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttServerConnectionHandler(
     clientEventBus, {
-    @required int maxConnectionAttempts,
+    required int maxConnectionAttempts,
   }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
     connectTimer = MqttCancellableAsyncSleep(5000);
     initialiseListeners();
@@ -23,7 +23,7 @@ class SynchronousMqttServerConnectionHandler
   /// Synchronously connect to the specific Mqtt Connection.
   @override
   Future<MqttClientConnectionStatus> internalConnect(
-      String hostname, int port, MqttConnectMessage connectMessage) async {
+      String? hostname, int? port, MqttConnectMessage? connectMessage) async {
     var connectionAttempts = 0;
     MqttLogger.log(
         'SynchronousMqttServerConnectionHandler::internalConnect entered');
@@ -35,7 +35,7 @@ class SynchronousMqttServerConnectionHandler
       connectionStatus.state = MqttConnectionState.connecting;
       connectionStatus.returnCode = MqttConnectReturnCode.noneSpecified;
       // Don't reallocate the connection if this is an auto reconnect
-      if (!autoReconnectInProgress) {
+      if (!autoReconnectInProgress!) {
         if (useWebSocket) {
           if (useAlternateWebSocketImplementation) {
             MqttLogger.log(
@@ -69,7 +69,7 @@ class SynchronousMqttServerConnectionHandler
 
       // Connect
       try {
-        if (!autoReconnectInProgress) {
+        if (!autoReconnectInProgress!) {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - calling connect');
           await connection.connect(hostname, port);
@@ -80,7 +80,7 @@ class SynchronousMqttServerConnectionHandler
         }
       } on Exception {
         // Ignore exceptions in an auto reconnect sequence
-        if (autoReconnectInProgress) {
+        if (autoReconnectInProgress!) {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect'
               ' exception thrown during auto reconnect - ignoring');
@@ -105,10 +105,10 @@ class SynchronousMqttServerConnectionHandler
           'SynchronousMqttServerConnectionHandler::internalConnect - '
           'post sleep, state = $connectionStatus');
     } while (connectionStatus.state != MqttConnectionState.connected &&
-        ++connectionAttempts < maxConnectionAttempts);
+        ++connectionAttempts < maxConnectionAttempts!);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionStatus.state != MqttConnectionState.connected) {
-      if (!autoReconnectInProgress) {
+      if (!autoReconnectInProgress!) {
         MqttLogger.log(
             'SynchronousMqttServerConnectionHandler::internalConnect failed');
         if (connectionStatus.returnCode ==

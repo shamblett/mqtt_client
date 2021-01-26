@@ -36,11 +36,11 @@ Future<int> main() async {
   }
 
   /// Check we are connected
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus.state}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
     client.disconnect();
     exit(-1);
   }
@@ -54,10 +54,10 @@ Future<int> main() async {
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
   // ignore: avoid_annotating_with_dynamic
-  client.updates.listen((dynamic c) {
+  client.updates!.listen((dynamic c) {
     final MqttPublishMessage recMess = c[0].payload;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
@@ -67,20 +67,20 @@ Future<int> main() async {
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
   // ignore: avoid_types_on_closure_parameters
-  client.published.listen((MqttPublishMessage message) {
+  client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
   });
 
   final builder1 = MqttClientPayloadBuilder();
   builder1.addString('Hello from mqtt_client topic 1');
   print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
-  client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload);
+  client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload!);
 
   final builder2 = MqttClientPayloadBuilder();
   builder2.addString('Hello from mqtt_client topic 2');
   print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
-  client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload);
+  client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload!);
 
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(60);

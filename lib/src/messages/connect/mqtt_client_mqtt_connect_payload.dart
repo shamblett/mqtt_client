@@ -35,38 +35,38 @@ class MqttConnectPayload extends MqttPayload {
   }
 
   /// Variable header
-  MqttConnectVariableHeader variableHeader = MqttConnectVariableHeader();
-  String _username;
+  MqttConnectVariableHeader? variableHeader = MqttConnectVariableHeader();
+  String? _username;
 
   /// User name
-  String get username => _username;
+  String? get username => _username;
 
-  set username(String name) => _username = name != null ? name.trim() : name;
-  String _password;
+  set username(String? name) => _username = name != null ? name.trim() : name;
+  String? _password;
 
   /// Password
-  String get password => _password;
+  String? get password => _password;
 
-  set password(String pwd) => _password = pwd != null ? pwd.trim() : pwd;
+  set password(String? pwd) => _password = pwd != null ? pwd.trim() : pwd;
 
   /// Will topic
-  String willTopic;
+  String? willTopic;
 
   /// Will message
-  String willMessage;
+  String? willMessage;
 
   /// Creates a payload from the specified header stream.
   @override
   void readFrom(MqttByteBuffer payloadStream) {
     clientIdentifier = payloadStream.readMqttStringM();
-    if (variableHeader.connectFlags.willFlag) {
+    if (variableHeader!.connectFlags.willFlag) {
       willTopic = payloadStream.readMqttStringM();
       willMessage = payloadStream.readMqttStringM();
     }
-    if (variableHeader.connectFlags.usernameFlag) {
+    if (variableHeader!.connectFlags.usernameFlag) {
       username = payloadStream.readMqttStringM();
     }
-    if (variableHeader.connectFlags.passwordFlag) {
+    if (variableHeader!.connectFlags.passwordFlag) {
       password = payloadStream.readMqttStringM();
     }
   }
@@ -75,15 +75,15 @@ class MqttConnectPayload extends MqttPayload {
   @override
   void writeTo(MqttByteBuffer payloadStream) {
     payloadStream.writeMqttStringM(clientIdentifier);
-    if (variableHeader.connectFlags.willFlag) {
-      payloadStream.writeMqttStringM(willTopic);
-      payloadStream.writeMqttStringM(willMessage);
+    if (variableHeader!.connectFlags.willFlag) {
+      payloadStream.writeMqttStringM(willTopic!);
+      payloadStream.writeMqttStringM(willMessage!);
     }
-    if (variableHeader.connectFlags.usernameFlag) {
-      payloadStream.writeMqttStringM(username);
+    if (variableHeader!.connectFlags.usernameFlag) {
+      payloadStream.writeMqttStringM(username!);
     }
-    if (variableHeader.connectFlags.passwordFlag) {
-      payloadStream.writeMqttStringM(password);
+    if (variableHeader!.connectFlags.passwordFlag) {
+      payloadStream.writeMqttStringM(password!);
     }
   }
 
@@ -92,15 +92,15 @@ class MqttConnectPayload extends MqttPayload {
     var length = 0;
     final enc = MqttEncoding();
     length += enc.getByteCount(clientIdentifier);
-    if (variableHeader.connectFlags.willFlag) {
-      length += enc.getByteCount(willTopic);
-      length += enc.getByteCount(willMessage);
+    if (variableHeader!.connectFlags.willFlag) {
+      length += enc.getByteCount(willTopic!);
+      length += enc.getByteCount(willMessage!);
     }
-    if (variableHeader.connectFlags.usernameFlag) {
-      length += enc.getByteCount(username);
+    if (variableHeader!.connectFlags.usernameFlag) {
+      length += enc.getByteCount(username!);
     }
-    if (variableHeader.connectFlags.passwordFlag) {
-      length += enc.getByteCount(password);
+    if (variableHeader!.connectFlags.passwordFlag) {
+      length += enc.getByteCount(password!);
     }
     return length;
   }

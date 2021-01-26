@@ -61,7 +61,7 @@ class MqttVariableHeader {
   int protocolVersion = 0;
 
   /// Conenct flags
-  MqttConnectFlags connectFlags;
+  late MqttConnectFlags connectFlags;
 
   /// Defines the maximum allowable lag, in seconds, between expected messages.
   /// The spec indicates that clients won't be disconnected until KeepAlive + 1/2 KeepAlive time period
@@ -75,7 +75,7 @@ class MqttVariableHeader {
   String topicName = '';
 
   /// Message identifier
-  int messageIdentifier = 0;
+  int? messageIdentifier = 0;
 
   /// Encoder
   final MqttEncoding _enc = MqttEncoding();
@@ -150,7 +150,7 @@ class MqttVariableHeader {
 
   /// Message identifier
   void writeMessageIdentifier(MqttByteBuffer stream) {
-    stream.writeShort(messageIdentifier);
+    stream.writeShort(messageIdentifier!);
   }
 
   /// Connect flags

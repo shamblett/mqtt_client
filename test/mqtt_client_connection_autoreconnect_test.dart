@@ -23,7 +23,7 @@ void main() {
       var autoReconnectCallbackCalled = false;
       var disconnectCallbackCalled = false;
 
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -49,14 +49,14 @@ void main() {
       const password = 'password 1';
       print(password);
       await client.connect();
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       await MqttUtilities.asyncSleep(2);
       client.doAutoReconnect();
       await MqttUtilities.asyncSleep(2);
       expect(autoReconnectCallbackCalled, isFalse);
       expect(disconnectCallbackCalled, isFalse);
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       broker.close();
     });
@@ -65,7 +65,7 @@ void main() {
       var autoReconnectCallbackCalled = false;
       var disconnectCallbackCalled = false;
 
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -91,7 +91,7 @@ void main() {
       const password = 'password 2';
       print(password);
       await client.connect();
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       broker.close();
       await MqttUtilities.asyncSleep(2);
@@ -99,14 +99,14 @@ void main() {
       await MqttUtilities.asyncSleep(2);
       expect(autoReconnectCallbackCalled, isTrue);
       expect(disconnectCallbackCalled, isFalse);
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
     });
     test('Connected - Broker Disconnects Remains Active', () async {
       var autoReconnectCallbackCalled = false;
       var disconnectCallbackCalled = false;
 
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -132,7 +132,7 @@ void main() {
       const password = 'password 3';
       print(password);
       await client.connect();
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       await MqttUtilities.asyncSleep(2);
       await broker.stop();
@@ -140,7 +140,7 @@ void main() {
       expect(autoReconnectCallbackCalled, isTrue);
       await MqttUtilities.asyncSleep(5);
       expect(disconnectCallbackCalled, isFalse);
-      expect(client.connectionStatus.state == MqttConnectionState.connected,
+      expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       broker.close();
     });

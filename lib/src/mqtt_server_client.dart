@@ -34,7 +34,7 @@ class MqttServerClient extends MqttClient {
   SecurityContext securityContext = SecurityContext.defaultContext;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(X509Certificate certificate) onBadCertificate;
+  bool Function(X509Certificate certificate)? onBadCertificate;
 
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
@@ -56,8 +56,8 @@ class MqttServerClient extends MqttClient {
   /// supply your own connection message and use the authenticateAs method to
   /// set these parameters do not set them again here.
   @override
-  Future<MqttClientConnectionStatus> connect(
-      [String username, String password]) async {
+  Future<MqttClientConnectionStatus?> connect(
+      [String? username, String? password]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttServerConnectionHandler(

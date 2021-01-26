@@ -13,7 +13,7 @@ class MqttPublishReleaseMessage extends MqttMessage {
   MqttPublishReleaseMessage() {
     header = MqttHeader().asType(MqttMessageType.publishRelease);
     // Qos is specified for this message
-    header.qos = MqttQos.atLeastOnce;
+    header!.qos = MqttQos.atLeastOnce;
     variableHeader = MqttPublishReleaseVariableHeader();
   }
 
@@ -27,17 +27,17 @@ class MqttPublishReleaseMessage extends MqttMessage {
 
   /// Gets or sets the variable header contents. Contains extended
   /// metadata about the message.
-  MqttPublishReleaseVariableHeader variableHeader;
+  late MqttPublishReleaseVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    header!.writeTo(variableHeader.getWriteLength(), messageStream);
     variableHeader.writeTo(messageStream);
   }
 
   /// Sets the message identifier of the MqttMessage.
-  MqttPublishReleaseMessage withMessageIdentifier(int messageIdentifier) {
+  MqttPublishReleaseMessage withMessageIdentifier(int? messageIdentifier) {
     variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }

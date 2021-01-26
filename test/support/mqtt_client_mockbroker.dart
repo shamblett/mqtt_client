@@ -4,7 +4,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:path/path.dart' as path;
 import 'package:typed_data/typed_data.dart' as typed;
 
-typedef MessageHandlerFunction = void Function(typed.Uint8Buffer message);
+typedef MessageHandlerFunction = void Function(typed.Uint8Buffer? message);
 
 /// Helper methods for test message serialization and deserialization
 class MessageSerializationHelper {
@@ -25,10 +25,10 @@ class MockBroker {
   MockBroker();
 
   int brokerPort = 1883;
-  ServerSocket listener;
-  MessageHandlerFunction handler;
-  Socket client;
-  MqttByteBuffer networkstream;
+  late ServerSocket listener;
+  MessageHandlerFunction? handler;
+  Socket? client;
+  MqttByteBuffer? networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
 
   FutureOr<dynamic> start() {
@@ -52,7 +52,7 @@ class MockBroker {
   void _connectAccept(Socket clientSocket) {
     print('MockBroker::connectAccept');
     client = clientSocket;
-    client.listen(_dataArrivedOnConnection);
+    client!.listen(_dataArrivedOnConnection);
   }
 
   void _dataArrivedOnConnection(List<int> data) {
@@ -60,12 +60,12 @@ class MockBroker {
     final dataBytesBuff = typed.Uint8Buffer();
     dataBytesBuff.addAll(data);
     networkstream = MqttByteBuffer(dataBytesBuff);
-    networkstream.seek(0);
+    networkstream!.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream!);
     print(msg.toString());
     if (handler != null) {
-      handler(networkstream.buffer);
+      handler!(networkstream!.buffer);
     }
     networkstream = null;
   }
@@ -79,7 +79,7 @@ class MockBroker {
     print('MockBroker::sending message ${msg.toString()}');
     final messBuff = MessageSerializationHelper.getMessageBytes(msg);
     print('MockBroker::sending message bytes ${messBuff.toString()}');
-    client.add(messBuff.toList());
+    client!.add(messBuff.toList());
   }
 
   /// Close the broker client socket
@@ -95,10 +95,10 @@ class MockBrokerWs {
   MockBrokerWs();
 
   int port = 8090;
-  MessageHandlerFunction handler;
-  MqttByteBuffer networkstream;
+  late MessageHandlerFunction handler;
+  MqttByteBuffer? networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-  WebSocket _webSocket;
+  late WebSocket _webSocket;
 
   void _handleMessage(dynamic data) {
     // Listen for incoming data.
@@ -108,13 +108,13 @@ class MockBrokerWs {
     if (networkstream == null) {
       networkstream = MqttByteBuffer(dataBytesBuff);
     } else {
-      networkstream.write(dataBytesBuff);
+      networkstream!.write(dataBytesBuff);
     }
-    networkstream.seek(0);
+    networkstream!.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream!);
     print(msg.toString());
-    handler(networkstream.buffer);
+    handler(networkstream!.buffer);
     networkstream = null;
   }
 
@@ -160,12 +160,12 @@ class MockBrokerSecure {
   MockBrokerSecure();
 
   int brokerPort = 8883;
-  SecureServerSocket listener;
-  MessageHandlerFunction handler;
-  SecureSocket client;
-  MqttByteBuffer networkstream;
+  SecureServerSocket? listener;
+  late MessageHandlerFunction handler;
+  late SecureSocket client;
+  MqttByteBuffer? networkstream;
   typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-  String pemName;
+  String? pemName;
 
   Future<void> start() {
     final completer = Completer<void>();
@@ -177,7 +177,7 @@ class MockBrokerSecure {
     SecureServerSocket.bind('localhost', brokerPort, context)
         .then((SecureServerSocket server) {
       listener = server;
-      listener.listen(_connectAccept);
+      listener!.listen(_connectAccept);
       print('MockBrokerSecure::we are bound');
       return completer.complete();
     });
@@ -197,13 +197,13 @@ class MockBrokerSecure {
     if (networkstream == null) {
       networkstream = MqttByteBuffer(dataBytesBuff);
     } else {
-      networkstream.write(dataBytesBuff);
+      networkstream!.write(dataBytesBuff);
     }
-    networkstream.seek(0);
+    networkstream!.seek(0);
     // Assume will have all the data for localhost testing purposes
-    final msg = MqttMessage.createFrom(networkstream);
+    final msg = MqttMessage.createFrom(networkstream!);
     print(msg.toString());
-    handler(networkstream.buffer);
+    handler(networkstream!.buffer);
     networkstream = null;
   }
 

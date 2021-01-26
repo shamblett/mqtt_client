@@ -10,7 +10,7 @@ part of mqtt_browser_client;
 /// The MQTT connection class for the browser websocket interface
 class MqttBrowserWsConnection extends MqttBrowserConnection {
   /// Default constructor
-  MqttBrowserWsConnection(events.EventBus eventBus) : super(eventBus);
+  MqttBrowserWsConnection(events.EventBus? eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttBrowserWsConnection.fromConnect(
@@ -162,7 +162,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onError - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 
@@ -173,7 +173,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onDone - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 

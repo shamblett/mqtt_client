@@ -26,7 +26,7 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
     ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
   }
 
-  MqttConnectionKeepAlive ka;
+  late MqttConnectionKeepAlive ka;
 }
 
 void main() {
@@ -68,8 +68,8 @@ void main() {
       expect(ka.pingRequired(), false);
       verify(ka.pingRequired());
       expect(ka.ka.pingTimer, isNotNull);
-      expect(ka.ka.pingTimer.isActive, isTrue);
-      ka.ka.pingTimer.cancel();
+      expect(ka.ka.pingTimer!.isActive, isTrue);
+      ka.ka.pingTimer!.cancel();
     });
   });
 
@@ -133,7 +133,7 @@ void main() {
     });
     test('Successful response and disconnect', () async {
       var connectCbCalled = false;
-      void messageHandler(typed.Uint8Buffer messageArrived) {
+      void messageHandler(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -160,7 +160,7 @@ void main() {
       expect(state, MqttConnectionState.disconnected);
     });
     test('Successful response and disconnect with returned status', () async {
-      void messageHandler(typed.Uint8Buffer messageArrived) {
+      void messageHandler(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -185,7 +185,7 @@ void main() {
     test('Successful response', () async {
       var expectRequest = 0;
 
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final headerStream = MqttByteBuffer(messageArrived);
         final header = MqttHeader.fromByteBuffer(headerStream);
         expect(header.messageType, MqttMessageType.connect);
@@ -194,7 +194,7 @@ void main() {
         broker.sendMessage(ack);
       }
 
-      void messageHandlerPingRequest(typed.Uint8Buffer messageArrived) {
+      void messageHandlerPingRequest(typed.Uint8Buffer? messageArrived) {
         final headerStream = MqttByteBuffer(messageArrived);
         final header = MqttHeader.fromByteBuffer(headerStream);
         if (expectRequest <= 3) {
@@ -221,7 +221,7 @@ void main() {
       print(
           'Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
       print(
-          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer.isActive.toString()}');
+          'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer!.isActive.toString()}');
       final stopwatch = Stopwatch()..start();
       await MqttUtilities.asyncSleep(10);
       print('Connection Keep Alive - Successful response - Elapsed time '
@@ -232,7 +232,7 @@ void main() {
 
   group('Client interface Mock broker', () {
     test('Normal publish', () async {
-      void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+      void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
             .withReturnCode(MqttConnectReturnCode.connectionAccepted);
         broker.sendMessage(ack);
@@ -246,11 +246,11 @@ void main() {
       const password = 'password';
       print(password);
       await client.connect();
-      if (client.connectionStatus.state == MqttConnectionState.connected) {
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
         print('Client connected');
       } else {
         print(
-            'ERROR Client connection failed - disconnecting, state is ${client.connectionStatus.state}');
+            'ERROR Client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
         client.disconnect();
       }
       // Publish a known topic
@@ -266,7 +266,7 @@ void main() {
       await MqttUtilities.asyncSleep(10);
       print('Disconnecting');
       client.disconnect();
-      expect(client.connectionStatus.state, MqttConnectionState.disconnected);
+      expect(client.connectionStatus!.state, MqttConnectionState.disconnected);
       broker.close();
     });
   });

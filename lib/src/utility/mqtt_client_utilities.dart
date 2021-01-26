@@ -44,10 +44,10 @@ class MqttCancellableAsyncSleep {
   int get timeout => _timeout;
 
   /// The completer
-  Completer<void> _completer;
+  late Completer<void> _completer;
 
   /// The timer
-  Timer _timer;
+  late Timer _timer;
 
   /// Timer running flag
   bool _running = false;
