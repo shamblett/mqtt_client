@@ -36,13 +36,15 @@ class MqttClientTopicFilter {
   late StreamController<List<MqttReceivedMessage<MqttMessage?>>> _updates;
 
   /// The stream on which all matching topic updates are published to
-  Stream<List<MqttReceivedMessage<MqttMessage?>>> get updates => _updates.stream;
+  Stream<List<MqttReceivedMessage<MqttMessage?>>> get updates =>
+      _updates.stream;
 
   void _topicIn(List<MqttReceivedMessage<MqttMessage?>>? c) {
     String? lastTopic;
     try {
       // Pass through if we have a match
-      final List<MqttReceivedMessage<MqttMessage?>> tmp = <MqttReceivedMessage<MqttMessage>>[];
+      final List<MqttReceivedMessage<MqttMessage?>> tmp =
+          <MqttReceivedMessage<MqttMessage>>[];
       for (final message in c!) {
         lastTopic = message.topic;
         if (_subscriptionTopic.matches(PublicationTopic(message.topic))) {

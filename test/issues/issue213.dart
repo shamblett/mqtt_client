@@ -28,7 +28,7 @@ Future<int> main() async {
     expect(client.autoReconnect, isTrue);
 
     // OK, reinstantiate the client and do some basic checks before we connect
-    sleep(Duration(seconds:5));
+    sleep(Duration(seconds: 5));
     client = MqttServerClient.withPort(
         'test.mosquitto.org', 'client-id-123456789', 1883);
     client.logging(on: true);
@@ -51,9 +51,8 @@ Future<int> main() async {
     print("TEST - Second subscription");
     var secondSub = client.subscribe(topic, MqttQos.exactlyOnce);
     await MqttUtilities.asyncSleep(5);
-    expect(client.getSubscriptionsStatus(topic),
-        MqttSubscriptionStatus.active);
-  },timeout: Timeout.factor(2));
+    expect(client.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
+  }, timeout: Timeout.factor(2));
 
   return 0;
 }

@@ -18,7 +18,7 @@ import 'package:test/test.dart';
 /// Helper function to ping a server
 bool pingServer(String server) {
   // Not on Travis
-  const isDeclared = String.fromEnvironment('PUB_ENVIRONMENT') != null;
+  var isDeclared = String.fromEnvironment('PUB_ENVIRONMENT').isNotEmpty;
   if (isDeclared) {
     print('PUB_ENVIRONMENT is declared');
     const noPing = String.fromEnvironment('PUB_ENVIRONMENT');

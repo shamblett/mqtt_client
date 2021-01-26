@@ -59,9 +59,6 @@ class MqttServerConnection extends MqttConnectionBase {
 
       try {
         msg = MqttMessage.createFrom(messageStream);
-        if (msg == null) {
-          return;
-        }
       } on Exception {
         MqttLogger.log(
             'MqttServerConnection::_ondata - message is not yet valid, '

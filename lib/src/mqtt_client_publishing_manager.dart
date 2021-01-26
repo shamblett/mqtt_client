@@ -38,8 +38,8 @@ class PublishingManager implements IPublishingManager {
   PublishingManager(this.connectionHandler, this._clientEventBus) {
     connectionHandler!.registerForMessage(
         MqttMessageType.publishAck, handlePublishAcknowledgement);
-    connectionHandler!.registerForMessage(
-        MqttMessageType.publish, handlePublish);
+    connectionHandler!
+        .registerForMessage(MqttMessageType.publish, handlePublish);
     connectionHandler!.registerForMessage(
         MqttMessageType.publishComplete, handlePublishComplete);
     connectionHandler!.registerForMessage(
@@ -108,7 +108,7 @@ class PublishingManager implements IPublishingManager {
   /// Handles the receipt of publish acknowledgement messages.
   /// This callback simply removes it from the list of published messages.
   bool handlePublishAcknowledgement(MqttMessage? msg) {
-    final MqttPublishAckMessage ackMsg = msg as MqttPublishAckMessage;
+    final ackMsg = msg as MqttPublishAckMessage;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
     final messageIdentifier = ackMsg.variableHeader.messageIdentifier;
     MqttLogger.log(
@@ -122,7 +122,7 @@ class PublishingManager implements IPublishingManager {
 
   /// Handles the receipt of publish messages from a message broker.
   bool handlePublish(MqttMessage? msg) {
-    final MqttPublishMessage pubMsg = msg as MqttPublishMessage;
+    final pubMsg = msg as MqttPublishMessage;
     var publishSuccess = true;
     try {
       final topic = PublicationTopic(pubMsg.variableHeader!.topicName);
@@ -162,7 +162,7 @@ class PublishingManager implements IPublishingManager {
 
   /// Handles the publish release, for messages that are undergoing Qos ExactlyOnce processing.
   bool handlePublishRelease(MqttMessage? msg) {
-    final MqttPublishReleaseMessage pubRelMsg = msg as MqttPublishReleaseMessage;
+    final pubRelMsg = msg as MqttPublishReleaseMessage;
     final messageIdentifier = pubRelMsg.variableHeader.messageIdentifier;
     MqttLogger.log(
         'PublishingManager::handlePublishRelease - for message identifier $messageIdentifier');
@@ -186,7 +186,7 @@ class PublishingManager implements IPublishingManager {
   /// Handles a publish complete message received from a broker.
   /// Returns true if the message flow completed successfully, otherwise false.
   bool handlePublishComplete(MqttMessage? msg) {
-    final MqttPublishCompleteMessage compMsg = msg as MqttPublishCompleteMessage;
+    final compMsg = msg as MqttPublishCompleteMessage;
     final messageIdentifier = compMsg.variableHeader.messageIdentifier;
     MqttLogger.log(
         'PublishingManager::handlePublishComplete - for message identifier $messageIdentifier');
@@ -198,7 +198,7 @@ class PublishingManager implements IPublishingManager {
   /// Handles publish received messages during processing of QOS level 2 (Exactly once) messages.
   /// Returns true or false, depending on the success of message processing.
   bool handlePublishReceived(MqttMessage? msg) {
-    final MqttPublishReceivedMessage recvMsg = msg as MqttPublishReceivedMessage;
+    final recvMsg = msg as MqttPublishReceivedMessage;
     final messageIdentifier = recvMsg.variableHeader.messageIdentifier;
     MqttLogger.log(
         'PublishingManager::handlePublishReceived - for message identifier $messageIdentifier');

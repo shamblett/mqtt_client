@@ -18,10 +18,10 @@ class SubscriptionsManager {
   ///  specified connection to manage subscriptions.
   SubscriptionsManager(
       this.connectionHandler, this.publishingManager, this._clientEventBus) {
-    connectionHandler!.registerForMessage(
-        MqttMessageType.subscribeAck, confirmSubscription);
-    connectionHandler!.registerForMessage(
-        MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+    connectionHandler!
+        .registerForMessage(MqttMessageType.subscribeAck, confirmSubscription);
+    connectionHandler!
+        .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages and re subscribe events.
     _clientEventBus!.on<MessageReceived>().listen(publishMessageReceived);
     _clientEventBus!.on<Resubscribe>().listen(_resubscribe);
@@ -128,7 +128,8 @@ class SubscriptionsManager {
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
     final topic = event.topic;
-    final msg = MqttReceivedMessage<MqttMessage?>(topic.rawTopic, event.message);
+    final msg =
+        MqttReceivedMessage<MqttMessage?>(topic.rawTopic, event.message);
     subscriptionNotifier.notifyChange(msg);
   }
 
@@ -157,7 +158,7 @@ class SubscriptionsManager {
   /// Marks the sub as confirmed in the subs storage.
   /// Returns true on successful subscription, false on fail.
   bool confirmSubscription(MqttMessage? msg) {
-    final MqttSubscribeAckMessage subAck = msg as MqttSubscribeAckMessage;
+    final subAck = msg as MqttSubscribeAckMessage;
     String topic;
     if (pendingSubscriptions
         .containsKey(subAck.variableHeader!.messageIdentifier)) {
@@ -191,7 +192,7 @@ class SubscriptionsManager {
   /// Cleans up after an unsubscribe message is received from the broker.
   /// returns true, always
   bool confirmUnsubscribe(MqttMessage? msg) {
-    final MqttUnsubscribeAckMessage unSubAck = msg as MqttUnsubscribeAckMessage;
+    final unSubAck = msg as MqttUnsubscribeAckMessage;
     final topic =
         pendingUnsubscriptions[unSubAck.variableHeader.messageIdentifier];
     subscriptions.remove(topic);

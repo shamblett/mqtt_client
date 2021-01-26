@@ -85,7 +85,7 @@ Future<int> main() async {
   /// notifications of published updates to each subscribed topic.
   // ignore: avoid_types_on_closure_parameters
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-    final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
+    final recMess = c![0].payload as MqttPublishMessage;
     final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
 

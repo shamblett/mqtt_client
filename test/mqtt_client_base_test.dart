@@ -560,7 +560,6 @@ void main() {
       final bytes = <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       final buff1 = MqttByteBuffer.fromList(bytes);
       expect(buff1.toString(), '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]');
-
     });
     test('Sleep Async', () async {
       final start = DateTime.now();

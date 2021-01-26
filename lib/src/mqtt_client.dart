@@ -209,9 +209,9 @@ class MqttClient {
 
   /// The stream on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage?>>?>? get updates =>
-      subscriptionsManager?.subscriptionNotifier?.changes;
+      subscriptionsManager?.subscriptionNotifier.changes;
 
-  /// Comon client connection method.
+  /// Common client connection method.
   Future<MqttClientConnectionStatus?> connect(
       [String? username, String? password]) async {
     // Protect against an incorrect instantiation
@@ -320,8 +320,8 @@ class MqttClient {
     }
     try {
       final pubTopic = PublicationTopic(topic);
-      return publishingManager!.publish(
-          pubTopic, qualityOfService, data, retain);
+      return publishingManager!
+          .publish(pubTopic, qualityOfService, data, retain);
     } on Exception catch (e) {
       throw InvalidTopicException(e.toString(), topic);
     }
@@ -388,7 +388,7 @@ class MqttClient {
       connectionHandler?.disconnect();
       disconnectOrigin = MqttDisconnectionOrigin.solicited;
     }
-    publishingManager?.published?.close();
+    publishingManager?.published.close();
     publishingManager = null;
     subscriptionsManager = null;
     keepAlive?.stop();

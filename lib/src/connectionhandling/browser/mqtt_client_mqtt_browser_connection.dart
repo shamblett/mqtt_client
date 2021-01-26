@@ -73,9 +73,6 @@ class MqttBrowserConnection extends MqttConnectionBase {
 
       try {
         msg = MqttMessage.createFrom(messageStream);
-        if (msg == null) {
-          return;
-        }
       } on Exception {
         MqttLogger.log(
             'MqttBrowserConnection::_ondata - message is not yet valid, '

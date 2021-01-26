@@ -11,7 +11,6 @@ dependencies:
  event_bus: '^1.1.1'
  path: '^1.6.4'
  crypto: '^3.0.0-nullsafety.0'
- meta: '^1.1.8'
 
 dev_dependencies:
  test: '^1.14.7'

@@ -48,8 +48,8 @@ void main() {
     const password = 'password 4';
     print(password);
     await client.connect();
-    expect(
-        client.connectionStatus!.state == MqttConnectionState.connected, isTrue);
+    expect(client.connectionStatus!.state == MqttConnectionState.connected,
+        isTrue);
     await MqttUtilities.asyncSleep(2);
     await broker.stop();
     await MqttUtilities.asyncSleep(60);

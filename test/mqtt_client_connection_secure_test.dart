@@ -131,7 +131,7 @@ void main() {
     });
 
     tearDown(() {
-      broker?.close();
+      broker.close();
     });
 
     test('Connection Keep Alive - Successful response', () async {

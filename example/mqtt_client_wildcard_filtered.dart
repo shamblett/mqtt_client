@@ -92,7 +92,7 @@ Future<int> main() async {
   // Now listen on the filtered updates, not the client updates
   // ignore: avoid_types_on_closure_parameters
   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage?>> c) {
-    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+    final recMess = c[0].payload as MqttPublishMessage;
     final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
 

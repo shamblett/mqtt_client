@@ -118,7 +118,7 @@ void main() {
           PublicationTopic('A/rawTopic'), MqttQos.atMostOnce, buff, true);
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
-      final MqttPublishMessage pubMess = testCHS.sentMessages[0] as MqttPublishMessage;
+      final pubMess = testCHS.sentMessages[0] as MqttPublishMessage;
       expect(pubMess.header!.messageType, MqttMessageType.publish);
       expect(pubMess.variableHeader!.messageIdentifier, 1);
       expect(pubMess.header!.qos, MqttQos.atMostOnce);
@@ -221,7 +221,7 @@ void main() {
       expect(pm.publishedMessages.containsKey(1), isTrue);
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId));
-      final MqttPublishReleaseMessage pubMessRel = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+      final pubMessRel = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel.variableHeader.messageIdentifier, msgId);
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId));
@@ -331,9 +331,9 @@ void main() {
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
       expect(testCHS.sentMessages.length, 2);
-      final MqttPublishReleaseMessage pubMessRel2 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+      final pubMessRel2 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
-      final MqttPublishReleaseMessage pubMessRel1 = testCHS.sentMessages[0] as MqttPublishReleaseMessage;
+      final pubMessRel1 = testCHS.sentMessages[0] as MqttPublishReleaseMessage;
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
@@ -375,9 +375,9 @@ void main() {
       pm.handlePublishReceived(
           MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
       expect(testCHS.sentMessages.length, 4);
-      final MqttPublishReleaseMessage pubMessRel1 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
+      final pubMessRel1 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
-      final MqttPublishReleaseMessage pubMessRel2 = testCHS.sentMessages[3] as MqttPublishReleaseMessage;
+      final pubMessRel2 = testCHS.sentMessages[3] as MqttPublishReleaseMessage;
       expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
 
       // PubComp 1
