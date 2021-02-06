@@ -140,6 +140,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     connectionStatus = await connect(server, port, connectionMessage);
     autoReconnectInProgress = false;
     if (connectionStatus.state == MqttConnectionState.connected) {
+      connection.onDisconnected = onDisconnected;
       // Fire the re subscribe event.
       clientEventBus.fire(Resubscribe(fromAutoReconnect: true));
       MqttLogger.log(
