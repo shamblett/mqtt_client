@@ -48,7 +48,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
-  bool Function(dynamic certificate) onBadCertificate;
+  bool Function(X509Certificate certificate) onBadCertificate;
 
   /// Max connection attempts
   final int maxConnectionAttempts;
