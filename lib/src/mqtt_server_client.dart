@@ -34,7 +34,7 @@ class MqttServerClient extends MqttClient {
   SecurityContext securityContext = SecurityContext.defaultContext;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(X509Certificate certificate) onBadCertificate;
+  bool Function(dynamic certificate) onBadCertificate;
 
   /// If set use a websocket connection, otherwise use the default TCP one
   bool useWebSocket = false;
