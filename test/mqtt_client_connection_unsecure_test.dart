@@ -38,41 +38,6 @@ void main() {
   const nonExistantHostName = 'aabbccddeeffeeddccbbaa.aa.bb';
   const badPort = 1884;
 
-  group('Connection Keep Alive - Mock tests', () {
-    // Group setup
-    final ch = MockCH();
-    when(ch.secure).thenReturn(false);
-    final ka = MockKA(ch, 3);
-    test('Message sent', () {
-      final MqttMessage msg = MqttPingRequestMessage();
-      when(ka.messageSent(msg)).thenReturn(ka.ka.messageSent(msg));
-      expect(ka.messageSent(msg), isTrue);
-      verify(ka.messageSent(msg));
-    });
-    test('Ping response received', () {
-      final MqttMessage msg = MqttPingResponseMessage();
-      when(ka.pingResponseReceived(msg))
-          .thenReturn(ka.ka.pingResponseReceived(msg));
-      expect(ka.pingResponseReceived(msg), isTrue);
-      verify(ka.pingResponseReceived(msg));
-    });
-    test('Ping request received', () {
-      final MqttMessage msg = MqttPingRequestMessage();
-      when(ka.pingRequestReceived(msg))
-          .thenReturn(ka.ka.pingRequestReceived(msg));
-      expect(ka.pingRequestReceived(msg), isTrue);
-      verify(ka.pingRequestReceived(msg));
-    });
-    test('Ping required', () {
-      when(ka.pingRequired()).thenReturn(ka.ka.pingRequired());
-      expect(ka.pingRequired(), false);
-      verify(ka.pingRequired());
-      expect(ka.ka.pingTimer, isNotNull);
-      expect(ka.ka.pingTimer!.isActive, isTrue);
-      ka.ka.pingTimer!.cancel();
-    });
-  });
-
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
       final clientEventBus = events.EventBus();
@@ -90,7 +55,7 @@ void main() {
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
-    }, skip:true);
+    }, skip: true);
     test('Connect invalid port', () async {
       var cbCalled = false;
       void disconnectCB() {

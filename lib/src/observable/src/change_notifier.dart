@@ -12,7 +12,7 @@ import 'records.dart';
 ///
 /// [ChangeNotifier] may be extended, mixed in, or used as a delegate.
 class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
-  StreamController<List<C>?>? _changes;
+  late StreamController<List<C>> _changes;
 
   bool _scheduled = false;
   List<C>? _queue;
@@ -21,8 +21,8 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   ///
   /// Changes should produced in order, if significant.
   @override
-  Stream<List<C>?> get changes =>
-      (_changes ??= StreamController<List<C>?>.broadcast(
+  Stream<List<C>> get changes =>
+      (_changes = StreamController<List<C>>.broadcast(
         sync: true,
         onListen: observed,
         onCancel: unobserved,
@@ -38,7 +38,7 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   @override
   @mustCallSuper
   void unobserved() {
-    _changes = _queue = null;
+    _changes.close();
   }
 
   /// If [hasObservers], synchronously emits [changes] that have been queued.
@@ -47,25 +47,21 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   @override
   @mustCallSuper
   bool deliverChanges() {
-    List<C>? changes;
+    List<C> changes;
     if (_scheduled && hasObservers) {
-      if (_queue != null) {
-        changes = _queue;
-        _queue = null;
-      } else {
-        changes = ChangeRecord.any as List<C>?;
-      }
+      changes = ChangeRecord.any as List<C>;
       _scheduled = false;
-      _changes!.add(changes);
+      _changes.add(changes);
+      return true;
     }
-    return changes != null;
+    return false;
   }
 
   /// Whether [changes] has at least one active listener.
   ///
   /// May be used to optimize whether to produce change records.
   @override
-  bool get hasObservers => _changes?.hasListener == true;
+  bool get hasObservers => _changes.hasListener == true;
 
   /// Schedules [change] to be delivered.
   ///

@@ -13,8 +13,8 @@ import 'package:test/test.dart';
 
 Future<int> main() async {
   test('Should maintain subscriptions after autoReconnect', () async {
-    final client = MqttServerClient.withPort(
-        'localhost', 'client-id-123456789', 1883);
+    final client =
+        MqttServerClient.withPort('localhost', 'client-id-123456789', 1883);
     client.autoReconnect = true;
     client.logging(on: false);
     const topic = 'xd/+';
@@ -82,7 +82,8 @@ Future<int> main() async {
     expect(await stream.first, equals('xd'));
 
     var delay = MqttCancellableAsyncSleep(10000);
-    print('ISSUE: Second disconnect ..... <<< Stop and restart the broker here');
+    print(
+        'ISSUE: Second disconnect ..... <<< Stop and restart the broker here');
     await delay.sleep();
     expect(autoCompleteCount, 1);
     print('ISSUE: Test complete');

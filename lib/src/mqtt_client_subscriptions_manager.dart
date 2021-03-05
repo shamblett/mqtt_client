@@ -70,7 +70,7 @@ class SubscriptionsManager {
       observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>();
 
   /// Subscription notifier
-  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage?>>
+  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
       get subscriptionNotifier => _subscriptionNotifier;
 
   /// Registers a new subscription with the subscription manager.
@@ -128,8 +128,7 @@ class SubscriptionsManager {
   /// Publish message received
   void publishMessageReceived(MessageReceived event) {
     final topic = event.topic;
-    final msg =
-        MqttReceivedMessage<MqttMessage?>(topic.rawTopic, event.message);
+    final msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
     subscriptionNotifier.notifyChange(msg);
   }
 
