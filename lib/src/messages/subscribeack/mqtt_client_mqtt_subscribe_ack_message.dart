@@ -25,17 +25,17 @@ class MqttSubscribeAckMessage extends MqttMessage {
 
   /// Gets or sets the variable header contents. Contains extended
   /// metadata about the message.
-  MqttSubscribeAckVariableHeader variableHeader;
+  MqttSubscribeAckVariableHeader? variableHeader;
 
   /// Gets or sets the payload of the Mqtt Message.
-  MqttSubscribeAckPayload payload;
+  late MqttSubscribeAckPayload payload;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
+    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    variableHeader.writeTo(messageStream);
+    variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
 
@@ -50,7 +50,7 @@ class MqttSubscribeAckMessage extends MqttMessage {
 
   /// Sets the message identifier on the subscribe message.
   MqttSubscribeAckMessage withMessageIdentifier(int messageIdentifier) {
-    variableHeader.messageIdentifier = messageIdentifier;
+    variableHeader!.messageIdentifier = messageIdentifier;
     return this;
   }
 

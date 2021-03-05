@@ -22,7 +22,7 @@ void main() {
     var autoReconnectCallbackCalled = false;
     var disconnectCallbackCalled = false;
 
-    void messageHandlerConnect(typed.Uint8Buffer messageArrived) {
+    void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
       final ack = MqttConnectAckMessage()
           .withReturnCode(MqttConnectReturnCode.connectionAccepted);
       broker.sendMessage(ack);
@@ -48,14 +48,14 @@ void main() {
     const password = 'password 4';
     print(password);
     await client.connect();
-    expect(
-        client.connectionStatus.state == MqttConnectionState.connected, isTrue);
+    expect(client.connectionStatus!.state == MqttConnectionState.connected,
+        isTrue);
     await MqttUtilities.asyncSleep(2);
     await broker.stop();
     await MqttUtilities.asyncSleep(60);
     expect(autoReconnectCallbackCalled, isTrue);
     expect(disconnectCallbackCalled, isFalse);
-    expect(client.connectionStatus.state == MqttConnectionState.connecting,
+    expect(client.connectionStatus!.state == MqttConnectionState.connecting,
         isTrue);
     broker.close();
   }, timeout: Timeout(Duration(seconds: 80)));

@@ -22,7 +22,7 @@ class MqttHeader {
   int _messageSize = 0;
 
   /// Gets or sets the type of the MQTT message.
-  MqttMessageType messageType;
+  MqttMessageType? messageType;
 
   /// Gets or sets a value indicating whether this MQTT Message is
   /// duplicate of a previous message.
@@ -97,7 +97,7 @@ class MqttHeader {
     // combination of message type, dup, qos and retain, and the
     // following bytes (up to 4 of them) are the size of the
     // payload + variable header.
-    final messageTypeLength = messageType.index << 4;
+    final messageTypeLength = messageType!.index << 4;
     final duplicateLength = (duplicate ? 1 : 0) << 3;
     final qosLength = qos.index << 1;
     final retainLength = retain ? 1 : 0;

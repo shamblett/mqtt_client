@@ -10,7 +10,7 @@ part of mqtt_server_client;
 /// The MQTT server connection class for the websocket interface
 class MqttServerWsConnection extends MqttServerConnection {
   /// Default constructor
-  MqttServerWsConnection(events.EventBus eventBus) : super(eventBus);
+  MqttServerWsConnection(events.EventBus? eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttServerWsConnection.fromConnect(
@@ -42,9 +42,9 @@ class MqttServerWsConnection extends MqttServerConnection {
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
-    if (port != null) {
-      uri = uri.replace(port: port);
-    }
+
+    uri = uri.replace(port: port);
+
     final uriString = uri.toString();
     MqttLogger.log(
         'MqttWsConnection::connect - WS URL is $uriString, protocols are $protocols');
@@ -92,9 +92,9 @@ class MqttServerWsConnection extends MqttServerConnection {
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
-    if (port != null) {
-      uri = uri.replace(port: port);
-    }
+
+    uri = uri.replace(port: port);
+
     final uriString = uri.toString();
     MqttLogger.log(
         'MqttWsConnection::connectAuto - WS URL is $uriString, protocols are $protocols');
@@ -136,7 +136,7 @@ class MqttServerWsConnection extends MqttServerConnection {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttWsConnection::::onDone - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 

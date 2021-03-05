@@ -25,17 +25,17 @@ class MqttPublishAckMessage extends MqttMessage {
 
   /// Gets or sets the variable header contents. Contains extended
   /// metadata about the message
-  MqttPublishAckVariableHeader variableHeader;
+  late MqttPublishAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    header!.writeTo(variableHeader.getWriteLength(), messageStream);
     variableHeader.writeTo(messageStream);
   }
 
   /// Sets the message identifier of the MqttMessage.
-  MqttPublishAckMessage withMessageIdentifier(int messageIdentifier) {
+  MqttPublishAckMessage withMessageIdentifier(int? messageIdentifier) {
     variableHeader.messageIdentifier = messageIdentifier;
     return this;
   }

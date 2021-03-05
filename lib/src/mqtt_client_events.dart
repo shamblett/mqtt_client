@@ -13,10 +13,10 @@ class MessageAvailable {
   MessageAvailable(this._message);
 
   /// The message associated with the event
-  final MqttMessage _message;
+  final MqttMessage? _message;
 
   /// Message
-  MqttMessage get message => _message;
+  MqttMessage? get message => _message;
 }
 
 /// The connect acknowledge message available event raised by the Connection class
@@ -25,10 +25,10 @@ class ConnectAckMessageAvailable {
   ConnectAckMessageAvailable(this._message);
 
   /// The message associated with the event
-  final MqttMessage _message;
+  final MqttMessage? _message;
 
   /// Message
-  MqttMessage get message => _message;
+  MqttMessage? get message => _message;
 }
 
 /// Message recieved class for publishing
@@ -37,10 +37,10 @@ class MessageReceived {
   MessageReceived(this._topic, this._message);
 
   /// The message associated with the event
-  final MqttMessage _message;
+  final MqttMessage? _message;
 
   /// Message
-  MqttMessage get message => _message;
+  MqttMessage? get message => _message;
 
   /// The topic
   final PublicationTopic _topic;

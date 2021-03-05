@@ -20,10 +20,10 @@ class MqttSubscribeAckPayload extends MqttPayload {
   }
 
   /// Variable header
-  MqttVariableHeader variableHeader;
+  MqttVariableHeader? variableHeader;
 
   /// Message header
-  MqttHeader header;
+  MqttHeader? header;
 
   /// The collection of Qos grants, Key is the topic, Value is the qos
   List<MqttQos> qosGrants = <MqttQos>[];
@@ -40,7 +40,7 @@ class MqttSubscribeAckPayload extends MqttPayload {
   @override
   void readFrom(MqttByteBuffer payloadStream) {
     var payloadBytesRead = 0;
-    final payloadLength = header.messageSize - variableHeader.length;
+    final payloadLength = header!.messageSize - variableHeader!.length;
     // Read the qos grants from the message payload
     while (payloadBytesRead < payloadLength) {
       final granted = MqttUtilities.getQosLevel(payloadStream.readByte());

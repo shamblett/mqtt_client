@@ -16,7 +16,7 @@ class IncorrectInstantiationException implements Exception {
         'instantiate MqttClient directly, use MqttServerClient or MqttBrowserClient';
   }
 
-  String _message;
+  late String _message;
 
   @override
   String toString() => _message;

@@ -9,12 +9,12 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerNoSend(var clientEventBus, {int maxConnectionAttempts})
+  TestConnectionHandlerNoSend(var clientEventBus, {int? maxConnectionAttempts})
       : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts);
 
   /// Auto reconnect callback
   @override
-  AutoReconnectCallback onAutoReconnect;
+  AutoReconnectCallback? onAutoReconnect;
 
   /// Use a websocket rather than TCP
   @override
@@ -22,19 +22,19 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   // Server name, needed for auto reconnect.
   @override
-  String server;
+  String? server;
 
   // Port number, needed for auto reconnect.
   @override
-  int port;
+  int? port;
 
   /// Auto reconnect in progress
   @override
-  bool autoReconnectInProgress = false;
+  bool? autoReconnectInProgress = false;
 
   // Connection message, needed for auto reconnect.
   @override
-  MqttConnectMessage connectionMessage;
+  MqttConnectMessage? connectionMessage;
 
   /// Alternate websocket implementation.
   ///
@@ -51,7 +51,7 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   /// User supplied websocket protocols
   @override
-  List<String> websocketProtocols;
+  List<String>? websocketProtocols;
 
   /// If set use a secure connection, note TCP only, not websocket.
   @override
@@ -63,19 +63,19 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   /// Successful connection callback
   @override
-  ConnectCallback onConnected;
+  ConnectCallback? onConnected;
 
   /// Unsolicited disconnection callback
   @override
-  DisconnectCallback onDisconnected;
+  DisconnectCallback? onDisconnected;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
-  bool Function(dynamic certificate) onBadCertificate;
+  bool Function(dynamic certificate)? onBadCertificate;
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
-      String hostname, int port, MqttConnectMessage message) {
+      String? hostname, int? port, MqttConnectMessage? message) {
     final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
@@ -86,23 +86,23 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 }
 
 class TestConnectionHandlerSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerSend(var clientEventBus, {int maxConnectionAttempts})
+  TestConnectionHandlerSend(var clientEventBus, {int? maxConnectionAttempts})
       : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts);
   // Server name, needed for auto reconnect.
   @override
-  String server;
+  String? server;
 
   // Port number, needed for auto reconnect.
   @override
-  int port;
+  int? port;
 
   // Connection message, needed for auto reconnect.
   @override
-  MqttConnectMessage connectionMessage;
+  MqttConnectMessage? connectionMessage;
 
   /// Auto reconnect in progress
   @override
-  bool autoReconnectInProgress = false;
+  bool? autoReconnectInProgress = false;
 
   /// Use a websocket rather than TCP
   @override
@@ -110,7 +110,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// Auto reconnect callback
   @override
-  AutoReconnectCallback onAutoReconnect;
+  AutoReconnectCallback? onAutoReconnect;
 
   /// Alternate websocket implementation.
   ///
@@ -127,7 +127,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// User supplied websocket protocols
   @override
-  List<String> websocketProtocols;
+  List<String>? websocketProtocols;
 
   /// If set use a secure connection, note TCP only, not websocket.
   @override
@@ -139,20 +139,20 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// Successful connection callback
   @override
-  ConnectCallback onConnected;
+  ConnectCallback? onConnected;
 
   /// Unsolicited disconnection callback
   @override
-  DisconnectCallback onDisconnected;
+  DisconnectCallback? onDisconnected;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
-  bool Function(dynamic certificate) onBadCertificate;
-  List<MqttMessage> sentMessages = <MqttMessage>[];
+  bool Function(dynamic certificate)? onBadCertificate;
+  List<MqttMessage?> sentMessages = <MqttMessage?>[];
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
-      String hostname, int port, MqttConnectMessage message) {
+      String? hostname, int? port, MqttConnectMessage? message) {
     final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
@@ -162,7 +162,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
       connectionStatus.state = MqttConnectionState.disconnected;
 
   @override
-  void sendMessage(MqttMessage message) {
+  void sendMessage(MqttMessage? message) {
     print(
         'TestConnectionHandlerNoSend::send, message is ${message.toString()}');
     sentMessages.add(message);

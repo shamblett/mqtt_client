@@ -19,14 +19,14 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   }
 
   /// Standard header
-  MqttHeader header;
+  MqttHeader? header;
 
   /// Creates a variable header from the specified header stream.
   @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
     readTopicName(variableHeaderStream);
-    if (header.qos == MqttQos.atLeastOnce ||
-        header.qos == MqttQos.exactlyOnce) {
+    if (header!.qos == MqttQos.atLeastOnce ||
+        header!.qos == MqttQos.exactlyOnce) {
       readMessageIdentifier(variableHeaderStream);
     }
   }
@@ -35,8 +35,8 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   @override
   void writeTo(MqttByteBuffer variableHeaderStream) {
     writeTopicName(variableHeaderStream);
-    if (header.qos == MqttQos.atLeastOnce ||
-        header.qos == MqttQos.exactlyOnce) {
+    if (header!.qos == MqttQos.atLeastOnce ||
+        header!.qos == MqttQos.exactlyOnce) {
       writeMessageIdentifier(variableHeaderStream);
     }
   }
@@ -47,8 +47,8 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
     var headerLength = 0;
     final enc = MqttEncoding();
     headerLength += enc.getByteCount(topicName);
-    if (header.qos == MqttQos.atLeastOnce ||
-        header.qos == MqttQos.exactlyOnce) {
+    if (header!.qos == MqttQos.atLeastOnce ||
+        header!.qos == MqttQos.exactlyOnce) {
       headerLength += 2;
     }
     return headerLength;

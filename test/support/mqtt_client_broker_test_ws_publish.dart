@@ -16,7 +16,7 @@ Future<int> main() async {
   client.port = 80;
   client.logging(on: true);
   await client.connect();
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('Mosquitto client connected');
   } else {
     print(

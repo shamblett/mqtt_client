@@ -77,7 +77,7 @@ Future<int> main() async {
   }
 
   /// Check we are connected
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     /// Use status here rather than state if you also want the broker return code.
@@ -94,10 +94,10 @@ Future<int> main() async {
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
-  client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
-    final MqttPublishMessage recMess = c[0].payload;
+  client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+    final recMess = c![0].payload as MqttPublishMessage;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
@@ -112,9 +112,9 @@ Future<int> main() async {
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
-  client.published.listen((MqttPublishMessage message) {
+  client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
   });
 
   /// Lets publish to our topic
@@ -130,7 +130,7 @@ Future<int> main() async {
 
   /// Publish it
   print('EXAMPLE::Publishing our topic');
-  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
+  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload!);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
@@ -156,7 +156,7 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
-  if (client.connectionStatus.disconnectionOrigin ==
+  if (client.connectionStatus!.disconnectionOrigin ==
       MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   }

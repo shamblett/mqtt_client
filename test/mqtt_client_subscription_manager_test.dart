@@ -54,11 +54,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
     });
     test('Acknowledged subscription request creates active subscription', () {
       var cbCalled = false;
@@ -80,11 +80,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -109,11 +109,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
@@ -145,11 +145,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -182,11 +182,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage().withMessageIdentifier(1);
       final ret = subs.confirmSubscription(subAckMsg);
@@ -220,10 +220,10 @@ void main() {
       subs.resubscribe();
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(2)
@@ -245,11 +245,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -272,11 +272,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
@@ -298,16 +298,16 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       expect(subs.subscriptions[topic], isNull);
     });
     test('Unsubscribe with ack', () {
       var cbCalled = false;
-      void unsubCallback(String topic) {
+      void unsubCallback(String? topic) {
         expect(topic, 'testtopic');
         cbCalled = true;
       }
@@ -325,11 +325,11 @@ void main() {
           subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.pending);
       expect(
           testCHS.sentMessages[0], const TypeMatcher<MqttSubscribeMessage>());
-      final MqttSubscribeMessage msg = testCHS.sentMessages[0];
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
       expect(msg.payload.subscriptions.containsKey(topic), isTrue);
       expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader.messageIdentifier, 1);
-      expect(msg.header.qos, MqttQos.atLeastOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
       expect(subs.subscriptions[topic], isNull);
       // Confirm the subscription
       final subAckMsg = MqttSubscribeAckMessage()
@@ -341,8 +341,8 @@ void main() {
       subs.unsubscribe(topic);
       expect(
           testCHS.sentMessages[1], const TypeMatcher<MqttUnsubscribeMessage>());
-      final MqttUnsubscribeMessage unSub = testCHS.sentMessages[1];
-      expect(unSub.variableHeader.messageIdentifier, 2);
+      final unSub = testCHS.sentMessages[1] as MqttUnsubscribeMessage;
+      expect(unSub.variableHeader!.messageIdentifier, 2);
       expect(unSub.payload.subscriptions.length, 1);
       expect(unSub.payload.subscriptions[0], topic);
       expect(subs.pendingUnsubscriptions.length, 1);
@@ -358,28 +358,28 @@ void main() {
     test('Change notification', () {
       var recCount = 0;
       const topic = 'testtopic';
-      StreamSubscription<List<MqttReceivedMessage<MqttMessage>>> st;
+      late StreamSubscription<List<MqttReceivedMessage<MqttMessage?>>?> st;
       // The subscription receive callback
       void subRec(List<MqttReceivedMessage<MqttMessage>> c) {
         expect(c[0].topic, topic);
         print('Change notification:: topic is $topic');
         expect(c[0].payload, const TypeMatcher<MqttPublishMessage>());
-        final MqttPublishMessage recMess = c[0].payload;
+        final recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
-          expect(recMess.variableHeader.messageIdentifier, 1);
-          final pt =
-              MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          expect(recMess.variableHeader!.messageIdentifier, 1);
+          final pt = MqttPublishPayload.bytesToStringAsString(
+              recMess.payload.message!);
           expect(pt, 'dead');
           print('Change notification:: payload is $pt');
-          expect(recMess.header.qos, MqttQos.atLeastOnce);
+          expect(recMess.header!.qos, MqttQos.atLeastOnce);
           recCount++;
         } else {
-          expect(recMess.variableHeader.messageIdentifier, 2);
-          final pt =
-              MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          expect(recMess.variableHeader!.messageIdentifier, 2);
+          final pt = MqttPublishPayload.bytesToStringAsString(
+              recMess.payload.message!);
           expect(pt, 'meat');
           print('Change notification:: payload is $pt');
-          expect(recMess.header.qos, MqttQos.atMostOnce);
+          expect(recMess.header!.qos, MqttQos.atMostOnce);
           //Stop listening
           st.cancel();
         }

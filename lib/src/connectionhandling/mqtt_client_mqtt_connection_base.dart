@@ -23,19 +23,19 @@ class MqttConnectionBase {
 
   /// The read wrapper
   @protected
-  ReadWrapper readWrapper;
+  ReadWrapper? readWrapper;
 
   ///The read buffer
   @protected
-  MqttByteBuffer messageStream;
+  late MqttByteBuffer messageStream;
 
   /// Unsolicited disconnection callback
   @protected
-  DisconnectCallback onDisconnected;
+  DisconnectCallback? onDisconnected;
 
   /// The event bus
   @protected
-  events.EventBus clientEventBus;
+  events.EventBus? clientEventBus;
 
   /// Connect for auto reconnect , must be overridden in connection classes
   @protected
@@ -58,7 +58,7 @@ class MqttConnectionBase {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onError - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 
@@ -69,7 +69,7 @@ class MqttConnectionBase {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onDone - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 

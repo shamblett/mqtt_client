@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// Callback function definitions
-typedef MessageCallbackFunction = bool Function(MqttMessage message);
+typedef MessageCallbackFunction = bool Function(MqttMessage? message);
 
 /// The connection handler interface class
 abstract class IMqttConnectionHandler {
@@ -16,31 +16,31 @@ abstract class IMqttConnectionHandler {
   MqttClientConnectionStatus get connectionStatus;
 
   /// Successful connection callback
-  ConnectCallback onConnected;
+  ConnectCallback? onConnected;
 
   /// Unsolicited disconnection callback
-  DisconnectCallback onDisconnected;
+  DisconnectCallback? onDisconnected;
 
   /// Auto reconnect callback
-  AutoReconnectCallback onAutoReconnect;
+  AutoReconnectCallback? onAutoReconnect;
 
   /// Auto reconnected callback
-  AutoReconnectCompleteCallback onAutoReconnected;
+  AutoReconnectCompleteCallback? onAutoReconnected;
 
   /// Auto reconnect in progress
-  bool autoReconnectInProgress;
+  bool? autoReconnectInProgress;
 
   // Server name, needed for auto reconnect.
-  String server;
+  String? server;
 
   // Port number, needed for auto reconnect.
-  int port;
+  int? port;
 
   // Connection message, needed for auto reconnect.
-  MqttConnectMessage connectionMessage;
+  MqttConnectMessage? connectionMessage;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(dynamic certificate) onBadCertificate;
+  bool Function(dynamic certificate)? onBadCertificate;
 
   /// Runs the disconnection process to stop communicating
   /// with a message broker.

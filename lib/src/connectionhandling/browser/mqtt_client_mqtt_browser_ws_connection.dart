@@ -10,7 +10,7 @@ part of mqtt_browser_client;
 /// The MQTT connection class for the browser websocket interface
 class MqttBrowserWsConnection extends MqttBrowserConnection {
   /// Default constructor
-  MqttBrowserWsConnection(events.EventBus eventBus) : super(eventBus);
+  MqttBrowserWsConnection(events.EventBus? eventBus) : super(eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttBrowserWsConnection.fromConnect(
@@ -43,9 +43,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
-    if (port != null) {
-      uri = uri.replace(port: port);
-    }
+    uri = uri.replace(port: port);
+
     final uriString = uri.toString();
     MqttLogger.log('MqttBrowserWsConnection::connect -  WS URL is $uriString');
     try {
@@ -108,9 +107,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
           'an incorrect scheme - $server';
       throw NoConnectionException(message);
     }
-    if (port != null) {
-      uri = uri.replace(port: port);
-    }
+
+    uri = uri.replace(port: port);
     final uriString = uri.toString();
     MqttLogger.log(
         'MqttBrowserWsConnection::connectAuto -  WS URL is $uriString');
@@ -162,7 +160,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onError - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 
@@ -173,7 +171,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
     if (onDisconnected != null) {
       MqttLogger.log(
           'MqttConnectionBase::_onDone - calling disconnected callback');
-      onDisconnected();
+      onDisconnected!();
     }
   }
 

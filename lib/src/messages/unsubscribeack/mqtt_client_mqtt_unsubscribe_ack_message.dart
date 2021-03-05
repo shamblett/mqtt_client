@@ -24,12 +24,12 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
 
   /// Gets or sets the variable header contents. Contains extended
   /// metadata about the message.
-  MqttUnsubscribeAckVariableHeader variableHeader;
+  late MqttUnsubscribeAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength(), messageStream);
+    header!.writeTo(variableHeader.getWriteLength(), messageStream);
     variableHeader.writeTo(messageStream);
   }
 

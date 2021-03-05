@@ -40,8 +40,8 @@ class MqttBrowserClient extends MqttClient {
   /// supply your own connection message and use the authenticateAs method to
   /// set these parameters do not set them again here.
   @override
-  Future<MqttClientConnectionStatus> connect(
-      [String username, String password]) async {
+  Future<MqttClientConnectionStatus?> connect(
+      [String? username, String? password]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
     connectionHandler = SynchronousMqttBrowserConnectionHandler(

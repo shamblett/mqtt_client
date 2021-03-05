@@ -27,45 +27,45 @@ class MqttConnectMessage extends MqttMessage {
 
   /// Sets the name of the protocol to use.
   MqttConnectMessage withProtocolName(String protocolName) {
-    variableHeader.protocolName = protocolName;
+    variableHeader!.protocolName = protocolName;
     return this;
   }
 
   /// Sets the protocol version. (Defaults to v3, the only protcol
   /// version supported)
   MqttConnectMessage withProtocolVersion(int protocolVersion) {
-    variableHeader.protocolVersion = protocolVersion;
+    variableHeader!.protocolVersion = protocolVersion;
     return this;
   }
 
   /// Sets the startClean flag so that the broker drops any messages
   /// that were previously destined for us.
   MqttConnectMessage startClean() {
-    variableHeader.connectFlags.cleanStart = true;
+    variableHeader!.connectFlags.cleanStart = true;
     return this;
   }
 
   /// Sets the keep alive period
   MqttConnectMessage keepAliveFor(int keepAliveSeconds) {
-    variableHeader.keepAlive = keepAliveSeconds;
+    variableHeader!.keepAlive = keepAliveSeconds;
     return this;
   }
 
   /// Sets the Will flag of the variable header
   MqttConnectMessage will() {
-    variableHeader.connectFlags.willFlag = true;
+    variableHeader!.connectFlags.willFlag = true;
     return this;
   }
 
   /// Sets the WillQos of the connect flag.
   MqttConnectMessage withWillQos(MqttQos qos) {
-    variableHeader.connectFlags.willQos = qos;
+    variableHeader!.connectFlags.willQos = qos;
     return this;
   }
 
   /// Sets the WillRetain flag of the Connection Flags
   MqttConnectMessage withWillRetain() {
-    variableHeader.connectFlags.willRetain = true;
+    variableHeader!.connectFlags.willRetain = true;
     return this;
   }
 
@@ -90,30 +90,30 @@ class MqttConnectMessage extends MqttMessage {
   }
 
   /// Sets the authentication
-  MqttConnectMessage authenticateAs(String username, String password) {
+  MqttConnectMessage authenticateAs(String? username, String? password) {
     if (username != null) {
-      variableHeader.connectFlags.usernameFlag = username.isNotEmpty;
+      variableHeader!.connectFlags.usernameFlag = username.isNotEmpty;
       payload.username = username;
     }
     if (password != null) {
-      variableHeader.connectFlags.passwordFlag = password.isNotEmpty;
+      variableHeader!.connectFlags.passwordFlag = password.isNotEmpty;
       payload.password = password;
     }
     return this;
   }
 
   /// The variable header contents. Contains extended metadata about the message
-  MqttConnectVariableHeader variableHeader;
+  MqttConnectVariableHeader? variableHeader;
 
   /// The payload of the Mqtt Message.
-  MqttConnectPayload payload;
+  late MqttConnectPayload payload;
 
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header.writeTo(variableHeader.getWriteLength() + payload.getWriteLength(),
+    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
         messageStream);
-    variableHeader.writeTo(messageStream);
+    variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
 

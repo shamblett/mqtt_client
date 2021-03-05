@@ -14,7 +14,7 @@ Future<int> main() async {
   final client = MqttServerClient('iot.eclipse.org', 'SJHMQTTClient');
   client.logging(on: true);
   await client.connect();
-  if (client.connectionStatus.state == MqttConnectionState.connected) {
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('Mosquitto client connected');
   } else {
     print(

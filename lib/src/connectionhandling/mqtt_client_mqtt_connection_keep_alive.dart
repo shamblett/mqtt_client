@@ -33,19 +33,19 @@ class MqttConnectionKeepAlive {
   }
 
   /// The keep alive period in  milliseconds
-  int keepAlivePeriod;
+  late int keepAlivePeriod;
 
   /// The timer that manages the ping callbacks.
-  Timer pingTimer;
+  Timer? pingTimer;
 
   /// The connection handler
-  IMqttConnectionHandler _connectionHandler;
+  late IMqttConnectionHandler _connectionHandler;
 
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;
 
   /// Ping response received callback
-  PongCallback pongCallback;
+  PongCallback? pongCallback;
 
   /// Pings the message broker if there has been no activity for
   /// the specified amount of idle time.
@@ -72,7 +72,7 @@ class MqttConnectionKeepAlive {
   /// The effect of calling this method on the keepalive handler is the
   /// transmission of a ping response message to the message broker on
   /// the current connection.
-  bool pingRequestReceived(MqttMessage pingMsg) {
+  bool pingRequestReceived(MqttMessage? pingMsg) {
     if (_shutdownPadlock) {
       return false;
     } else {
@@ -85,19 +85,19 @@ class MqttConnectionKeepAlive {
   }
 
   /// Processed ping response messages received from a message broker.
-  bool pingResponseReceived(MqttMessage pingMsg) {
+  bool pingResponseReceived(MqttMessage? pingMsg) {
     // Call the pong callback if not null
     if (pongCallback != null) {
-      pongCallback();
+      pongCallback!();
     }
     return true;
   }
 
   /// Handles the MessageSent event of the connectionHandler control.
-  bool messageSent(MqttMessage msg) => true;
+  bool messageSent(MqttMessage? msg) => true;
 
   /// Stop the keep alive process
   void stop() {
-    pingTimer.cancel();
+    pingTimer!.cancel();
   }
 }

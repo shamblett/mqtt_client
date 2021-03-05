@@ -55,13 +55,10 @@ class MqttServerConnection extends MqttConnectionBase {
 
     while (messageStream.isMessageAvailable()) {
       var messageIsValid = true;
-      MqttMessage msg;
+      MqttMessage? msg;
 
       try {
         msg = MqttMessage.createFrom(messageStream);
-        if (msg == null) {
-          return;
-        }
       } on Exception {
         MqttLogger.log(
             'MqttServerConnection::_ondata - message is not yet valid, '
@@ -75,11 +72,11 @@ class MqttServerConnection extends MqttConnectionBase {
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log('MqttServerConnection::_onData - message received $msg');
-        if (!clientEventBus.streamController.isClosed) {
-          if (msg.header.messageType == MqttMessageType.connectAck) {
-            clientEventBus.fire(ConnectAckMessageAvailable(msg));
+        if (!clientEventBus!.streamController.isClosed) {
+          if (msg!.header!.messageType == MqttMessageType.connectAck) {
+            clientEventBus!.fire(ConnectAckMessageAvailable(msg));
           } else {
-            clientEventBus.fire(MessageAvailable(msg));
+            clientEventBus!.fire(MessageAvailable(msg));
           }
           MqttLogger.log(
               'MqttServerConnection::_onData - message available event fired');
