@@ -90,7 +90,7 @@ void main() {
         expect(e.toString().contains(nonExistantHostName), isTrue);
       }
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
-    });
+    }, skip:true);
     test('Connect invalid port', () async {
       var cbCalled = false;
       void disconnectCB() {
