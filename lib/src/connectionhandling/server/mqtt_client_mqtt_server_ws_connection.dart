@@ -123,7 +123,7 @@ class MqttServerWsConnection extends MqttServerConnection {
   @override
   void disconnect({bool auto = false}) {
     if (auto) {
-      _disconnect();
+      client = null;
     } else {
       onDone();
     }

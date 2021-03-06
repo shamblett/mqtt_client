@@ -208,8 +208,8 @@ class MqttClient {
   events.EventBus? clientEventBus;
 
   /// The stream on which all subscribed topic updates are published to
-  Stream<List<MqttReceivedMessage<MqttMessage?>>?>? get updates =>
-      subscriptionsManager?.subscriptionNotifier.changes;
+  Stream<List<MqttReceivedMessage<MqttMessage>>>? get updates =>
+      subscriptionsManager?.subscriptionNotifier;
 
   /// Common client connection method.
   Future<MqttClientConnectionStatus?> connect(

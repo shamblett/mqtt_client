@@ -358,7 +358,7 @@ void main() {
     test('Change notification', () {
       var recCount = 0;
       const topic = 'testtopic';
-      late StreamSubscription<List<MqttReceivedMessage<MqttMessage?>>?> st;
+      late StreamSubscription<List<MqttReceivedMessage<MqttMessage>>> st;
       // The subscription receive callback
       void subRec(List<MqttReceivedMessage<MqttMessage>> c) {
         expect(c[0].topic, topic);
@@ -394,7 +394,7 @@ void main() {
       final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
       subs.registerSubscription(topic, qos);
       // Start listening
-      st = subs.subscriptionNotifier.changes.listen(t1);
+      st = subs.subscriptionNotifier.listen(t1);
       // Publish messages on the topic
       final buff = typed.Uint8Buffer(4);
       buff[0] = 'd'.codeUnitAt(0);

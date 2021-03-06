@@ -64,14 +64,14 @@ class SubscriptionsManager {
   /// The event bus
   final events.EventBus? _clientEventBus;
 
-  /// Observable change notifier for all subscribed topics
-  final observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
-      _subscriptionNotifier =
-      observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>();
+  /// Stream for all subscribed topics
+  final _subscriptionNotifier =
+      StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
+          sync: true);
 
   /// Subscription notifier
-  observe.ChangeNotifier<MqttReceivedMessage<MqttMessage>>
-      get subscriptionNotifier => _subscriptionNotifier;
+  Stream<List<MqttReceivedMessage<MqttMessage>>> get subscriptionNotifier =>
+      _subscriptionNotifier.stream;
 
   /// Registers a new subscription with the subscription manager.
   Subscription? registerSubscription(String topic, MqttQos qos) {
@@ -129,7 +129,7 @@ class SubscriptionsManager {
   void publishMessageReceived(MessageReceived event) {
     final topic = event.topic;
     final msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
-    subscriptionNotifier.notifyChange(msg);
+    _subscriptionNotifier.add([msg]);
   }
 
   /// Unsubscribe from a topic

@@ -75,7 +75,7 @@ class MqttConnectionBase {
 
   void _disconnect() {
     if (client != null) {
-      // TODO client.destroy();
+      client.destroy();
       client = null;
     }
   }
