@@ -180,8 +180,8 @@ class MqttServerWs2Connection extends MqttServerConnection {
 
   /// Connect Auto
   @override
-  Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
-    final completer = Completer<MqttClientConnectionStatus>();
+  Future<MqttClientConnectionStatus?> connectAuto(String server, int port) {
+    final completer = Completer<MqttClientConnectionStatus?>();
     MqttLogger.log('MqttWs2Connection::connectAuto - entered');
     Uri uri;
     try {

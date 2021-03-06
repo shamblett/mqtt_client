@@ -88,8 +88,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection {
 
   /// Connect Auto
   @override
-  Future<MqttClientConnectionStatus> connectAuto(String server, int port) {
-    final completer = Completer<MqttClientConnectionStatus>();
+  Future<MqttClientConnectionStatus?> connectAuto(String server, int port) {
+    final completer = Completer<MqttClientConnectionStatus?>();
     MqttLogger.log('MqttBrowserWsConnection::connectAuto - entered');
     // Add the port if present
     Uri uri;
