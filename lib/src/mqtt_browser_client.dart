@@ -10,7 +10,7 @@ part of mqtt_browser_client;
 class MqttBrowserClient extends MqttClient {
   /// Initializes a new instance of the MqttServerClient class using the
   /// default Mqtt Port.
-  /// The server hostname to connect to
+  /// The server hostname or URL to connect to
   /// The client identifier to use to connect with
   MqttBrowserClient(
     String server,

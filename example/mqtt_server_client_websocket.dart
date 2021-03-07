@@ -10,7 +10,9 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-/// An annotated simple auto reconnect usage example for mqtt_server_client.
+/// An annotated simple subscribe/publish usage example for mqtt_server_client using websockets.
+/// Please read in with reference to the MQTT specification. The example is runnable, also refer to
+/// test/mqtt_client_broker_test...dart files for separate subscribe/publish tests.
 
 /// First create a client, the client is constructed with a broker name, client identifier
 /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
@@ -20,52 +22,30 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
 /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
 /// of 1883 is used.
-/// If you want to use websockets rather than TCP see below.
 
-/// To test the auto reconnect feature this example uses a Mosquitto broker running on local host, any will do
-/// as long as you can break its connection to this process. You could wait for the first pong callback to print out
-/// (these are every 5 seconds) then stop/break connection to the server and reinstate it.
-///
-final client = MqttServerClient('localhost', '');
+/// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
+/// for details.
+final client = MqttServerClient('ws://test.mosquitto.org', '');
 
 Future<int> main() async {
-  /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
-  /// for details.
-  /// To use websockets add the following lines -:
-  /// client.useWebSocket = true;
-  /// client.port = 80;  ( or whatever your WS port is)
-  /// There is also an alternate websocket implementation for specialist use, see useAlternateWebSocketImplementation
-  /// Note do not set the secure flag if you are using wss, the secure flags is for TCP sockets only.
+  client.useWebSocket = true;
+  client.port = 8080; // ( or whatever your ws port is)
   /// You can also supply your own websocket protocol list or disable this feature using the websocketProtocols
   /// setter, read the API docs for further details here, the vast majority of brokers will support the client default
   /// list so in most cases you can ignore this.
+  /// client.websocketProtocols = ['myString'];
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
-  client.keepAlivePeriod = 5;
+  client.keepAlivePeriod = 20;
 
-  /// Set auto reconnect
-  client.autoReconnect = true;
+  /// Add the unsolicited disconnection callback
+  client.onDisconnected = onDisconnected;
 
-  /// If you do not want active confirmed subscriptions to be automatically re subscribed
-  /// by the auto connect sequence do the following, otherwise leave this defaulted.
-  client.resubscribeOnAutoReconnect = false;
-
-  /// Add an auto reconnect callback.
-  /// This is the 'pre' auto re connect callback, called before the sequence starts.
-  client.onAutoReconnect = onAutoReconnect;
-
-  /// Add an auto reconnect callback.
-  /// This is the 'post' auto re connect callback, called after the sequence
-  /// has completed. Note that re subscriptions may be occurring when this callback
-  /// is invoked. See [resubscribeOnAutoReconnect] above.
-  client.onAutoReconnected = onAutoReconnected;
-
-  /// Add the successful connection callback if you need one.
-  /// This will be called after [onAutoReconnect] but before [onAutoReconnected]
+  /// Add the successful connection callback
   client.onConnected = onConnected;
 
   /// Add a subscribed callback, there is also an unsubscribed callback if you need it.
@@ -84,7 +64,7 @@ Future<int> main() async {
   /// and clean session, an example of a specific one below.
   final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .keepAliveFor(5) // Must agree with the keep alive set above or not set
+      .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
@@ -97,8 +77,13 @@ Future<int> main() async {
   /// never send malformed messages.
   try {
     await client.connect();
-  } on Exception catch (e) {
+  } on NoConnectionException catch (e) {
+    // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
+    client.disconnect();
+  } on SocketException catch (e) {
+    // Raised by the socket layer
+    print('EXAMPLE::socket exception - $e');
     client.disconnect();
   }
 
@@ -179,26 +164,23 @@ void onSubscribed(String topic) {
   print('EXAMPLE::Subscription confirmed for topic $topic');
 }
 
-/// The pre auto re connect callback
-void onAutoReconnect() {
-  print(
-      'EXAMPLE::onAutoReconnect client callback - Client auto reconnection sequence will start');
-}
-
-/// The post auto re connect callback
-void onAutoReconnected() {
-  print(
-      'EXAMPLE::onAutoReconnected client callback - Client auto reconnection sequence has completed');
+/// The unsolicited disconnect callback
+void onDisconnected() {
+  print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+  if (client.connectionStatus!.disconnectionOrigin ==
+      MqttDisconnectionOrigin.solicited) {
+    print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+  }
+  exit(-1);
 }
 
 /// The successful connect callback
 void onConnected() {
   print(
-      'EXAMPLE::OnConnected client callback - Client connection was successful');
+      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
 }
 
 /// Pong callback
 void pong() {
-  print(
-      'EXAMPLE::Ping response client callback invoked - you may want to disconnect your broker here');
+  print('EXAMPLE::Ping response client callback invoked');
 }
