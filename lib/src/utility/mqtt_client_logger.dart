@@ -16,10 +16,17 @@ class MqttLogger {
   static int clientId = 0;
 
   /// Log method
-  static void log(String message) {
+  /// If the optimise parameter is supplied it must have a toString method,
+  /// this allows large objects such as lots of payload data not to be
+  /// converted into a string in the message parameter if logging is not enabled.
+  static void log(String message, [dynamic optimise = false]) {
     if (loggingOn) {
       final now = DateTime.now();
-      print('${clientId.toString()}-$now -- $message');
+      if (optimise is bool) {
+        print('${clientId.toString()}-$now -- $message');
+      } else {
+        print('${clientId.toString()}-$now -- $message$optimise');
+      }
     }
   }
 }

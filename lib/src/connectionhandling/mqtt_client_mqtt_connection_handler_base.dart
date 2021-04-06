@@ -159,7 +159,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Sends a message to the broker through the current connection.
   @override
   void sendMessage(MqttMessage? message) {
-    MqttLogger.log('MqttConnectionHandlerBase::sendMessage - $message');
+    MqttLogger.log('MqttConnectionHandlerBase::sendMessage - ', message);
     if ((connectionStatus.state == MqttConnectionState.connected) ||
         (connectionStatus.state == MqttConnectionState.connecting)) {
       final buff = typed.Uint8Buffer();
