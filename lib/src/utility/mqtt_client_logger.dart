@@ -15,6 +15,12 @@ class MqttLogger {
   /// Unique per client identifier
   static int clientId = 0;
 
+  /// Test output
+  static String testOutput = '';
+
+  /// Test mode
+  static bool testMode = false;
+
   /// Log method
   /// If the optimise parameter is supplied it must have a toString method,
   /// this allows large objects such as lots of payload data not to be
@@ -22,10 +28,16 @@ class MqttLogger {
   static void log(String message, [dynamic optimise = false]) {
     if (loggingOn) {
       final now = DateTime.now();
+      var output = '';
       if (optimise is bool) {
-        print('${clientId.toString()}-$now -- $message');
+        output = '${clientId.toString()}-$now -- $message';
+        print(output);
       } else {
-        print('${clientId.toString()}-$now -- $message$optimise');
+        output = '${clientId.toString()}-$now -- $message$optimise';
+        print(output);
+      }
+      if (testMode) {
+        testOutput = output;
       }
     }
   }
