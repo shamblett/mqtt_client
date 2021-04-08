@@ -883,12 +883,47 @@ void main() {
     test('Invalid instantiation', () async {
       var ok = false;
       try {
-        var client = MqttClient('aaaa', 'bbbb');
+        final client = MqttClient('aaaa', 'bbbb');
         await client.connect();
       } on IncorrectInstantiationException {
         ok = true;
       }
       expect(ok, isTrue);
+    });
+    test('Client Id ', (){
+        final client = MqttClient('aaaa', 'bbbb');
+        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'bbbb');
+        final userConnect = MqttConnectMessage().withClientIdentifier('cccc');
+        client.connectionMessage = userConnect;
+        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'cccc');
+    });
+  });
+
+  group('Logging', () {
+    test('Logging off', () {
+      MqttLogger.clientId = 1;
+      MqttLogger.testMode = true;
+      MqttLogger.log('No output');
+      expect(MqttLogger.testOutput, '');
+    });
+    test('Logging on - normal', () {
+      MqttLogger.clientId = 2;
+      MqttLogger.testMode = true;
+      MqttLogger.loggingOn = true;
+      MqttLogger.log('Some output');
+      expect(MqttLogger.testOutput.isNotEmpty, isTrue);
+      expect(MqttLogger.testOutput.contains('Some output'), isTrue);
+    });
+    test('Logging on - optimised', () {
+      MqttLogger.clientId = 3;
+      MqttLogger.testMode = true;
+      MqttLogger.loggingOn = true;
+      final message = MqttSubscribeAckMessage();
+      MqttLogger.log('Some output - ', message);
+      expect(MqttLogger.testOutput.isNotEmpty, isTrue);
+      expect(MqttLogger.testOutput.contains('Some output'), isTrue);
+      expect(MqttLogger.testOutput.contains('MqttMessageType.subscribeAck'),
+          isTrue);
     });
   });
 }

@@ -248,14 +248,18 @@ class MqttClient {
       keepAlive!.pongCallback = pongCallback;
     }
     final connectMessage = getConnectMessage(username, password);
+    // If the client id is not set in the connection message use the one
+    // supplied in the constructor.
+    if (connectMessage.payload.clientIdentifier.isEmpty) {
+      connectMessage.payload.clientIdentifier = clientIdentifier;
+    }
     return connectionHandler.connect(server, port, connectMessage);
   }
 
   ///  Gets a pre-configured connect message if one has not been
   ///  supplied by the user.
   ///  Returns an MqttConnectMessage that can be used to connect to a
-  ///  message broker.
-  @protected
+  ///  message broker if the user has not set one.
   MqttConnectMessage getConnectMessage(String? username, String? password) =>
       connectionMessage ??= MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
