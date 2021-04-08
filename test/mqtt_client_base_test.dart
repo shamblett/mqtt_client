@@ -890,12 +890,22 @@ void main() {
       }
       expect(ok, isTrue);
     });
-    test('Client Id ', (){
-        final client = MqttClient('aaaa', 'bbbb');
-        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'bbbb');
-        final userConnect = MqttConnectMessage().withClientIdentifier('cccc');
-        client.connectionMessage = userConnect;
-        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'cccc');
+    test('Client Id ', () {
+      final client = MqttClient('aaaa', 'bbbb');
+      expect(
+          client
+              .getConnectMessage('username', 'password')
+              .payload
+              .clientIdentifier,
+          'bbbb');
+      final userConnect = MqttConnectMessage().withClientIdentifier('cccc');
+      client.connectionMessage = userConnect;
+      expect(
+          client
+              .getConnectMessage('username', 'password')
+              .payload
+              .clientIdentifier,
+          'cccc');
     });
   });
 

@@ -71,7 +71,8 @@ class MqttServerConnection extends MqttConnectionBase {
       }
       if (messageIsValid) {
         messageStream.shrink();
-        MqttLogger.log('MqttServerConnection::_onData - message received ', msg);
+        MqttLogger.log(
+            'MqttServerConnection::_onData - message received ', msg);
         if (!clientEventBus!.streamController.isClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
