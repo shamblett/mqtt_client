@@ -883,12 +883,19 @@ void main() {
     test('Invalid instantiation', () async {
       var ok = false;
       try {
-        var client = MqttClient('aaaa', 'bbbb');
+        final client = MqttClient('aaaa', 'bbbb');
         await client.connect();
       } on IncorrectInstantiationException {
         ok = true;
       }
       expect(ok, isTrue);
+    });
+    test('Client Id ', (){
+        final client = MqttClient('aaaa', 'bbbb');
+        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'bbbb');
+        final userConnect = MqttConnectMessage().withClientIdentifier('cccc');
+        client.connectionMessage = userConnect;
+        expect(client.getConnectMessage('username', 'password').payload.clientIdentifier, 'cccc');
     });
   });
 
