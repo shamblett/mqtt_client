@@ -70,7 +70,12 @@ class PublishingManager implements IPublishingManager {
   /// The stream on which all confirmed published messages are added to
   StreamController<MqttPublishMessage> get published => _published;
 
-  /// Raised when a message has been recieved by the client and the relevant QOS handshake is complete.
+  /// Indicates that QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
+  /// the client. The user must do this when the message has been taken off the publication stream
+  /// using the [acknowledgeQos1Message] method.
+  bool manuallyAcknowledgeQos1 = false;
+
+  /// Raised when a message has been received by the client and the relevant QOS handshake is complete.
   @override
   MessageReceived? publishEvent;
 
@@ -120,6 +125,22 @@ class PublishingManager implements IPublishingManager {
     return true;
   }
 
+  /// Manually acknowledge a QOS 1 message.
+  /// The publish message supplied must be QOS 1.
+  /// Returns true if an acknowledgement is sent to the broker.
+  bool acknowledgeQos1Message(MqttPublishMessage message) {
+    final messageIdentifier = message.variableHeader!.messageIdentifier;
+    if ((message.header!.qos == MqttQos.atLeastOnce) &&
+        (publishedMessages.keys.contains(messageIdentifier))) {
+      final ackMsg =
+          MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
+      connectionHandler!.sendMessage(ackMsg);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// Handles the receipt of publish messages from a message broker.
   bool handlePublish(MqttMessage? msg) {
     final pubMsg = msg as MqttPublishMessage;
@@ -138,9 +159,12 @@ class PublishingManager implements IPublishingManager {
         // Send the message for processing to whoever is waiting.
         _clientEventBus!.fire(MessageReceived(topic, msg));
         _notifyPublish(msg);
-        final ackMsg = MqttPublishAckMessage()
-            .withMessageIdentifier(pubMsg.variableHeader!.messageIdentifier);
-        connectionHandler!.sendMessage(ackMsg);
+        // If configured the client will do this, else the user must.
+        if (!manuallyAcknowledgeQos1) {
+          final ackMsg = MqttPublishAckMessage()
+              .withMessageIdentifier(pubMsg.variableHeader!.messageIdentifier);
+          connectionHandler!.sendMessage(ackMsg);
+        }
       } else if (pubMsg.header!.qos == MqttQos.exactlyOnce) {
         // QOS ExactlyOnce means we can't give it away yet, we need to do a handshake
         // to make sure the broker knows we got it, and we know he knows we got it.
