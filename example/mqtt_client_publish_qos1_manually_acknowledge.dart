@@ -11,13 +11,14 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
-/// tests QOS1 protocol handling.
+/// tests QOS1 protocol handling when manual acknowledgement is in force.
 Future<int> main() async {
   final client = MqttServerClient('test.mosquitto.org', '');
-  client.logging(on: true);
+  client.logging(on: false);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
+  client.manuallyAcknowledgeQos1 = true;
   final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueIdQ1')
       .keepAliveFor(20) // Must agree with the keep alive set above or not set
@@ -61,7 +62,11 @@ Future<int> main() async {
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-    print('');
+    print('EXAMPLE::Manually Acknowledging');
+    final ackRes = client.acknowledgeQos1Message(recMess);
+    ackRes!
+        ? print('EXAMPLE::Manual acknowledge succeeded')
+        : print('EXAMPLE:: ERROR Manually acknowledge failed');
   });
 
   /// If needed you can listen for published messages that have completed the publishing

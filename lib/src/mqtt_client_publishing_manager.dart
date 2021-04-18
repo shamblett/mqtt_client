@@ -111,7 +111,6 @@ class PublishingManager implements IPublishingManager {
   }
 
   /// Handles the receipt of publish acknowledgement messages.
-  /// This callback simply removes it from the list of published messages.
   bool handlePublishAcknowledgement(MqttMessage? msg) {
     final ackMsg = msg as MqttPublishAckMessage;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
@@ -120,25 +119,37 @@ class PublishingManager implements IPublishingManager {
         'PublishingManager::handlePublishAcknowledgement for message id $messageIdentifier');
     if (publishedMessages.keys.contains(messageIdentifier)) {
       _notifyPublish(publishedMessages[messageIdentifier!]);
-      publishedMessages.remove(messageIdentifier);
+      // Only remove if the message is not Qos 1 or the message is Qos 1 and manual acknowledgement
+      // of Qos 1 messages is not is not in force.
+      if (!manuallyAcknowledgeQos1) {
+        publishedMessages.remove(messageIdentifier);
+      } else {
+        if (publishedMessages[messageIdentifier]?.header?.qos != MqttQos.atLeastOnce) {
+          publishedMessages.remove(messageIdentifier);
+        } else {
+          MqttLogger.log(
+              'PublishingManager::handlePublishAcknowledgement - manual ack in force, ack is Qos 1, '
+                  'not removing message identifier $messageIdentifier');
+        }
+      }
     }
     return true;
   }
 
   /// Manually acknowledge a QOS 1 message.
-  /// The publish message supplied must be QOS 1.
+  /// The publish message supplied must be QOS 1 and [manuallyAcknowledgeQos1] must be true
   /// Returns true if an acknowledgement is sent to the broker.
   bool acknowledgeQos1Message(MqttPublishMessage message) {
     final messageIdentifier = message.variableHeader!.messageIdentifier;
-    if ((message.header!.qos == MqttQos.atLeastOnce) &&
-        (publishedMessages.keys.contains(messageIdentifier))) {
-      final ackMsg =
-          MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
-      connectionHandler!.sendMessage(ackMsg);
-      return true;
-    } else {
-      return false;
+    if (message.header!.qos == MqttQos.atLeastOnce && manuallyAcknowledgeQos1) {
+      if (publishedMessages.keys.contains(messageIdentifier)) {
+        final ackMsg =
+            MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
+        connectionHandler!.sendMessage(ackMsg);
+        return true;
+      }
     }
+    return false;
   }
 
   /// Handles the receipt of publish messages from a message broker.
