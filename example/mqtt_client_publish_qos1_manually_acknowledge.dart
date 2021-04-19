@@ -82,6 +82,8 @@ Future<int> main() async {
     ackRes!
         ? print('EXAMPLE::Manual acknowledge succeeded')
         : print('EXAMPLE:: ERROR Manually acknowledge failed');
+    print(
+        'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}');
   });
 
   final builder1 = MqttClientPayloadBuilder();
