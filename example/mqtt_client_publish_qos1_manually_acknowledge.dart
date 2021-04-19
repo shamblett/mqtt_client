@@ -77,11 +77,12 @@ Future<int> main() async {
     }
     // Perform any required business logic processing before manually acknowledging
     // the message.
-    print('EXAMPLE::Manually Acknowledging');
+    print(
+        'EXAMPLE::Manually Acknowledging message id ${message.variableHeader?.messageIdentifier}');
     final ackRes = client.acknowledgeQos1Message(message);
     ackRes!
         ? print('EXAMPLE::Manual acknowledge succeeded')
-        : print('EXAMPLE:: ERROR Manually acknowledge failed');
+        : print('EXAMPLE::No Manual acknowledge');
     print(
         'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}');
   });
