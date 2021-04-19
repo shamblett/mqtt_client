@@ -119,19 +119,7 @@ class PublishingManager implements IPublishingManager {
         'PublishingManager::handlePublishAcknowledgement for message id $messageIdentifier');
     if (publishedMessages.keys.contains(messageIdentifier)) {
       _notifyPublish(publishedMessages[messageIdentifier!]);
-      // Only remove if the message is not Qos 1 or the message is Qos 1 and manual acknowledgement
-      // of Qos 1 messages is not is not in force.
-      if (!manuallyAcknowledgeQos1) {
-        publishedMessages.remove(messageIdentifier);
-      } else {
-        if (publishedMessages[messageIdentifier]?.header?.qos != MqttQos.atLeastOnce) {
-          publishedMessages.remove(messageIdentifier);
-        } else {
-          MqttLogger.log(
-              'PublishingManager::handlePublishAcknowledgement - manual ack in force, ack is Qos 1, '
-                  'not removing message identifier $messageIdentifier');
-        }
-      }
+      publishedMessages.remove(messageIdentifier);
     }
     return true;
   }
@@ -142,12 +130,10 @@ class PublishingManager implements IPublishingManager {
   bool acknowledgeQos1Message(MqttPublishMessage message) {
     final messageIdentifier = message.variableHeader!.messageIdentifier;
     if (message.header!.qos == MqttQos.atLeastOnce && manuallyAcknowledgeQos1) {
-      if (publishedMessages.keys.contains(messageIdentifier)) {
-        final ackMsg =
-            MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
-        connectionHandler!.sendMessage(ackMsg);
-        return true;
-      }
+      final ackMsg =
+          MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
+      connectionHandler!.sendMessage(ackMsg);
+      return true;
     }
     return false;
   }
@@ -170,7 +156,7 @@ class PublishingManager implements IPublishingManager {
         // Send the message for processing to whoever is waiting.
         _clientEventBus!.fire(MessageReceived(topic, msg));
         _notifyPublish(msg);
-        // If configured the client will do this, else the user must.
+        // If configured the client will acknowledgement, else the user must.
         if (!manuallyAcknowledgeQos1) {
           final ackMsg = MqttPublishAckMessage()
               .withMessageIdentifier(pubMsg.variableHeader!.messageIdentifier);

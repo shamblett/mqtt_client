@@ -443,11 +443,11 @@ void main() {
       pm.messageIdentifierDispenser.reset();
       final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
       message.variableHeader?.messageIdentifier = 1;
-      pm.publishedMessages[1] = message;
       expect(pm.acknowledgeQos1Message(message), isTrue);
       expect(testCHS.sentMessages.length, 1);
-      expect(testCHS.sentMessages[0]?.header?.messageType,
-          MqttMessageType.publishAck);
+      final ackMessage = testCHS.sentMessages[0] as MqttPublishAckMessage;
+      expect(ackMessage.header?.messageType, MqttMessageType.publishAck);
+      expect(ackMessage.variableHeader.messageIdentifier, 1);
     });
   });
 }
