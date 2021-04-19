@@ -55,6 +55,11 @@ class PublishingManager implements IPublishingManager {
   /// Stores messages that have been pubished but not yet acknowledged.
   Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
 
+  /// Stores Qos 1 messages that have been received but not yet acknowledged as
+  /// manual acknowledgement has been selected.
+  Map<int, MqttPublishMessage> awaitingManualAcknowledge =
+      <int, MqttPublishMessage>{};
+
   /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
   Map<int?, MqttPublishMessage> receivedMessages = <int?, MqttPublishMessage>{};
 
@@ -125,14 +130,17 @@ class PublishingManager implements IPublishingManager {
   }
 
   /// Manually acknowledge a QOS 1 message.
-  /// The publish message supplied must be QOS 1 and [manuallyAcknowledgeQos1] must be true
+  /// The publish message supplied must be awaiting acknowledge and [manuallyAcknowledgeQos1]
+  /// must be true.
   /// Returns true if an acknowledgement is sent to the broker.
   bool acknowledgeQos1Message(MqttPublishMessage message) {
     final messageIdentifier = message.variableHeader!.messageIdentifier;
-    if (message.header!.qos == MqttQos.atLeastOnce && manuallyAcknowledgeQos1) {
+    if (awaitingManualAcknowledge.keys.contains(messageIdentifier) &&
+        manuallyAcknowledgeQos1) {
       final ackMsg =
           MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
       connectionHandler!.sendMessage(ackMsg);
+      awaitingManualAcknowledge.remove(messageIdentifier);
       return true;
     }
     return false;
@@ -157,10 +165,14 @@ class PublishingManager implements IPublishingManager {
         _clientEventBus!.fire(MessageReceived(topic, msg));
         _notifyPublish(msg);
         // If configured the client will acknowledgement, else the user must.
+        final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
         if (!manuallyAcknowledgeQos1) {
-          final ackMsg = MqttPublishAckMessage()
-              .withMessageIdentifier(pubMsg.variableHeader!.messageIdentifier);
+          final ackMsg =
+              MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
           connectionHandler!.sendMessage(ackMsg);
+        } else {
+          // Add to the awaiting manual acknowledge list
+          awaitingManualAcknowledge[messageIdentifier!] = pubMsg;
         }
       } else if (pubMsg.header!.qos == MqttQos.exactlyOnce) {
         // QOS ExactlyOnce means we can't give it away yet, we need to do a handshake

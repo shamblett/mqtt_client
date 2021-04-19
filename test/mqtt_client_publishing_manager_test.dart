@@ -282,6 +282,8 @@ void main() {
       pm.handlePublish(pubMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages.length, 0);
+      expect(pm.awaitingManualAcknowledge.length, 1);
+      expect(pm.awaitingManualAcknowledge.keys.contains(msgId), isTrue);
     });
     test('Publish recieved exactly once', () {
       final clientEventBus = events.EventBus();
@@ -415,23 +417,15 @@ void main() {
       expect(pm.acknowledgeQos1Message(message), isFalse);
       expect(testCHS.sentMessages.length, 0);
     });
-    test('Not Qos 1 - Qos 2', () {
-      final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
-      final pm = PublishingManager(testCHS, clientEventBus);
-      pm.manuallyAcknowledgeQos1 = true;
-      pm.messageIdentifierDispenser.reset();
-      final message = MqttPublishMessage().withQos(MqttQos.exactlyOnce);
-      expect(pm.acknowledgeQos1Message(message), isFalse);
-      expect(testCHS.sentMessages.length, 0);
-    });
-    test('Not Qos 1 - Qos 0', () {
+    test('Not Awaiting Acknowledge', () {
       final clientEventBus = events.EventBus();
       final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       pm.messageIdentifierDispenser.reset();
       final message = MqttPublishMessage().withQos(MqttQos.atMostOnce);
+      message.variableHeader?.messageIdentifier = 1;
+      expect(pm.awaitingManualAcknowledge.length, 0);
       expect(pm.acknowledgeQos1Message(message), isFalse);
       expect(testCHS.sentMessages.length, 0);
     });
@@ -443,11 +437,13 @@ void main() {
       pm.messageIdentifierDispenser.reset();
       final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
       message.variableHeader?.messageIdentifier = 1;
+      pm.awaitingManualAcknowledge[1] = message;
       expect(pm.acknowledgeQos1Message(message), isTrue);
       expect(testCHS.sentMessages.length, 1);
       final ackMessage = testCHS.sentMessages[0] as MqttPublishAckMessage;
       expect(ackMessage.header?.messageType, MqttMessageType.publishAck);
       expect(ackMessage.variableHeader.messageIdentifier, 1);
+      expect(pm.awaitingManualAcknowledge.length, 0);
     });
   });
 }

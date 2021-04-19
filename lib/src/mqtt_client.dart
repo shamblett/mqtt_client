@@ -88,6 +88,11 @@ class MqttClient {
   bool? acknowledgeQos1Message(MqttPublishMessage message) =>
       publishingManager?.acknowledgeQos1Message(message);
 
+  /// The number of QOS 1 messages awaiting manual acknowledge.
+  int get messagesAwaitingManualAcknowledge => publishingManager == null
+      ? 0
+      : publishingManager!.awaitingManualAcknowledge.length;
+
   /// The Handler that is managing the connection to the remote server.
   @protected
   dynamic connectionHandler;
