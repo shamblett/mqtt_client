@@ -62,22 +62,26 @@ Future<int> main() async {
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-    print('EXAMPLE::Manually Acknowledging');
-    final ackRes = client.acknowledgeQos1Message(recMess);
-    ackRes!
-        ? print('EXAMPLE::Manual acknowledge succeeded')
-        : print('EXAMPLE:: ERROR Manually acknowledge failed');
   });
 
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
-  /// publishing handshake with the broker.
+  /// publishing handshake with the broker unless the message is a Qos 1 message and manual
+  /// acknowledge has been set on the client, in which case the user must manually acknowledge the
+  /// received publish message on completion of any business logic processing.
   client.published!.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
     if (message.variableHeader!.topicName == topic3) {
       print('EXAMPLE:: Non subscribed topic received.');
     }
+    // Perform any required business logic processing before manually acknowledging
+    // the message.
+    print('EXAMPLE::Manually Acknowledging');
+    final ackRes = client.acknowledgeQos1Message(message);
+    ackRes!
+        ? print('EXAMPLE::Manual acknowledge succeeded')
+        : print('EXAMPLE:: ERROR Manually acknowledge failed');
   });
 
   final builder1 = MqttClientPayloadBuilder();
