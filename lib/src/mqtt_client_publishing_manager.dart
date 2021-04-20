@@ -75,8 +75,8 @@ class PublishingManager implements IPublishingManager {
   /// The stream on which all confirmed published messages are added to
   StreamController<MqttPublishMessage> get published => _published;
 
-  /// Indicates that QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
-  /// the client. The user must do this when the message has been taken off the publication stream
+  /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
+  /// the client. The user must do this when the message has been taken off the update stream
   /// using the [acknowledgeQos1Message] method.
   bool manuallyAcknowledgeQos1 = false;
 
@@ -129,9 +129,9 @@ class PublishingManager implements IPublishingManager {
     return true;
   }
 
-  /// Manually acknowledge a QOS 1 message.
-  /// The publish message supplied must be awaiting acknowledge and [manuallyAcknowledgeQos1]
-  /// must be true.
+  /// Manually acknowledge a received QOS 1 message.
+  /// Has no effect if [manuallyAcknowledgeQos1] is not in force
+  /// or the message is not awaiting a QOS 1 acknowledge.
   /// Returns true if an acknowledgement is sent to the broker.
   bool acknowledgeQos1Message(MqttPublishMessage message) {
     final messageIdentifier = message.variableHeader!.messageIdentifier;
@@ -164,7 +164,7 @@ class PublishingManager implements IPublishingManager {
         // Send the message for processing to whoever is waiting.
         _clientEventBus!.fire(MessageReceived(topic, msg));
         _notifyPublish(msg);
-        // If configured the client will acknowledgement, else the user must.
+        // If configured the client will send the acknowledgement, else the user must.
         final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
         if (!manuallyAcknowledgeQos1) {
           final ackMsg =
