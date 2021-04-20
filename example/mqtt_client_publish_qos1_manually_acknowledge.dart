@@ -56,13 +56,30 @@ Future<int> main() async {
   const topic3 = 'SJHTopic3'; // Not a wildcard topic - no subscription
 
   // ignore: avoid_annotating_with_dynamic
-  client.updates!.listen((dynamic c) {
-    final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
-    print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-  });
+  try {
+    client.updates!.listen((dynamic c) {
+      final MqttPublishMessage recMess = c[0].payload;
+      final pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
+      print(
+          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      // Perform any required business logic processing before manually acknowledging
+      // the message. You don't have to check anything about the publish message, the
+      // acknowledgeQos1Message method will only send an acknowledge for the publish message
+      // if it is Qos 1, manual acknowledge has been selected and there is an acknowledge outstanding.
+      // If you need to know the acknowledge has been sent the return code will be true.
+      print(
+          'EXAMPLE::Manually Acknowledging message id ${recMess.variableHeader?.messageIdentifier}');
+      final ackRes = client.acknowledgeQos1Message(recMess);
+      ackRes!
+          ? print('EXAMPLE::Manual acknowledge succeeded')
+          : print('EXAMPLE::No Manual acknowledge');
+      print(
+          'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}');
+    });
+  } catch (e, s) {
+    print(s);
+  }
 
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
@@ -75,16 +92,6 @@ Future<int> main() async {
     if (message.variableHeader!.topicName == topic3) {
       print('EXAMPLE:: Non subscribed topic received.');
     }
-    // Perform any required business logic processing before manually acknowledging
-    // the message.
-    print(
-        'EXAMPLE::Manually Acknowledging message id ${message.variableHeader?.messageIdentifier}');
-    final ackRes = client.acknowledgeQos1Message(message);
-    ackRes!
-        ? print('EXAMPLE::Manual acknowledge succeeded')
-        : print('EXAMPLE::No Manual acknowledge');
-    print(
-        'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}');
   });
 
   final builder1 = MqttClientPayloadBuilder();
