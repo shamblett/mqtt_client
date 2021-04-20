@@ -46,10 +46,10 @@ Future<int> main() async {
   }
 
   /// Lets try our subscriptions
-  print('EXAMPLE:: <<<< SUBCRIBE 1 >>>>');
+  print('EXAMPLE:: <<<< SUBSCRIBE 1 >>>>');
   const topic1 = 'SJHTopic1'; // Not a wildcard topic
   client.subscribe(topic1, MqttQos.exactlyOnce);
-  print('EXAMPLE:: <<<< SUBCRIBE 2 >>>>');
+  print('EXAMPLE:: <<<< SUBSCRIBE 2 >>>>');
   const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 

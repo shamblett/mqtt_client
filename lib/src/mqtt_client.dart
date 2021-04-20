@@ -71,6 +71,29 @@ class MqttClient {
   /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
   bool resubscribeOnAutoReconnect = true;
 
+  /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
+  /// the client. The user must do this when the message has been taken off the update stream
+  /// using the [acknowledgeQos1Message] method.
+  bool _manuallyAcknowledgeQos1 = false;
+  set manuallyAcknowledgeQos1(bool state) {
+    publishingManager?.manuallyAcknowledgeQos1 = state;
+    _manuallyAcknowledgeQos1 = state;
+  }
+
+  bool get manuallyAcknowledgeQos1 => _manuallyAcknowledgeQos1;
+
+  /// Manually acknowledge a received QOS 1 message.
+  /// Has no effect if [manuallyAcknowledgeQos1] is not in force
+  /// or the message is not awaiting a QOS 1 acknowledge.
+  /// Returns true if an acknowledgement is sent to the broker.
+  bool? acknowledgeQos1Message(MqttPublishMessage message) =>
+      publishingManager?.acknowledgeQos1Message(message);
+
+  /// The number of QOS 1 messages awaiting manual acknowledge.
+  int get messagesAwaitingManualAcknowledge => publishingManager == null
+      ? 0
+      : publishingManager!.awaitingManualAcknowledge.length;
+
   /// The Handler that is managing the connection to the remote server.
   @protected
   dynamic connectionHandler;
@@ -236,6 +259,7 @@ class MqttClient {
     connectionHandler.onAutoReconnected = onAutoReconnected;
 
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
+    publishingManager!.manuallyAcknowledgeQos1 = _manuallyAcknowledgeQos1;
     subscriptionsManager = SubscriptionsManager(
         connectionHandler, publishingManager, clientEventBus);
     subscriptionsManager!.onSubscribed = onSubscribed;

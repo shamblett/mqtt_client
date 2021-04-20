@@ -227,6 +227,8 @@ void main() {
       buff[3] = 'l'.codeUnitAt(0);
       buff[4] = 'o'.codeUnitAt(0);
       client.publishMessage(topic, MqttQos.exactlyOnce, buff);
+      // Manual acknowledge count should be 0
+      expect(client.messagesAwaitingManualAcknowledge, 0);
       print('Sleeping....');
       await MqttUtilities.asyncSleep(10);
       print('Disconnecting');

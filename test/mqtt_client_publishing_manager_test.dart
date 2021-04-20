@@ -227,7 +227,7 @@ void main() {
           MqttPublishCompleteMessage().withMessageIdentifier(msgId));
       expect(pm.publishedMessages, isEmpty);
     });
-    test('Publish recieved at most once', () {
+    test('Publish received at most once', () {
       final clientEventBus = events.EventBus();
       final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
@@ -245,7 +245,7 @@ void main() {
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages.isEmpty, isTrue);
     });
-    test('Publish recieved at least once', () {
+    test('Publish received at least once', () {
       final clientEventBus = events.EventBus();
       final testCHS = TestConnectionHandlerSend(clientEventBus);
       final pm = PublishingManager(testCHS, clientEventBus);
@@ -263,6 +263,27 @@ void main() {
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages[0]!.header!.messageType,
           MqttMessageType.publishAck);
+    });
+    test('Publish received at least once  - manual acknowledge in force', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.manuallyAcknowledgeQos1 = true;
+      const msgId = 1;
+      final data = typed.Uint8Buffer(3);
+      data[0] = 0;
+      data[1] = 1;
+      data[2] = 2;
+      final pubMess = MqttPublishMessage()
+          .withMessageIdentifier(msgId)
+          .toTopic('A/rawTopic')
+          .withQos(MqttQos.atLeastOnce)
+          .publishData(data);
+      pm.handlePublish(pubMess);
+      expect(pm.receivedMessages.containsKey(msgId), isFalse);
+      expect(testCHS.sentMessages.length, 0);
+      expect(pm.awaitingManualAcknowledge.length, 1);
+      expect(pm.awaitingManualAcknowledge.keys.contains(msgId), isTrue);
     });
     test('Publish recieved exactly once', () {
       final clientEventBus = events.EventBus();
@@ -384,6 +405,45 @@ void main() {
       pm.handlePublishComplete(
           MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
       expect(pm.publishedMessages.length, 1);
+    });
+  });
+  group('Manual Acknowledge', () {
+    test('Manual Acknowledge not set', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.messageIdentifierDispenser.reset();
+      final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
+      expect(pm.acknowledgeQos1Message(message), isFalse);
+      expect(testCHS.sentMessages.length, 0);
+    });
+    test('Not Awaiting Acknowledge', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.manuallyAcknowledgeQos1 = true;
+      pm.messageIdentifierDispenser.reset();
+      final message = MqttPublishMessage().withQos(MqttQos.atMostOnce);
+      message.variableHeader?.messageIdentifier = 1;
+      expect(pm.awaitingManualAcknowledge.length, 0);
+      expect(pm.acknowledgeQos1Message(message), isFalse);
+      expect(testCHS.sentMessages.length, 0);
+    });
+    test('Valid manual acknowledge', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.manuallyAcknowledgeQos1 = true;
+      pm.messageIdentifierDispenser.reset();
+      final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
+      message.variableHeader?.messageIdentifier = 1;
+      pm.awaitingManualAcknowledge[1] = message;
+      expect(pm.acknowledgeQos1Message(message), isTrue);
+      expect(testCHS.sentMessages.length, 1);
+      final ackMessage = testCHS.sentMessages[0] as MqttPublishAckMessage;
+      expect(ackMessage.header?.messageType, MqttMessageType.publishAck);
+      expect(ackMessage.variableHeader.messageIdentifier, 1);
+      expect(pm.awaitingManualAcknowledge.length, 0);
     });
   });
 }

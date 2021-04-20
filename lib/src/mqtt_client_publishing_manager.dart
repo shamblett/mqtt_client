@@ -55,6 +55,11 @@ class PublishingManager implements IPublishingManager {
   /// Stores messages that have been pubished but not yet acknowledged.
   Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
 
+  /// Stores Qos 1 messages that have been received but not yet acknowledged as
+  /// manual acknowledgement has been selected.
+  Map<int, MqttPublishMessage> awaitingManualAcknowledge =
+      <int, MqttPublishMessage>{};
+
   /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
   Map<int?, MqttPublishMessage> receivedMessages = <int?, MqttPublishMessage>{};
 
@@ -70,7 +75,12 @@ class PublishingManager implements IPublishingManager {
   /// The stream on which all confirmed published messages are added to
   StreamController<MqttPublishMessage> get published => _published;
 
-  /// Raised when a message has been recieved by the client and the relevant QOS handshake is complete.
+  /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
+  /// the client. The user must do this when the message has been taken off the update stream
+  /// using the [acknowledgeQos1Message] method.
+  bool manuallyAcknowledgeQos1 = false;
+
+  /// Raised when a message has been received by the client and the relevant QOS handshake is complete.
   @override
   MessageReceived? publishEvent;
 
@@ -106,7 +116,6 @@ class PublishingManager implements IPublishingManager {
   }
 
   /// Handles the receipt of publish acknowledgement messages.
-  /// This callback simply removes it from the list of published messages.
   bool handlePublishAcknowledgement(MqttMessage? msg) {
     final ackMsg = msg as MqttPublishAckMessage;
     // If we're expecting an ack for the message, remove it from the list of pubs awaiting ack.
@@ -118,6 +127,23 @@ class PublishingManager implements IPublishingManager {
       publishedMessages.remove(messageIdentifier);
     }
     return true;
+  }
+
+  /// Manually acknowledge a received QOS 1 message.
+  /// Has no effect if [manuallyAcknowledgeQos1] is not in force
+  /// or the message is not awaiting a QOS 1 acknowledge.
+  /// Returns true if an acknowledgement is sent to the broker.
+  bool acknowledgeQos1Message(MqttPublishMessage message) {
+    final messageIdentifier = message.variableHeader!.messageIdentifier;
+    if (awaitingManualAcknowledge.keys.contains(messageIdentifier) &&
+        manuallyAcknowledgeQos1) {
+      final ackMsg =
+          MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
+      connectionHandler!.sendMessage(ackMsg);
+      awaitingManualAcknowledge.remove(messageIdentifier);
+      return true;
+    }
+    return false;
   }
 
   /// Handles the receipt of publish messages from a message broker.
@@ -138,9 +164,16 @@ class PublishingManager implements IPublishingManager {
         // Send the message for processing to whoever is waiting.
         _clientEventBus!.fire(MessageReceived(topic, msg));
         _notifyPublish(msg);
-        final ackMsg = MqttPublishAckMessage()
-            .withMessageIdentifier(pubMsg.variableHeader!.messageIdentifier);
-        connectionHandler!.sendMessage(ackMsg);
+        // If configured the client will send the acknowledgement, else the user must.
+        final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
+        if (!manuallyAcknowledgeQos1) {
+          final ackMsg =
+              MqttPublishAckMessage().withMessageIdentifier(messageIdentifier);
+          connectionHandler!.sendMessage(ackMsg);
+        } else {
+          // Add to the awaiting manual acknowledge list
+          awaitingManualAcknowledge[messageIdentifier!] = pubMsg;
+        }
       } else if (pubMsg.header!.qos == MqttQos.exactlyOnce) {
         // QOS ExactlyOnce means we can't give it away yet, we need to do a handshake
         // to make sure the broker knows we got it, and we know he knows we got it.
