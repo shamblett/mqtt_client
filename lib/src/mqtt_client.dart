@@ -123,7 +123,9 @@ class MqttClient {
   @protected
   MqttConnectionKeepAlive? keepAlive;
 
-  /// Keep alive period, seconds
+  /// Keep alive period, seconds.
+  /// Keep alive is defaulted to off, this must be ste to a valid value to
+  /// enable keep alive.
   int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
   /// Handles everything to do with publication management.
@@ -267,7 +269,9 @@ class MqttClient {
     subscriptionsManager!.onSubscribeFail = onSubscribeFail;
     subscriptionsManager!.resubscribeOnAutoReconnect =
         resubscribeOnAutoReconnect;
-    keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
+    if ( keepAlivePeriod != MqttClientConstants.defaultKeepAlive ) {
+      keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
+    }
     if (pongCallback != null) {
       keepAlive!.pongCallback = pongCallback;
     }
@@ -277,6 +281,7 @@ class MqttClient {
     if (connectMessage.payload.clientIdentifier.isEmpty) {
       connectMessage.payload.clientIdentifier = clientIdentifier;
     }
+    connectMessage.variableHeader?.keepAlive = keepAlivePeriod;
     return connectionHandler.connect(server, port, connectMessage);
   }
 
@@ -289,7 +294,6 @@ class MqttClient {
           .withClientIdentifier(clientIdentifier)
           // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
-          .keepAliveFor(MqttClientConstants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
 

@@ -30,6 +30,8 @@ class MqttConnectionKeepAlive {
     connectionHandler.registerForAllSentMessages(messageSent);
     // Start the timer so we do a ping whenever required.
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
+    MqttLogger.log(
+        'MqttConnectionKeepAlive:: initialised with a keep alive value of $keepAliveSeconds seconds');
   }
 
   /// The keep alive period in  milliseconds
@@ -50,6 +52,7 @@ class MqttConnectionKeepAlive {
   /// Pings the message broker if there has been no activity for
   /// the specified amount of idle time.
   bool pingRequired() {
+    MqttLogger.log('MqttConnectionKeepAlive::pingRequired');
     if (_shutdownPadlock) {
       return false;
     } else {
@@ -59,8 +62,12 @@ class MqttConnectionKeepAlive {
     final pingMsg = MqttPingRequestMessage();
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
+      MqttLogger.log('MqttConnectionKeepAlive::- pingRequired - sending ping');
       _connectionHandler.sendMessage(pingMsg);
       pinged = true;
+    } else {
+      MqttLogger.log(
+          'MqttConnectionKeepAlive::pingRequired - NOT sending ping - not connected');
     }
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
     _shutdownPadlock = false;
@@ -73,6 +80,7 @@ class MqttConnectionKeepAlive {
   /// transmission of a ping response message to the message broker on
   /// the current connection.
   bool pingRequestReceived(MqttMessage? pingMsg) {
+    MqttLogger.log('MqttConnectionKeepAlive::pingRequestReceived');
     if (_shutdownPadlock) {
       return false;
     } else {
@@ -86,6 +94,7 @@ class MqttConnectionKeepAlive {
 
   /// Processed ping response messages received from a message broker.
   bool pingResponseReceived(MqttMessage? pingMsg) {
+    MqttLogger.log('MqttConnectionKeepAlive::pingResponseReceived');
     // Call the pong callback if not null
     if (pongCallback != null) {
       pongCallback!();
@@ -98,6 +107,7 @@ class MqttConnectionKeepAlive {
 
   /// Stop the keep alive process
   void stop() {
+    MqttLogger.log('MqttConnectionKeepAlive::stop - stopping keep alive');
     pingTimer!.cancel();
   }
 }
