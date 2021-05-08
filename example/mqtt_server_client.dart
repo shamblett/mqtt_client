@@ -41,8 +41,7 @@ Future<int> main() async {
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
 
-  /// If you intend to use a keep alive value in your connect message that is not the default(60s)
-  /// you must set it here
+  /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
 
   /// Add the unsolicited disconnection callback
@@ -63,11 +62,10 @@ Future<int> main() async {
   client.pongCallback = pong;
 
   /// Create a connection message to use or use the default one. The default one sets the
-  /// client identifier, any supplied username/password, the default keepalive interval(60s)
-  /// and clean session, an example of a specific one below.
+  /// client identifier, any supplied username/password and clean session,
+  /// an example of a specific one below.
   final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .keepAliveFor(20) // Must agree with the keep alive set above or not set
       .withWillTopic('willtopic') // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing

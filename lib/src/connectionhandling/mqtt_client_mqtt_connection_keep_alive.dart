@@ -10,12 +10,12 @@ part of mqtt_client;
 /// Ping response received callback
 typedef PongCallback = void Function();
 
-/// Implements keepalive functionality on the Mqtt Connection,
+/// Implements keep alive functionality on the Mqtt Connection,
 /// ensuring that the connection remains active according to the
-/// keepalive seconds setting.
-/// This class implements the keepalive by sending an MqttPingRequest
+/// keep alive seconds setting.
+/// This class implements the keep alive by sending an MqttPingRequest
 /// to the broker if a message has not been sent or received
-/// within the keepalive period.
+/// within the keep alive period.
 class MqttConnectionKeepAlive {
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
   MqttConnectionKeepAlive(
@@ -62,7 +62,8 @@ class MqttConnectionKeepAlive {
     final pingMsg = MqttPingRequestMessage();
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
-      MqttLogger.log('MqttConnectionKeepAlive::- pingRequired - sending ping');
+      MqttLogger.log(
+          'MqttConnectionKeepAlive::pingRequired - sending ping request');
       _connectionHandler.sendMessage(pingMsg);
       pinged = true;
     } else {
@@ -74,9 +75,8 @@ class MqttConnectionKeepAlive {
     return pinged;
   }
 
-  /// Signal to the keepalive that a ping request has been received
-  /// from the message broker.
-  /// The effect of calling this method on the keepalive handler is the
+  /// A ping request has been received from the message broker.
+  /// The effect of calling this method on the keep alive handler is the
   /// transmission of a ping response message to the message broker on
   /// the current connection.
   bool pingRequestReceived(MqttMessage? pingMsg) {

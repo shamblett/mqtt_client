@@ -120,11 +120,12 @@ class MqttClient {
   SubscriptionsManager? subscriptionsManager;
 
   /// Handles the connection management while idle.
+  /// Not instantiated if keep alive is disabled.
   @protected
   MqttConnectionKeepAlive? keepAlive;
 
   /// Keep alive period, seconds.
-  /// Keep alive is defaulted to off, this must be ste to a valid value to
+  /// Keep alive is defaulted to off, this must be set to a valid value to
   /// enable keep alive.
   int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
@@ -269,11 +270,13 @@ class MqttClient {
     subscriptionsManager!.onSubscribeFail = onSubscribeFail;
     subscriptionsManager!.resubscribeOnAutoReconnect =
         resubscribeOnAutoReconnect;
-    if ( keepAlivePeriod != MqttClientConstants.defaultKeepAlive ) {
+    if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
       keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
-    }
-    if (pongCallback != null) {
-      keepAlive!.pongCallback = pongCallback;
+      if (pongCallback != null) {
+        keepAlive!.pongCallback = pongCallback;
+      }
+    } else {
+      MqttLogger.log('MqttClient::connect - keep alive is disabled');
     }
     final connectMessage = getConnectMessage(username, password);
     // If the client id is not set in the connection message use the one
@@ -281,6 +284,7 @@ class MqttClient {
     if (connectMessage.payload.clientIdentifier.isEmpty) {
       connectMessage.payload.clientIdentifier = clientIdentifier;
     }
+    // Set keep alive period.
     connectMessage.variableHeader?.keepAlive = keepAlivePeriod;
     return connectionHandler.connect(server, port, connectMessage);
   }
