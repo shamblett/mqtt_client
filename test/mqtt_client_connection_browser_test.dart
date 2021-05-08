@@ -52,9 +52,9 @@ void main() {
     test('Connect non-existant broker', () async {
       final client = MqttBrowserClient('ws://hhhhhhhhh/ws', testClientId);
       client.port = 10000;
+      client.keepAlivePeriod = 20;
       client.logging(on: true);
       final connMess = MqttConnectMessage()
-          .keepAliveFor(20)
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;
@@ -80,8 +80,8 @@ void main() {
       final client = MqttBrowserClient(localServer, testClientId);
       client.port = localPort;
       client.logging(on: true);
+      client.keepAlivePeriod = 20;
       final connMess = MqttConnectMessage()
-          .keepAliveFor(20)
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;

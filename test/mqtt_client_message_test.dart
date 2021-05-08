@@ -597,10 +597,8 @@ void main() {
       expect(raised, isTrue);
     });
     test('Basic serialization', () {
-      final msg = MqttConnectMessage()
-          .withClientIdentifier('mark')
-          .keepAliveFor(40)
-          .startClean();
+      final msg =
+          MqttConnectMessage().withClientIdentifier('mark').startClean();
       print('Connect - Basic serialization::${msg.toString()}');
       final mb = MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
@@ -612,7 +610,6 @@ void main() {
           .withProtocolName('MQIsdp')
           .withProtocolVersion(3)
           .withClientIdentifier('mark')
-          .keepAliveFor(30)
           .startClean()
           .will()
           .withWillQos(MqttQos.atLeastOnce)
