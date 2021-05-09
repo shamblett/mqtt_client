@@ -46,6 +46,8 @@ class MqttConnectMessage extends MqttMessage {
   }
 
   /// Sets the keep alive period
+  @Deprecated(
+      'This will be removed, you must now set this through the client keepAlivePeriod')
   MqttConnectMessage keepAliveFor(int keepAliveSeconds) {
     variableHeader!.keepAlive = keepAliveSeconds;
     return this;

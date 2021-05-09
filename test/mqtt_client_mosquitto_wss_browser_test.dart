@@ -36,7 +36,6 @@ void main() {
       client.keepAlivePeriod = 10;
       final connMess = MqttConnectMessage()
           .withClientIdentifier(testClientId)
-          .keepAliveFor(10)
           .withWillTopic('willtopic')
           .withWillMessage('My Will message')
           .startClean() // Non persistent session for testing

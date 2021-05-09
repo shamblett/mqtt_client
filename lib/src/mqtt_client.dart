@@ -120,10 +120,13 @@ class MqttClient {
   SubscriptionsManager? subscriptionsManager;
 
   /// Handles the connection management while idle.
+  /// Not instantiated if keep alive is disabled.
   @protected
   MqttConnectionKeepAlive? keepAlive;
 
-  /// Keep alive period, seconds
+  /// Keep alive period, seconds.
+  /// Keep alive is defaulted to off, this must be set to a valid value to
+  /// enable keep alive.
   int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
   /// Handles everything to do with publication management.
@@ -267,9 +270,15 @@ class MqttClient {
     subscriptionsManager!.onSubscribeFail = onSubscribeFail;
     subscriptionsManager!.resubscribeOnAutoReconnect =
         resubscribeOnAutoReconnect;
-    keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
-    if (pongCallback != null) {
-      keepAlive!.pongCallback = pongCallback;
+    if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
+      MqttLogger.log(
+          'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds');
+      keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
+      if (pongCallback != null) {
+        keepAlive!.pongCallback = pongCallback;
+      }
+    } else {
+      MqttLogger.log('MqttClient::connect - keep alive is disabled');
     }
     final connectMessage = getConnectMessage(username, password);
     // If the client id is not set in the connection message use the one
@@ -277,6 +286,9 @@ class MqttClient {
     if (connectMessage.payload.clientIdentifier.isEmpty) {
       connectMessage.payload.clientIdentifier = clientIdentifier;
     }
+    // Set keep alive period.
+    connectMessage.variableHeader?.keepAlive = keepAlivePeriod;
+    connectionMessage = connectMessage;
     return connectionHandler.connect(server, port, connectMessage);
   }
 
@@ -289,7 +301,6 @@ class MqttClient {
           .withClientIdentifier(clientIdentifier)
           // Explicitly set the will flag
           .withWillQos(MqttQos.atMostOnce)
-          .keepAliveFor(MqttClientConstants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
 

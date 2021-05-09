@@ -27,8 +27,9 @@ class MqttClientConstants {
   /// The recommended length for usernames and passwords.
   static const int recommendedMaxUsernamePasswordLength = 12;
 
-  /// Default keep alive in seconds
-  static int defaultKeepAlive = 60;
+  /// Default keep alive in seconds.
+  /// The default of 0 disables keep alive.
+  static int defaultKeepAlive = 0;
 
   /// Protocol variants
   /// V3

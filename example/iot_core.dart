@@ -16,6 +16,9 @@ import 'package:typed_data/typed_data.dart' as typed;
 /// An example of connecting to the google iot-core MQTT bridge server and publishing to a devices topic.
 /// Full setup instructions can be found here https://cloud.google.com/iot/docs/how-tos/mqtt-bridge, please read this
 /// before setting up and running this example.
+///
+/// Also this project, https://github.com/shamblett/iot-home shows how to use MQTT client to connect to IOT Core.
+/// It also shows how to generate a JWT token and transmit basic sensor data.
 Future<int> main() async {
   // Create and connect the client
   const url = 'mqtt.googleapis.com'; // The google iot-core MQTT bridge server
