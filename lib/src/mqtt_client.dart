@@ -271,6 +271,8 @@ class MqttClient {
     subscriptionsManager!.resubscribeOnAutoReconnect =
         resubscribeOnAutoReconnect;
     if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
+      MqttLogger.log(
+          'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds');
       keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
@@ -286,6 +288,7 @@ class MqttClient {
     }
     // Set keep alive period.
     connectMessage.variableHeader?.keepAlive = keepAlivePeriod;
+    connectionMessage = connectMessage;
     return connectionHandler.connect(server, port, connectMessage);
   }
 

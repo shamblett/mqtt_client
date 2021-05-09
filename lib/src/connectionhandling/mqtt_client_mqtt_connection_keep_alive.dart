@@ -70,6 +70,8 @@ class MqttConnectionKeepAlive {
       MqttLogger.log(
           'MqttConnectionKeepAlive::pingRequired - NOT sending ping - not connected');
     }
+    MqttLogger.log(
+        'MqttConnectionKeepAlive::pingRequired - restarting ping timer');
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
     _shutdownPadlock = false;
     return pinged;
