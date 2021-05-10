@@ -59,7 +59,7 @@ class MqttMessage {
       throw InvalidMessageException(
           'The data provided in the message stream was not a '
           'valid MQTT Message, '
-          'exception is $e, bytestream is $messageStream');
+          'exception is $e');
     }
   }
 
