@@ -66,7 +66,7 @@ class MqttPublishPayload extends MqttPayload {
   }
 
   /// Converts an array of bytes to a character string.
-  static String bytesToStringAsString(typed.Uint8Buffer message) {
+  static String bytesToStringAsString(typed.Uint8Buffer? message) {
     final sb = StringBuffer();
     message.forEach(sb.writeCharCode);
     return sb.toString();
