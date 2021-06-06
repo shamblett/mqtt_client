@@ -27,7 +27,7 @@ class MqttPublishPayload extends MqttPayload {
   MqttPublishVariableHeader? variableHeader;
 
   /// The message that forms the payload of the publish message.
-  typed.Uint8Buffer? message;
+  late typed.Uint8Buffer message;
 
   /// Creates a payload from the specified header stream.
   @override
