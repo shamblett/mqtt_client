@@ -937,12 +937,12 @@ void main() {
       expect(baseMessage.header!.messageSize, 12);
       final pm = baseMessage as MqttPublishMessage;
       // Check the payload
-      expect(pm.payload.message![0], 'h'.codeUnitAt(0));
-      expect(pm.payload.message![1], 'e'.codeUnitAt(0));
-      expect(pm.payload.message![2], 'l'.codeUnitAt(0));
-      expect(pm.payload.message![3], 'l'.codeUnitAt(0));
-      expect(pm.payload.message![4], 'o'.codeUnitAt(0));
-      expect(pm.payload.message![5], '!'.codeUnitAt(0));
+      expect(pm.payload.message[0], 'h'.codeUnitAt(0));
+      expect(pm.payload.message[1], 'e'.codeUnitAt(0));
+      expect(pm.payload.message[2], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[3], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[4], 'o'.codeUnitAt(0));
+      expect(pm.payload.message[5], '!'.codeUnitAt(0));
     });
     test('Deserialisation - Valid payload V311', () {
       // Tests basic message deserialization from a raw byte array.
@@ -981,12 +981,12 @@ void main() {
       expect(baseMessage.header!.messageSize, 12);
       final pm = baseMessage as MqttPublishMessage;
       // Check the payload
-      expect(pm.payload.message![0], 'h'.codeUnitAt(0));
-      expect(pm.payload.message![1], 'e'.codeUnitAt(0));
-      expect(pm.payload.message![2], 'l'.codeUnitAt(0));
-      expect(pm.payload.message![3], 'l'.codeUnitAt(0));
-      expect(pm.payload.message![4], 'o'.codeUnitAt(0));
-      expect(pm.payload.message![5], '!'.codeUnitAt(0));
+      expect(pm.payload.message[0], 'h'.codeUnitAt(0));
+      expect(pm.payload.message[1], 'e'.codeUnitAt(0));
+      expect(pm.payload.message[2], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[3], 'l'.codeUnitAt(0));
+      expect(pm.payload.message[4], 'o'.codeUnitAt(0));
+      expect(pm.payload.message[5], '!'.codeUnitAt(0));
     });
     test('Deserialisation - payload too short', () {
       final sampleMessage = <int>[
@@ -1171,9 +1171,9 @@ void main() {
       data[0] = 0;
       data[1] = 1;
       final msg = MqttPublishMessage().publishData(data);
-      expect(msg.payload.message!.length, 2);
+      expect(msg.payload.message.length, 2);
       msg.clearPublishData();
-      expect(msg.payload.message!.length, 0);
+      expect(msg.payload.message.length, 0);
     });
   });
 

@@ -30,7 +30,7 @@ Future<int> main() async {
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print('Change notification:: payload is <$pt> for topic <$topic>');
   });
   print('Sleeping....');
