@@ -42,7 +42,7 @@ class MqttClient {
 
   /// Server name.
   /// Note that a server name that is a host name must conform to the name
-  /// syntax described in RFC952[https://datatracker.ietf.org/doc/html/rfc952]
+  /// syntax described in <a href="https://datatracker.ietf.org/doc/html/rfc952">RFC952</a>
   String server;
 
   /// Port number
