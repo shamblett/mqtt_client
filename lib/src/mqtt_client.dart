@@ -35,12 +35,14 @@ class MqttClient {
 
   /// Initializes a new instance of the MqttClient class using
   /// the supplied Mqtt Port.
-  /// The server hostname to connect to
-  /// The client identifier to use to connect with
+  /// The server/hostname to connect to.
+  /// The client identifier to use to connect with.
   /// The port to use
   MqttClient.withPort(this.server, this.clientIdentifier, this.port);
 
-  /// Server name
+  /// Server name.
+  /// Note that a server name that is a host name must conform to the name
+  /// syntax described in RFC952[https://datatracker.ietf.org/doc/html/rfc952]
   String server;
 
   /// Port number
