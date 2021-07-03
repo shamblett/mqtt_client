@@ -367,16 +367,16 @@ void main() {
         final recMess = c[0].payload as MqttPublishMessage;
         if (recCount == 0) {
           expect(recMess.variableHeader!.messageIdentifier, 1);
-          final pt = MqttPublishPayload.bytesToStringAsString(
-              recMess.payload.message!);
+          final pt =
+              MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
           expect(pt, 'dead');
           print('Change notification:: payload is $pt');
           expect(recMess.header!.qos, MqttQos.atLeastOnce);
           recCount++;
         } else {
           expect(recMess.variableHeader!.messageIdentifier, 2);
-          final pt = MqttPublishPayload.bytesToStringAsString(
-              recMess.payload.message!);
+          final pt =
+              MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
           expect(pt, 'meat');
           print('Change notification:: payload is $pt');
           expect(recMess.header!.qos, MqttQos.atMostOnce);

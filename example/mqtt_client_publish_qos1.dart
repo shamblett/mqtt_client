@@ -57,7 +57,7 @@ Future<int> main() async {
   client.updates!.listen((dynamic c) {
     final MqttPublishMessage recMess = c[0].payload;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');

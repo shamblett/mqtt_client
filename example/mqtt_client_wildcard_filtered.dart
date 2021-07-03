@@ -92,7 +92,7 @@ Future<int> main() async {
   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage?>> c) {
     final recMess = c[0].payload as MqttPublishMessage;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     print(
         'EXAMPLE::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
