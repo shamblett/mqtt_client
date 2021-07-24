@@ -24,7 +24,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// of 1883 is used.
 /// If you want to use websockets rather than TCP see below.
 
-final client = MqttServerClient('test.mosquitto.org', '');
+final client = MqttServerClient('psp-sit138.harix.iamidata.com', '');
 
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -38,8 +38,10 @@ Future<int> main() async {
   /// setter, read the API docs for further details here, the vast majority of brokers will support the client default
   /// list so in most cases you can ignore this.
 
+  client.port = 20197;
+
   /// Set logging on if needed, defaults to off
-  client.logging(on: false);
+  client.logging(on: true);
 
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
@@ -65,11 +67,8 @@ Future<int> main() async {
   /// client identifier, any supplied username/password and clean session,
   /// an example of a specific one below.
   final connMess = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueId')
-      .withWillTopic('willtopic') // If you set this you must set a will message
-      .withWillMessage('My Will message')
-      .startClean() // Non persistent session for testing
-      .withWillQos(MqttQos.atLeastOnce);
+      .withClientIdentifier('mqttx_813c8b44')
+      .startClean(); // Non persistent session for testing
   print('EXAMPLE::Mosquitto client connecting....');
   client.connectionMessage = connMess;
 
