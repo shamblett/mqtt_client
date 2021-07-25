@@ -1,5 +1,5 @@
 #9.4.0
-PR 298, Issue 296
+PR 298, Issues 296, 299
 
 #9.3.2
 Issues 287 and 288 
