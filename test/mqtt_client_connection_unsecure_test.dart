@@ -184,7 +184,7 @@ void main() {
       final ka = MqttConnectionKeepAlive(ch, 2);
       broker.setMessageHandler = messageHandlerPingRequest;
       print(
-          'Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
+          'Connection Keep Alive - Successful response - keep alive ms is ${ka.keepAlivePeriod}');
       print(
           'Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer!.isActive.toString()}');
       final stopwatch = Stopwatch()..start();

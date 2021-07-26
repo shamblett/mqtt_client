@@ -24,7 +24,7 @@ class MqttConnectionKeepAlive {
       IMqttConnectionHandler connectionHandler, int keepAliveSeconds,
       [int disconnectOnNoResponsePeriod = 0]) {
     _connectionHandler = connectionHandler;
-    this.disconnectOnNoResponsePeriod = disconnectOnNoResponsePeriod;
+    this.disconnectOnNoResponsePeriod = disconnectOnNoResponsePeriod * 1000;
     keepAlivePeriod = keepAliveSeconds * 1000;
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
@@ -40,7 +40,7 @@ class MqttConnectionKeepAlive {
         ? MqttLogger.log(
             'MqttConnectionKeepAlive:: Disconnect on no ping response is disabled')
         : MqttLogger.log(
-            'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value ofg $disconnectOnNoResponsePeriod seconds');
+            'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds');
   }
 
   /// The keep alive period in  milliseconds
@@ -94,7 +94,7 @@ class MqttConnectionKeepAlive {
       MqttLogger.log(
           'MqttConnectionKeepAlive::pingRequired - starting disconnect timer');
       disconnectTimer = Timer(
-          Duration(milliseconds: disconnectOnNoResponsePeriod * 1000),
+          Duration(milliseconds: disconnectOnNoResponsePeriod),
           noPingResponseReceived);
     }
     _shutdownPadlock = false;
