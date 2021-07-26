@@ -46,7 +46,7 @@ class MqttConnectionKeepAlive {
   /// The keep alive period in  milliseconds
   late int keepAlivePeriod;
 
-  /// The period of time to wait if the broker does not respond to a ping request, in seconds.
+  /// The period of time to wait if the broker does not respond to a ping request, in milliseconds.
   /// If this time period is exceeded the client is forcibly disconnected.
   /// The default is 0, which disables this functionality.
   int disconnectOnNoResponsePeriod = 0;

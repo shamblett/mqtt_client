@@ -7,6 +7,7 @@
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:event_bus/event_bus.dart' as events;
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -14,6 +15,7 @@ import 'package:mockito/mockito.dart';
 
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {
+  MockCH(var clientEventBus, {required int? maxConnectionAttempts});
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 }
@@ -28,6 +30,13 @@ class MockKA extends Mock implements MqttConnectionKeepAlive {
 
 void main() {
   group('Normal operation', () {
-    test('Successful response', () async {});
+    test('Successful response', () async {
+      final clientEventBus = events.EventBus();
+      final ch = MockCH(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
+      final ka = MqttConnectionKeepAlive(ch, 2);
+    });
   });
 }
