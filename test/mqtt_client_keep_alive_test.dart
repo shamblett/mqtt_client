@@ -20,23 +20,59 @@ class MockCH extends Mock implements MqttServerConnectionHandler {
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 }
 
-class MockKA extends Mock implements MqttConnectionKeepAlive {
-  MockKA(IMqttConnectionHandler connectionHandler, int keepAliveSeconds) {
-    ka = MqttConnectionKeepAlive(connectionHandler, keepAliveSeconds);
-  }
-
-  late MqttConnectionKeepAlive ka;
-}
-
 void main() {
   group('Normal operation', () {
-    test('Successful response', () async {
+    test('Successful response - no pong callback', () async {
       final clientEventBus = events.EventBus();
       final ch = MockCH(
         clientEventBus,
         maxConnectionAttempts: 3,
       );
+      ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, 2);
+      verify(ch.registerForMessage(MqttMessageType.pingRequest, any)).called(1);
+      verify(ch.registerForMessage(MqttMessageType.pingResponse, any))
+          .called(1);
+      verify(ch.registerForAllSentMessages(ka.messageSent)).called(1);
+      expect(ka.pingTimer?.isActive, isTrue);
+      expect(ka.disconnectTimer, isNull);
+      await MqttUtilities.asyncSleep(3);
+      verify(ch.sendMessage(any)).called(1);
+      final pingMessageRx = MqttPingResponseMessage();
+      ka.pingResponseReceived(pingMessageRx);
+      ka.stop();
+      expect(ka.pingTimer?.isActive, isFalse);
+      expect(ka.disconnectTimer, isNull);
+    });
+    test('Successful response - pong callback', () async {
+      var pongCalled = false;
+      void pongCallback() {
+        pongCalled = true;
+      }
+
+      ;
+      final clientEventBus = events.EventBus();
+      final ch = MockCH(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
+      ch.connectionStatus.state = MqttConnectionState.connected;
+      final ka = MqttConnectionKeepAlive(ch, 2);
+      ka.pongCallback = pongCallback;
+      verify(ch.registerForMessage(MqttMessageType.pingRequest, any)).called(1);
+      verify(ch.registerForMessage(MqttMessageType.pingResponse, any))
+          .called(1);
+      verify(ch.registerForAllSentMessages(ka.messageSent)).called(1);
+      expect(ka.pingTimer?.isActive, isTrue);
+      expect(ka.disconnectTimer, isNull);
+      await MqttUtilities.asyncSleep(3);
+      verify(ch.sendMessage(any)).called(1);
+      final pingMessageRx = MqttPingResponseMessage();
+      ka.pingResponseReceived(pingMessageRx);
+      expect(pongCalled, isTrue);
+      ka.stop();
+      expect(ka.pingTimer?.isActive, isFalse);
+      expect(ka.disconnectTimer, isNull);
     });
   });
 }

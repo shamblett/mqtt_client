@@ -827,9 +827,7 @@ void main() {
 
     test('Chaining', () {
       final builder = MqttClientPayloadBuilder();
-      builder.addBool(val: true)
-        ..addByte(0x80)
-        ..addInt(10);
+      builder.addBool(val: true).addByte(0x80).addInt(10);
       expect(builder.length, 10);
       expect(
           builder.payload!.toList(), <int>[1, 0x80, 10, 0, 0, 0, 0, 0, 0, 0]);
