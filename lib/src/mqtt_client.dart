@@ -275,9 +275,13 @@ class MqttClient {
     if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
       MqttLogger.log(
           'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds');
-      keepAlive = MqttConnectionKeepAlive(connectionHandler, keepAlivePeriod);
+      keepAlive = MqttConnectionKeepAlive(
+          connectionHandler, clientEventBus, keepAlivePeriod);
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
+        clientEventBus
+            ?.on<DisconnectOnNoPingResponse>()
+            .listen(_disconnectOnNoPingResponse);
       }
     } else {
       MqttLogger.log('MqttClient::connect - keep alive is disabled');
@@ -389,6 +393,13 @@ class MqttClient {
   ///
   /// This method will disconnect regardless of the [autoReconnect] state.
   void disconnect() {
+    _disconnect(unsolicited: false);
+  }
+
+  /// Internal disconnect called when the keep alive mechanism has determined that
+  /// a ping response expected from the broker has not arrived in the specified
+  /// time period.
+  void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
     _disconnect(unsolicited: false);
   }
 
