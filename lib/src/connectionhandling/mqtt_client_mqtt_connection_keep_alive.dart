@@ -164,7 +164,7 @@ class MqttConnectionKeepAlive {
         MqttConnectionState.connected) {
       MqttLogger.log(
           'MqttConnectionKeepAlive::noPingResponseReceived - disconnecting');
-      _clientEventBus?.fire(DisconnectOnNoPingResponse);
+      _clientEventBus?.fire(DisconnectOnNoPingResponse());
     } else {
       MqttLogger.log(
           'MqttConnectionKeepAlive::noPingResponseReceived - not disconnecting, not connected');

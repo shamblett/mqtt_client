@@ -129,13 +129,13 @@ void main() {
     test('No response', () async {
       final clientEventBus = events.EventBus();
       var disconnect = false;
-      void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+      void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
       }
 
       clientEventBus
           .on<DisconnectOnNoPingResponse>()
-          .listen(_disconnectOnNoPingResponse);
+          .listen(disconnectOnNoPingResponse);
       final ch = MockCH(
         clientEventBus,
         maxConnectionAttempts: 3,

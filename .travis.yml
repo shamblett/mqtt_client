@@ -16,6 +16,7 @@ script:
   - pub run test test/mqtt_client_connection_ws_test.dart
   - pub run test test/mqtt_client_connection_autoreconnect_test.dart
   - pub run test test/mqtt_client_connection_autoreconnect_nobroker_test.dart
+  - pub run test test/mqtt_client_keep_alive_test.dart
 branches:
     only:
     - master
