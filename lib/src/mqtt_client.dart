@@ -131,6 +131,11 @@ class MqttClient {
   /// enable keep alive.
   int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
+  /// The period of time to wait if the broker does not respond to a ping request, in seconds.
+  /// If this time period is exceeded the client is forcibly disconnected.
+  /// The default is 0, which disables this functionality.
+  int disconnectOnNoResponsePeriod = 0;
+
   /// Handles everything to do with publication management.
   @protected
   PublishingManager? publishingManager;
@@ -275,8 +280,8 @@ class MqttClient {
     if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
       MqttLogger.log(
           'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds');
-      keepAlive = MqttConnectionKeepAlive(
-          connectionHandler, clientEventBus, keepAlivePeriod);
+      keepAlive = MqttConnectionKeepAlive(connectionHandler, clientEventBus,
+          keepAlivePeriod, disconnectOnNoResponsePeriod);
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
         clientEventBus
