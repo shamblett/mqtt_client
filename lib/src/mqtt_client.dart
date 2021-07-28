@@ -396,11 +396,11 @@ class MqttClient {
     _disconnect(unsolicited: false);
   }
 
-  /// Internal disconnect called when the keep alive mechanism has determined that
+  /// Called when the keep alive mechanism has determined that
   /// a ping response expected from the broker has not arrived in the specified
   /// time period.
   void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
-    _disconnect(unsolicited: false);
+    internalDisconnect();
   }
 
   /// Internal disconnect
