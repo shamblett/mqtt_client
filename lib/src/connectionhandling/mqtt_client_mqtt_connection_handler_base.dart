@@ -243,6 +243,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   void _performConnectionDisconnect() {
     MqttLogger.log(
         'MqttConnectionHandlerBase::_performConnectionDisconnect entered');
+    connection.disconect(auto: false);
     connectionStatus.state = MqttConnectionState.disconnected;
   }
 

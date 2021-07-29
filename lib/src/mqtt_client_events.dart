@@ -67,6 +67,12 @@ class Resubscribe {
   /// Constructor
   Resubscribe({this.fromAutoReconnect = false});
 
-  /// If set re sunscribe has been triggered from auto reconnect.
+  /// If set re subscribe has been triggered from auto reconnect.
   bool fromAutoReconnect = false;
+}
+
+/// Disconnect on keep alive on no ping response event
+class DisconnectOnNoPingResponse {
+  /// Constructor
+  DisconnectOnNoPingResponse();
 }

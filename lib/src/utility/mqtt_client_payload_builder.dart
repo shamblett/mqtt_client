@@ -7,7 +7,8 @@
 
 part of mqtt_client;
 
-/// Utility class to assist with the build in of message topic payloads.
+/// Utility class to assist with the building of message topic payloads.
+/// Implements the builder pattern, i.e. returns itself to allow chaining.
 class MqttClientPayloadBuilder {
   /// Construction
   MqttClientPayloadBuilder() {
@@ -23,72 +24,86 @@ class MqttClientPayloadBuilder {
   int get length => _payload!.length;
 
   /// Add a buffer
-  void addBuffer(typed.Uint8Buffer buffer) {
+  MqttClientPayloadBuilder addBuffer(typed.Uint8Buffer buffer) {
     _payload!.addAll(buffer);
+    return this;
   }
 
   /// Add byte, this will overflow on values > 2**8-1
-  void addByte(int val) {
+  MqttClientPayloadBuilder addByte(int val) {
     _payload!.add(val);
+    return this;
   }
 
   /// Add a bool, true is 1, false is 0
-  void addBool({required bool val}) {
+  MqttClientPayloadBuilder addBool({required bool val}) {
     val ? addByte(1) : addByte(0);
+    return this;
   }
 
-  /// Add a halfword, 16 bits, this will overflow on values > 2**16-1
-  void addHalf(int val) {
+  /// Add a half word, 16 bits, this will overflow on values > 2**16-1
+  MqttClientPayloadBuilder addHalf(int val) {
     final tmp = Uint16List.fromList(<int>[val]);
     _payload!.addAll(tmp.buffer.asInt8List());
+    return this;
   }
 
   /// Add a word, 32 bits, this will overflow on values > 2**32-1
-  void addWord(int val) {
+  MqttClientPayloadBuilder addWord(int val) {
     final tmp = Uint32List.fromList(<int>[val]);
     _payload!.addAll(tmp.buffer.asInt8List());
+    return this;
   }
 
   /// Add a long word, 64 bits or a Dart int
-  void addInt(int val) {
+  MqttClientPayloadBuilder addInt(int val) {
     final tmp = Uint64List.fromList(<int>[val]);
     _payload!.addAll(tmp.buffer.asInt8List());
+    return this;
   }
 
   /// Add a standard Dart string
-  void addString(String val) {
+  MqttClientPayloadBuilder addString(String val) {
     addUTF16String(val);
+    return this;
   }
 
   /// Add a UTF16 string, note Dart natively encodes strings as UTF16
-  void addUTF16String(String val) {
-    for (final codeunit in val.codeUnits) {
-      if (codeunit <= 255 && codeunit >= 0) {
-        _payload!.add(codeunit);
+  MqttClientPayloadBuilder addUTF16String(String val) {
+    for (final codeUnit in val.codeUnits) {
+      if (codeUnit <= 255 && codeUnit >= 0) {
+        _payload!.add(codeUnit);
       } else {
-        addHalf(codeunit);
+        addHalf(codeUnit);
       }
     }
+    return this;
   }
 
   /// Add a UTF8 string
-  void addUTF8String(String val) {
+  MqttClientPayloadBuilder addUTF8String(String val) {
     const encoder = Utf8Encoder();
     _payload!.addAll(encoder.convert(val));
+    return this;
   }
 
   /// Add a 32 bit double
-  void addHalfDouble(double val) {
+  MqttClientPayloadBuilder addHalfDouble(double val) {
     final tmp = Float32List.fromList(<double>[val]);
     _payload!.addAll(tmp.buffer.asInt8List());
+    return this;
   }
 
   /// Add a 64 bit double
-  void addDouble(double val) {
+  MqttClientPayloadBuilder addDouble(double val) {
     final tmp = Float64List.fromList(<double>[val]);
     _payload!.addAll(tmp.buffer.asInt8List());
+    return this;
   }
 
   /// Clear the buffer
-  void clear() => _payload!.clear();
+  MqttClientPayloadBuilder clear() {
+    _payload!.clear();
+    return this;
+  }
 }

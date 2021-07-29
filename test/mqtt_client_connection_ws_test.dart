@@ -108,9 +108,9 @@ void main() {
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, MqttConnectionState.connected);
       brokerWs.setMessageHandler = messageHandlerPingRequest;
-      final ka = MqttConnectionKeepAlive(ch, 2);
+      final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
       print(
-          'WS Connection Keep Alive - Successful response - keepealive ms is ${ka.keepAlivePeriod}');
+          'WS Connection Keep Alive - Successful response - keep alive ms is ${ka.keepAlivePeriod}');
       print(
           'WS Connection Keep Alive - Successful response - ping timer active is ${ka.pingTimer!.isActive.toString()}');
       final stopwatch = Stopwatch()..start();
