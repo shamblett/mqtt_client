@@ -46,6 +46,9 @@ Future<int> main() async {
 
   /// Set the ping response disconnect period, if a ping response is not received from the broker in this period
   /// the client will disconnect itself.
+  /// Note you should somehow get your broker to stop sending ping responses without forcing a disconnect at the
+  /// network level to run this example. On way to do this if you are using a wired network connection is to pull
+  /// the wire, on some platforms no network events will be generated until the wire is re inserted.
   client.disconnectOnNoResponsePeriod = 1;
 
   /// Add the unsolicited disconnection callback
@@ -150,7 +153,7 @@ Future<int> main() async {
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
-  print('EXAMPLE::Sleeping....');
+  print('EXAMPLE::Sleeping...., turn off ping responses here');
   await MqttUtilities.asyncSleep(120);
 
   /// Finally, unsubscribe and exit gracefully

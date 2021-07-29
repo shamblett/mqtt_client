@@ -131,9 +131,11 @@ class MqttClient {
   /// enable keep alive.
   int keepAlivePeriod = MqttClientConstants.defaultKeepAlive;
 
-  /// The period of time to wait if the broker does not respond to a ping request, in seconds.
+  /// The period of time to wait if the broker does not respond to a ping request
+  /// from keep alive processing, in seconds.
   /// If this time period is exceeded the client is forcibly disconnected.
   /// The default is 0, which disables this functionality.
+  /// Thi setting has no effect if keep alive is disabled.
   int disconnectOnNoResponsePeriod = 0;
 
   /// Handles everything to do with publication management.
@@ -402,9 +404,11 @@ class MqttClient {
   }
 
   /// Called when the keep alive mechanism has determined that
-  /// a ping response expected from the broker has not arrived in the specified
-  /// time period.
+  /// a ping response expected from the broker has not arrived in the
+  /// time period specified by [disconnectOnNoResponsePeriod].
   void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+    MqttLogger.log(
+        'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds');
     internalDisconnect();
   }
 
