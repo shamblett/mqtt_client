@@ -163,8 +163,15 @@ class MqttConnectionKeepAlive {
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::noPingResponseReceived - disconnecting');
-      _clientEventBus?.fire(DisconnectOnNoPingResponse());
+          'MqttConnectionKeepAlive::noPingResponseReceived - connected, attempting to disconnect');
+      if (_clientEventBus != null) {
+        _clientEventBus!.fire(DisconnectOnNoPingResponse());
+        MqttLogger.log(
+            'MqttConnectionKeepAlive::noPingResponseReceived - OK - disconnect event fired');
+      } else {
+        MqttLogger.log(
+            'MqttConnectionKeepAlive::noPingResponseReceived - ERROR - disconnect event not fired, no event handler');
+      }
     } else {
       MqttLogger.log(
           'MqttConnectionKeepAlive::noPingResponseReceived - not disconnecting, not connected');

@@ -286,9 +286,6 @@ class MqttClient {
           keepAlivePeriod, disconnectOnNoResponsePeriod);
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
-        clientEventBus
-            ?.on<DisconnectOnNoPingResponse>()
-            .listen(_disconnectOnNoPingResponse);
       }
     } else {
       MqttLogger.log('MqttClient::connect - keep alive is disabled');
@@ -406,7 +403,7 @@ class MqttClient {
   /// Called when the keep alive mechanism has determined that
   /// a ping response expected from the broker has not arrived in the
   /// time period specified by [disconnectOnNoResponsePeriod].
-  void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+  void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
     MqttLogger.log(
         'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds');
     internalDisconnect();
