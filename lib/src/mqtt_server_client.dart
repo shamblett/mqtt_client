@@ -60,6 +60,9 @@ class MqttServerClient extends MqttClient {
       [String? username, String? password]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
+    clientEventBus
+        ?.on<DisconnectOnNoPingResponse>()
+        .listen(disconnectOnNoPingResponse);
     connectionHandler = SynchronousMqttServerConnectionHandler(
       clientEventBus,
       maxConnectionAttempts: maxConnectionAttempts,
