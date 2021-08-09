@@ -36,7 +36,7 @@ class MqttServerConnection extends MqttConnectionBase {
   void _startListening() {
     MqttLogger.log('MqttServerConnection::_startListening');
     try {
-      client.listen(_onData, onError: onError, onDone: onDone);
+      listener = client.listen(_onData, onError: onError, onDone: onDone);
     } on Exception catch (e) {
       print('MqttServerConnection::_startListening - exception raised $e');
     }

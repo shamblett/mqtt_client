@@ -98,16 +98,20 @@ class MqttConnectionKeepAlive {
       if (disconnectTimer == null) {
         MqttLogger.log(
             'MqttConnectionKeepAlive::pingRequired - starting disconnect timer');
-        disconnectTimer = Timer(
-            Duration(milliseconds: disconnectOnNoResponsePeriod),
-            noPingResponseReceived);
-      } else {
-        if (disconnectTimer != null && !disconnectTimer!.isActive) {
-          MqttLogger.log(
-              'MqttConnectionKeepAlive::pingRequired - restarting disconnect timer');
+        if (pinged) {
           disconnectTimer = Timer(
               Duration(milliseconds: disconnectOnNoResponsePeriod),
               noPingResponseReceived);
+        }
+      } else {
+        if (disconnectTimer != null && !disconnectTimer!.isActive) {
+          if (pinged) {
+            MqttLogger.log(
+                'MqttConnectionKeepAlive::pingRequired - restarting disconnect timer');
+            disconnectTimer = Timer(
+                Duration(milliseconds: disconnectOnNoResponsePeriod),
+                noPingResponseReceived);
+          }
         } else {
           MqttLogger.log(
               'MqttConnectionKeepAlive::pingRequired - disconnect timer is active, not restarting');
