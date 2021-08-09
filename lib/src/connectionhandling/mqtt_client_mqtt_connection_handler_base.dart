@@ -184,6 +184,11 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     }
   }
 
+  @override
+  void stopListening() {
+    connection.stopListening();
+  }
+
   /// Registers for the receipt of messages when they arrive.
   @override
   void registerForMessage(

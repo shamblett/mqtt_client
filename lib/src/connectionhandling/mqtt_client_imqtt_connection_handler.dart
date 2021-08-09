@@ -49,6 +49,9 @@ abstract class IMqttConnectionHandler {
   /// Closes a connection.
   void close();
 
+  /// Kills all listeners from old connections.
+  void stopListening();
+
   /// Connects to a message broker
   /// The broker server to connect to
   /// The port to connect to

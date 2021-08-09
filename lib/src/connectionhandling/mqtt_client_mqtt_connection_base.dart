@@ -86,6 +86,12 @@ class MqttConnectionBase {
     }
   }
 
+  void stopListening() {
+    if (client != null) {
+      listener.cancel();
+    }
+  }
+
   /// User requested or auto disconnect disconnection
   @protected
   void disconnect({bool auto = false}) {

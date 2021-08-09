@@ -446,6 +446,7 @@ class MqttClient {
       connectionHandler?.disconnect();
       disconnectOrigin = MqttDisconnectionOrigin.solicited;
     }
+    connectionHandler?.stopListening();
     publishingManager?.published.close();
     publishingManager = null;
     subscriptionsManager = null;
