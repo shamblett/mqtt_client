@@ -158,4 +158,36 @@ void main() {
       expect(ka.disconnectTimer?.isActive, isFalse);
     });
   });
+  group('Not connected', () {
+    test('No ping sent', () async {
+      final clientEventBus = events.EventBus();
+      var disconnect = false;
+      void _disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+        disconnect = true;
+      }
+
+      clientEventBus
+          .on<DisconnectOnNoPingResponse>()
+          .listen(_disconnectOnNoPingResponse);
+      final ch = MockCH(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
+      ch.connectionStatus.state = MqttConnectionState.disconnected;
+      final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
+      verify(ch.registerForMessage(MqttMessageType.pingRequest, any)).called(1);
+      verify(ch.registerForMessage(MqttMessageType.pingResponse, any))
+          .called(1);
+      verify(ch.registerForAllSentMessages(ka.messageSent)).called(1);
+      expect(ka.pingTimer?.isActive, isTrue);
+      expect(ka.disconnectTimer, isNull);
+      await MqttUtilities.asyncSleep(3);
+      verifyNever(ch.sendMessage(any));
+      expect(disconnect, isFalse);
+      expect(ka.disconnectTimer, isNull);
+      ka.stop();
+      expect(ka.pingTimer?.isActive, isFalse);
+      expect(ka.disconnectTimer, isNull);
+    });
+  });
 }

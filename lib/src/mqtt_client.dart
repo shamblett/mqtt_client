@@ -406,6 +406,8 @@ class MqttClient {
   void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
     MqttLogger.log(
         'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds');
+    // Destroy the existing client socket
+    connectionHandler?.connection?.disconnect();
     internalDisconnect();
   }
 
@@ -446,6 +448,7 @@ class MqttClient {
       connectionHandler?.disconnect();
       disconnectOrigin = MqttDisconnectionOrigin.solicited;
     }
+    connectionHandler?.stopListening();
     publishingManager?.published.close();
     publishingManager = null;
     subscriptionsManager = null;

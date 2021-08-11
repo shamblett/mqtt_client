@@ -10,7 +10,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-/// An annotated simple auto reconnect usage example for mqtt_server_client.
+/// An annotated simple auto reconnect from no ping response usage example for mqtt_server_client.
 
 /// First create a client, the client is constructed with a broker name, client identifier
 /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
@@ -22,11 +22,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// of 1883 is used.
 /// If you want to use websockets rather than TCP see below.
 
-/// To test the auto reconnect feature this example uses a Mosquitto broker running on local host, any will do
-/// as long as you can break its connection to this process. You could wait for the first pong callback to print out
-/// (these are every 5 seconds) then stop/break connection to the server and reinstate it.
-///
-final client = MqttServerClient('localhost', '');
+/// To test the auto reconnect on no ping response feature this example uses a test Mosquitto broker, any will do
+/// as long as you can stop it sending ping responses.
+final client = MqttServerClient('test.mosquitto.org', '');
 
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -43,15 +41,18 @@ Future<int> main() async {
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
 
-  /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
-  client.keepAlivePeriod = 5;
+  /// Set keep alive.
+  client.keepAlivePeriod = 2;
+
+  /// Set the ping response disconnect period, if a ping response is not received from the broker in this period
+  /// the client will disconnect itself.
+  /// Note you should somehow get your broker to stop sending ping responses without forcing a disconnect at the
+  /// network level to run this example. On way to do this if you are using a wired network connection is to pull
+  /// the wire, on some platforms no network events will be generated until the wire is re inserted.
+  client.disconnectOnNoResponsePeriod = 1;
 
   /// Set auto reconnect
   client.autoReconnect = true;
-
-  /// If you do not want active confirmed subscriptions to be automatically re subscribed
-  /// by the auto connect sequence do the following, otherwise leave this defaulted.
-  client.resubscribeOnAutoReconnect = false;
 
   /// Add an auto reconnect callback.
   /// This is the 'pre' auto re connect callback, called before the sequence starts.
@@ -198,5 +199,5 @@ void onConnected() {
 /// Pong callback
 void pong() {
   print(
-      'EXAMPLE::Ping response client callback invoked - you may want to disconnect your broker here');
+      'EXAMPLE::Ping response client callback invoked - you may want to stop your ping responses here');
 }
