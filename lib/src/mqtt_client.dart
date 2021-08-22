@@ -376,9 +376,12 @@ class MqttClient {
     }
   }
 
-  /// Unsubscribe from a topic
-  void unsubscribe(String topic) {
-    subscriptionsManager!.unsubscribe(topic);
+  /// Unsubscribe from a topic.
+  /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
+  /// the [expectAcknowledge] parameter for this, default is false.
+  void unsubscribe(String topic, {expectAcknowledge = false}) {
+    subscriptionsManager!
+        .unsubscribe(topic, expectAcknowledge: expectAcknowledge);
   }
 
   /// Gets the current status of a subscription.

@@ -132,12 +132,17 @@ class SubscriptionsManager {
     _subscriptionNotifier.add([msg]);
   }
 
-  /// Unsubscribe from a topic
-  void unsubscribe(String topic) {
+  /// Unsubscribe from a topic.
+  /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
+  /// the [expectAcknowledge] parameter for this, default is false.
+  void unsubscribe(String topic, {expectAcknowledge = false}) {
     final unsubscribeMsg = MqttUnsubscribeMessage()
         .withMessageIdentifier(
             messageIdentifierDispenser.getNextMessageIdentifier())
         .fromTopic(topic);
+    if (expectAcknowledge) {
+      unsubscribeMsg.expectAcknowledgement();
+    }
     connectionHandler!.sendMessage(unsubscribeMsg);
     pendingUnsubscriptions[unsubscribeMsg.variableHeader!.messageIdentifier] =
         topic;
