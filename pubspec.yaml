@@ -1,6 +1,6 @@
 name: mqtt_client
 description: A server and browser based MQTT client for Dart supporting normal, secure sockets and websockets.
-version: 9.6.0
+version: 9.6.1
 homepage: https://github.com/shamblett/mqtt_client
 
 environment:

@@ -151,7 +151,8 @@ class MqttServerWs2Connection extends MqttServerConnection {
           messageStream = MqttByteBuffer(typed.Uint8Buffer());
           MqttLogger.log('MqttWs2Connection::connect - start listening');
           _startListening();
-          completer.complete();
+          completer.complete(MqttClientConnectionStatus()
+            ..state = MqttConnectionState.connected);
         }).catchError((dynamic e) {
           onError(e);
           completer.completeError(e);
