@@ -23,7 +23,7 @@ class MqttConnectionBase {
 
   /// The stream controller as returned when clients listen.
   @protected
-  late StreamSubscription listener;
+  StreamSubscription? listener;
 
   /// The read wrapper
   @protected
@@ -79,7 +79,7 @@ class MqttConnectionBase {
 
   void _disconnect() {
     if (client != null) {
-      listener.cancel();
+      listener?.cancel();
       client.destroy();
       client.close();
       client = null;
@@ -88,7 +88,7 @@ class MqttConnectionBase {
 
   void stopListening() {
     if (client != null) {
-      listener.cancel();
+      listener?.cancel();
     }
   }
 

@@ -107,6 +107,8 @@ void main() {
         ok = false;
       }
       expect(ok, isTrue);
+      client.disconnect();
+      expect(client.connectionStatus!.state, MqttConnectionState.disconnected);
     });
   });
 }
