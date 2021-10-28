@@ -180,7 +180,10 @@ class MqttVariableHeader {
 
   /// Return code
   void readReturnCode(MqttByteBuffer stream) {
-    returnCode = MqttConnectReturnCode.values[stream.readByte()];
+    var rawCode = stream.readByte();
+    var noneSpecifiedIndex = MqttConnectReturnCode.noneSpecified.index;
+    rawCode = rawCode > noneSpecifiedIndex ? noneSpecifiedIndex : rawCode;
+    returnCode = MqttConnectReturnCode.values[rawCode];
     length++;
   }
 
