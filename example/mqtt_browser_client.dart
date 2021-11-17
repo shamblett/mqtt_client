@@ -52,6 +52,11 @@ Future<int> main() async {
   /// from the broker.
   client.pongCallback = pong;
 
+  /// Set the appropriate websocket headers for your connection/broker.
+  /// Mosquito uses the single default header, other brokers may be fine with the
+  /// default headers.
+  client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
+
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password and clean session,
   /// an example of a specific one below.
