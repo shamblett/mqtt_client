@@ -20,7 +20,7 @@ class MqttClientTopicFilter {
     _subscriptionTopic = SubscriptionTopic(_topic);
     _clientUpdates!.listen(_topicIn);
     _updates =
-        StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
+        StreamController<List<MqttReceivedMessage<MqttMessage?>>>.broadcast(
             sync: true);
   }
 
