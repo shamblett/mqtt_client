@@ -89,6 +89,8 @@ class MqttConnectionBase {
   void stopListening() {
     if (client != null) {
       listener?.cancel();
+      client.destroy();
+      client.close();
     }
   }
 

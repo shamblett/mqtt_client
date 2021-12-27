@@ -450,6 +450,7 @@ class MqttClient {
     if (!unsolicited) {
       connectionHandler?.disconnect();
       disconnectOrigin = MqttDisconnectionOrigin.solicited;
+      connectionHandler?.stopListening();
     }
 
     publishingManager?.published.close();

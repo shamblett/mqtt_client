@@ -14,6 +14,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// tests QOS1 protocol handling when manual acknowledgement is in force.
 Future<int> main() async {
   final client = MqttServerClient('test.mosquitto.org', '');
+
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
   client.logging(on: false);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;

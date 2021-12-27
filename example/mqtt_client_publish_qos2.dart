@@ -14,6 +14,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// tests QOS2 protocol handling.
 Future<int> main() async {
   final client = MqttServerClient('test.mosquitto.org', '');
+
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
   client.logging(on: true);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;

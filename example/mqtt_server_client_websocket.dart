@@ -38,6 +38,9 @@ Future<int> main() async {
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
 
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
+
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
 
