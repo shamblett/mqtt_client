@@ -89,7 +89,12 @@ class MqttConnectionBase {
   void stopListening() {
     if (client != null) {
       listener?.cancel();
-      client.destroy();
+      try {
+        client.destroy();
+      } on NoSuchMethodError {
+        MqttLogger.log(
+            'MqttConnectionBase::stopListening - cannot destroy socket, maybe a websocket');
+      }
       client.close();
     }
   }

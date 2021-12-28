@@ -33,7 +33,7 @@ Future<int> main() async {
   // Set the protocol to V3.1.1 for AWS IoT Core, if you fail to do this you will receive a connect ack with the response code
   client.setProtocolV311();
   // logging if you wish
-  client.logging(on: true);
+  client.logging(on: false);
 
   // Set the security context as you need, note this is the standard Dart SecurityContext class.
   // If this is incorrect the TLS handshake will abort and a Handshake exception will be raised,
@@ -59,6 +59,7 @@ Future<int> main() async {
   } on Exception catch (e) {
     print('MQTT client exception - $e');
     client.disconnect();
+    exit(-1);
   }
 
   if (client.connectionStatus!.state == MqttConnectionState.connected) {

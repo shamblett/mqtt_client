@@ -39,7 +39,7 @@ Future<int> main() async {
   /// list so in most cases you can ignore this.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
@@ -92,10 +92,12 @@ Future<int> main() async {
     // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
     client.disconnect();
+    exit(-1);
   } on SocketException catch (e) {
     // Raised by the socket layer
     print('EXAMPLE::socket exception - $e');
     client.disconnect();
+    exit(-1);
   }
 
   /// Check we are connected
@@ -157,7 +159,7 @@ Future<int> main() async {
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
   print('EXAMPLE::Sleeping...., turn off ping responses here');
-  await MqttUtilities.asyncSleep(120);
+  await MqttUtilities.asyncSleep(60);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
@@ -182,7 +184,6 @@ void onDisconnected() {
       MqttDisconnectionOrigin.unsolicited) {
     print('EXAMPLE::OnDisconnected callback is unsolicited, this is correct');
   }
-  exit(-1);
 }
 
 /// The successful connect callback

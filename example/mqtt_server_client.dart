@@ -177,6 +177,10 @@ void onDisconnected() {
   if (client.connectionStatus!.disconnectionOrigin ==
       MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+  } else {
+    print(
+        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
+    exit(-1);
   }
   if (pongCount == 3) {
     print('EXAMPLE:: Pong count is correct');

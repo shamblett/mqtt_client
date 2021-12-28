@@ -88,6 +88,7 @@ Future<int> main() async {
   } on Exception catch (e) {
     print('EXAMPLE::client exception - $e');
     client.disconnect();
+    exit(-1);
   }
 
   /// Check we are connected
@@ -149,7 +150,7 @@ Future<int> main() async {
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(120);
+  await MqttUtilities.asyncSleep(60);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
@@ -174,7 +175,6 @@ void onDisconnected() {
       MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   }
-  exit(-1);
 }
 
 /// The successful connect callback

@@ -17,7 +17,7 @@ Future<int> main() async {
 
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
-  client.logging(on: true);
+  client.logging(on: false);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
@@ -55,7 +55,6 @@ Future<int> main() async {
   const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
-  // ignore: avoid_annotating_with_dynamic
   client.updates!.listen((dynamic c) {
     final MqttPublishMessage recMess = c[0].payload;
     final pt =
@@ -105,5 +104,4 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
-  exit(-1);
 }
