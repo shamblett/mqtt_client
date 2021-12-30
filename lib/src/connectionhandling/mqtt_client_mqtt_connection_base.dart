@@ -86,18 +86,9 @@ class MqttConnectionBase {
     }
   }
 
-  void stopListening() {
-    if (client != null) {
-      listener?.cancel();
-      try {
-        client.destroy();
-      } on NoSuchMethodError {
-        MqttLogger.log(
-            'MqttConnectionBase::stopListening - cannot destroy socket, maybe a websocket');
-      }
-      client.close();
-    }
-  }
+  /// Stops listening and closes the socket immediately, must be overridden in
+  /// connection classes
+  void stopListening() {}
 
   /// User requested or auto disconnect disconnection
   @protected

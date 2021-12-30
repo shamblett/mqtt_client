@@ -146,4 +146,13 @@ class MqttServerWsConnection extends MqttServerConnection {
       client = null;
     }
   }
+
+  /// Stops listening and closes the socket immediately.
+  @override
+  void stopListening() {
+    if (client != null) {
+      listener?.cancel();
+      client.close();
+    }
+  }
 }
