@@ -1,3 +1,6 @@
+#9.6.4
+Issue 344, added SBOM
+
 #9.6.3
 PR 339
 

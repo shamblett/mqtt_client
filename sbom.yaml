@@ -1,0 +1,4 @@
+type: spdx
+
+spdx:
+  SPDXFormat: 'tagvalue'
