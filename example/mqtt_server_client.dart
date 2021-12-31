@@ -26,6 +26,8 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 final client = MqttServerClient('test.mosquitto.org', '');
 
+var pongCount = 0; // Pong counter
+
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
   /// for details.
@@ -40,6 +42,9 @@ Future<int> main() async {
 
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
+
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
 
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
@@ -147,7 +152,7 @@ Future<int> main() async {
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(120);
+  await MqttUtilities.asyncSleep(60);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
@@ -157,6 +162,7 @@ Future<int> main() async {
   await MqttUtilities.asyncSleep(2);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
+  print('EXAMPLE::Exiting normally');
   return 0;
 }
 
@@ -171,17 +177,26 @@ void onDisconnected() {
   if (client.connectionStatus!.disconnectionOrigin ==
       MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+  } else {
+    print(
+        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
+    exit(-1);
   }
-  exit(-1);
+  if (pongCount == 3) {
+    print('EXAMPLE:: Pong count is correct');
+  } else {
+    print('EXAMPLE:: Pong count is incorrect, expected 3. actual $pongCount');
+  }
 }
 
 /// The successful connect callback
 void onConnected() {
   print(
-      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+      'EXAMPLE::OnConnected client callback - Client connection was successful');
 }
 
 /// Pong callback
 void pong() {
   print('EXAMPLE::Ping response client callback invoked');
+  pongCount++;
 }

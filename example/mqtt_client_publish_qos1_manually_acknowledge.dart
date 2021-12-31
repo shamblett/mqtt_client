@@ -14,6 +14,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// tests QOS1 protocol handling when manual acknowledgement is in force.
 Future<int> main() async {
   final client = MqttServerClient('test.mosquitto.org', '');
+
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
   client.logging(on: false);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;
@@ -54,7 +57,6 @@ Future<int> main() async {
   client.subscribe(topic2, MqttQos.atLeastOnce);
   const topic3 = 'SJHTopic3'; // Not a wildcard topic - no subscription
 
-  // ignore: avoid_annotating_with_dynamic
   try {
     client.updates!.listen((dynamic c) {
       final MqttPublishMessage recMess = c[0].payload;
@@ -112,7 +114,7 @@ Future<int> main() async {
   await MqttUtilities.asyncSleep(60);
 
   print('EXAMPLE::Unsubscribing');
-  //client.unsubscribe(topic1);
+  client.unsubscribe(topic1);
   client.unsubscribe(topic2);
 
   await MqttUtilities.asyncSleep(10);
@@ -129,5 +131,4 @@ void onSubscribed(String topic) {
 /// The unsolicited disconnect callback
 void onDisconnected() {
   print('EXAMPLE::OnDisconnected client callback - Client disconnection');
-  exit(-1);
 }

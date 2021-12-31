@@ -32,11 +32,14 @@ Future<int> main() async {
   client.port = 8080; // ( or whatever your ws port is)
   /// You can also supply your own websocket protocol list or disable this feature using the websocketProtocols
   /// setter, read the API docs for further details here, the vast majority of brokers will support the client default
-  /// list so in most cases you can ignore this.
-  /// client.websocketProtocols = ['myString'];
+  /// list so in most cases you can ignore this. Mosquito needs the single default setting.
+  client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
 
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
+
+  /// Set the correct MQTT protocol for mosquito
+  client.setProtocolV311();
 
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
@@ -79,10 +82,12 @@ Future<int> main() async {
     // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
     client.disconnect();
+    exit(-1);
   } on SocketException catch (e) {
     // Raised by the socket layer
     print('EXAMPLE::socket exception - $e');
     client.disconnect();
+    exit(-1);
   }
 
   /// Check we are connected
@@ -144,7 +149,7 @@ Future<int> main() async {
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(120);
+  await MqttUtilities.asyncSleep(60);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
@@ -169,7 +174,6 @@ void onDisconnected() {
       MqttDisconnectionOrigin.solicited) {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   }
-  exit(-1);
 }
 
 /// The successful connect callback

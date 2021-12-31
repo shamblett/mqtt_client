@@ -110,4 +110,13 @@ class MqttBrowserConnection extends MqttConnectionBase {
     var bData = ByteData.view(buffer);
     client?.sendTypedData(bData);
   }
+
+  /// Stops listening and closes the socket immediately.
+  @override
+  void stopListening() {
+    if (client != null) {
+      listener?.cancel();
+      client.close();
+    }
+  }
 }

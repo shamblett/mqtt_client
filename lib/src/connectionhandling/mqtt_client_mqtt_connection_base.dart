@@ -86,11 +86,9 @@ class MqttConnectionBase {
     }
   }
 
-  void stopListening() {
-    if (client != null) {
-      listener?.cancel();
-    }
-  }
+  /// Stops listening and closes the socket immediately, must be overridden in
+  /// connection classes
+  void stopListening() {}
 
   /// User requested or auto disconnect disconnection
   @protected

@@ -94,4 +94,14 @@ class MqttServerConnection extends MqttConnectionBase {
     final messageBytes = message.read(message.length);
     client?.add(messageBytes.toList());
   }
+
+  /// Stops listening and closes the socket immediately.
+  @override
+  void stopListening() {
+    if (client != null) {
+      listener?.cancel();
+      client.destroy();
+      client.close();
+    }
+  }
 }
