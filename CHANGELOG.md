@@ -1,3 +1,6 @@
+#9.6.5
+Issue 344 browser client fix
+
 #9.6.4
 Issue 344, added SBOM
 
