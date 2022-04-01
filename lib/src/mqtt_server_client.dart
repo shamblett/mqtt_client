@@ -72,6 +72,9 @@ class MqttServerClient extends MqttClient {
       connectionHandler.useWebSocket = true;
       connectionHandler.useAlternateWebSocketImplementation =
           useAlternateWebSocketImplementation;
+      if (connectionHandler.useAlternateWebSocketImplementation) {
+        connectionHandler.securityContext = securityContext;
+      }
       if (websocketProtocolString != null) {
         connectionHandler.websocketProtocols = websocketProtocolString;
       }
