@@ -3,8 +3,15 @@
 # The commented part below is just for inspiration. Read the guide here:
 #   https://www.dartlang.org/guides/language/analysis-options
 
-include: package:pedantic/analysis_options.yaml
+include: package:lints/recommended.yaml
 
 analyzer:
   exclude:
     - test/issues/**
+
+linter:
+  rules:
+    - always_declare_return_types
+    - prefer_single_quotes
+    - unawaited_futures
+    - overridden_fields: false

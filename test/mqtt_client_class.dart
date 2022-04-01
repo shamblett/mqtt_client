@@ -29,7 +29,7 @@ bool pingServer(String server) {
       print('PUB_ENVIRONMENT is $noPing');
     }
   }
-  final result = Process.runSync('ping', <String>['-c3', '$server']);
+  final result = Process.runSync('ping', <String>['-c3', server]);
   //Get the exit code from the new process.
   if (result.exitCode == 0) {
     return false;
