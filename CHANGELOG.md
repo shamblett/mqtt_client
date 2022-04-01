@@ -1,3 +1,6 @@
+#9.6.6
+PR 367
+
 #9.6.5
 Issue 344 browser client fix
 
