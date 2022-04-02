@@ -11,7 +11,7 @@ analyzer:
 
 linter:
   rules:
+    - overridden_fields: false
     - always_declare_return_types
     - prefer_single_quotes
     - unawaited_futures
-    - overridden_fields: false
