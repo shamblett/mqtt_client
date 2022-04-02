@@ -1,5 +1,5 @@
 # mqtt_client
-[![Build Status](https://travis-ci.org/shamblett/mqtt_client.svg?branch=master)](https://travis-ci.org/shamblett/mqtt_client)
+[![Build Status](https://github.com/shamblett/mqtt_client/actions/workflows/ci.yml/badge.svg)](https://github.com/shamblett/mqtt_client/actions/workflows/ci.yml)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshamblett%2Fmqtt_client.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshamblett%2Fmqtt_client?ref=badge_shield)
 
 A server and browser based MQTT client for Dart.
