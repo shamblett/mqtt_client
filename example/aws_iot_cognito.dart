@@ -122,7 +122,6 @@ Future<int> main() async {
   // AWS IoT MQTT default port for websockets
   const port = 443;
   // Your AWS IoT Core control API endpoint (https://docs.aws.amazon.com/general/latest/gr/iot-core.html#iot-core-control-plane-endpoints)
-  // Make sure that the the credentials that call this API have the right IAM permissions for AttachPolicy (https://docs.aws.amazon.com/iot/latest/apireference/API_AttachPolicy.html)
   const iotApiUrl = 'https://iot.$region.amazonaws.com/target-policies';
   // The AWS IOT Core policy name that you want to attach to the identity
   const policyName = '<iot-policy-name>';
@@ -139,6 +138,7 @@ Future<int> main() async {
   // When using Cognito Federated identity pools, there are AUTHENTICATED and UNAUTHENTICATED (guest) identities (https://docs.aws.amazon.com/cognito/latest/developerguide/identity-pools.html).
   // You MUST attach a policy for an AUTHENTICATED user to allow access to iot core (regular cognito or federated id)
   // You CAN attach a policy to an UNAUTHENTICATED user for control, but this is not necessary
+  // Make sure that the the credentials that call this API have the right IAM permissions for AttachPolicy (https://docs.aws.amazon.com/iot/latest/apireference/API_AttachPolicy.html)
   if (!await attachPolicy(
       accessKey: accessKey,
       secretKey: secretKey,
