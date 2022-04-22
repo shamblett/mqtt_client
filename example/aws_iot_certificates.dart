@@ -12,6 +12,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 
 /// An example of connecting to the AWS IoT Core MQTT broker and publishing to a devices topic.
+/// This example uses MQTT on port 8883 using certificites
 /// More instructions can be found at https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html and
 /// https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html, please read this
 /// before setting up and running this example.
@@ -30,7 +31,7 @@ Future<int> main() async {
   client.secure = true;
   // Set Keep-Alive
   client.keepAlivePeriod = 20;
-  // Set the protocol to V3.1.1 for AWS IoT Core, if you fail to do this you will receive a connect ack with the response code
+  // Set the protocol to V3.1.1 for AWS IoT Core, if you fail to do this you will not receive a connect ack with the response code
   client.setProtocolV311();
   // logging if you wish
   client.logging(on: false);
@@ -54,7 +55,7 @@ Future<int> main() async {
 
   // Connect the client
   try {
-    print('MQTT client connecting to AWS IoT....');
+    print('MQTT client connecting to AWS IoT using certificates....');
     await client.connect();
   } on Exception catch (e) {
     print('MQTT client exception - $e');
