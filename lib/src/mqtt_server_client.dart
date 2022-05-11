@@ -63,6 +63,9 @@ class MqttServerClient extends MqttClient {
     clientEventBus
         ?.on<DisconnectOnNoPingResponse>()
         .listen(disconnectOnNoPingResponse);
+    clientEventBus
+        ?.on<DisconnectOnNoMessageSent>()
+        .listen(disconnectOnNoMessageSent);
     connectionHandler = SynchronousMqttServerConnectionHandler(
       clientEventBus,
       maxConnectionAttempts: maxConnectionAttempts,

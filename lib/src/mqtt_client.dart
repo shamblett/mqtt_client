@@ -414,6 +414,17 @@ class MqttClient {
     internalDisconnect();
   }
 
+  /// Called when the send message function throws exception
+  /// a ping response expected from the broker has not arrived in the
+  /// time period specified by [disconnectOnNoResponsePeriod].
+  void disconnectOnNoMessageSent(DisconnectOnNoMessageSent event) {
+    MqttLogger.log(
+        'MqttClient::disconnectOnNoMessageSent - disconnecting, no message sent due to exception like socket exception');
+    // Destroy the existing client socket
+    connectionHandler?.connection?.disconnect();
+    internalDisconnect();
+  }
+
   /// Internal disconnect
   /// This is always passed to the connection handler to allow the
   /// client to close itself down correctly on disconnect.

@@ -47,6 +47,9 @@ class MqttBrowserClient extends MqttClient {
     clientEventBus
         ?.on<DisconnectOnNoPingResponse>()
         .listen(disconnectOnNoPingResponse);
+    clientEventBus
+        ?.on<DisconnectOnNoMessageSent>()
+        .listen(disconnectOnNoMessageSent);
     connectionHandler = SynchronousMqttBrowserConnectionHandler(
       clientEventBus,
       maxConnectionAttempts: maxConnectionAttempts,

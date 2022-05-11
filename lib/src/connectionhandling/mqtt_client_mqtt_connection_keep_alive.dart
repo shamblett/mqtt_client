@@ -85,8 +85,13 @@ class MqttConnectionKeepAlive {
         MqttConnectionState.connected) {
       MqttLogger.log(
           'MqttConnectionKeepAlive::pingRequired - sending ping request');
-      _connectionHandler.sendMessage(pingMsg);
-      pinged = true;
+      try {
+        _connectionHandler.sendMessage(pingMsg);
+        pinged = true;
+      } catch (e) {
+        MqttLogger.log(
+            'MqttConnectionKeepAlive::pingRequired - exception occurred');
+      }
     } else {
       MqttLogger.log(
           'MqttConnectionKeepAlive::pingRequired - NOT sending ping - not connected');
@@ -102,6 +107,8 @@ class MqttConnectionKeepAlive {
           disconnectTimer = Timer(
               Duration(milliseconds: disconnectOnNoResponsePeriod),
               noPingResponseReceived);
+        } else {
+          noMessageSent();
         }
       } else {
         if (disconnectTimer != null && !disconnectTimer!.isActive) {
@@ -111,6 +118,8 @@ class MqttConnectionKeepAlive {
             disconnectTimer = Timer(
                 Duration(milliseconds: disconnectOnNoResponsePeriod),
                 noPingResponseReceived);
+          } else {
+            noMessageSent();
           }
         } else {
           MqttLogger.log(
@@ -179,6 +188,26 @@ class MqttConnectionKeepAlive {
     } else {
       MqttLogger.log(
           'MqttConnectionKeepAlive::noPingResponseReceived - not disconnecting, not connected');
+    }
+  }
+
+  /// Handle when send message throws error
+  void noMessageSent() {
+    if (_connectionHandler.connectionStatus.state ==
+        MqttConnectionState.connected) {
+      MqttLogger.log(
+          'MqttConnectionKeepAlive::noMessageSent - connected, attempting to disconnect');
+      if (_clientEventBus != null) {
+        _clientEventBus!.fire(DisconnectOnNoMessageSent());
+        MqttLogger.log(
+            'MqttConnectionKeepAlive::noMessageSent - OK - disconnect event fired');
+      } else {
+        MqttLogger.log(
+            'MqttConnectionKeepAlive::noMessageSent - ERROR - disconnect event not fired, no event handler');
+      }
+    } else {
+      MqttLogger.log(
+          'MqttConnectionKeepAlive::noMessageSent - not disconnecting, not connected');
     }
   }
 }
