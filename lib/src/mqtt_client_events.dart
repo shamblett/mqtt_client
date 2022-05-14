@@ -76,3 +76,9 @@ class DisconnectOnNoPingResponse {
   /// Constructor
   DisconnectOnNoPingResponse();
 }
+
+/// Disconnect on sent message failed event
+class DisconnectOnNoMessageSent {
+  /// Constructor
+  DisconnectOnNoMessageSent();
+}
