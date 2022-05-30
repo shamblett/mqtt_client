@@ -166,7 +166,13 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       final stream = MqttByteBuffer(buff);
       message!.writeTo(stream);
       stream.seek(0);
-      connection.send(stream);
+      try {
+        connection.send(stream);
+      } catch (e) {
+        MqttLogger.log(
+            'MqttConnectionHandlerBase::sendMessage - exception occurred');
+        rethrow;
+      }
       // Let any registered people know we're doing a message.
       for (final callback in sentMessageCallbacks) {
         callback(message);

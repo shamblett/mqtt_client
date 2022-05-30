@@ -23,4 +23,5 @@ part 'src/connectionhandling/server/mqtt_client_mqtt_server_ws2_connection.dart'
 part 'src/connectionhandling/server/mqtt_client_mqtt_server_ws_connection.dart';
 part 'src/connectionhandling/server/mqtt_client_synchronous_mqtt_server_connection_handler.dart';
 part 'src/connectionhandling/server/mqtt_client_mqtt_server_connection.dart';
+part 'src/exception/server/mqtt_client_socket_exception.dart';
 part 'src/mqtt_server_client.dart';

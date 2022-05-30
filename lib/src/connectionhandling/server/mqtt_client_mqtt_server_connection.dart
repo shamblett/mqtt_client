@@ -92,7 +92,11 @@ class MqttServerConnection extends MqttConnectionBase {
   /// Sends the message in the stream to the broker.
   void send(MqttByteBuffer message) {
     final messageBytes = message.read(message.length);
-    client?.add(messageBytes.toList());
+    try {
+      client?.add(messageBytes.toList());
+    } on SocketException catch (e) {
+      throw NoConnectionException(e.toString());
+    }
   }
 
   /// Stops listening and closes the socket immediately.

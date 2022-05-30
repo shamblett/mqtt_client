@@ -90,7 +90,7 @@ class MqttConnectionKeepAlive {
         pinged = true;
       } catch (e) {
         MqttLogger.log(
-            'MqttConnectionKeepAlive::pingRequired - exception occurred');
+            'MqttConnectionKeepAlive::pingRequired - sent ping failed - exception occurred');
       }
     } else {
       MqttLogger.log(
