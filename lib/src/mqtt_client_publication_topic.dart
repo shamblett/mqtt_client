@@ -12,7 +12,7 @@ part of mqtt_client;
 class PublicationTopic extends Topic {
   /// Construction
   PublicationTopic(String topic)
-      : super(topic, <dynamic>[
+      : super(topic, <Validation>[
           Topic.validateMinLength,
           Topic.validateMaxLength,
           _validateWildcards

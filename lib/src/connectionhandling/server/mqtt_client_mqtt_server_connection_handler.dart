@@ -34,5 +34,5 @@ abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
   bool secure = false;
 
   /// The security context for secure usage
-  dynamic securityContext;
+  SecurityContext? securityContext;
 }

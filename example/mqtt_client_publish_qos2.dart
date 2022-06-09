@@ -55,12 +55,14 @@ Future<int> main() async {
   const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
-  client.updates!.listen((dynamic c) {
-    final MqttPublishMessage recMess = c[0].payload;
+  client.updates!.listen((messageList) {
+    final recMess = messageList[0];
+    if (recMess is! MqttReceivedMessage<MqttPublishMessage>) return;
+    final pubMess = recMess.payload;
     final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(pubMess.payload.message);
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${recMess.topic}>, payload is <-- $pt -->');
     print('');
   });
 

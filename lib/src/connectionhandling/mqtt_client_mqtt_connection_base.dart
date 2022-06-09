@@ -8,7 +8,7 @@
 part of mqtt_client;
 
 /// The MQTT client connection base class
-class MqttConnectionBase {
+abstract class MqttConnectionBase<T extends Object> {
   /// Default constructor
   MqttConnectionBase(this.clientEventBus);
 
@@ -19,11 +19,11 @@ class MqttConnectionBase {
 
   /// The socket that maintains the connection to the MQTT broker.
   @protected
-  dynamic client;
+  T? client;
 
   /// The stream controller as returned when clients listen.
   @protected
-  StreamSubscription? listener;
+  List<StreamSubscription> listeners = [];
 
   /// The read wrapper
   @protected
@@ -34,26 +34,31 @@ class MqttConnectionBase {
   late MqttByteBuffer messageStream;
 
   /// Unsolicited disconnection callback
-  @protected
+  @internal
   DisconnectCallback? onDisconnected;
 
   /// The event bus
   @protected
   events.EventBus? clientEventBus;
 
-  /// Connect for auto reconnect , must be overridden in connection classes
-  @protected
-  Future<void> connectAuto(String server, int port) {
-    final completer = Completer<void>();
-    return completer.future;
-  }
-
   /// Connect, must be overridden in connection classes
-  @protected
-  Future<void> connect(String server, int port) {
-    final completer = Completer<void>();
-    return completer.future;
-  }
+  Future<void> connect(String server, int port);
+
+  /// Connect for auto reconnect , must be overridden in connection classes
+  Future<void> connectAuto(String server, int port);
+
+  /// Sends the message in the stream to the broker.
+  void send(MqttByteBuffer message);
+
+  /// Stops listening the socket immediately, must be overridden in connection classes
+  void stopListening();
+
+  /// Closes the socket immediately, must be overridden in connection classes
+  void closeClient();
+
+  /// Closes and dispose the socket immediately, must be overridden in connection classes
+  @mustCallSuper
+  void disposeClient();
 
   /// OnError listener callback
   @protected
@@ -77,18 +82,11 @@ class MqttConnectionBase {
     }
   }
 
+  /// Internal disconnect with stop listeners and dispose client
   void _disconnect() {
-    if (client != null) {
-      listener?.cancel();
-      client.destroy();
-      client.close();
-      client = null;
-    }
+    stopListening();
+    disposeClient();
   }
-
-  /// Stops listening and closes the socket immediately, must be overridden in
-  /// connection classes
-  void stopListening() {}
 
   /// User requested or auto disconnect disconnection
   @protected

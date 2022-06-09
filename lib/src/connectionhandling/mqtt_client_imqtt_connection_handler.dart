@@ -28,7 +28,7 @@ abstract class IMqttConnectionHandler {
   AutoReconnectCompleteCallback? onAutoReconnected;
 
   /// Auto reconnect in progress
-  bool? autoReconnectInProgress;
+  bool autoReconnectInProgress = false;
 
   // Server name, needed for auto reconnect.
   String? server;
@@ -40,7 +40,7 @@ abstract class IMqttConnectionHandler {
   MqttConnectMessage? connectionMessage;
 
   /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(dynamic certificate)? onBadCertificate;
+  bool Function(Object certificate)? onBadCertificate;
 
   /// Runs the disconnection process to stop communicating
   /// with a message broker.

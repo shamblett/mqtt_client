@@ -46,7 +46,7 @@ class MqttClient {
   String server;
 
   /// Port number
-  int? port;
+  int port = 1883;
 
   /// Client identifier
   String clientIdentifier;
@@ -98,7 +98,7 @@ class MqttClient {
 
   /// The Handler that is managing the connection to the remote server.
   @protected
-  dynamic connectionHandler;
+  MqttConnectionHandlerBase? connectionHandler;
 
   @protected
   List<String>? websocketProtocolString;
@@ -112,6 +112,8 @@ class MqttClient {
   /// empty list , i.e [].
   set websocketProtocols(List<String> protocols) {
     websocketProtocolString = protocols;
+
+    final connectionHandler = this.connectionHandler;
     if (connectionHandler != null) {
       connectionHandler.websocketProtocols = protocols;
     }
@@ -152,7 +154,7 @@ class MqttClient {
   /// Will be removed, use connectionStatus
   @Deprecated('Use ConnectionStatus, not this')
   MqttConnectionState? get connectionState => connectionHandler != null
-      ? connectionHandler.connectionStatus.state
+      ? connectionHandler!.connectionStatus.state
       : MqttConnectionState.disconnected;
 
   final MqttClientConnectionStatus _connectionStatus =
@@ -162,7 +164,7 @@ class MqttClient {
   /// This is the connection state as above also with the broker return code.
   /// Set after every connection attempt.
   MqttClientConnectionStatus? get connectionStatus => connectionHandler != null
-      ? connectionHandler.connectionStatus
+      ? connectionHandler!.connectionStatus
       : _connectionStatus;
 
   /// The connection message to use to override the default
@@ -262,6 +264,10 @@ class MqttClient {
     connectionMessage?.authenticateAs(username, password);
 
     // Do the connection
+    final connectionHandler = this.connectionHandler;
+    if (connectionHandler == null) {
+      throw Exception();
+    }
     if (websocketProtocolString != null) {
       connectionHandler.websocketProtocols = websocketProtocolString;
     }
@@ -342,7 +348,7 @@ class MqttClient {
   /// Returns the subscription or null on failure
   Subscription? subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
-      throw ConnectionException(connectionHandler?.connectionStatus?.state);
+      throw ConnectionException(connectionHandler?.connectionStatus.state);
     }
     return subscriptionsManager!.registerSubscription(topic, qosLevel);
   }
@@ -363,9 +369,9 @@ class MqttClient {
   int publishMessage(
       String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
       {bool retain = false}) {
-    if (connectionHandler?.connectionStatus?.state !=
+    if (connectionHandler?.connectionStatus.state !=
         MqttConnectionState.connected) {
-      throw ConnectionException(connectionHandler?.connectionStatus?.state);
+      throw ConnectionException(connectionHandler?.connectionStatus.state);
     }
     try {
       final pubTopic = PublicationTopic(topic);
@@ -410,7 +416,7 @@ class MqttClient {
     MqttLogger.log(
         'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds');
     // Destroy the existing client socket
-    connectionHandler?.connection?.disconnect();
+    connectionHandler?.connection.disconnect();
     internalDisconnect();
   }
 
@@ -421,7 +427,7 @@ class MqttClient {
     MqttLogger.log(
         'MqttClient::disconnectOnNoMessageSent - disconnecting, no message sent due to exception like socket exception');
     // Destroy the existing client socket
-    connectionHandler?.connection?.disconnect();
+    connectionHandler?.connection.disconnect();
     internalDisconnect();
   }
 
@@ -431,6 +437,7 @@ class MqttClient {
   @protected
   void internalDisconnect() {
     // if we don't have a connection Handler we are already disconnected.
+    final connectionHandler = this.connectionHandler;
     if (connectionHandler == null) {
       MqttLogger.log(
           'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');

@@ -7,15 +7,17 @@
 
 part of mqtt_client;
 
+typedef Validation = void Function(Topic topic);
+
 /// Provides the base implementation of an MQTT topic.
 abstract class Topic {
   /// Creates a new instance of a rawTopic from a rawTopic string.
   /// rawTopic - The topic to represent.
   /// validations - The validations to run on the rawTopic.
-  Topic(this.rawTopic, List<dynamic> validations) {
+  Topic(this.rawTopic, List<Validation> validations) {
     topicFragments = rawTopic.split(topicSeparator[0]);
     // run all validations
-    for (final dynamic validation in validations) {
+    for (final validation in validations) {
       validation(this);
     }
   }

@@ -66,7 +66,7 @@ class MqttServerClient extends MqttClient {
     clientEventBus
         ?.on<DisconnectOnNoMessageSent>()
         .listen(disconnectOnNoMessageSent);
-    connectionHandler = SynchronousMqttServerConnectionHandler(
+    final connectionHandler = SynchronousMqttServerConnectionHandler(
       clientEventBus,
       maxConnectionAttempts: maxConnectionAttempts,
     );
@@ -87,8 +87,10 @@ class MqttServerClient extends MqttClient {
       connectionHandler.useWebSocket = false;
       connectionHandler.useAlternateWebSocketImplementation = false;
       connectionHandler.securityContext = securityContext;
-      connectionHandler.onBadCertificate = onBadCertificate;
+      connectionHandler.onBadCertificate = onBadCertificate as bool Function(Object certificate)?;
     }
+
+    this.connectionHandler = connectionHandler;
     return await super.connect(username, password);
   }
 }
