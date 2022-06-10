@@ -12,7 +12,7 @@ part of mqtt_client;
 class SubscriptionTopic extends Topic {
   /// Creates a new instance of a rawTopic from a topic string.
   SubscriptionTopic(String rawTopic)
-      : super(rawTopic, <dynamic>[
+      : super(rawTopic, <Validation>[
           Topic.validateMinLength,
           Topic.validateMaxLength,
           _validateMultiWildcard,

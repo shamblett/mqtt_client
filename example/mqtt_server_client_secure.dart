@@ -66,7 +66,7 @@ Future<int> main() async {
   client.pongCallback = pong;
 
   /// Set an on bad certificate callback, note that the parameter is needed.
-  client.onBadCertificate = (dynamic a) => true;
+  client.onBadCertificate = (X509Certificate a) => true;
 
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password and clean session,

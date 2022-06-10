@@ -5,6 +5,7 @@
  * Copyright :  S.Hamblett
  */
 import 'dart:async';
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
@@ -30,7 +31,7 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   /// Auto reconnect in progress
   @override
-  bool? autoReconnectInProgress = false;
+  bool autoReconnectInProgress = false;
 
   // Connection message, needed for auto reconnect.
   @override
@@ -59,7 +60,7 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   /// The security context for secure usage
   @override
-  dynamic securityContext;
+  SecurityContext? securityContext;
 
   /// Successful connection callback
   @override
@@ -71,7 +72,7 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
-  bool Function(dynamic certificate)? onBadCertificate;
+  bool Function(Object certificate)? onBadCertificate;
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
@@ -102,7 +103,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// Auto reconnect in progress
   @override
-  bool? autoReconnectInProgress = false;
+  bool autoReconnectInProgress = false;
 
   /// Use a websocket rather than TCP
   @override
@@ -135,7 +136,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// The security context for secure usage
   @override
-  dynamic securityContext;
+  SecurityContext? securityContext;
 
   /// Successful connection callback
   @override
@@ -147,7 +148,7 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   @override
-  bool Function(dynamic certificate)? onBadCertificate;
+  bool Function(Object certificate)? onBadCertificate;
   List<MqttMessage?> sentMessages = <MqttMessage?>[];
 
   @override
