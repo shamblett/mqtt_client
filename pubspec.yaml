@@ -16,7 +16,7 @@ dependencies:
 dev_dependencies:
   test: '^1.17.10'
   mockito: '^5.0.12'
-  flutter_lints: '^2.0.1'
+  lints: '^2.0.0'
   build_runner: '^2.0.6'
   build_test: '^2.1.2'
   build_web_compilers: '^3.0.0'
