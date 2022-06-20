@@ -5,6 +5,8 @@
  * Copyright :  S.Hamblett
  */
 
+@TestOn('vm')
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
@@ -14,7 +16,6 @@ import 'support/mqtt_client_mockbroker.dart';
 
 // ignore_for_file: invalid_use_of_protected_member
 
-@TestOn('vm')
 void main() {
   // Test wide variables
   final brokerWs = MockBrokerWs();

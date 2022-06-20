@@ -4,12 +4,14 @@
  * Date   : 18/02/2017
  * Copyright :  S.Hamblett
  */
+
+@TestOn('vm')
+
 import 'dart:async';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 
-@TestOn('vm')
 void main() {
   group('Topic filtering', () {
     final clientUpdates =

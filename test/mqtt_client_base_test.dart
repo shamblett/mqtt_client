@@ -4,6 +4,8 @@
  * Date   : 31/05/2017
  * Copyright :  S.Hamblett
  */
+@TestOn('vm')
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
@@ -11,8 +13,6 @@ import 'dart:convert';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
-
-@TestOn('vm')
 
 /// Sleep function that block asynchronous activity.
 /// Time units are seconds

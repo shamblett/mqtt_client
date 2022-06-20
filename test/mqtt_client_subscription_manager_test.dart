@@ -4,6 +4,8 @@
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
+
+@TestOn('vm')
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -12,8 +14,6 @@ import 'package:mockito/mockito.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_test_connection_handler.dart';
-
-@TestOn('vm')
 
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {}
