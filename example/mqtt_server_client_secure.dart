@@ -42,8 +42,10 @@ Future<int> main() async {
   /// Security context
   final currDir = '${path.current}${path.separator}example${path.separator}';
   final context = SecurityContext.defaultContext;
+  // Note if you get a 'TlsException: Failure trusting builtin roots (OS Error:
+  // 	CERT_ALREADY_IN_HASH_TABLE' error here comment out the following 2 lines
   context
-      .setTrustedCertificates(currDir + path.join('pem', 'mosquitto.org.crt'));
+     .setTrustedCertificates(currDir + path.join('pem', 'mosquitto.org.crt'));
 
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
@@ -66,7 +68,7 @@ Future<int> main() async {
   client.pongCallback = pong;
 
   /// Set an on bad certificate callback, note that the parameter is needed.
-  client.onBadCertificate = (X509Certificate a) => true;
+  client.onBadCertificate = (Object a) => true;
 
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password and clean session,
