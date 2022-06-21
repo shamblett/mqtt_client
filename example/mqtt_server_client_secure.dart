@@ -45,7 +45,7 @@ Future<int> main() async {
   // Note if you get a 'TlsException: Failure trusting builtin roots (OS Error:
   // 	CERT_ALREADY_IN_HASH_TABLE' error here comment out the following 2 lines
   context
-     .setTrustedCertificates(currDir + path.join('pem', 'mosquitto.org.crt'));
+      .setTrustedCertificates(currDir + path.join('pem', 'mosquitto.org.crt'));
 
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
