@@ -8,7 +8,7 @@
 part of mqtt_server_client;
 
 /// The MQTT server secure connection class
-class MqttServerSecureConnection extends MqttServerConnection {
+class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   /// Default constructor
   MqttServerSecureConnection(
       this.context, events.EventBus? eventBus, this.onBadCertificate)
@@ -35,7 +35,7 @@ class MqttServerSecureConnection extends MqttServerConnection {
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)
-          .then((SecureSocket socket) {
+          .then((socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         client = socket;
         readWrapper = ReadWrapper();
@@ -43,7 +43,7 @@ class MqttServerSecureConnection extends MqttServerConnection {
         MqttLogger.log('MqttSecureConnection::connect - start listening');
         _startListening();
         completer.complete();
-      }).catchError((dynamic e) {
+      }).catchError((e) {
         onError(e);
         completer.completeError(e);
       });
@@ -75,13 +75,13 @@ class MqttServerSecureConnection extends MqttServerConnection {
     try {
       SecureSocket.connect(server, port,
               onBadCertificate: onBadCertificate, context: context)
-          .then((SecureSocket socket) {
+          .then((socket) {
         MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
         client = socket;
         MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
         _startListening();
         completer.complete();
-      }).catchError((dynamic e) {
+      }).catchError((e) {
         onError(e);
         completer.completeError(e);
       });
@@ -104,5 +104,49 @@ class MqttServerSecureConnection extends MqttServerConnection {
       throw NoConnectionException(message);
     }
     return completer.future;
+  }
+
+  /// Sends the message in the stream to the broker.
+  @override
+  void send(MqttByteBuffer message) {
+    final messageBytes = message.read(message.length);
+    client?.add(messageBytes.toList());
+  }
+
+  /// Stops listening the socket immediately.
+  @override
+  void stopListening() {
+    for (final listener in listeners) {
+      listener.cancel();
+    }
+
+    listeners.clear();
+  }
+
+  /// Closes the socket immediately.
+  @override
+  void closeClient() {
+    client?.destroy();
+    client?.close();
+  }
+
+  /// Closes and dispose the socket immediately.
+  @override
+  void disposeClient() {
+    closeClient();
+    if (client != null) {
+      client = null;
+    }
+  }
+
+  /// Implement stream subscription
+  @override
+  StreamSubscription onListen() {
+    final socket = client;
+    if (socket == null) {
+      throw NullThrownError();
+    }
+
+    return socket.listen(onData, onError: onError, onDone: onDone);
   }
 }

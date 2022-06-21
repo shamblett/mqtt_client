@@ -8,7 +8,7 @@
 part of mqtt_server_client;
 
 /// The MQTT server connection class for the websocket interface
-class MqttServerWsConnection extends MqttServerConnection {
+class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   /// Default constructor
   MqttServerWsConnection(events.EventBus? eventBus) : super(eventBus);
 
@@ -52,13 +52,13 @@ class MqttServerWsConnection extends MqttServerConnection {
       // Connect and save the socket.
       WebSocket.connect(uriString,
               protocols: protocols.isNotEmpty ? protocols : null)
-          .then((dynamic socket) {
+          .then((socket) {
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
         _startListening();
         completer.complete();
-      }).catchError((dynamic e) {
+      }).catchError((e) {
         onError(e);
         completer.completeError(e);
       });
@@ -102,11 +102,11 @@ class MqttServerWsConnection extends MqttServerConnection {
       // Connect and save the socket.
       WebSocket.connect(uriString,
               protocols: protocols.isNotEmpty ? protocols : null)
-          .then((dynamic socket) {
+          .then((socket) {
         client = socket;
         _startListening();
         completer.complete();
-      }).catchError((dynamic e) {
+      }).catchError((e) {
         onError(e);
         completer.completeError(e);
       });
@@ -119,40 +119,44 @@ class MqttServerWsConnection extends MqttServerConnection {
     return completer.future;
   }
 
-  /// User requested or auto disconnect disconnection
+  /// Sends the message in the stream to the broker.
   @override
-  void disconnect({bool auto = false}) {
-    if (auto) {
-      client = null;
-    } else {
-      onDone();
-    }
+  void send(MqttByteBuffer message) {
+    final messageBytes = message.read(message.length);
+    client?.add(messageBytes.toList());
   }
 
-  /// OnDone listener callback
-  @override
-  void onDone() {
-    _disconnect();
-    if (onDisconnected != null) {
-      MqttLogger.log(
-          'MqttWsConnection::::onDone - calling disconnected callback');
-      onDisconnected!();
-    }
-  }
-
-  void _disconnect() {
-    if (client != null) {
-      client.close();
-      client = null;
-    }
-  }
-
-  /// Stops listening and closes the socket immediately.
+  /// Stops listening the socket immediately.
   @override
   void stopListening() {
-    if (client != null) {
-      listener?.cancel();
-      client.close();
+    for (final listener in listeners) {
+      listener.cancel();
     }
+
+    listeners.clear();
+  }
+
+  /// Closes the socket immediately.
+  @override
+  void closeClient() {
+    client?.close();
+  }
+
+  /// Closes and dispose the socket immediately.
+  @override
+  void disposeClient() {
+    closeClient();
+    client = null;
+  }
+
+  /// Implement stream subscription
+  @override
+  StreamSubscription onListen() {
+    final webSocket = client;
+    if (webSocket == null) {
+      throw NullThrownError();
+    }
+
+    return webSocket.listen(onData, onError: onError, onDone: onDone);
   }
 }

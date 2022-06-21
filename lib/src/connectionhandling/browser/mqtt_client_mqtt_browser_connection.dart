@@ -8,7 +8,8 @@
 part of mqtt_browser_client;
 
 /// The MQTT browser connection base class
-class MqttBrowserConnection extends MqttConnectionBase {
+abstract class MqttBrowserConnection<T extends Object>
+    extends MqttConnectionBase<T> {
   /// Default constructor
   MqttBrowserConnection(clientEventBus) : super(clientEventBus);
 
@@ -18,45 +19,23 @@ class MqttBrowserConnection extends MqttConnectionBase {
     connect(server, port);
   }
 
-  /// Connect, must be overridden in connection classes
-  @override
-  Future<void> connect(String server, int port) {
-    final completer = Completer<void>();
-    return completer.future;
-  }
-
-  /// Connect for auto reconnect , must be overridden in connection classes
-  @override
-  Future<void> connectAuto(String server, int port) {
-    final completer = Completer<void>();
-    return completer.future;
-  }
-
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
+    stopListening();
     MqttLogger.log('MqttBrowserConnection::_startListening');
     try {
-      client.onClose.listen((e) {
-        MqttLogger.log(
-            'MqttBrowserConnection::_startListening - websocket is closed');
-        onDone();
-      });
-      client.onMessage.listen((MessageEvent e) {
-        _onData(e.data);
-      });
-      client.onError.listen((e) {
-        MqttLogger.log(
-            'MqttBrowserConnection::_startListening - websocket has errored');
-        onError(e);
-      });
+      onListen();
     } on Exception catch (e) {
       MqttLogger.log(
           'MqttBrowserConnection::_startListening - exception raised $e');
     }
   }
 
+  /// Implement stream subscription
+  List<StreamSubscription> onListen();
+
   /// OnData listener callback
-  void _onData(dynamic byteData) {
+  void onData(dynamic /*String|List<int>*/ byteData) {
     MqttLogger.log('MqttBrowserConnection::_onData');
     // Protect against 0 bytes but should never happen.
     var data = Uint8List.view(byteData);
@@ -101,13 +80,5 @@ class MqttBrowserConnection extends MqttConnectionBase {
         }
       }
     }
-  }
-
-  /// Sends the message in the stream to the broker.
-  void send(MqttByteBuffer message) {
-    final messageBytes = message.read(message.length);
-    var buffer = messageBytes.buffer;
-    var bData = ByteData.view(buffer);
-    client?.sendTypedData(bData);
   }
 }

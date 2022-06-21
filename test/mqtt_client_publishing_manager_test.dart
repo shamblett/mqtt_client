@@ -4,6 +4,8 @@
  * Date   : 27/06/2017
  * Copyright :  S.Hamblett
  */
+
+@TestOn('vm')
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
@@ -13,8 +15,6 @@ import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_test_connection_handler.dart';
 
 // ignore_for_file: invalid_use_of_protected_member
-
-@TestOn('vm')
 
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {}

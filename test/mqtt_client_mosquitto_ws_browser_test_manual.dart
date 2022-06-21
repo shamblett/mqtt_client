@@ -5,11 +5,12 @@
  * Copyright :  S.Hamblett
  */
 
+@TestOn('browser')
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
 import 'package:test/test.dart';
 
-@TestOn('browser')
 void main() {
   const mosquittoServer = 'ws://test.mosquitto.org';
   const mosquittoPort = 8080;

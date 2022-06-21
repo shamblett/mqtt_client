@@ -4,11 +4,12 @@
  * Date   : 31/05/2017
  * Copyright :  S.Hamblett
  */
+
+@TestOn('vm')
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
-
-@TestOn('vm')
 
 /// Helper methods for test message serialization and deserialization
 class MessageSerializationHelper {
