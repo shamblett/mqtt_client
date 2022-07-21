@@ -50,10 +50,9 @@ class MqttBrowserClient extends MqttClient {
     clientEventBus
         ?.on<DisconnectOnNoMessageSent>()
         .listen(disconnectOnNoMessageSent);
-    connectionHandler = SynchronousMqttBrowserConnectionHandler(
-      clientEventBus,
-      maxConnectionAttempts: maxConnectionAttempts,
-    );
+    connectionHandler = SynchronousMqttBrowserConnectionHandler(clientEventBus,
+        maxConnectionAttempts: maxConnectionAttempts,
+        reconnectTimePeriod: connectTimeoutPeriod);
     return await super.connect(username, password);
   }
 }

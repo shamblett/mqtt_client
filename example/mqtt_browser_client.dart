@@ -35,6 +35,9 @@ Future<int> main() async {
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
 
+  /// The connection timeout period can be set if needed, the default is 5 seconds.
+  client.connectTimeoutPeriod = 2000;
+
   /// The ws port for Mosquitto is 8080, for wss it is 8081
   client.port = 8080;
 

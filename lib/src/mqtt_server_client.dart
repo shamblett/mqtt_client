@@ -67,9 +67,9 @@ class MqttServerClient extends MqttClient {
         ?.on<DisconnectOnNoMessageSent>()
         .listen(disconnectOnNoMessageSent);
     final connectionHandler = SynchronousMqttServerConnectionHandler(
-      clientEventBus,
-      maxConnectionAttempts: maxConnectionAttempts,
-    );
+        clientEventBus,
+        maxConnectionAttempts: maxConnectionAttempts,
+        reconnectTimePeriod: connectTimeoutPeriod);
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;

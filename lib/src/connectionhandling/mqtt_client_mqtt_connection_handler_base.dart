@@ -41,7 +41,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   // Port number, needed for auto reconnect.
   @override
   int? port;
-
   // Connection message, needed for auto reconnect.
   @override
   MqttConnectMessage? connectionMessage;
