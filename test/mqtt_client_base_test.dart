@@ -931,6 +931,13 @@ void main() {
               .clientIdentifier,
           'cccc');
     });
+    test('Connect timeout period', () async {
+      final client = MqttClient('aaaa', 'bbbb');
+      client.connectTimeoutPeriod = 30000;
+      expect(client.connectTimeoutPeriod, 30000);
+      client.connectTimeoutPeriod = 500;
+      expect(client.connectTimeoutPeriod, 5000);
+    });
   });
 
   group('Logging', () {

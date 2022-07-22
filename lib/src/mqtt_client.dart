@@ -73,6 +73,19 @@ class MqttClient {
   /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
   bool resubscribeOnAutoReconnect = true;
 
+  /// Connect timeout value in milliseconds, i.e the time period between
+  /// successive connection attempts.
+  /// Minimum value is 1000ms, defaults to 5000ms.
+  int _connectTimeoutPeriod = 5000;
+  int get connectTimeoutPeriod => _connectTimeoutPeriod;
+  set connectTimeoutPeriod(int period) {
+    int periodToSet = period;
+    if (period < 1000) {
+      periodToSet = 5000;
+    }
+    _connectTimeoutPeriod = periodToSet;
+  }
+
   /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
   /// the client. The user must do this when the message has been taken off the update stream
   /// using the [acknowledgeQos1Message] method.
@@ -275,7 +288,8 @@ class MqttClient {
     connectionHandler.onConnected = onConnected;
     connectionHandler.onAutoReconnect = onAutoReconnect;
     connectionHandler.onAutoReconnected = onAutoReconnected;
-
+    MqttLogger.log(
+        'MqttClient::connect - Connection timeout period is $connectTimeoutPeriod milliseconds');
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
     publishingManager!.manuallyAcknowledgeQos1 = _manuallyAcknowledgeQos1;
     subscriptionsManager = SubscriptionsManager(

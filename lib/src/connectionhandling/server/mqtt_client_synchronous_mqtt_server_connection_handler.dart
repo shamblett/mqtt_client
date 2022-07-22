@@ -12,11 +12,10 @@ part of mqtt_server_client;
 class SynchronousMqttServerConnectionHandler
     extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
-  SynchronousMqttServerConnectionHandler(
-    clientEventBus, {
-    required int maxConnectionAttempts,
-  }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
-    connectTimer = MqttCancellableAsyncSleep(5000);
+  SynchronousMqttServerConnectionHandler(clientEventBus,
+      {required int maxConnectionAttempts, reconnectTimePeriod = 5000})
+      : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
+    connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }
 

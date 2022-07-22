@@ -88,6 +88,7 @@ void main() {
         clientEventBus,
         maxConnectionAttempts: 3,
       );
+      final start = DateTime.now();
       try {
         await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -97,6 +98,28 @@ void main() {
       expect(ch.connectionStatus.state, MqttConnectionState.faulted);
       expect(
           ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
+      final end = DateTime.now();
+      expect(end.difference(start).inSeconds > 4, true);
+    });
+    test('1000ms connect period', () async {
+      await broker.start();
+      final clientEventBus = events.EventBus();
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, reconnectTimePeriod: 1000);
+
+      final start = DateTime.now();
+
+      try {
+        await ch.connect(mockBrokerAddress, mockBrokerPort,
+            MqttConnectMessage().withClientIdentifier(testClientId));
+      } on Exception catch (e) {
+        expect(e is NoConnectionException, isTrue);
+      }
+      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
+      expect(
+          ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
+      final end = DateTime.now();
+      expect(end.difference(start).inSeconds < 4, true);
     });
     test('Successful response and disconnect', () async {
       var connectCbCalled = false;

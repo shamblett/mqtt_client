@@ -12,11 +12,10 @@ part of mqtt_browser_client;
 class SynchronousMqttBrowserConnectionHandler
     extends MqttBrowserConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
-  SynchronousMqttBrowserConnectionHandler(
-    clientEventBus, {
-    required int maxConnectionAttempts,
-  }) : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
-    connectTimer = MqttCancellableAsyncSleep(5000);
+  SynchronousMqttBrowserConnectionHandler(clientEventBus,
+      {required int maxConnectionAttempts, reconnectTimePeriod = 5000})
+      : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
+    connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }
 
