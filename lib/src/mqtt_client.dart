@@ -74,7 +74,7 @@ class MqttClient {
   bool resubscribeOnAutoReconnect = true;
 
   /// Connect timeout value in milliseconds, i.e the time period between
-  /// successive connection/reconnection attempts.
+  /// successive connection attempts.
   /// Minimum value is 1000ms, defaults to 5000ms.
   int _connectTimeoutPeriod = 5000;
   int get connectTimeoutPeriod => _connectTimeoutPeriod;

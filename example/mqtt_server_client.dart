@@ -50,7 +50,7 @@ Future<int> main() async {
   client.keepAlivePeriod = 20;
 
   /// The connection timeout period can be set if needed, the default is 5 seconds.
-  client.connectTimeoutPeriod = 2000;
+  client.connectTimeoutPeriod = 2000; // milliseconds
 
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
