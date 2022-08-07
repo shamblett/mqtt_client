@@ -1108,7 +1108,7 @@ void main() {
       expect(actual[0], expected[0]); // msg type of header + other bits
       expect(actual[1], 100); // remaining length
       expect(actual[2], expected[2]); // first topic length byte
-      expect(actual[3], 89); // second topic length byte
+      expect(actual[3], 90); // second topic length byte
       expect(actual[4], 47);
       expect(actual[5], 104);
       expect(actual[6], 102);

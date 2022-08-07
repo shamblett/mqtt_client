@@ -18,10 +18,15 @@ class MqttEncoding extends Utf8Codec {
   /// into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);
+    final stringConverted = encoder.convert(s);
+    if (stringConverted.length > 65535) {
+      throw Exception(
+          'MqttUtf8Encoding::toUtf8 -  UTF8 string length is invalid, length is ${stringConverted.length}');
+    }
     final stringBytes = typed.Uint8Buffer();
-    stringBytes.add(s.length >> 8);
-    stringBytes.add(s.length & 0xFF);
-    stringBytes.addAll(encoder.convert(s));
+    stringBytes.add(stringConverted.length >> 8);
+    stringBytes.add(stringConverted.length & 0xFF);
+    stringBytes.addAll(stringConverted);
     return stringBytes;
   }
 
