@@ -31,8 +31,24 @@ The code is originally a port from the C# [nMQTT](https://www.openhub.net/p/nMQT
 
 Please read the changelog for details related to specific versions.
 
+## Installation
+To get the project running prepare the Android and iOS project as following.
 
-
-
+### iOS
+Add the following keys to your **Info.plist** file, located in **ios/Runner/Info.plist**:
+```
+<key>NSLocalNetworkUsageDescription</key>
+<string>Looking for local tcp Bonjour service</string>
+<key>NSBonjourServices</key>
+<array>
+  <string>mqtt.tcp</string>
+</array>
+```
+### Android
+Add the following Android permissions to the **AndroidManifest.xml** file, located in **android/app/src/main/AndroidManifest.xml**:
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+```
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshamblett%2Fmqtt_client.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshamblett%2Fmqtt_client?ref=badge_large)
