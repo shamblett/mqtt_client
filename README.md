@@ -32,7 +32,7 @@ The code is originally a port from the C# [nMQTT](https://www.openhub.net/p/nMQT
 Please read the changelog for details related to specific versions.
 
 ## Installation
-To get the project running prepare the Android and iOS project as following.
+If you are using the client in a flutter environment on Android or iOS devices then the following device permission settings are necessary.
 
 ### iOS
 Add the following keys to your **Info.plist** file, located in **ios/Runner/Info.plist**:
