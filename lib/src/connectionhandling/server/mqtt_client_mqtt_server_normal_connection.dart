@@ -121,7 +121,7 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
   StreamSubscription onListen() {
     final socket = client;
     if (socket == null) {
-      throw TypeError();
+      throw StateError('socket is null');
     }
 
     return socket.listen(onData, onError: onError, onDone: onDone);

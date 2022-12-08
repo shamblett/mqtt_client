@@ -154,7 +154,7 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   StreamSubscription onListen() {
     final webSocket = client;
     if (webSocket == null) {
-      throw TypeError();
+      throw StateError('webSocket is null');
     }
 
     return webSocket.listen(onData, onError: onError, onDone: onDone);
