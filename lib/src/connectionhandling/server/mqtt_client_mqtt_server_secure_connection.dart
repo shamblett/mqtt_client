@@ -144,7 +144,7 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   StreamSubscription onListen() {
     final socket = client;
     if (socket == null) {
-      throw NullThrownError();
+      throw TypeError();
     }
 
     return socket.listen(onData, onError: onError, onDone: onDone);

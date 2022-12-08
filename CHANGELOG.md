@@ -1,3 +1,6 @@
+# 9.7.3
+Throw TypeError on nulls, as NullThrownError is deprecated in Dart 2.19.
+
 # 9.7.2
 Issue 410
 

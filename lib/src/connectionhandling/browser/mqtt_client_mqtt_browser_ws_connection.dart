@@ -195,7 +195,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
   List<StreamSubscription> onListen() {
     final webSocket = client;
     if (webSocket == null) {
-      throw NullThrownError();
+      throw TypeError();
     }
 
     return [
