@@ -279,7 +279,7 @@ class MqttClient {
     // Do the connection
     final connectionHandler = this.connectionHandler;
     if (connectionHandler == null) {
-      throw NullThrownError();
+      throw StateError('connectionHandler is null');
     }
     if (websocketProtocolString != null) {
       connectionHandler.websocketProtocols = websocketProtocolString;
