@@ -1,3 +1,6 @@
+# 9.7.4
+Issue 431
+
 # 9.7.3
 Throw `StateError` on nulls, as `NullThrownError` is deprecated in Dart 2.19.
 
