@@ -222,15 +222,15 @@ class SubscriptionsManager {
   }
 
   // Re subscribe.
-  // Takes all active completed subscriptions and re subscribes them if
+  // Takes all active completed and pending subscriptions and re subscribes them if
   // [resubscribeOnAutoReconnect] is true.
   // Automatically fired after auto reconnect has completed.
   void _resubscribe(Resubscribe resubscribeEvent) {
     if (resubscribeOnAutoReconnect) {
       MqttLogger.log(
           'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}');
-      final subscriptionList = subscriptions.values;
-      final pendingSubscriptionList = pendingSubscriptions.values;
+      final subscriptionList = subscriptions.values.toList();
+      final pendingSubscriptionList = pendingSubscriptions.values.toList();
       subscriptions.clear();
       pendingSubscriptions.clear();
 
