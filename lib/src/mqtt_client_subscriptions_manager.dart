@@ -229,10 +229,17 @@ class SubscriptionsManager {
     if (resubscribeOnAutoReconnect) {
       MqttLogger.log(
           'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}');
-      for (final subscription in subscriptions.values) {
+      final subscriptionList = subscriptions.values;
+      final pendingSubscriptionList = pendingSubscriptions.values;
+      subscriptions.clear();
+      pendingSubscriptions.clear();
+
+      for (final subscription in [
+        ...subscriptionList,
+        ...pendingSubscriptionList
+      ]) {
         createNewSubscription(subscription!.topic.rawTopic, subscription.qos);
       }
-      subscriptions.clear();
     } else {
       MqttLogger.log('Subscriptionsmanager::_resubscribe - '
           'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false');
