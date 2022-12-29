@@ -4,7 +4,7 @@
 
 A server and browser based MQTT client for Dart.
 
-The client is an MQTT v3(3.1 and 3.1.1) implementation supporting subscription/publishing at all QOS levels,
+The client is an MQTT v3(3.1 and 3.1.1) implementation(an equivalent MQTT v5 client can be found [here](https://pub.dev/packages/mqtt5_client)) supporting subscription/publishing at all QOS levels,
 keep alive and synchronous connection. The client is designed to take as much MQTT protocol work
 off the user as possible, connection protocol is handled automatically as are the message exchanges needed
 to support the different QOS levels and the keep alive mechanism. This allows the user to concentrate on
@@ -46,7 +46,7 @@ Add the following keys to your **Info.plist** file, located in **ios/Runner/Info
 ```
 ### Android
 Add the following Android permissions to the **AndroidManifest.xml** file, located in **android/app/src/main/AndroidManifest.xml**:
-```xml
+```
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
