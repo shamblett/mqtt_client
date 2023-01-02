@@ -66,7 +66,8 @@ Future<int> main() async {
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('MQTT client connected to AWS IoT');
 
-    // Publish to a topic of your choice
+    // Publish to a topic of your choice after a slight delay, AWS seems to need this
+    await MqttUtilities.asyncSleep(1);
     const topic = '/test/topic';
     final builder = MqttClientPayloadBuilder();
     builder.addString('Hello World');
