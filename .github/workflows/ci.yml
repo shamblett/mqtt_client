@@ -23,5 +23,13 @@ jobs:
       - name: Analyze project source
         run: dart analyze
 
-      - name: Run tests
-        run: dart test
+      - name: Run tests with coverage
+        run: dart run coverage:test_with_coverage
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage/lcov.info
+          name: Upload to codecov.io
+          verbose: true
