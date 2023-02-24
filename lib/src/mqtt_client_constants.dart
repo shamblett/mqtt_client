@@ -14,12 +14,9 @@ class MqttClientConstants {
 
   /// The Maximum allowed client identifier length as specified by the 3.1
   /// specification is 23 characters, however we allow more than
-  /// this, a warning is given in the log if 23 is exceeded.
-  /// NOte: this is only a warning, it changes no client behaviour.
-  static const int maxClientIdentifierLength = 1024;
-
-  /// Specification length
-  static const int maxClientIdentifierLengthSpec = 23;
+  /// this as this was relaxed in the 3.1.1 specification and
+  /// most brokers now support lengths greater than 23 characters.
+  static const int maxClientIdentifierLength = 65535;
 
   /// The default Mqtt port to connect to.
   static const int defaultMqttPort = 1883;
