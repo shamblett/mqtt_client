@@ -33,6 +33,26 @@ abstract class MqttServerConnection<T extends Object>
   /// Implement stream subscription
   StreamSubscription onListen();
 
+  /// Socket options, ensure the socket is closed promptly
+  /// if the broker server is lost.
+  final enableKeepAliveOption = RawSocketOption.fromBool(
+      0xffff, // SOL_SOCKET
+      0x0008, // SO_KEEPALIVE
+      true);
+  final keepAliveIntervalOption = RawSocketOption.fromInt(
+      6, // IP-PROTO_TCP
+      0x10, // TCP_KEEP ALIVE
+      2);
+  final keepAliveSuccessiveIntervalOption = RawSocketOption.fromInt(
+    6, // IP-PROTO_TCP
+    0x101, // TCP_KEEPINTVL
+    1,
+  );
+  final keepAliveSuccessiveCountOption = RawSocketOption.fromInt(
+      6, // IP-PROTO_TCP
+      0x102, // TCP_KEEP-CNT
+      2);
+
   /// OnData listener callback
   @protected
   void onData(dynamic /*String|List<int>*/ data) {
