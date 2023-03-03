@@ -1,0 +1,40 @@
+/*
+ * Package : mqtt_client
+ * Author : S. Hamblett <steve.hamblett@linux.com>
+ * Date   : 03/03/2023
+ * Copyright :  S.Hamblett
+ */
+
+part of mqtt_client;
+
+// Helper enumeration for socket options
+enum MqttSocketOptionType { boolean, integer }
+
+// Helper class for socket options
+class MqttSocketOptionValue {
+  var type = MqttSocketOptionType.integer;
+  var level = 0;
+  var option = 0;
+  var intValue = 0;
+  var boolValue = false;
+}
+
+/// A class to allow socket options to be set on server TCP sockets.
+/// This class supports setting of both integer and boolean raw socket options
+/// as supported by the Dart IO library [RawSocketOption](https://api.dart.dev/stable/2.19.3/dart-io/RawSocketOption-class.html) class.
+/// The socket options are set on both the initial connect and auto reconnect.
+/// Care should be used when using this feature, socket options are usually platform specific
+/// and can cause numerous failures at the network level for the unwary.
+class MqttSocketOption {
+  MqttSocketOption(MqttSocketOptionValue option) {
+    options.add(option);
+  }
+
+  /// Boolean socket option
+  void fromBool(int level, int option, bool value) {}
+
+  /// Integer socket option
+  void fromInt(int level, int option, int value) {}
+
+  List<MqttSocketOptionValue> options = <MqttSocketOptionValue>[];
+}

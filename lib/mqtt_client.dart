@@ -48,6 +48,8 @@ part 'src/connectionhandling/mqtt_client_mqtt_connection_handler_base.dart';
 
 part 'src/connectionhandling/mqtt_client_imqtt_connection_handler.dart';
 
+part 'src/connectionhandling/mqtt_client_socket_option.dart';
+
 part 'src/mqtt_client_topic.dart';
 
 part 'src/mqtt_client_connection_status.dart';

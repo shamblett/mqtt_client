@@ -37,11 +37,7 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
-        // Socket options
-        socket.setRawOption(enableKeepAliveOption);
-        socket.setRawOption(keepAliveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveCountOption);
+        // Socket options TBD
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -82,11 +78,8 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
-        // Socket options
-        socket.setRawOption(enableKeepAliveOption);
-        socket.setRawOption(keepAliveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveCountOption);
+        // Socket options TBD
+
         client = socket;
         MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
         _startListening();

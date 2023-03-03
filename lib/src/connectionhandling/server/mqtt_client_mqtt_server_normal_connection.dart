@@ -27,11 +27,8 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
     try {
       // Connect and save the socket.
       Socket.connect(server, port).then((socket) {
-        // Socket options
-        socket.setRawOption(enableKeepAliveOption);
-        //socket.setRawOption(keepAliveIntervalOption);
-        //socket.setRawOption(keepAliveSuccessiveIntervalOption);
-        //socket.setRawOption(keepAliveSuccessiveCountOption);
+        // Socket options TBD
+
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -65,11 +62,8 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
     try {
       // Connect and save the socket.
       Socket.connect(server, port).then((socket) {
-        // Socket options
-        socket.setRawOption(enableKeepAliveOption);
-        socket.setRawOption(keepAliveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveIntervalOption);
-        socket.setRawOption(keepAliveSuccessiveCountOption);
+        // Socket options TBD
+
         client = socket;
         _startListening();
         completer.complete();
