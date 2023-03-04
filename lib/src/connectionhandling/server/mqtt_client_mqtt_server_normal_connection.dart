@@ -30,7 +30,11 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
       // Connect and save the socket.
       Socket.connect(server, port).then((socket) {
         // Socket options
-        _applySocketOptions(socket, socketOptions);
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttNormalConnection::connect - socket options applied');
+        }
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -65,7 +69,11 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
       // Connect and save the socket.
       Socket.connect(server, port).then((socket) {
         // Socket options
-        _applySocketOptions(socket, socketOptions);
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttNormalConnection::connectAuto - socket options applied');
+        }
         client = socket;
         _startListening();
         completer.complete();

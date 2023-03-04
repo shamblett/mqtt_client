@@ -86,12 +86,15 @@ abstract class MqttServerConnection<T extends Object>
     }
   }
 
-  // Apply any socket options
-  void _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
+  // Apply any socket options, true indicates options applied
+  bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
     if (socketOptions.isNotEmpty) {
+      MqttLogger.log(
+          'MqttServerConnection::__applySocketOptions - Socket options supplied, applying');
       for (final option in socketOptions) {
         socket.setRawOption(option);
       }
     }
+    return socketOptions.isNotEmpty;
   }
 }

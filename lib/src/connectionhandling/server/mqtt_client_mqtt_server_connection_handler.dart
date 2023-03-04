@@ -12,8 +12,7 @@ part of mqtt_server_client;
 abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
   /// Initializes a new instance of the [MqttServerConnectionHandler] class.
   MqttServerConnectionHandler(var clientEventBus,
-      {required int? maxConnectionAttempts,
-      required List<RawSocketOption> socketOptions})
+      {required int? maxConnectionAttempts, required this.socketOptions})
       : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts);
 
   /// Use a websocket rather than TCP

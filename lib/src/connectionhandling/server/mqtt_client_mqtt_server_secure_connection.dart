@@ -38,7 +38,11 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
         // Socket options
-        _applySocketOptions(socket, socketOptions);
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttSecureConnection::connect - socket options applied');
+        }
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -80,7 +84,11 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
         // Socket options
-        _applySocketOptions(socket, socketOptions);
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttSecureConnection::connectAuto - socket options applied');
+        }
         client = socket;
         MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
         _startListening();
