@@ -967,41 +967,4 @@ void main() {
           isTrue);
     });
   });
-
-  group('Socket options', () {
-    test('Construction', () {
-      final options = MqttSocketOption();
-      expect(options.hasOptions, isFalse);
-    });
-    test('Construction - from option value', () {
-      final optVal = MqttSocketOptionValue();
-      optVal.type = MqttSocketOptionType.boolean;
-      optVal.level = 1;
-      optVal.option = 2;
-      optVal.boolValue = true;
-      final options = MqttSocketOption.fromOptionValue(optVal);
-      expect(options.hasOptions, isTrue);
-      final values = options.options;
-      expect(values.length, 1);
-      expect(values[0], optVal);
-    });
-
-    test('Add options', () {
-      final options = MqttSocketOption();
-      expect(options.hasOptions, isFalse);
-      options.fromBool(1, 2, true);
-      options.fromInt(3, 4, 5);
-      expect(options.hasOptions, isTrue);
-      final values = options.options;
-      expect(values.length, 2);
-      expect(values[0].type, MqttSocketOptionType.boolean);
-      expect(values[0].level, 1);
-      expect(values[0].option, 2);
-      expect(values[0].boolValue, isTrue);
-      expect(values[1].type, MqttSocketOptionType.integer);
-      expect(values[1].level, 3);
-      expect(values[1].option, 4);
-      expect(values[1].intValue, 5);
-    });
-  });
 }

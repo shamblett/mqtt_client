@@ -94,13 +94,14 @@ class _DetachedSocket extends Stream<Uint8List> implements Socket {
 /// The MQTT server alternative websocket connection class
 class MqttServerWs2Connection extends MqttServerWsConnection {
   /// Default constructor
-  MqttServerWs2Connection(this.context, events.EventBus? eventBus)
-      : super(eventBus);
+  MqttServerWs2Connection(this.context, events.EventBus? eventBus,
+      List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions);
 
   /// Initializes a new instance of the MqttWs2Connection class.
-  MqttServerWs2Connection.fromConnect(
-      String server, int port, events.EventBus eventBus)
-      : super(eventBus) {
+  MqttServerWs2Connection.fromConnect(String server, int port,
+      events.EventBus eventBus, List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions) {
     connect(server, port);
   }
 

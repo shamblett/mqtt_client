@@ -10,12 +10,14 @@ part of mqtt_server_client;
 /// The MQTT server connection class for the websocket interface
 class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   /// Default constructor
-  MqttServerWsConnection(events.EventBus? eventBus) : super(eventBus);
+  MqttServerWsConnection(
+      events.EventBus? eventBus, List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttServerWsConnection.fromConnect(
-      String server, int port, events.EventBus eventBus)
-      : super(eventBus) {
+  MqttServerWsConnection.fromConnect(String server, int port,
+      events.EventBus eventBus, List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions) {
     connect(server, port);
   }
 

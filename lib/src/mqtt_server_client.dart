@@ -49,6 +49,20 @@ class MqttServerClient extends MqttClient {
   /// Max connection attempts
   final int maxConnectionAttempts;
 
+  /// The client supports the setting of both integer and boolean raw socket options
+  /// as supported by the Dart IO library [RawSocketOption](https://api.dart.dev/stable/2.19.3/dart-io/RawSocketOption-class.html) class.
+  /// Please consult the documentation for the above class before using this.
+  ///
+  /// The socket options are set on both the initial connect and auto reconnect.
+  ///
+  /// The client performs no sanity checking of the values provided, what values are set are
+  /// passed on to the socket untouched, as such, care should be used when using this feature,
+  /// socket options are usually platform specific and can cause numerous failures at the network
+  /// level for the unwary.
+  ///
+  /// Applicable only to TCP sockets
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
+
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.
   /// If a username and password are supplied these will override
@@ -69,7 +83,8 @@ class MqttServerClient extends MqttClient {
     final connectionHandler = SynchronousMqttServerConnectionHandler(
         clientEventBus,
         maxConnectionAttempts: maxConnectionAttempts,
-        reconnectTimePeriod: connectTimeoutPeriod);
+        reconnectTimePeriod: connectTimeoutPeriod,
+        socketOptions: socketOptions);
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;
