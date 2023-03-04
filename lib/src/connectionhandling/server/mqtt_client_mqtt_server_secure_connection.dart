@@ -37,7 +37,8 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
-        // Socket options TBD
+        // Socket options
+        _applySocketOptions(socket, socketOptions);
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -78,8 +79,8 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
-        // Socket options TBD
-
+        // Socket options
+        _applySocketOptions(socket, socketOptions);
         client = socket;
         MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
         _startListening();

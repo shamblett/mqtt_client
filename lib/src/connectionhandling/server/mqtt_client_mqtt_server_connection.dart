@@ -85,4 +85,13 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
   }
+
+  // Apply any socket options
+  void _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
+    if (socketOptions.isNotEmpty) {
+      for (final option in socketOptions) {
+        socket.setRawOption(option);
+      }
+    }
+  }
 }
