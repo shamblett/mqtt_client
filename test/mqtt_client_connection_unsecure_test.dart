@@ -7,6 +7,7 @@
 
 @TestOn('vm')
 
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
@@ -39,14 +40,13 @@ void main() {
   const testClientId = 'syncMqttTests';
   const nonExistantHostName = 'aabbccddeeffeeddccbbaa.aa.bb';
   const badPort = 1884;
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
   group('Synchronous MqttConnectionHandler', () {
     test('Connect to bad host name', () async {
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       try {
         await ch.connect(nonExistantHostName, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -65,10 +65,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       ch.onDisconnected = disconnectCB;
       try {
         await ch.connect(mockBrokerAddress, badPort,
@@ -84,10 +82,8 @@ void main() {
     test('Connect no connect ack', () async {
       await broker.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       final start = DateTime.now();
       try {
         await ch.connect(mockBrokerAddress, mockBrokerPort,
@@ -105,7 +101,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, reconnectTimePeriod: 1000);
+          maxConnectionAttempts: 3,
+          reconnectTimePeriod: 1000,
+          socketOptions: socketOptions);
 
       final start = DateTime.now();
 
@@ -134,10 +132,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       broker.setMessageHandler = messageHandler;
       ch.onConnected = connectCb;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
@@ -157,10 +153,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       broker.setMessageHandler = messageHandler;
       final status = await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));
@@ -196,10 +190,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       broker.setMessageHandler = messageHandlerConnect;
       await ch.connect(mockBrokerAddress, mockBrokerPort,
           MqttConnectMessage().withClientIdentifier(testClientId));

@@ -7,6 +7,7 @@
 
 @TestOn('vm')
 
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
@@ -24,15 +25,14 @@ void main() {
   const mockBrokerAddressWsBad = '://localhost.com';
   const mockBrokerPortWs = 8090;
   const testClientId = 'syncMqttTests';
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
   group('Connection parameters', () {
     test('Invalid URL', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttServerConnectionHandler(
-          clientEventBus,
-          maxConnectionAttempts: 3,
-        );
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+            maxConnectionAttempts: 3, socketOptions: socketOptions);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -57,10 +57,8 @@ void main() {
     test('Invalid URL - bad scheme', () async {
       try {
         final clientEventBus = events.EventBus();
-        final ch = SynchronousMqttServerConnectionHandler(
-          clientEventBus,
-          maxConnectionAttempts: 3,
-        );
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+            maxConnectionAttempts: 3, socketOptions: socketOptions);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -97,10 +95,8 @@ void main() {
 
       await brokerWs.start();
       final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: 3,
-      );
+      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+          maxConnectionAttempts: 3, socketOptions: socketOptions);
       MqttLogger.loggingOn = true;
       ch.useWebSocket = true;
       ch.websocketProtocols = <String>['SJHprotocol'];
