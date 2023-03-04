@@ -6,6 +6,7 @@
  */
 
 @TestOn('vm')
+import 'dart:io';
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -21,6 +22,7 @@ class MockCH extends Mock implements MqttServerConnectionHandler {}
 class MockCON extends Mock implements MqttServerNormalConnection {}
 
 void main() {
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
   group('Manager', () {
     test('Invalid topic returns null subscription', () {
       var cbCalled = false;
@@ -30,7 +32,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'house#';
@@ -43,7 +46,8 @@ void main() {
     });
     test('Subscription request creates pending subscription', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -68,7 +72,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -98,7 +103,8 @@ void main() {
         'Acknowledged subscription request for no pending subscription is ignored',
         () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -133,7 +139,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -170,7 +177,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -197,7 +205,8 @@ void main() {
     });
     test('Re subscribe', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -234,7 +243,8 @@ void main() {
     });
     test('Get subscription with valid topic returns subscription', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -261,7 +271,8 @@ void main() {
     });
     test('Get subscription with invalid topic returns null', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -287,7 +298,8 @@ void main() {
     });
     test('Get subscription for pending subscription returns null', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -313,7 +325,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -365,7 +378,8 @@ void main() {
       }
 
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       const topic = 'testtopic';
@@ -442,7 +456,8 @@ void main() {
       // Wrap the callback
       final dynamic t1 = expectAsync1(subRec, count: 2);
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       const qos = MqttQos.atLeastOnce;
       final subs = SubscriptionsManager(testCHS, pm, clientEventBus);

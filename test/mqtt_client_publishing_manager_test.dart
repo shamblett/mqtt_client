@@ -6,6 +6,7 @@
  */
 
 @TestOn('vm')
+import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
@@ -22,6 +23,7 @@ class MockCH extends Mock implements MqttServerConnectionHandler {}
 class MockCON extends Mock implements MqttServerNormalConnection {}
 
 void main() {
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
   group('Message Identifier', () {
     test('Numbering starts at 1', () {
       final dispenser = MessageIdentifierDispenser();
@@ -51,7 +53,8 @@ void main() {
     final con = MockCON();
     final ch = MockCH();
     final clientEventBus = events.EventBus();
-    final testCHNS = TestConnectionHandlerNoSend(clientEventBus);
+    final testCHNS = TestConnectionHandlerNoSend(clientEventBus,
+        socketOptions: socketOptions);
     testCHNS.connection = con;
     ch.connection = con;
     MessageCallbackFunction? cbFunc;
@@ -106,7 +109,8 @@ void main() {
   group('Publishing', () {
     test('Publish at least once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -130,7 +134,8 @@ void main() {
 
     test('Publish at least once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       final buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -153,7 +158,8 @@ void main() {
     });
     test('Publish at exactly once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -175,7 +181,8 @@ void main() {
     });
     test('Publish consecutive topics', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       final buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -190,7 +197,8 @@ void main() {
     });
     test('Publish at least once and ack', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -207,7 +215,8 @@ void main() {
     });
     test('Publish exactly once, release and complete', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -229,7 +238,8 @@ void main() {
     });
     test('Publish received at most once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -247,7 +257,8 @@ void main() {
     });
     test('Publish received at least once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -266,7 +277,8 @@ void main() {
     });
     test('Publish received at least once  - manual acknowledge in force', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       const msgId = 1;
@@ -287,7 +299,8 @@ void main() {
     });
     test('Publish recieved exactly once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -306,7 +319,8 @@ void main() {
     });
     test('Release recieved exactly once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -330,7 +344,8 @@ void main() {
     });
     test('Publish exactly once, interleaved scenario 1', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final payload1 = MqttClientPayloadBuilder();
@@ -364,7 +379,8 @@ void main() {
     });
     test('Publish exactly once, interleaved scenario 2', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final payload1 = MqttClientPayloadBuilder();
@@ -410,7 +426,8 @@ void main() {
   group('Manual Acknowledge', () {
     test('Manual Acknowledge not set', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
@@ -419,7 +436,8 @@ void main() {
     });
     test('Not Awaiting Acknowledge', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       pm.messageIdentifierDispenser.reset();
@@ -431,7 +449,8 @@ void main() {
     });
     test('Valid manual acknowledge', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus);
+      final testCHS = TestConnectionHandlerSend(clientEventBus,
+          socketOptions: socketOptions);
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       pm.messageIdentifierDispenser.reset();
