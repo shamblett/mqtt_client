@@ -13,8 +13,12 @@ class SynchronousMqttServerConnectionHandler
     extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttServerConnectionHandler(clientEventBus,
-      {required int maxConnectionAttempts, reconnectTimePeriod = 5000})
-      : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
+      {required int maxConnectionAttempts,
+      required socketOptions,
+      reconnectTimePeriod = 5000})
+      : super(clientEventBus,
+            maxConnectionAttempts: maxConnectionAttempts,
+            socketOptions: socketOptions) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }
@@ -41,13 +45,13 @@ class SynchronousMqttServerConnectionHandler
             MqttLogger.log(
                 'SynchronousMqttServerConnectionHandler::internalConnect - '
                 'alternate websocket implementation selected');
-            connection =
-                MqttServerWs2Connection(securityContext, clientEventBus);
+            connection = MqttServerWs2Connection(
+                securityContext, clientEventBus, socketOptions);
           } else {
             MqttLogger.log(
                 'SynchronousMqttServerConnectionHandler::internalConnect - '
                 'websocket selected');
-            connection = MqttServerWsConnection(clientEventBus);
+            connection = MqttServerWsConnection(clientEventBus, socketOptions);
           }
 
           final websocketProtocols = this.websocketProtocols;
@@ -61,12 +65,13 @@ class SynchronousMqttServerConnectionHandler
               'SynchronousMqttServerConnectionHandler::internalConnect - '
               'secure selected');
           connection = MqttServerSecureConnection(
-              securityContext, clientEventBus, onBadCertificate);
+              securityContext, clientEventBus, onBadCertificate, socketOptions);
         } else {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '
               'insecure TCP selected');
-          connection = MqttServerNormalConnection(clientEventBus);
+          connection =
+              MqttServerNormalConnection(clientEventBus, socketOptions);
         }
         connection.onDisconnected = onDisconnected;
       }

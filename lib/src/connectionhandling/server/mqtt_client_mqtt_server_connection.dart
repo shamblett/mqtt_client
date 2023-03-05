@@ -11,13 +11,18 @@ part of mqtt_server_client;
 abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
   /// Default constructor
-  MqttServerConnection(clientEventBus) : super(clientEventBus);
+  MqttServerConnection(clientEventBus, this.socketOptions)
+      : super(clientEventBus);
 
   /// Initializes a new instance of the MqttConnection class.
-  MqttServerConnection.fromConnect(server, port, clientEventBus)
+  MqttServerConnection.fromConnect(
+      server, port, clientEventBus, this.socketOptions)
       : super(clientEventBus) {
     connect(server, port);
   }
+
+  /// Socket options, applicable only to TCP sockets
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
@@ -79,5 +84,17 @@ abstract class MqttServerConnection<T extends Object>
         }
       }
     }
+  }
+
+  // Apply any socket options, true indicates options applied
+  bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
+    if (socketOptions.isNotEmpty) {
+      MqttLogger.log(
+          'MqttServerConnection::__applySocketOptions - Socket options supplied, applying');
+      for (final option in socketOptions) {
+        socket.setRawOption(option);
+      }
+    }
+    return socketOptions.isNotEmpty;
   }
 }

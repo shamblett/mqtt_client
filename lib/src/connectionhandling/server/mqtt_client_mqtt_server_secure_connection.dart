@@ -10,14 +10,14 @@ part of mqtt_server_client;
 /// The MQTT server secure connection class
 class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   /// Default constructor
-  MqttServerSecureConnection(
-      this.context, events.EventBus? eventBus, this.onBadCertificate)
-      : super(eventBus);
+  MqttServerSecureConnection(this.context, events.EventBus? eventBus,
+      this.onBadCertificate, List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions);
 
   /// Initializes a new instance of the MqttSecureConnection class.
-  MqttServerSecureConnection.fromConnect(
-      String server, int port, events.EventBus eventBus)
-      : super(eventBus) {
+  MqttServerSecureConnection.fromConnect(String server, int port,
+      events.EventBus eventBus, List<RawSocketOption> socketOptions)
+      : super(eventBus, socketOptions) {
     connect(server, port);
   }
 
@@ -37,6 +37,12 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connect - securing socket');
+        // Socket options
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttSecureConnection::connect - socket options applied');
+        }
         client = socket;
         readWrapper = ReadWrapper();
         messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -77,6 +83,12 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               onBadCertificate: onBadCertificate, context: context)
           .then((socket) {
         MqttLogger.log('MqttSecureConnection::connectAuto - securing socket');
+        // Socket options
+        final applied = _applySocketOptions(socket, socketOptions);
+        if (applied) {
+          MqttLogger.log(
+              'MqttSecureConnection::connectAuto - socket options applied');
+        }
         client = socket;
         MqttLogger.log('MqttSecureConnection::connectAuto - start listening');
         _startListening();

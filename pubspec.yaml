@@ -1,6 +1,6 @@
 name: mqtt_client
 description: A server and browser based MQTT client for Dart supporting normal, secure sockets and websockets.
-version: 9.7.4
+version: 9.7.5
 repository: https://github.com/shamblett/mqtt_client
 homepage: https://github.com/shamblett/mqtt_client
 
@@ -18,13 +18,13 @@ dependencies:
   meta: '^1.8.0'
 
 dev_dependencies:
-  test: '^1.21.2'
-  mockito: '^5.2.0'
-  lints: '^2.0.0'
-  build_runner: '^2.1.11'
-  build_test: '^2.1.5'
-  build_web_compilers: '^3.2.3'
-  http: '^0.13.4'
+  test: '^1.23.1'
+  mockito: '^5.3.2'
+  lints: '^2.0.1'
+  build_runner: '^2.3.3'
+  build_test: '^2.1.6'
+  build_web_compilers: '^3.2.7'
+  http: '^0.13.5'
   sigv4: '^5.0.0'
 
 false_secrets:
