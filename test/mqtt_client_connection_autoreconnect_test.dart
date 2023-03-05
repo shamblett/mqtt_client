@@ -102,7 +102,7 @@ void main() {
       expect(disconnectCallbackCalled, isFalse);
       expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
-    }, skip:true);
+    }, skip: true);
     test('Connected - Broker Disconnects Remains Active', () async {
       var autoReconnectCallbackCalled = false;
       var disconnectCallbackCalled = false;
@@ -144,6 +144,6 @@ void main() {
       expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       broker.close();
-    }, skip:true);
+    }, skip: true);
   });
 }
