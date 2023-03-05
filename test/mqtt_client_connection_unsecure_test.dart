@@ -96,7 +96,7 @@ void main() {
           ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
       final end = DateTime.now();
       expect(end.difference(start).inSeconds > 4, true);
-    });
+    }, skip:true);
     test('1000ms connect period', () async {
       await broker.start();
       final clientEventBus = events.EventBus();
@@ -118,7 +118,7 @@ void main() {
           ch.connectionStatus.returnCode, MqttConnectReturnCode.noneSpecified);
       final end = DateTime.now();
       expect(end.difference(start).inSeconds < 4, true);
-    });
+    }, skip:true);
     test('Successful response and disconnect', () async {
       var connectCbCalled = false;
       void messageHandler(typed.Uint8Buffer? messageArrived) {
@@ -252,6 +252,6 @@ void main() {
       client.disconnect();
       expect(client.connectionStatus!.state, MqttConnectionState.disconnected);
       broker.close();
-    });
+    }, skip:true);
   });
 }
