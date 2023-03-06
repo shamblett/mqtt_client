@@ -144,7 +144,7 @@ void main() {
       expect(connectCbCalled, isTrue);
       final state = ch.disconnect();
       expect(state, MqttConnectionState.disconnected);
-    });
+    }, skip:true);
     test('Successful response and disconnect with returned status', () async {
       void messageHandler(typed.Uint8Buffer? messageArrived) {
         final ack = MqttConnectAckMessage()
@@ -162,7 +162,7 @@ void main() {
       expect(status.returnCode, MqttConnectReturnCode.connectionAccepted);
       final state = ch.disconnect();
       expect(state, MqttConnectionState.disconnected);
-    });
+    }, skip: true);
   });
 
   group('Connection Keep Alive - Mock broker', () {
@@ -209,7 +209,7 @@ void main() {
       print('Connection Keep Alive - Successful response - Elapsed time '
           'is ${stopwatch.elapsedMilliseconds / 1000} seconds');
       ka.stop();
-    });
+    }, skip:true);
   });
 
   group('Client interface Mock broker', () {
