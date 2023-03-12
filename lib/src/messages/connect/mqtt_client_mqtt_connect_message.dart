@@ -28,13 +28,14 @@ class MqttConnectMessage extends MqttMessage {
   /// Sets the name of the protocol to use.
   MqttConnectMessage withProtocolName(String protocolName) {
     variableHeader!.protocolName = protocolName;
+    Protocol.name = protocolName;
     return this;
   }
 
-  /// Sets the protocol version. (Defaults to v3, the only protcol
-  /// version supported)
+  /// Sets the protocol version.
   MqttConnectMessage withProtocolVersion(int protocolVersion) {
     variableHeader!.protocolVersion = protocolVersion;
+    Protocol.version = protocolVersion;
     return this;
   }
 
