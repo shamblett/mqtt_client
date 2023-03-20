@@ -66,13 +66,18 @@ class MockSocket extends Mock implements Socket {
 ///
 /// Mock socket scenario classes
 ///
-class MqttSimpleConnect extends MockSocket {
+///
+
+///
+/// Simple connect, always sends a connect ack no matter what is received.
+///
+class MqttMockSocketSimpleConnect extends MockSocket {
   dynamic onDataFunc;
 
-  static Future<MqttSimpleConnectWithDisconnect> connect(host, int port,
+  static Future<MqttMockSocketSimpleConnect> connect(host, int port,
       {sourceAddress, int sourcePort = 0, Duration? timeout}) {
-    final completer = Completer<MqttSimpleConnectWithDisconnect>();
-    final extSocket = MqttSimpleConnectWithDisconnect();
+    final completer = Completer<MqttMockSocketSimpleConnect>();
+    final extSocket = MqttMockSocketSimpleConnect();
     extSocket.port = port;
     extSocket.host = host;
     completer.complete(extSocket);
@@ -100,16 +105,19 @@ class MqttSimpleConnect extends MockSocket {
   }
 }
 
-class MqttSimpleConnectWithDisconnect extends MockSocket {
+///
+/// Connected - Broker Disconnects Stays Inactive
+///
+class MqttMockSocketScenario1 extends MockSocket {
   dynamic onDataFunc;
   dynamic onDoneFunc;
 
   static bool initial = true;
 
-  static Future<MqttSimpleConnectWithDisconnect> connect(host, int port,
+  static Future<MqttMockSocketScenario1> connect(host, int port,
       {sourceAddress, int sourcePort = 0, Duration? timeout}) {
-    final completer = Completer<MqttSimpleConnectWithDisconnect>();
-    final extSocket = MqttSimpleConnectWithDisconnect();
+    final completer = Completer<MqttMockSocketScenario1>();
+    final extSocket = MqttMockSocketScenario1();
     extSocket.port = port;
     extSocket.host = host;
     completer.complete(extSocket);
@@ -130,6 +138,53 @@ class MqttSimpleConnectWithDisconnect extends MockSocket {
       final out = Uint8List.fromList(ms.buffer!.toList());
       onDataFunc(out);
     } else {
+      onDoneFunc();
+    }
+  }
+
+  @override
+  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+    onDataFunc = onData;
+    onDoneFunc = onDone;
+    return outgoing;
+  }
+}
+
+///
+/// Connected - Broker Disconnects Remains Active
+///
+class MqttMockSocketScenario2 extends MockSocket {
+  dynamic onDataFunc;
+  dynamic onDoneFunc;
+
+  static bool initial = true;
+
+  static Future<MqttMockSocketScenario2> connect(host, int port,
+      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+    final completer = Completer<MqttMockSocketScenario2>();
+    final extSocket = MqttMockSocketScenario2();
+    extSocket.port = port;
+    extSocket.host = host;
+    completer.complete(extSocket);
+    return completer.future;
+  }
+
+  @override
+  void add(List<int> data) {
+    mockBytes.addAll(data);
+    if (initial) {
+      initial = false;
+      final ack = MqttConnectAckMessage()
+          .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+      final buff = Uint8Buffer();
+      final ms = MqttByteBuffer(buff);
+      ack.writeTo(ms);
+      ms.seek(0);
+      final out = Uint8List.fromList(ms.buffer!.toList());
+      onDataFunc(out);
+    } else {
+      initial = true;
       onDoneFunc();
     }
   }

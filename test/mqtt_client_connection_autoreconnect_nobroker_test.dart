@@ -7,7 +7,6 @@
 
 @TestOn('vm')
 import 'dart:io';
-import 'dart:async';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -55,7 +54,7 @@ void main() {
                 {dynamic sourceAddress,
                 int sourcePort = 0,
                 Duration? timeout}) =>
-            MqttSimpleConnectWithDisconnect.connect(host, port,
+            MqttMockSocketScenario1.connect(host, port,
                 sourceAddress: sourceAddress,
                 sourcePort: sourcePort,
                 timeout: timeout));
