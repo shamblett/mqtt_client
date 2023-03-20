@@ -21,7 +21,7 @@ class MessageSerializationHelper {
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. Uses a standard TCP connection.
-class MockBroker {
+class kkMockBroker {
   MockBroker();
 
   int brokerPort = 1883;
