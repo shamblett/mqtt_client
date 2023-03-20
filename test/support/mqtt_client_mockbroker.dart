@@ -156,7 +156,7 @@ class MockBrokerWs {
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
-class MockBrokerSecure {
+class MockBrokerSecurekk {
   MockBrokerSecure();
 
   int brokerPort = 8883;
