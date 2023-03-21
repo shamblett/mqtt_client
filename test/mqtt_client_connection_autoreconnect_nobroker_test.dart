@@ -35,6 +35,7 @@ void main() {
       client.keepAlivePeriod = 1;
       client.autoReconnect = true;
       final socketOption = RawSocketOption.fromInt(6, 0x10, 2);
+      client.socketOptions.add(socketOption);
       client.onAutoReconnect = autoReconnect;
       client.onDisconnected = disconnect;
       const username = 'unused 4';
