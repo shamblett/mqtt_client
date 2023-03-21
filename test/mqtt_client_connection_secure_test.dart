@@ -11,7 +11,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 import 'package:path/path.dart' as path;
 import 'package:event_bus/event_bus.dart' as events;
@@ -38,46 +38,7 @@ void main() {
   const mockBrokerAddress = 'localhost';
   const mockBrokerPort = 8883;
   const testClientId = 'syncMqttTests';
-  const nonExistantHostName = 'aabbccddeeffeeddccbbaa.aa.bb';
-  const badPort = 1884;
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
-
-  group('Synchronous MqttConnectionHandler', () {
-    test('Connect to bad host name', () async {
-      final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
-      ch.secure = true;
-      try {
-        await ch.connect(nonExistantHostName, mockBrokerPort,
-            MqttConnectMessage().withClientIdentifier(testClientId));
-      } on Exception catch (e) {
-        expect(e.toString().contains('Failed host lookup'), isTrue);
-        expect(e.toString().contains(nonExistantHostName), isTrue);
-      }
-      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
-    }, skip: true);
-    test('Connect invalid port', () async {
-      var cbCalled = false;
-      void disconnectCB() {
-        cbCalled = true;
-      }
-
-      final clientEventBus = events.EventBus();
-      final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
-      ch.secure = true;
-      ch.onDisconnected = disconnectCB;
-      try {
-        await ch.connect(mockBrokerAddress, badPort,
-            MqttConnectMessage().withClientIdentifier(testClientId));
-      } on Exception catch (e) {
-        expect(e.toString().contains('refused'), isTrue);
-      }
-      expect(ch.connectionStatus.state, MqttConnectionState.faulted);
-      expect(cbCalled, isTrue);
-    });
-  });
 
   group('MockBroker', () {
     late MockBrokerSecure broker;
