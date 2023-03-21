@@ -19,76 +19,6 @@ class MessageSerializationHelper {
   }
 }
 
-/// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
-/// connection handlers that are difficult to test otherwise. Uses a standard TCP connection.
-class kkMockBroker {
-  MockBroker();
-
-  int brokerPort = 1883;
-  late ServerSocket listener;
-  MessageHandlerFunction? handler;
-  Socket? client;
-  MqttByteBuffer? networkstream;
-  typed.Uint8Buffer headerBytes = typed.Uint8Buffer(1);
-
-  FutureOr<dynamic> start() {
-    final completer = Completer<dynamic>();
-    ServerSocket.bind('localhost', brokerPort, shared: true)
-        .then((dynamic server) {
-      listener = server;
-      listener.listen(_connectAccept);
-      print('MockBroker::we are bound');
-      return completer.complete();
-    });
-    return completer.future;
-  }
-
-  Future<void> stop() async {
-    print('MockBroker:: stopping server');
-    close();
-    await listener.close();
-  }
-
-  void _connectAccept(Socket clientSocket) {
-    print('MockBroker::connectAccept');
-    client = clientSocket;
-    client!.listen(_dataArrivedOnConnection);
-  }
-
-  void _dataArrivedOnConnection(List<int> data) {
-    print('MockBroker::data arrived ${data.toString()}');
-    final dataBytesBuff = typed.Uint8Buffer();
-    dataBytesBuff.addAll(data);
-    networkstream = MqttByteBuffer(dataBytesBuff);
-    networkstream!.seek(0);
-    // Assume will have all the data for localhost testing purposes
-    final msg = MqttMessage.createFrom(networkstream!);
-    print(msg.toString());
-    if (handler != null) {
-      handler!(networkstream!.buffer);
-    }
-    networkstream = null;
-  }
-
-  /// Sets a function that will be passed the next message received by the faked out broker.
-  set setMessageHandler(MessageHandlerFunction messageHandler) =>
-      handler = messageHandler;
-
-  /// Sends the message to the client connected to the broker.
-  void sendMessage(MqttMessage msg) {
-    print('MockBroker::sending message ${msg.toString()}');
-    final messBuff = MessageSerializationHelper.getMessageBytes(msg);
-    print('MockBroker::sending message bytes ${messBuff.toString()}');
-    client!.add(messBuff.toList());
-  }
-
-  /// Close the broker client socket
-  void close() {
-    print('MockBroker:: closing client socket');
-    client?.destroy();
-  }
-}
-
 /// Mocks a websocket broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise.
 class MockBrokerWs {
@@ -156,7 +86,7 @@ class MockBrokerWs {
 
 /// Mocks a broker, such as the RSMB, so that we can test the MqttConnection class, and some bits of the
 /// connection handlers that are difficult to test otherwise. standard TCP connection.
-class MockBrokerSecurekk {
+class MockBrokerSecure {
   MockBrokerSecure();
 
   int brokerPort = 8883;
