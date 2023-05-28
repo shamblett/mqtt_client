@@ -13,12 +13,12 @@ part of mqtt_client;
 /// The MQTT string format is simply a pascal string with ANSI character
 /// encoding. The first 2 bytes define the length of the string, and they
 /// are followed by the string itself.
-class MqttEncoding extends Utf8Codec {
+class MqttEncoding {
   /// Encodes all the characters in the specified string
   /// into a sequence of bytes.
   typed.Uint8Buffer getBytes(String s) {
     _validateString(s);
-    final stringConverted = encoder.convert(s);
+    final stringConverted = utf8.encoder.convert(s);
     if (stringConverted.length > 65535) {
       throw Exception(
           'MqttUtf8Encoding::toUtf8 -  UTF8 string length is invalid, length is ${stringConverted.length}');
@@ -31,7 +31,8 @@ class MqttEncoding extends Utf8Codec {
   }
 
   /// Decodes the bytes in the specified byte array into a string.
-  String getString(typed.Uint8Buffer bytes) => decoder.convert(bytes.toList());
+  String getString(typed.Uint8Buffer bytes) =>
+      utf8.decoder.convert(bytes.toList());
 
   ///  When overridden in a derived class, calculates the number of characters
   ///  produced by decoding all the bytes in the specified byte array.
