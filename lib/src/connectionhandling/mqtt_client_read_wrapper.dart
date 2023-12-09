@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// State and logic used to read from the underlying network stream.
 class ReadWrapper {

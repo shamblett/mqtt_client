@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// Callback function definitions
 typedef MessageCallbackFunction = bool Function(MqttMessage? message);

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_browser_client;
+part of '../../../mqtt_browser_client.dart';
 
 ///  This class provides specific connection functionality
 ///  for browser based connection handler implementations.

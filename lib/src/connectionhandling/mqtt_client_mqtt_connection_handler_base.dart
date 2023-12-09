@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 ///  This class provides shared connection functionality
 ///  to serverand browser connection handler implementations.

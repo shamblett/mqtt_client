@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_browser_client;
+part of '../../../mqtt_browser_client.dart';
 
 /// The MQTT browser connection base class
 abstract class MqttBrowserConnection<T extends Object>

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// The MQTT client connection base class
 abstract class MqttConnectionBase<T extends Object> {
