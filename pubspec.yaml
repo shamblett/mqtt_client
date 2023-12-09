@@ -19,13 +19,13 @@ dependencies:
 
 dev_dependencies:
   test: '^1.24.3'
-  lints: '^2.1.0'
+  lints: '^3.0.0'
   build_runner: '^2.4.4'
   build_test: '^2.1.7'
   build_web_compilers: '^4.0.3'
   http: '^0.13.6'
   sigv4: '^5.0.0'
-  mocktail: '^0.3.0'
+  mocktail: '^1.0.1'
 
 false_secrets:
   - /test/pem/self_signed.key
