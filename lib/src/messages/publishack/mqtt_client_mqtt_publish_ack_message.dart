@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a
 /// publish message that has it's QOS set to AtLeast or Exactly Once.

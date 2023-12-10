@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// Utility class to assist with the building of message topic payloads.
 /// Implements the builder pattern, i.e. returns itself to allow chaining.

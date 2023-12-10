@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../../mqtt_client.dart';
 
 /// Message that indicates a connection acknowledgement.
 class MqttConnectAckMessage extends MqttMessage {

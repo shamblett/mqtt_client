@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// Exception thrown when the connection state is incorrect.
 class ConnectionException implements Exception {

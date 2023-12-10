@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 /// Interface that defines how the publishing manager publishes
 /// messages to the broker and how it passed on messages that are

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of '../mqtt_server_client.dart';
 
 class MqttServerClient extends MqttClient {
   /// Initializes a new instance of the MqttServerClient class using the

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 ///     Interface that defines the methods and properties that must be provided
 ///     by classes that interpret and convert inbound and outbound

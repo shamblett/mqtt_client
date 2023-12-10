@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../../mqtt_client.dart';
 
 /// An Mqtt message that is used to initiate a connection to a message broker.
 class MqttConnectMessage extends MqttMessage {
