@@ -12,9 +12,8 @@ part of '../../../mqtt_browser_client.dart';
 class SynchronousMqttBrowserConnectionHandler
     extends MqttBrowserConnectionHandler {
   /// Initializes a new instance of the MqttConnectionHandler class.
-  SynchronousMqttBrowserConnectionHandler(clientEventBus,
-      {required int maxConnectionAttempts, reconnectTimePeriod = 5000})
-      : super(clientEventBus, maxConnectionAttempts: maxConnectionAttempts) {
+  SynchronousMqttBrowserConnectionHandler(super.clientEventBus,
+      {required super.maxConnectionAttempts, reconnectTimePeriod = 5000}) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }

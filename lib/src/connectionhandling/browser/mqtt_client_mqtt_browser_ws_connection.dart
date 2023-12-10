@@ -10,7 +10,7 @@ part of '../../../mqtt_browser_client.dart';
 /// The MQTT connection class for the browser websocket interface
 class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
   /// Default constructor
-  MqttBrowserWsConnection(events.EventBus? eventBus) : super(eventBus);
+  MqttBrowserWsConnection(super.eventBus);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttBrowserWsConnection.fromConnect(
