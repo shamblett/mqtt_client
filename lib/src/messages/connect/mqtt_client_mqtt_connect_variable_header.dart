@@ -13,8 +13,8 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   MqttConnectVariableHeader();
 
   /// Initializes a new instance of the MqttConnectVariableHeader class.
-  MqttConnectVariableHeader.fromByteBuffer(MqttByteBuffer headerStream)
-      : super.fromByteBuffer(headerStream);
+  MqttConnectVariableHeader.fromByteBuffer(super.headerStream)
+      : super.fromByteBuffer();
 
   /// Creates a variable header from the specified header stream.
   @override

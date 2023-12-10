@@ -12,13 +12,11 @@ part of '../../../mqtt_server_client.dart';
 class SynchronousMqttServerConnectionHandler
     extends MqttServerConnectionHandler {
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
-  SynchronousMqttServerConnectionHandler(clientEventBus,
+  SynchronousMqttServerConnectionHandler(super.clientEventBus,
       {required int maxConnectionAttempts,
-      required socketOptions,
+      required super.socketOptions,
       reconnectTimePeriod = 5000})
-      : super(clientEventBus,
-            maxConnectionAttempts: maxConnectionAttempts,
-            socketOptions: socketOptions) {
+      : super(maxConnectionAttempts: maxConnectionAttempts) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }

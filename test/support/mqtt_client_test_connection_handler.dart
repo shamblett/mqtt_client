@@ -9,11 +9,8 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerNoSend(var clientEventBus,
-      {int? maxConnectionAttempts, socketOptions})
-      : super(clientEventBus,
-            maxConnectionAttempts: maxConnectionAttempts,
-            socketOptions: socketOptions);
+  TestConnectionHandlerNoSend(super.clientEventBus,
+      {super.maxConnectionAttempts, required super.socketOptions});
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
@@ -28,11 +25,8 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 }
 
 class TestConnectionHandlerSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerSend(var clientEventBus,
-      {int? maxConnectionAttempts, socketOptions})
-      : super(clientEventBus,
-            maxConnectionAttempts: maxConnectionAttempts,
-            socketOptions: socketOptions);
+  TestConnectionHandlerSend(super.clientEventBus,
+      {super.maxConnectionAttempts, required super.socketOptions});
 
   List<MqttMessage?> sentMessages = <MqttMessage?>[];
 

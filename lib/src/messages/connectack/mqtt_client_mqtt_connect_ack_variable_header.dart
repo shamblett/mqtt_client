@@ -13,8 +13,8 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
   MqttConnectAckVariableHeader();
 
   /// Initializes a new instance of the MqttConnectVariableHeader class.
-  MqttConnectAckVariableHeader.fromByteBuffer(MqttByteBuffer headerStream)
-      : super.fromByteBuffer(headerStream);
+  MqttConnectAckVariableHeader.fromByteBuffer(super.headerStream)
+      : super.fromByteBuffer();
 
   /// Writes the variable header for an MQTT Connect message to
   /// the supplied stream.
