@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 typedef Validation = void Function(Topic topic);
 

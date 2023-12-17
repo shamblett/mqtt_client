@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of '../mqtt_server_client.dart';
 
 class MqttServerClient extends MqttClient {
   /// Initializes a new instance of the MqttServerClient class using the
@@ -13,10 +13,10 @@ class MqttServerClient extends MqttClient {
   /// The server hostname or URL to connect to
   /// The client identifier to use to connect with
   MqttServerClient(
-    String server,
-    String clientIdentifier, {
+    super.server,
+    super.clientIdentifier, {
     this.maxConnectionAttempts = 3,
-  }) : super(server, clientIdentifier);
+  });
 
   /// Initializes a new instance of the MqttServerClient class using
   /// the supplied Mqtt Port.
@@ -24,11 +24,11 @@ class MqttServerClient extends MqttClient {
   /// The client identifier to use to connect with
   /// The port to use
   MqttServerClient.withPort(
-    String server,
-    String clientIdentifier,
-    int port, {
+    super.server,
+    super.clientIdentifier,
+    super.port, {
     this.maxConnectionAttempts = 3,
-  }) : super.withPort(server, clientIdentifier, port);
+  }) : super.withPort();
 
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 /// Handles the logic and workflow surrounding the message publishing and receipt process.
 ///

@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// Converts string data to and from the MQTT wire format
 class AsciiPayloadConverter implements PayloadConverter<String> {

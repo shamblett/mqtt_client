@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../../mqtt_client.dart';
 
 /// Enumeration of allowable connection request return codes from a broker.
 enum MqttConnectReturnCode {

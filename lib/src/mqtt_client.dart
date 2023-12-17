@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 /// The client disconnect callback type
 typedef DisconnectCallback = void Function();
@@ -161,7 +161,7 @@ class MqttClient {
   /// stream on completion of the message publishing protocol for a Qos level.
   /// Attach listeners only after connect has been called.
   Stream<MqttPublishMessage>? get published =>
-      publishingManager != null ? publishingManager!.published.stream : null;
+      publishingManager?.published.stream;
 
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus

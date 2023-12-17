@@ -6,7 +6,7 @@
  * 01/19/2019 : Don Edvalson - Added this alternate websocket class to work around AWS deficiencies.
  */
 
-part of mqtt_server_client;
+part of '../../../mqtt_server_client.dart';
 
 /// Detatched socket class for alternative websocket support
 class _DetachedSocket extends Stream<Uint8List> implements Socket {

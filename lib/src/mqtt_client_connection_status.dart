@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 /// Records the status of the last connection attempt
 class MqttClientConnectionStatus {

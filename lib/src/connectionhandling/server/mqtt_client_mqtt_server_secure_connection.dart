@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_server_client;
+part of '../../../mqtt_server_client.dart';
 
 /// The MQTT server secure connection class
 class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {

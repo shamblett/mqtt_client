@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../../mqtt_client.dart';
 
 /// Implementation of the variable header for an MQTT Unsubscribe Ack message.
 class MqttUnsubscribeAckVariableHeader extends MqttVariableHeader {

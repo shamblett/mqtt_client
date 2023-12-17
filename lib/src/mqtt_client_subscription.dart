@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../mqtt_client.dart';
 
 /// Entity that captures data related to an individual subscription
 class Subscription extends observe.Observable<observe.ChangeRecord> {

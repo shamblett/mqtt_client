@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-part of mqtt_client;
+part of '../../mqtt_client.dart';
 
 /// Exception thrown when a browser or server client is instantiated incorrectly.
 class IncorrectInstantiationException implements Exception {
