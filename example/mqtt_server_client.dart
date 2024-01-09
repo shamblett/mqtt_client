@@ -112,9 +112,7 @@ Future<int> main() async {
   const topic = 'test/lol'; // Not a wildcard topic
   client.subscribe(topic, MqttQos.atMostOnce);
 
-  /// The client has a change notifier object(see the Observable class) which we then listen to to get
-  /// notifications of published updates to each subscribed topic.
-  client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+  void onData(List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
     final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
@@ -127,7 +125,11 @@ Future<int> main() async {
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
-  });
+  }
+
+  /// The client has a change notifier object(see the Observable class) which we then listen to to get
+  /// notifications of published updates to each subscribed topic.
+  var sub = client.updates!.listen(onData);
 
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
@@ -160,6 +162,9 @@ Future<int> main() async {
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic);
+
+  /// Don't forget to cancel listeners of updates!
+  await sub.cancel();
 
   /// Wait for the unsubscribe message from the broker if you wish.
   await MqttUtilities.asyncSleep(2);
