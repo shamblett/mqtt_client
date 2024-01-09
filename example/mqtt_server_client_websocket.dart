@@ -108,7 +108,7 @@ Future<int> main() async {
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
-  client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+  void onData(List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
     final pt =
         MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
@@ -121,12 +121,14 @@ Future<int> main() async {
     print(
         'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
     print('');
-  });
+  }
+
+  client.updates!.listen(onData);
 
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
-  client.published!.listen((MqttPublishMessage message) {
+  var sub = client.published!.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
   });
@@ -154,6 +156,9 @@ Future<int> main() async {
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic);
+
+  /// Don't forget to cancel listeners of updates!
+  await sub.cancel();
 
   /// Wait for the unsubscribe message from the broker if you wish.
   await MqttUtilities.asyncSleep(2);
