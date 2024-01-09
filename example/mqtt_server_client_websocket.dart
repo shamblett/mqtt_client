@@ -123,12 +123,12 @@ Future<int> main() async {
     print('');
   }
 
-  client.updates!.listen(onData);
+  var sub = client.updates!.listen(onData);
 
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
-  var sub = client.published!.listen((MqttPublishMessage message) {
+  client.published!.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
   });
