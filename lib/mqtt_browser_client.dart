@@ -8,7 +8,7 @@
 library mqtt_browser_client;
 
 import 'dart:async';
-import 'dart:html';
+import 'package:universal_html/html.dart';
 import 'dart:typed_data';
 import 'package:event_bus/event_bus.dart' as events;
 import 'package:typed_data/typed_data.dart' as typed;
