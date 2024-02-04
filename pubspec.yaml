@@ -40,6 +40,6 @@ topics:
 
 screenshots:
     - description: 'MQTT Specification'
-      path: example/screenshots/mqtt-ver.png
+      path: example/screenshots/mqtt-ver.webp
     - description: 'MQTT IOT Usage'
       path: example/screenshots/MQTT-1.webp
