@@ -1,6 +1,6 @@
 name: mqtt_client
 description: A server and browser based MQTT client for Dart supporting normal, secure sockets and websockets.
-version: 10.0.2
+version: 10.0.3
 repository: https://github.com/shamblett/mqtt_client
 homepage: https://github.com/shamblett/mqtt_client
 
@@ -31,3 +31,15 @@ dev_dependencies:
 false_secrets:
   - /test/pem/self_signed.key
   - /test/pem/localhost.key
+
+topics:
+  - iot
+  - chat
+  - mqtt
+  - data
+
+screenshots:
+    - description: 'MQTT Specification'
+      path: example/screenshots/mqtt-ver.png
+    - description: 'MQTT IOT Usage'
+      path: example/screenshots/MQTT-1.webp
