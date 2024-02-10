@@ -28,44 +28,45 @@ import 'package:sigv4/sigv4.dart';
 // This function is based on the one from package flutter-aws-iot, but adapted slightly
 String getWebSocketURL(
     {required String accessKey,
-      required String secretKey,
-      required String sessionToken,
-      required String region,
-      required String scheme,
-      required String endpoint,
-      required String urlPath}) {
-
-  final creds = AWSCredentials(accessKey,secretKey,sessionToken);
+    required String secretKey,
+    required String sessionToken,
+    required String region,
+    required String scheme,
+    required String endpoint,
+    required String urlPath}) {
+  final creds = AWSCredentials(accessKey, secretKey, sessionToken);
 
   final signer = AWSSigV4Signer(
-    credentialsProvider: AWSCredentialsProvider( creds ),
+    credentialsProvider: AWSCredentialsProvider(creds),
   );
 
   final scope = AWSCredentialScope(
-      region: region,
-      service: new AWSService('iotdevicegateway')
-  );
+      region: region, service: AWSService('iotdevicegateway'));
 
   final request = AWSHttpRequest(
     method: AWSHttpMethod.get,
     uri: Uri.https(endpoint, urlPath),
   );
 
-  ServiceConfiguration serviceConfiguration = const BaseServiceConfiguration(omitSessionToken: true);
+  ServiceConfiguration serviceConfiguration =
+      const BaseServiceConfiguration(omitSessionToken: true);
 
-  var signed = signer.presignSync(request, credentialScope: scope, expiresIn: Duration(hours: 1), serviceConfiguration: serviceConfiguration);
+  var signed = signer.presignSync(request,
+      credentialScope: scope,
+      expiresIn: Duration(hours: 1),
+      serviceConfiguration: serviceConfiguration);
   var finalParams = signed.query;
   return '$scheme$endpoint$urlPath?$finalParams';
 }
 
 Future<bool> attachPolicy(
     {required String accessKey,
-      required String secretKey,
-      required String sessionToken,
-      required String identityId,
-      required String iotApiUrl,
-      required String region,
-      required String policyName}) async {
+    required String secretKey,
+    required String sessionToken,
+    required String identityId,
+    required String iotApiUrl,
+    required String region,
+    required String policyName}) async {
   final sigv4Client = Sigv4Client(
       keyId: accessKey,
       accessKey: secretKey,
@@ -76,7 +77,7 @@ Future<bool> attachPolicy(
   final body = json.encode({'target': identityId});
 
   final request =
-  sigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
+      sigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
 
   var result = await put(request.url, headers: request.headers, body: body);
 
@@ -152,7 +153,7 @@ Future<int> main() async {
   client.keepAlivePeriod = 30;
 
   final MqttConnectMessage connMess =
-  MqttConnectMessage().withClientIdentifier(identityId);
+      MqttConnectMessage().withClientIdentifier(identityId);
 
   client.connectionMessage = connMess;
 
@@ -182,7 +183,7 @@ Future<int> main() async {
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final recMess = c[0].payload as MqttPublishMessage;
       final pt =
-      MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
       print(
           'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
       print('');
