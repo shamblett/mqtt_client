@@ -124,6 +124,9 @@ Future<int> main() async {
 
   /// The client has a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic.
+  /// In general you should listen here as soon as possible after connecting, you will not receive any
+  /// publish messages until you do this.
+  /// Also you must re-listen after disconnecting.
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
     final pt =

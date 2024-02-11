@@ -245,4 +245,7 @@ class SubscriptionsManager {
           'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false');
     }
   }
+
+  /// Closes the subscription notifier
+  void closeSubscriptionNotifier() => _subscriptionNotifier.close();
 }

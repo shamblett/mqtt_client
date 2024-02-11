@@ -487,6 +487,7 @@ class MqttClient {
 
     publishingManager?.published.close();
     publishingManager = null;
+    subscriptionsManager?.closeSubscriptionNotifier();
     subscriptionsManager = null;
     keepAlive?.stop();
     keepAlive = null;
