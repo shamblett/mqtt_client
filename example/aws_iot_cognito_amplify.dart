@@ -7,15 +7,14 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:io';
+
 import 'package:aws_common/aws_common.dart';
 import 'package:aws_signature_v4/aws_signature_v4.dart';
-
-import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:http/http.dart';
-import 'package:sigv4/sigv4.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
+// import 'package:http/http.dart';
 
 /// An example of connecting to the AWS IoT Core MQTT broker and publishing to a devices topic.
 /// This example uses MQTT over Websockets with AWS IAM Credentials
@@ -59,34 +58,34 @@ String getWebSocketURL(
   return '$scheme$endpoint$urlPath?$finalParams';
 }
 
-Future<bool> attachPolicy(
-    {required String accessKey,
-    required String secretKey,
-    required String sessionToken,
-    required String identityId,
-    required String iotApiUrl,
-    required String region,
-    required String policyName}) async {
-  final sigv4Client = Sigv4Client(
-      keyId: accessKey,
-      accessKey: secretKey,
-      sessionToken: sessionToken,
-      region: region,
-      serviceName: 'execute-api');
+// Future<bool> attachPolicy(
+//     {required String accessKey,
+//     required String secretKey,
+//     required String sessionToken,
+//     required String identityId,
+//     required String iotApiUrl,
+//     required String region,
+//     required String policyName}) async {
+//   final sigv4Client = Sigv4Client(
+//       keyId: accessKey,
+//       accessKey: secretKey,
+//       sessionToken: sessionToken,
+//       region: region,
+//       serviceName: 'execute-api');
 
-  final body = json.encode({'target': identityId});
+//   final body = json.encode({'target': identityId});
 
-  final request =
-      sigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
+//   final request =
+//       sigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
 
-  var result = await put(request.url, headers: request.headers, body: body);
+//   var result = await put(request.url, headers: request.headers, body: body);
 
-  if (result.statusCode != 200) {
-    print('Error attaching IoT Policy ${result.body}');
-  }
+//   if (result.statusCode != 200) {
+//     print('Error attaching IoT Policy ${result.body}');
+//   }
 
-  return result.statusCode == 200;
-}
+//   return result.statusCode == 200;
+// }
 
 Future<int> main() async {
   // Your AWS region
@@ -98,9 +97,9 @@ Future<int> main() async {
   // AWS IoT MQTT default port for websockets
   const port = 443;
   // Your AWS IoT Core control API endpoint (https://docs.aws.amazon.com/general/latest/gr/iot-core.html#iot-core-control-plane-endpoints)
-  const iotApiUrl = 'https://iot.$region.amazonaws.com/target-policies';
+  // const iotApiUrl = 'https://iot.$region.amazonaws.com/target-policies';
   // The AWS IOT Core policy name that you want to attach to the identity
-  const policyName = '<iot-policy-name>';
+  // const policyName = '<iot-policy-name>';
 
   // The necessary AWS credentials to make a connection.
   // Obtaining them is not part of this example, but you can get the below credentials via any cognito/amplify library like amazon_cognito_identity_dart_2 or amplify_auth_cognito.
@@ -115,17 +114,17 @@ Future<int> main() async {
   // You MUST attach a policy for an AUTHENTICATED user to allow access to iot core (regular cognito or federated id)
   // You CAN attach a policy to an UNAUTHENTICATED user for control, but this is not necessary
   // Make sure that the the credentials that call this API have the right IAM permissions for AttachPolicy (https://docs.aws.amazon.com/iot/latest/apireference/API_AttachPolicy.html)
-  if (!await attachPolicy(
-      accessKey: accessKey,
-      secretKey: secretKey,
-      sessionToken: sessionToken,
-      identityId: identityId,
-      iotApiUrl: iotApiUrl,
-      region: region,
-      policyName: policyName)) {
-    print('MQTT client setup error - attachPolicy failed');
-    exit(-1);
-  }
+  // if (!await attachPolicy(
+  //     accessKey: accessKey,
+  //     secretKey: secretKey,
+  //     sessionToken: sessionToken,
+  //     identityId: identityId,
+  //     iotApiUrl: iotApiUrl,
+  //     region: region,
+  //     policyName: policyName)) {
+  //   print('MQTT client setup error - attachPolicy failed');
+  //   exit(-1);
+  // }
 
   // Transform the url into a Websocket url using SigV4 signing
   String signedUrl = getWebSocketURL(
