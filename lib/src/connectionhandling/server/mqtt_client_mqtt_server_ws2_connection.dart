@@ -249,7 +249,7 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     final key = 'mqtt-$now';
     final key64 = base64.encode(utf8.encode(key));
 
-    var request = 'GET $path HTTP/1.1 $endL';
+    var request = 'GET $path HTTP/1.1$endL';
     request += 'Host: $host$endL';
     request += 'Upgrade: websocket$endL';
     request += 'Connection: Upgrade$endL';
