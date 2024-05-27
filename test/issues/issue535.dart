@@ -14,7 +14,7 @@ import 'package:test/test.dart';
 
 Future<int> main() {
   test('Trigger available bytes is less', () {
-
+    // Add mock socket with not enough bytes scenario
   };
 
   return 0;
