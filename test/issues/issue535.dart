@@ -23,6 +23,8 @@ class MqttMockSocketScenario1 extends MockSocket {
   dynamic onDoneFunc;
 
   static bool initial = true;
+  static bool partial = true;
+  static bool complete = true;
 
   static Future<MqttMockSocketScenario1> connect(host, int port,
       {sourceAddress, int sourcePort = 0, Duration? timeout}) {
@@ -37,6 +39,7 @@ class MqttMockSocketScenario1 extends MockSocket {
   @override
   void add(List<int> data) {
     mockBytes.addAll(data);
+    int msLast = 0;
     if (initial) {
       initial = false;
       final ack = MqttConnectAckMessage()
@@ -47,17 +50,20 @@ class MqttMockSocketScenario1 extends MockSocket {
       ms.seek(0);
       final out = Uint8List.fromList(ms.buffer!.toList());
       onDataFunc(out);
-    } else {
+    } else if (partial) {
+      partial = false;
       final subAck = MqttSubscribeAckMessage().withMessageIdentifier(1);
       final buff = Uint8Buffer();
       final ms = MqttByteBuffer(buff);
       subAck.writeTo(ms);
       ms.seek(0);
       final msList = ms.buffer!.toList();
-      final msLast = msList.last;
-      var out = Uint8List.fromList(msList.sublist(0, 3));
+      msLast = msList.last;
+      final out = Uint8List.fromList(msList.sublist(0, 3));
       onDataFunc(out);
-      out = Uint8List.fromList([msLast]);
+    } else if (complete) {
+      complete = false;
+      final out = Uint8List.fromList([msLast]);
       onDataFunc(out);
     }
   }
@@ -74,6 +80,13 @@ class MqttMockSocketScenario1 extends MockSocket {
 int main() {
   test('Trigger available bytes is less', () async {
     await IOOverrides.runZoned(() async {
+      bool subscriptionOk = false;
+      void onSubscribed(String topic) {
+        if (topic == 'theTopic') {
+          subscriptionOk = true;
+        }
+      }
+
       final client = MqttServerClient('localhost', 'abc123');
       client.logging(on: true);
       client.keepAlivePeriod = 1;
@@ -81,10 +94,13 @@ int main() {
       print(username);
       const password = 'password 4';
       print(password);
+      client.onSubscribed = onSubscribed;
       await client.connect();
       expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
       client.subscribe('theTopic', MqttQos.atLeastOnce);
+      await MqttUtilities.asyncSleep(3);
+      expect(subscriptionOk, isTrue);
     },
         socketConnect: (dynamic host, int port,
                 {dynamic sourceAddress,
