@@ -7,7 +7,7 @@ include: package:lints/recommended.yaml
 
 analyzer:
   exclude:
-    - test/issues/**
+    - test/issues_done/**
 
 linter:
   rules:

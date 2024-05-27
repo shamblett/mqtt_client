@@ -12,10 +12,10 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
 
-Future<int> main() {
+int main() {
   test('Trigger available bytes is less', () {
     // Add mock socket with not enough bytes scenario
-  };
+  });
 
   return 0;
 }
