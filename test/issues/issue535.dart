@@ -25,6 +25,8 @@ class MqttMockSocketScenario1 extends MockSocket {
   static bool initial = true;
   static bool partial = true;
   static bool complete = true;
+  static bool pub = true;
+  int msLast = 0;
 
   static Future<MqttMockSocketScenario1> connect(host, int port,
       {sourceAddress, int sourcePort = 0, Duration? timeout}) {
@@ -39,7 +41,6 @@ class MqttMockSocketScenario1 extends MockSocket {
   @override
   void add(List<int> data) {
     mockBytes.addAll(data);
-    int msLast = 0;
     if (initial) {
       initial = false;
       final ack = MqttConnectAckMessage()
@@ -65,6 +66,17 @@ class MqttMockSocketScenario1 extends MockSocket {
       complete = false;
       final out = Uint8List.fromList([msLast]);
       onDataFunc(out);
+    } else if (pub) {
+      pub = false;
+      final publish =
+          MqttPublishMessage().withMessageIdentifier(2).toTopic('theTopic');
+      final buff = Uint8Buffer();
+      final ms = MqttByteBuffer(buff);
+      publish.writeTo(ms);
+      ms.seek(0);
+      final msList = ms.buffer!.toList();
+      final out = Uint8List.fromList(msList);
+      onDataFunc(out);
     }
   }
 
@@ -81,6 +93,7 @@ int main() {
   test('Trigger available bytes is less', () async {
     await IOOverrides.runZoned(() async {
       bool subscriptionOk = false;
+      bool publishOk = false;
       void onSubscribed(String topic) {
         if (topic == 'theTopic') {
           subscriptionOk = true;
@@ -98,9 +111,15 @@ int main() {
       await client.connect();
       expect(client.connectionStatus!.state == MqttConnectionState.connected,
           isTrue);
+      client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
+        final recMess = c![0].payload as MqttPublishMessage;
+        expect(recMess.variableHeader!.topicName, 'theTopic');
+        publishOk = true;
+      });
       client.subscribe('theTopic', MqttQos.atLeastOnce);
       await MqttUtilities.asyncSleep(3);
       expect(subscriptionOk, isTrue);
+      expect(publishOk, isTrue);
     },
         socketConnect: (dynamic host, int port,
                 {dynamic sourceAddress,
