@@ -118,6 +118,9 @@ class SynchronousMqttServerConnectionHandler
       if (!autoReconnectInProgress) {
         MqttLogger.log(
             'SynchronousMqttServerConnectionHandler::internalConnect failed');
+        if (onFailedConnectionAttempt != null) {
+          onFailedConnectionAttempt!(connectionAttempts);
+        }
         if (connectionStatus.returnCode ==
             MqttConnectReturnCode.noneSpecified) {
           throw NoConnectionException('The maximum allowed connection attempts '

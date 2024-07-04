@@ -30,6 +30,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   AutoReconnectCompleteCallback? onAutoReconnected;
 
+  /// Failed connection attempt callback
+  @override
+  FailedConnectionAttemptCallback? onFailedConnectionAttempt;
+
   /// Auto reconnect in progress
   @override
   bool autoReconnectInProgress = false;
