@@ -21,6 +21,7 @@ void main() {
     await IOOverrides.runZoned(() async {
       var autoReconnectCallbackCalled = false;
       var disconnectCallbackCalled = false;
+      var connectionFailedCallbackCalled = false;
 
       void autoReconnect() {
         autoReconnectCallbackCalled = true;
@@ -28,6 +29,10 @@ void main() {
 
       void disconnect() {
         disconnectCallbackCalled = true;
+      }
+
+      void connectionFailed(int attempt) {
+        connectionFailedCallbackCalled = true;
       }
 
       final client = MqttServerClient('localhost', testClientId);
@@ -38,6 +43,7 @@ void main() {
       client.socketOptions.add(socketOption);
       client.onAutoReconnect = autoReconnect;
       client.onDisconnected = disconnect;
+      client.onFailedConnectionAttempt = connectionFailed;
       const username = 'unused 4';
       print(username);
       const password = 'password 4';
@@ -48,6 +54,7 @@ void main() {
       await MqttUtilities.asyncSleep(2);
       expect(autoReconnectCallbackCalled, isTrue);
       expect(disconnectCallbackCalled, isFalse);
+      expect(connectionFailedCallbackCalled, isFalse);
       expect(client.connectionStatus!.state == MqttConnectionState.connecting,
           isTrue);
     },

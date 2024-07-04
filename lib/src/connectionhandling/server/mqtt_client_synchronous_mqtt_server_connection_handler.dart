@@ -108,19 +108,28 @@ class SynchronousMqttServerConnectionHandler
       // We're the sync connection handler so we need to wait for the
       // brokers acknowledgement of the connections
       await connectTimer.sleep();
+      connectionAttempts++;
       MqttLogger.log(
           'SynchronousMqttServerConnectionHandler::internalConnect - '
           'post sleep, state = $connectionStatus');
+      if (connectionStatus.state != MqttConnectionState.connected) {
+        if (!autoReconnectInProgress) {
+          MqttLogger.log(
+              'SynchronousMqttServerConnectionHandler::internalConnect failed, attempt $connectionAttempts');
+          if (onFailedConnectionAttempt != null) {
+            MqttLogger.log(
+                'SynchronousMqttServerConnectionHandler::calling onFailedConnectionAttempt');
+            onFailedConnectionAttempt!(connectionAttempts);
+          }
+        }
+      }
     } while (connectionStatus.state != MqttConnectionState.connected &&
-        ++connectionAttempts < maxConnectionAttempts!);
+        connectionAttempts < maxConnectionAttempts!);
     // If we've failed to handshake with the broker, throw an exception.
     if (connectionStatus.state != MqttConnectionState.connected) {
       if (!autoReconnectInProgress) {
         MqttLogger.log(
             'SynchronousMqttServerConnectionHandler::internalConnect failed');
-        if (onFailedConnectionAttempt != null) {
-          onFailedConnectionAttempt!(connectionAttempts);
-        }
         if (connectionStatus.returnCode ==
             MqttConnectReturnCode.noneSpecified) {
           throw NoConnectionException('The maximum allowed connection attempts '
