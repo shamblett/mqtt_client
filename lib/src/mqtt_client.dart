@@ -19,6 +19,9 @@ typedef AutoReconnectCallback = void Function();
 /// The client auto reconnect complete callback type
 typedef AutoReconnectCompleteCallback = void Function();
 
+/// The client failed connection attempt callback
+typedef FailedConnectionAttemptCallback = void Function(int attemptNumber);
+
 /// A client class for interacting with MQTT Data Packets.
 /// Do not instantiate this class directly, instead instantiate
 /// either a [MqttClientServer] class or an [MqttBrowserClient] as needed.
@@ -201,6 +204,14 @@ class MqttClient {
   /// perform any post auto reconnect actions.
   AutoReconnectCompleteCallback? onAutoReconnected;
 
+  /// Failed Connection attempt callback.
+  /// Called on every failed connection attempt, if [maxConnectionAttempts] is
+  /// set to 5 say this will be called 5 times if the connection fails,
+  /// one for every failed attempt. Note this is never called
+  /// if [autoReconnect] is set, also the [NoConnectionException] is not raised
+  /// if this callback is supplied.
+  FailedConnectionAttemptCallback? onFailedConnectionAttempt;
+
   /// Subscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been subscribed to.
   SubscribeCallback? _onSubscribed;
@@ -288,6 +299,8 @@ class MqttClient {
     connectionHandler.onConnected = onConnected;
     connectionHandler.onAutoReconnect = onAutoReconnect;
     connectionHandler.onAutoReconnected = onAutoReconnected;
+    connectionHandler.onFailedConnectionAttempt = onFailedConnectionAttempt;
+
     MqttLogger.log(
         'MqttClient::connect - Connection timeout period is $connectTimeoutPeriod milliseconds');
     publishingManager = PublishingManager(connectionHandler, clientEventBus);

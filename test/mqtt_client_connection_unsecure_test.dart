@@ -121,6 +121,90 @@ void main() {
                   timeout: timeout));
     });
 
+    test('Connect no connect ack onFailedConnectionAttempt callback set',
+        () async {
+      await IOOverrides.runZoned(() async {
+        bool connectionFailed = false;
+        int tAttempt = 0;
+        final lAttempt = <int>[];
+        void onFailedConnectionAttempt(int attempt) {
+          tAttempt++;
+          lAttempt.add(attempt);
+          connectionFailed = true;
+        }
+
+        final clientEventBus = events.EventBus();
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+            maxConnectionAttempts: 3, socketOptions: socketOptions);
+        ch.onFailedConnectionAttempt = onFailedConnectionAttempt;
+        final start = DateTime.now();
+        try {
+          await ch.connect(mockBrokerAddress, mockBrokerPort,
+              MqttConnectMessage().withClientIdentifier(testClientId));
+        } on Exception catch (e) {
+          expect(e is NoConnectionException, isTrue);
+        }
+        expect(connectionFailed, isTrue);
+        expect(tAttempt, 3);
+        expect(lAttempt, [1, 2, 3]);
+        expect(ch.connectionStatus.state, MqttConnectionState.faulted);
+        expect(ch.connectionStatus.returnCode,
+            MqttConnectReturnCode.noneSpecified);
+        final end = DateTime.now();
+        expect(end.difference(start).inSeconds > 4, true);
+      },
+          socketConnect: (dynamic host, int port,
+                  {dynamic sourceAddress,
+                  int sourcePort = 0,
+                  Duration? timeout}) =>
+              MqttMockSocketSimpleConnectNoAck.connect(host, port,
+                  sourceAddress: sourceAddress,
+                  sourcePort: sourcePort,
+                  timeout: timeout));
+    });
+
+    test('Connect no connect ack onFailedConnectionAttempt callback set',
+        () async {
+      await IOOverrides.runZoned(() async {
+        bool connectionFailed = false;
+        int tAttempt = 0;
+        final lAttempt = <int>[];
+        void onFailedConnectionAttempt(int attempt) {
+          tAttempt++;
+          lAttempt.add(attempt);
+          connectionFailed = true;
+        }
+
+        final clientEventBus = events.EventBus();
+        final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
+            maxConnectionAttempts: 3, socketOptions: socketOptions);
+        ch.onFailedConnectionAttempt = onFailedConnectionAttempt;
+        final start = DateTime.now();
+        try {
+          await ch.connect(mockBrokerAddress, mockBrokerPort,
+              MqttConnectMessage().withClientIdentifier(testClientId));
+        } on Exception catch (e) {
+          expect(e is NoConnectionException, isTrue);
+        }
+        expect(connectionFailed, isTrue);
+        expect(tAttempt, 3);
+        expect(lAttempt, [1, 2, 3]);
+        expect(ch.connectionStatus.state, MqttConnectionState.faulted);
+        expect(ch.connectionStatus.returnCode,
+            MqttConnectReturnCode.noneSpecified);
+        final end = DateTime.now();
+        expect(end.difference(start).inSeconds > 4, true);
+      },
+          socketConnect: (dynamic host, int port,
+                  {dynamic sourceAddress,
+                  int sourcePort = 0,
+                  Duration? timeout}) =>
+              MqttMockSocketSimpleConnectNoAck.connect(host, port,
+                  sourceAddress: sourceAddress,
+                  sourcePort: sourcePort,
+                  timeout: timeout));
+    });
+
     test('1000ms connect period', () async {
       await IOOverrides.runZoned(() async {
         final clientEventBus = events.EventBus();

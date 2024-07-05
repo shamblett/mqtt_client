@@ -27,6 +27,9 @@ abstract class IMqttConnectionHandler {
   /// Auto reconnected callback
   AutoReconnectCompleteCallback? onAutoReconnected;
 
+  /// Failed connection attempt callback
+  FailedConnectionAttemptCallback? onFailedConnectionAttempt;
+
   /// Auto reconnect in progress
   bool autoReconnectInProgress = false;
 
