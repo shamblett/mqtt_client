@@ -11,7 +11,9 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// An annotated connection attempt failed usage example for mqtt_server_client.
-/// to run this example on a linux host please execute 'netcat -l 1883' at the command line.
+///
+/// To run this example on a linux host please execute 'netcat -l 1883' at the command line.
+/// Use a suitably equivalent command for other hosts.
 ///
 /// First create a client, the client is constructed with a broker name, client identifier
 /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
@@ -21,7 +23,6 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
 /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
 /// of 1883 is used.
-/// If you want to use websockets rather than TCP see below.
 
 /// Connect to a resolvable host that is not running a broker, hence the connection will fail.
 /// Set the maximum connection attempts to 3.
@@ -36,6 +37,9 @@ Future<int> main() async {
 
   /// The connection timeout period can be set if needed, the default is 5 seconds.
   client.connectTimeoutPeriod = 2000; // milliseconds
+
+  /// Add the unsolicited disconnection callback
+  client.onDisconnected = onDisconnected;
 
   /// Add the failed connection attempt callback.
   /// This callback will be called on every failed connection attempt, in the case of this
@@ -74,7 +78,6 @@ Future<int> main() async {
   /// Check we are not connected
   if (client.connectionStatus!.state != MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client not connected');
-    exit(0);
   }
 
   exit(0);
@@ -83,4 +86,20 @@ Future<int> main() async {
 /// Failed connection attempt callback
 void failedConnectionAttemptCallback(int attempt) {
   print('EXAMPLE::onFailedConnectionAttempt, attempt number is $attempt');
+  if (attempt == 3) {
+    client.disconnect();
+  }
+}
+
+/// The unsolicited disconnect callback
+void onDisconnected() {
+  print('EXAMPLE::OnDisconnected client callback - Client disconnection');
+  if (client.connectionStatus!.disconnectionOrigin ==
+      MqttDisconnectionOrigin.solicited) {
+    print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+  } else {
+    print(
+        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
+    exit(-1);
+  }
 }
