@@ -63,20 +63,21 @@ Future<int> main() async {
     // Raised by the client when connection fails.
     print('EXAMPLE::client exception - $e');
     client.disconnect();
-    return -1;
+    exit(-1);
   } on SocketException catch (e) {
     // Raised by the socket layer
     print('EXAMPLE::socket exception - $e');
     client.disconnect();
-    return -1;
+    exit(-1);
   }
 
   /// Check we are not connected
   if (client.connectionStatus!.state != MqttConnectionState.connected) {
     print('EXAMPLE::Mosquitto client not connected');
+    exit(0);
   }
 
-  return 0;
+  exit(0);
 }
 
 /// Failed connection attempt callback

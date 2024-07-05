@@ -208,7 +208,8 @@ class MqttClient {
   /// Called on every failed connection attempt, if [maxConnectionAttempts] is
   /// set to 5 say this will be called 5 times if the connection fails,
   /// one for every failed attempt. Note this is never called
-  /// if [autoReconnect] is set.
+  /// if [autoReconnect] is set, also the [NoConnectionException] is not raised
+  /// if this callback is supplied.
   FailedConnectionAttemptCallback? onFailedConnectionAttempt;
 
   /// Subscribed callback, function returns a void and takes a
