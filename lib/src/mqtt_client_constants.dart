@@ -26,7 +26,10 @@ class MqttClientConstants {
 
   /// Default keep alive in seconds.
   /// The default of 0 disables keep alive.
-  static int defaultKeepAlive = 0;
+  static const int defaultKeepAlive = 0;
+
+  /// Default maximum connection attempts
+  static const int defaultMaxConnectionAttempts = 3;
 
   /// Protocol variants
   /// V3
