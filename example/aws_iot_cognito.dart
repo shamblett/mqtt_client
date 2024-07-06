@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:http/http.dart';
+//HTTP  import 'package:http/http.dart';
 import 'package:sigv4/sigv4.dart';
 
 /// An example of connecting to the AWS IoT Core MQTT broker and publishing to a devices topic.
@@ -21,6 +21,11 @@ import 'package:sigv4/sigv4.dart';
 /// More instructions can be found at https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html and
 /// https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html, please read this
 /// before setting up and running this example.
+
+/// Note the dependency on the http package has been removed from the client, as such lines below
+/// depending on this are commented out. If you wish to run this example please re add package http
+/// at version 1.2.1 to the pubspec.yaml and uncomment lines starting with HTTP.
+
 
 // This function is based on the one from package flutter-aws-iot, but adapted slightly
 String getWebSocketURL(
@@ -103,13 +108,17 @@ Future<bool> attachPolicy(
   final request =
       sigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
 
-  var result = await put(request.url, headers: request.headers, body: body);
+  //HTTP remove the line below
+  print(request);
+  //HTTP  var result = await put(request.url, headers: request.headers, body: body);
 
-  if (result.statusCode != 200) {
-    print('Error attaching IoT Policy ${result.body}');
-  }
+  //HTTP if (result.statusCode != 200) {
+  //HTTP print('Error attaching IoT Policy ${result.body}');
+  //HTTP  }
 
-  return result.statusCode == 200;
+  //HTTP  return result.statusCode == 200;
+  //HTTP remove the line below
+  return true;
 }
 
 Future<int> main() async {

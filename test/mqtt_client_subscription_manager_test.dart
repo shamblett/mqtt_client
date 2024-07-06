@@ -6,6 +6,8 @@
  */
 
 @TestOn('vm')
+library;
+
 import 'dart:io';
 import 'dart:async';
 import 'package:mqtt_client/mqtt_client.dart';

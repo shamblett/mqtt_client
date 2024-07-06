@@ -6,6 +6,7 @@
  */
 
 @TestOn('browser')
+library;
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_browser_client.dart';
