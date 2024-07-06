@@ -29,7 +29,6 @@ import 'package:sigv4/sigv4.dart';
 /// depending on this are commented out. If you wish to run this example please re add package http
 /// at version 1.2.1 to the pubspec.yaml and uncomment lines starting with HTTP.
 
-
 // This function is based on the one from package flutter-aws-iot, but adapted slightly
 String getWebSocketURL(
     {required String accessKey,
