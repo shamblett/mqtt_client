@@ -460,12 +460,6 @@ void main() {
 
   group('Connect', () {
     test('Basic deserialization', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and ammeneded as work progresses
-      //
-      // Message Specs________________
-      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111
       final sampleMessage = <int>[
         0x10,
         0x1B,
@@ -532,12 +526,6 @@ void main() {
       expect(bm.payload.password, 'Billy1Pass');
     });
     test('Payload - invalid client idenfier length', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and ammeneded as work progresses
-      //
-      // Message Specs________________
-      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111andy111andy111andy111
       final sampleMessage = <int>[
         0x10,
         0x15,
@@ -631,8 +619,23 @@ void main() {
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
-      sampleMessage[2] = 0x0;
-      sampleMessage[3] = 0x0;
+      sampleMessage[2] = 0x00;
+      sampleMessage[3] = 0x06;
+      sampleMessage[4] = 0x4D;
+      sampleMessage[5] = 0x51;
+      sampleMessage[6] = 0x49;
+      sampleMessage[7] = 0x73;
+      sampleMessage[8] = 0x64;
+      sampleMessage[3] = 0x70;
+      sampleMessage[3] = 0x03;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
+      sampleMessage[3] = 0x00;
       final byteBuffer = MqttByteBuffer(sampleMessage);
       final baseMessage = MqttMessage.createFrom(byteBuffer);
       print('Connect Ack - Connection accepted::${baseMessage.toString()}');
@@ -744,14 +747,14 @@ void main() {
   test('Serialisation - Connection accepted', () {
     final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
-    expected[1] = 0x02;
-    expected[2] = 0x0;
-    expected[3] = 0x0;
+    expected[1] = 0x0C;
+    expected[2] = 0x00;
+    expected[3] = 0x06;
     final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.connectionAccepted);
     print('Connect Ack - Connection accepted::${msg.toString()}');
     final actual = MessageSerializationHelper.getMessageBytes(msg);
-    expect(actual.length, expected.length);
+    expect(actual.length, 19);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
     expect(actual[2], expected[2]); // connect ack - compression? always empty
