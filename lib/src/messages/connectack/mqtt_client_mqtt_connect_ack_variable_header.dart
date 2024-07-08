@@ -28,12 +28,16 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
       super.readFrom(variableHeaderStream);
 
   /// Gets the length of the write data when WriteTo will be called.
-  /// This method is overriden by the ConnectAckVariableHeader because the
-  /// variable header of this message type, for some reason, contains an extra
-  /// byte that is not present in the variable header spec, meaning we have to
-  /// do some custom serialization and deserialization.
   @override
-  int getWriteLength() => 2;
+  int getWriteLength() {
+    var headerLength = 0;
+    final enc = MqttEncoding();
+    headerLength += enc.getByteCount(protocolName);
+    headerLength += 1; // protocolVersion
+    headerLength += MqttConnectFlags.getWriteLength();
+    headerLength += 2; // keepAlive
+    return headerLength;
+  }
 
   @override
   String toString() =>
