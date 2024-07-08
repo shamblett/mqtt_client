@@ -628,12 +628,6 @@ void main() {
 
   group('Connect Ack', () {
     test('Deserialisation - Connection accepted', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -662,12 +656,6 @@ void main() {
           MqttConnectReturnCode.connectionAccepted);
     });
     test('Deserialisation - Unacceptable protocol version', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -697,12 +685,6 @@ void main() {
           MqttConnectReturnCode.unacceptedProtocolVersion);
     });
     test('Deserialisation - Identifier rejected', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -731,12 +713,6 @@ void main() {
           MqttConnectReturnCode.identifierRejected);
     });
     test('Deserialisation - Broker unavailable', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;

@@ -16,22 +16,31 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
   MqttConnectAckVariableHeader.fromByteBuffer(super.headerStream)
       : super.fromByteBuffer();
 
+  /// Session present flag.
+  /// Only available for the 3.1.1 protocol, for 3.1 this is always false.
+  bool _sessionPresent = false;
+  bool get sessionPresent => _sessionPresent;
+  set sessionPresent(bool present) {
+    if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
+      _sessionPresent = present;
+    }
+  }
+
   /// Writes the variable header for an MQTT Connect message to
   /// the supplied stream.
   @override
   void writeTo(MqttByteBuffer variableHeaderStream) {
-    // Unused additional 'compression' byte used within the variable
-    // header acknowledgement.
-    variableHeaderStream.writeByte(0);
+    sessionPresent
+        ? variableHeaderStream.writeByte(1)
+        : variableHeaderStream.writeByte(0);
     writeReturnCode(variableHeaderStream);
   }
 
   /// Creates a variable header from the specified header stream.
   @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
-    // Unused additional 'compression' byte used within the variable
-    // header acknowledgement.
-    variableHeaderStream.readByte();
+    final ackConnectFlags = variableHeaderStream.readByte();
+    sessionPresent = ackConnectFlags == 1;
     readReturnCode(variableHeaderStream);
   }
 
@@ -45,6 +54,6 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
 
   @override
   String toString() =>
-      'Connect Variable Header: TopicNameCompressionResponse={0}, '
+      'Connect Variable Header: SessionPresent={$sessionPresent}, '
       'ReturnCode={$returnCode}';
 }

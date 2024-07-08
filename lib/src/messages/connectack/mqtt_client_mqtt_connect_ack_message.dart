@@ -49,6 +49,13 @@ class MqttConnectAckMessage extends MqttMessage {
     return this;
   }
 
+  /// Sets the session present flag.
+  /// Can only be set if the protocol is 3.1.1
+  MqttConnectAckMessage withSessionPresent(bool present) {
+    variableHeader.sessionPresent = present;
+    return this;
+  }
+
   @override
   String toString() {
     final sb = StringBuffer();

@@ -281,6 +281,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
             '- state = connected');
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
+        connectionStatus.connectAckMessage = msg;
+
         // Call the connected callback if we have one
         if (onConnected != null) {
           onConnected!();

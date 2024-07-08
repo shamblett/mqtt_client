@@ -91,7 +91,8 @@ class MqttMockSocketSimpleConnect extends MockSocket {
     mockBytes.addAll(data);
     if (initial) {
       final ack = MqttConnectAckMessage()
-          .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+          .withReturnCode(MqttConnectReturnCode.connectionAccepted)
+          .withSessionPresent(true);
       final buff = Uint8Buffer();
       final ms = MqttByteBuffer(buff);
       ack.writeTo(ms);

@@ -254,6 +254,7 @@ void main() {
         expect(ch.connectionStatus.state, MqttConnectionState.connected);
         expect(ch.connectionStatus.returnCode,
             MqttConnectReturnCode.connectionAccepted);
+        expect(ch.connectionStatus.connectAckMessage, isNotNull);
         expect(connectCbCalled, isTrue);
         final state = ch.disconnect();
         expect(state, MqttConnectionState.disconnected);
@@ -270,6 +271,7 @@ void main() {
 
     test('Successful response and disconnect with returned status', () async {
       await IOOverrides.runZoned(() async {
+        Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
         final clientEventBus = events.EventBus();
         final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
             maxConnectionAttempts: 3, socketOptions: socketOptions);
@@ -277,6 +279,8 @@ void main() {
             MqttConnectMessage().withClientIdentifier(testClientId));
         expect(status.state, MqttConnectionState.connected);
         expect(status.returnCode, MqttConnectReturnCode.connectionAccepted);
+        expect(status.connectAckMessage, isNotNull);
+        expect(status.connectAckMessage?.variableHeader.sessionPresent, isTrue);
         final state = ch.disconnect();
         expect(state, MqttConnectionState.disconnected);
       },
