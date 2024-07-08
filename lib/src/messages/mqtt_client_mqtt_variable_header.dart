@@ -60,7 +60,7 @@ class MqttVariableHeader {
   /// Protocol version
   int protocolVersion = 0;
 
-  /// Conenct flags
+  /// Connect flags
   late MqttConnectFlags connectFlags;
 
   /// Defines the maximum allowable lag, in seconds, between expected messages.

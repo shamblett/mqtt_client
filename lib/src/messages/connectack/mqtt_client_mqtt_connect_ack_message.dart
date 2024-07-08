@@ -8,6 +8,9 @@
 part of '../../../mqtt_client.dart';
 
 /// Message that indicates a connection acknowledgement.
+///
+/// On successful connection the [MqttClientConnectionStatus] class is updated
+/// with this message as returned by the broker.
 class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
   /// Only called via the MqttMessage.Create operation during processing
@@ -46,6 +49,13 @@ class MqttConnectAckMessage extends MqttMessage {
   /// Sets the return code of the Variable Header.
   MqttConnectAckMessage withReturnCode(MqttConnectReturnCode returnCode) {
     variableHeader.returnCode = returnCode;
+    return this;
+  }
+
+  /// Sets the session present flag.
+  /// Can only be set if the protocol is 3.1.1
+  MqttConnectAckMessage withSessionPresent(bool present) {
+    variableHeader.sessionPresent = present;
     return this;
   }
 

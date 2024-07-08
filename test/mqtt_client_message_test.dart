@@ -460,12 +460,6 @@ void main() {
 
   group('Connect', () {
     test('Basic deserialization', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and ammeneded as work progresses
-      //
-      // Message Specs________________
-      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111
       final sampleMessage = <int>[
         0x10,
         0x1B,
@@ -532,12 +526,6 @@ void main() {
       expect(bm.payload.password, 'Billy1Pass');
     });
     test('Payload - invalid client idenfier length', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and ammeneded as work progresses
-      //
-      // Message Specs________________
-      // <10><15><00><06>MQIsdp<03><02><00><1E><00><07>andy111andy111andy111andy111
       final sampleMessage = <int>[
         0x10,
         0x15,
@@ -628,12 +616,6 @@ void main() {
 
   group('Connect Ack', () {
     test('Deserialisation - Connection accepted', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -661,13 +643,37 @@ void main() {
       expect(message.variableHeader.returnCode,
           MqttConnectReturnCode.connectionAccepted);
     });
+    test('Deserialisation - Connection accepted - session present', () {
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final sampleMessage = typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x01;
+      sampleMessage[3] = 0x00;
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
+      print('Connect Ack - Connection accepted::${baseMessage.toString()}');
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
+      final message = baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header!.duplicate,
+        false,
+      );
+      expect(
+        message.header!.retain,
+        false,
+      );
+      expect(message.header!.qos, MqttQos.atMostOnce);
+      expect(message.header!.messageType, MqttMessageType.connectAck);
+      expect(message.header!.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
+      expect(message.variableHeader.sessionPresent, isTrue);
+    });
     test('Deserialisation - Unacceptable protocol version', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -697,12 +703,6 @@ void main() {
           MqttConnectReturnCode.unacceptedProtocolVersion);
     });
     test('Deserialisation - Identifier rejected', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -731,12 +731,6 @@ void main() {
           MqttConnectReturnCode.identifierRejected);
     });
     test('Deserialisation - Broker unavailable', () {
-      // Our test deserialization message, with the following properties. Note this message is not
-      // yet a real MQTT message, because not everything is implemented, but it must be modified
-      // and amended as work progresses
-      //
-      // Message Specs________________
-      // <20><02><00><00>
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
@@ -769,10 +763,28 @@ void main() {
     final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
     expected[1] = 0x02;
-    expected[2] = 0x0;
-    expected[3] = 0x0;
+    expected[2] = 0x00;
+    expected[3] = 0x00;
     final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+    print('Connect Ack - Connection accepted::${msg.toString()}');
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
+  test('Serialisation - Connection accepted - session present', () {
+    Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+    final expected = typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x01;
+    expected[3] = 0x00;
+    final msg = MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.connectionAccepted)
+        .withSessionPresent(true);
     print('Connect Ack - Connection accepted::${msg.toString()}');
     final actual = MessageSerializationHelper.getMessageBytes(msg);
     expect(actual.length, expected.length);
