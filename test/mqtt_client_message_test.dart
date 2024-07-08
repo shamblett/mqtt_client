@@ -619,22 +619,36 @@ void main() {
       final sampleMessage = typed.Uint8Buffer(4);
       sampleMessage[0] = 0x20;
       sampleMessage[1] = 0x02;
-      sampleMessage[2] = 0x00;
-      sampleMessage[3] = 0x06;
-      sampleMessage[4] = 0x4D;
-      sampleMessage[5] = 0x51;
-      sampleMessage[6] = 0x49;
-      sampleMessage[7] = 0x73;
-      sampleMessage[8] = 0x64;
-      sampleMessage[3] = 0x70;
-      sampleMessage[3] = 0x03;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
-      sampleMessage[3] = 0x00;
+      sampleMessage[2] = 0x0;
+      sampleMessage[3] = 0x0;
+      final byteBuffer = MqttByteBuffer(sampleMessage);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
+      print('Connect Ack - Connection accepted::${baseMessage.toString()}');
+      // Check that the message was correctly identified as a connect ack message.
+      expect(baseMessage, const TypeMatcher<MqttConnectAckMessage>());
+      final message = baseMessage as MqttConnectAckMessage;
+      // Validate the message deserialization
+      expect(
+        message.header!.duplicate,
+        false,
+      );
+      expect(
+        message.header!.retain,
+        false,
+      );
+      expect(message.header!.qos, MqttQos.atMostOnce);
+      expect(message.header!.messageType, MqttMessageType.connectAck);
+      expect(message.header!.messageSize, 2);
+      // Validate the variable header
+      expect(message.variableHeader.returnCode,
+          MqttConnectReturnCode.connectionAccepted);
+    });
+    test('Deserialisation - Connection accepted - session present', () {
+      Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+      final sampleMessage = typed.Uint8Buffer(4);
+      sampleMessage[0] = 0x20;
+      sampleMessage[1] = 0x02;
+      sampleMessage[2] = 0x01;
       sampleMessage[3] = 0x00;
       final byteBuffer = MqttByteBuffer(sampleMessage);
       final baseMessage = MqttMessage.createFrom(byteBuffer);
@@ -657,6 +671,7 @@ void main() {
       // Validate the variable header
       expect(message.variableHeader.returnCode,
           MqttConnectReturnCode.connectionAccepted);
+      expect(message.variableHeader.sessionPresent, isTrue);
     });
     test('Deserialisation - Unacceptable protocol version', () {
       final sampleMessage = typed.Uint8Buffer(4);
@@ -747,14 +762,32 @@ void main() {
   test('Serialisation - Connection accepted', () {
     final expected = typed.Uint8Buffer(4);
     expected[0] = 0x20;
-    expected[1] = 0x0C;
+    expected[1] = 0x02;
     expected[2] = 0x00;
-    expected[3] = 0x06;
+    expected[3] = 0x00;
     final msg = MqttConnectAckMessage()
         .withReturnCode(MqttConnectReturnCode.connectionAccepted);
     print('Connect Ack - Connection accepted::${msg.toString()}');
     final actual = MessageSerializationHelper.getMessageBytes(msg);
-    expect(actual.length, 19);
+    expect(actual.length, expected.length);
+    expect(actual[0], expected[0]); // msg type of header
+    expect(actual[1], expected[1]); // remaining length
+    expect(actual[2], expected[2]); // connect ack - compression? always empty
+    expect(actual[3], expected[3]); // return code.
+  });
+  test('Serialisation - Connection accepted - session present', () {
+    Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
+    final expected = typed.Uint8Buffer(4);
+    expected[0] = 0x20;
+    expected[1] = 0x02;
+    expected[2] = 0x01;
+    expected[3] = 0x00;
+    final msg = MqttConnectAckMessage()
+        .withReturnCode(MqttConnectReturnCode.connectionAccepted)
+        .withSessionPresent(true);
+    print('Connect Ack - Connection accepted::${msg.toString()}');
+    final actual = MessageSerializationHelper.getMessageBytes(msg);
+    expect(actual.length, expected.length);
     expect(actual[0], expected[0]); // msg type of header
     expect(actual[1], expected[1]); // remaining length
     expect(actual[2], expected[2]); // connect ack - compression? always empty
