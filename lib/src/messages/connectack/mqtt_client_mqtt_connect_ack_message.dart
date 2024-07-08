@@ -8,6 +8,9 @@
 part of '../../../mqtt_client.dart';
 
 /// Message that indicates a connection acknowledgement.
+///
+/// On successful connection the [MqttClientConnectionStatus] class is updated
+/// with this message as returned by the broker.
 class MqttConnectAckMessage extends MqttMessage {
   /// Initializes a new instance of the MqttConnectAckMessage class.
   /// Only called via the MqttMessage.Create operation during processing

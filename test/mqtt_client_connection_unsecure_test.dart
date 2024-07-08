@@ -151,6 +151,7 @@ void main() {
         expect(ch.connectionStatus.state, MqttConnectionState.faulted);
         expect(ch.connectionStatus.returnCode,
             MqttConnectReturnCode.noneSpecified);
+        expect(ch.connectionStatus.connectAckMessage, isNull);
         final end = DateTime.now();
         expect(end.difference(start).inSeconds > 4, true);
       },
@@ -193,6 +194,7 @@ void main() {
         expect(ch.connectionStatus.state, MqttConnectionState.faulted);
         expect(ch.connectionStatus.returnCode,
             MqttConnectReturnCode.noneSpecified);
+        expect(ch.connectionStatus.connectAckMessage, isNull);
         final end = DateTime.now();
         expect(end.difference(start).inSeconds > 4, true);
       },
@@ -254,6 +256,11 @@ void main() {
         expect(ch.connectionStatus.state, MqttConnectionState.connected);
         expect(ch.connectionStatus.returnCode,
             MqttConnectReturnCode.connectionAccepted);
+        expect(ch.connectionStatus.connectAckMessage, isNotNull);
+        expect(
+            ch.connectionStatus.connectAckMessage?.variableHeader
+                .messageIdentifier,
+            1);
         expect(connectCbCalled, isTrue);
         final state = ch.disconnect();
         expect(state, MqttConnectionState.disconnected);

@@ -19,21 +19,13 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
   /// Writes the variable header for an MQTT Connect message to
   /// the supplied stream.
   @override
-  void writeTo(MqttByteBuffer variableHeaderStream) {
-    // Unused additional 'compression' byte used within the variable
-    // header acknowledgement.
-    variableHeaderStream.writeByte(0);
-    writeReturnCode(variableHeaderStream);
-  }
+  void writeTo(MqttByteBuffer variableHeaderStream) =>
+      super.writeTo(variableHeaderStream);
 
   /// Creates a variable header from the specified header stream.
   @override
-  void readFrom(MqttByteBuffer variableHeaderStream) {
-    // Unused additional 'compression' byte used within the variable
-    // header acknowledgement.
-    variableHeaderStream.readByte();
-    readReturnCode(variableHeaderStream);
-  }
+  void readFrom(MqttByteBuffer variableHeaderStream) =>
+      super.readFrom(variableHeaderStream);
 
   /// Gets the length of the write data when WriteTo will be called.
   /// This method is overriden by the ConnectAckVariableHeader because the
