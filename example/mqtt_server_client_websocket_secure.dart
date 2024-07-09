@@ -36,6 +36,10 @@ Future<int> main() async {
   /// list so in most cases you can ignore this.  Mosquito needs the single default setting.
   client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
 
+  /// You can supply a list of headers to send with the websocket request.
+  /// Some brokers are known to need their own special headers for auth etc.
+  client.websocketHeader = {'sjh-test': 'SJH'};
+
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
 

@@ -62,6 +62,21 @@ class MockBrokerWs {
         print(
             'Mockbroker WS server::listen - request received ${request.uri.path}');
         if (request.uri.path == '/ws') {
+          final websocketHeader = request.headers.value('Origin');
+          if (websocketHeader != 'SJH') {
+            return completer.completeError((request) => websocketHeader);
+          } else {
+            print(
+                'Mockbroker WS server::listen - Origin header is correctly set');
+          }
+          final websocketProtocol =
+              request.headers.value('sec-websocket-protocol');
+          if (websocketProtocol != 'SJHprotocol') {
+            return completer.completeError((request) => websocketProtocol);
+          } else {
+            print(
+                'Mockbroker WS server::listen - WS protocol is correctly set');
+          }
           print('Mockbroker WS server::listen - upgrading');
           WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
             _webSocket = websocket;
