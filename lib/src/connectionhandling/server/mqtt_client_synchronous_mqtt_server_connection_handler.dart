@@ -57,6 +57,11 @@ class SynchronousMqttServerConnectionHandler
             connection.protocols = websocketProtocols;
           }
 
+          final websocketHeaders = this.websocketHeaders;
+          if (websocketHeaders != null) {
+            connection.headers = websocketHeaders;
+          }
+
           this.connection = connection;
         } else if (secure) {
           MqttLogger.log(

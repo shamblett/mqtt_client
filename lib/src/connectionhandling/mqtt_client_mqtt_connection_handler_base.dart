@@ -67,6 +67,9 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// User supplied websocket protocols
   List<String>? websocketProtocols;
 
+  /// User supplied websocket headers
+  Map<String, dynamic>? websocketHeaders;
+
   /// The connection
   @protected
   late MqttConnectionBase connection;

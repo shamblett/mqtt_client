@@ -65,6 +65,21 @@ class MqttServerClient extends MqttClient {
   /// Applicable only to TCP sockets
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
+  /// User definable websocket headers.
+  /// This allows the specification of additional HTTP headers for setting up the connection
+  /// should a broker need specific headers.
+  /// The keys of the map are the header fields and the values are either String or List.
+  @protected
+  Map<String, dynamic>? websocketHeaders;
+  set websocketHeader(Map<String, dynamic> header) {
+    websocketHeaders = header;
+
+    final connectionHandler = this.connectionHandler;
+    if (connectionHandler != null) {
+      connectionHandler.websocketHeaders = header;
+    }
+  }
+
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.
   /// If a username and password are supplied these will override
@@ -95,8 +110,8 @@ class MqttServerClient extends MqttClient {
       if (connectionHandler.useAlternateWebSocketImplementation) {
         connectionHandler.securityContext = securityContext;
       }
-      if (websocketProtocolString != null) {
-        connectionHandler.websocketProtocols = websocketProtocolString;
+      if (websocketHeaders != null) {
+        connectionHandler.websocketHeaders = websocketHeaders;
       }
     }
     if (secure) {
