@@ -22,6 +22,9 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   /// The websocket subprotocol list
   List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
 
+  /// User defined websocket headers
+  Map<String, dynamic>? headers;
+
   /// Connect
   @override
   Future<MqttClientConnectionStatus?> connect(String server, int port) {
@@ -51,7 +54,8 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     try {
       // Connect and save the socket.
       WebSocket.connect(uriString,
-              protocols: protocols.isNotEmpty ? protocols : null)
+              protocols: protocols.isNotEmpty ? protocols : null,
+              headers: headers)
           .then((socket) {
         client = socket;
         readWrapper = ReadWrapper();
@@ -101,7 +105,8 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     try {
       // Connect and save the socket.
       WebSocket.connect(uriString,
-              protocols: protocols.isNotEmpty ? protocols : null)
+              protocols: protocols.isNotEmpty ? protocols : null,
+              headers: headers)
           .then((socket) {
         client = socket;
         _startListening();
