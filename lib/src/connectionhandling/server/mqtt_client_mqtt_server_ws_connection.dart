@@ -105,7 +105,8 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     try {
       // Connect and save the socket.
       WebSocket.connect(uriString,
-              protocols: protocols.isNotEmpty ? protocols : null)
+              protocols: protocols.isNotEmpty ? protocols : null,
+              headers: headers)
           .then((socket) {
         client = socket;
         _startListening();
