@@ -37,7 +37,7 @@ Future<int> main() async {
 
   /// You can supply a list of headers to send with the websocket request.
   /// Some brokers are known to need their own special headers for auth etc.
-  client.websocketHeader = {'sjh-test' : 'SJH'};
+  client.websocketHeader = {'sjh-test': 'SJH'};
 
   /// Set logging on if needed, defaults to off
   client.logging(on: false);
