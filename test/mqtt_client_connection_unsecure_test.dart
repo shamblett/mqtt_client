@@ -249,12 +249,14 @@ void main() {
         final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
             maxConnectionAttempts: 3, socketOptions: socketOptions);
         ch.onConnected = connectCb;
-        await ch.connect(mockBrokerAddress, mockBrokerPort,
+        final status = await ch.connect(mockBrokerAddress, mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId));
         expect(ch.connectionStatus.state, MqttConnectionState.connected);
         expect(ch.connectionStatus.returnCode,
             MqttConnectReturnCode.connectionAccepted);
         expect(ch.connectionStatus.connectAckMessage, isNotNull);
+        expect(
+            status.connectAckMessage?.variableHeader.sessionPresent, isFalse);
         expect(connectCbCalled, isTrue);
         final state = ch.disconnect();
         expect(state, MqttConnectionState.disconnected);
@@ -269,7 +271,7 @@ void main() {
                   timeout: timeout));
     });
 
-    test('Successful response and disconnect with returned status', () async {
+    test('Successful response and disconnect with session present', () async {
       await IOOverrides.runZoned(() async {
         Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
         final clientEventBus = events.EventBus();

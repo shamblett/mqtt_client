@@ -40,7 +40,9 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
   @override
   void readFrom(MqttByteBuffer variableHeaderStream) {
     final ackConnectFlags = variableHeaderStream.readByte();
-    sessionPresent = ackConnectFlags == 1;
+    if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
+      sessionPresent = ackConnectFlags == 1;
+    }
     readReturnCode(variableHeaderStream);
   }
 
