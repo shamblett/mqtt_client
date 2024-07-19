@@ -1,38 +1,77 @@
+import 'dart:io';
+
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
+int connectionNumber = 1;
+
 Future<void> main() async {
-  final client = MqttServerClient('mqtt.hsl.fi', 'SJH-TEST');
+  final client = MqttServerClient('wss://test.mosquito.org', 'SJH-TEST');
+  client.useWebSocket = true;
+  client.port = 8080; // ( or whatever your ws port is)
+  client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
   client.keepAlivePeriod = 60;
   client.onConnected = onConnected;
   client.onDisconnected = onDisconnected;
-  client.logging(on: true);
+  client.logging(on: false);
   client.setProtocolV311();
 
-  // let's connect to mqtt broker
+  print('EXAMPLE::first connection');
   try {
-    client.autoReconnect = true;
     await client.connect();
-    client.subscribe("/hfp/v2/journey/#", MqttQos.atMostOnce);
-    client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-      final recMess = c![0].payload as MqttPublishMessage;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
-      print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- ${pt.length} -->');
-      print('');
-    });
   } on NoConnectionException catch (e) {
     print(e.toString());
   }
 
-  await MqttUtilities.asyncSleep(20);
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
+    print('EXAMPLE::Mosquitto wss client connected');
+  } else {
+    print(
+        'EXAMPLE::ERROR Mosquitto client connection $connectionNumber failed - '
+        'disconnecting, status is ${client.connectionStatus}');
+    client.disconnect();
+    exit(-1);
+  }
+
+  print('EXAMPLE::sleeping for 60 seconds...');
+  await MqttUtilities.asyncSleep(60);
+
+  print('EXAMPLE::disconnecting');
+  client.disconnect();
+
+  print('');
+  print('EXAMPLE::second connection');
+  connectionNumber++;
+  try {
+    await client.connect();
+  } on NoConnectionException catch (e) {
+    print(e.toString());
+  }
+
+  if (client.connectionStatus!.state == MqttConnectionState.connected) {
+    print('EXAMPLE::Mosquitto wss client connected');
+  } else {
+    print(
+        'EXAMPLE::ERROR Mosquitto client connection $connectionNumber failed - '
+        'disconnecting, status is ${client.connectionStatus}');
+    client.disconnect();
+    exit(-1);
+  }
+
+  print('EXAMPLE::sleeping for 60 seconds...');
+  await MqttUtilities.asyncSleep(60);
+
+  print('EXAMPLE::disconnecting');
+  client.disconnect();
+
+  print('');
+  print('EXAMPLE::end of test');
 }
 
 void onDisconnected() {
-  print('Disconnected');
+  print('EXAMPLE::Disconnected, number is $connectionNumber');
 }
 
 void onConnected() {
-  print('Connected');
+  print('EXAMPLE::Connected, number is $connectionNumber');
 }
