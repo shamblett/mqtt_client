@@ -6,9 +6,9 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 int connectionNumber = 1;
 
 Future<void> main() async {
-  final client = MqttServerClient('wss://test.mosquito.org', 'SJH-TEST');
+  final client = MqttServerClient('wss://test.mosquitto.org', 'SJH-TEST');
   client.useWebSocket = true;
-  client.port = 8080; // ( or whatever your ws port is)
+  client.port = 8081; // ( or whatever your ws port is)
   client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
   client.keepAlivePeriod = 60;
   client.onConnected = onConnected;
