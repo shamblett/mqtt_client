@@ -236,5 +236,52 @@ void main() {
       expect(ka.pingTimer?.isActive, isFalse);
       expect(ka.disconnectTimer, isNull);
     });
+    test('Latency counts', () async {
+      final latencies = <int>[0, 0];
+      final clientEventBus = events.EventBus();
+      var disconnect = false;
+      void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+        disconnect = true;
+      }
+
+      clientEventBus
+          .on<DisconnectOnNoPingResponse>()
+          .listen(disconnectOnNoPingResponse);
+      final ch = MockCH(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
+      ch.connectionStatus.state = MqttConnectionState.connected;
+      final ka = MqttConnectionKeepAlive(ch, clientEventBus, 3);
+      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
+          .called(1);
+      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
+          .called(1);
+      verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
+      expect(ka.pingTimer?.isActive, isTrue);
+      expect(ka.disconnectTimer, isNull);
+      await MqttUtilities.asyncSleep(3);
+      verify(() => ch.sendMessage(any())).called(1);
+      await MqttUtilities.asyncSleep(1);
+      final pingMessageRx = MqttPingResponseMessage();
+      ka.pingResponseReceived(pingMessageRx);
+      latencies[0] = ka.lastCycleLatency;
+      expect(ka.lastCycleLatency > 1000, isTrue);
+      expect(ka.averageCycleLatency > 1000, isTrue);
+      await MqttUtilities.asyncSleep(2);
+      verify(() => ch.sendMessage(any())).called(1);
+      await MqttUtilities.asyncSleep(1);
+      ka.pingResponseReceived(pingMessageRx);
+      latencies[1] = ka.lastCycleLatency;
+      expect(ka.lastCycleLatency > 1000, isTrue);
+      expect(ka.averageCycleLatency > 1000, isTrue);
+      expect(ka.averageCycleLatency, (latencies[0] + latencies[1]) ~/ 2);
+      expect(disconnect, isFalse);
+      ka.stop();
+      expect(ka.averageCycleLatency, 0);
+      expect(ka.lastCycleLatency, 0);
+      expect(ka.pingTimer?.isActive, isFalse);
+      expect(ka.disconnectTimer, isNull);
+    });
   });
 }
