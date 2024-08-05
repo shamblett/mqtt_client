@@ -10,6 +10,9 @@ part of '../../mqtt_client.dart';
 /// Ping response received callback
 typedef PongCallback = void Function();
 
+/// Ping request sent callback
+typedef PingCallback = void Function();
+
 /// Implements keep alive functionality on the Mqtt Connection,
 /// ensuring that the connection remains active according to the
 /// keep alive seconds setting.
@@ -64,8 +67,11 @@ class MqttConnectionKeepAlive {
   /// Used to synchronise shutdown and ping operations.
   bool _shutdownPadlock = false;
 
-  /// Ping response received callback
+  /// Ping response received callback.
   PongCallback? pongCallback;
+
+  /// Ping request sent callback.
+  PingCallback? pingCallback;
 
   /// The event bus
   events.EventBus? _clientEventBus;
@@ -88,6 +94,9 @@ class MqttConnectionKeepAlive {
       try {
         _connectionHandler.sendMessage(pingMsg);
         pinged = true;
+        if (pingCallback != null) {
+          pingCallback!();
+        }
       } catch (e) {
         MqttLogger.log(
             'MqttConnectionKeepAlive::pingRequired - exception occurred');
