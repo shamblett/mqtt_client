@@ -73,6 +73,18 @@ class MqttConnectionKeepAlive {
   /// Ping request sent callback.
   PingCallback? pingCallback;
 
+  /// Latency(time between sending a ping and receiving a pong) in ms
+  /// of the last ping/pong cycle. Reset on disconnect.
+  int lastCycleLatency = 0;
+
+  DateTime _lastPingTime = DateTime.now();
+
+  /// Average latency(time between sending a ping and receiving a pong) in ms
+  /// of all the ping/pong cycles in a connection period. Reset on disconnect.
+  int averageCycleLatency = 0;
+
+  int _cycleCount = 0;
+
   /// The event bus
   events.EventBus? _clientEventBus;
 
@@ -94,6 +106,7 @@ class MqttConnectionKeepAlive {
       try {
         _connectionHandler.sendMessage(pingMsg);
         pinged = true;
+        _lastPingTime = DateTime.now();
         if (pingCallback != null) {
           pingCallback!();
         }
@@ -160,10 +173,17 @@ class MqttConnectionKeepAlive {
   /// Processed ping response messages received from a message broker.
   bool pingResponseReceived(MqttMessage? pingMsg) {
     MqttLogger.log('MqttConnectionKeepAlive::pingResponseReceived');
+
+    // Calculate latency
+    lastCycleLatency = DateTime.now().millisecond - _lastPingTime.millisecond;
+    _cycleCount++;
+    averageCycleLatency += averageCycleLatency ~/ _cycleCount;
+
     // Call the pong callback if not null
     if (pongCallback != null) {
       pongCallback!();
     }
+
     // Cancel the disconnect timer if needed.
     disconnectTimer?.cancel();
     return true;
@@ -177,6 +197,9 @@ class MqttConnectionKeepAlive {
     MqttLogger.log('MqttConnectionKeepAlive::stop - stopping keep alive');
     pingTimer!.cancel();
     disconnectTimer?.cancel();
+    lastCycleLatency = 0;
+    averageCycleLatency = 0;
+    _cycleCount = 0;
   }
 
   /// Handle the disconnect timer timeout
