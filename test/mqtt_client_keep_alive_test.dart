@@ -196,4 +196,45 @@ void main() {
       expect(ka.disconnectTimer, isNull);
     });
   });
+  group('Latency', () {
+    test('Ping callback', () async {
+      final clientEventBus = events.EventBus();
+      var disconnect = false;
+      void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+        disconnect = true;
+      }
+
+      var pingCalled = false;
+      void pingCallback() {
+        pingCalled = true;
+      }
+
+      clientEventBus
+          .on<DisconnectOnNoPingResponse>()
+          .listen(disconnectOnNoPingResponse);
+      final ch = MockCH(
+        clientEventBus,
+        maxConnectionAttempts: 3,
+      );
+      ch.connectionStatus.state = MqttConnectionState.connected;
+      final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
+      ka.pingCallback = pingCallback;
+      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
+          .called(1);
+      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
+          .called(1);
+      verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
+      expect(ka.pingTimer?.isActive, isTrue);
+      expect(ka.disconnectTimer, isNull);
+      await MqttUtilities.asyncSleep(3);
+      verify(() => ch.sendMessage(any())).called(1);
+      expect(pingCalled, isTrue);
+      final pingMessageRx = MqttPingResponseMessage();
+      ka.pingResponseReceived(pingMessageRx);
+      expect(disconnect, isFalse);
+      ka.stop();
+      expect(ka.pingTimer?.isActive, isFalse);
+      expect(ka.disconnectTimer, isNull);
+    });
+  });
 }
