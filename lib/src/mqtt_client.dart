@@ -278,6 +278,14 @@ class MqttClient {
     keepAlive?.pingCallback = cb;
   }
 
+  /// The latency of the last ping/pong cycle in milliseconds.
+  /// Cleared on disconnect.
+  int? get lastCycleLatency => keepAlive?.lastCycleLatency;
+
+  /// The average latency of all ping/pong cycles in a connection period in
+  /// milliseconds. Cleared on disconnect.
+  int? get averageCycleLatency => keepAlive?.averageCycleLatency;
+
   /// The event bus
   @protected
   events.EventBus? clientEventBus;

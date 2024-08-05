@@ -27,6 +27,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 final client = MqttServerClient('test.mosquitto.org', '');
 
 var pongCount = 0; // Pong counter
+var pingCount = 0; // Ping counter
 
 Future<int> main() async {
   /// A websocket URL must start with ws:// or wss:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -41,7 +42,7 @@ Future<int> main() async {
   /// list so in most cases you can ignore this.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
@@ -66,8 +67,12 @@ Future<int> main() async {
   client.onSubscribed = onSubscribed;
 
   /// Set a ping received callback if needed, called whenever a ping response(pong) is received
-  /// from the broker.
+  /// from the broker. Can be used for health monitoring.
   client.pongCallback = pong;
+
+  /// Set a ping sent callback if needed, called whenever a ping request(ping) is sent
+  /// by the client. Can be used for latency calculations.
+  client.pingCallback = ping;
 
   /// Create a connection message to use or use the default one. The default one sets the
   /// client identifier, any supplied username/password and clean session,
@@ -160,6 +165,13 @@ Future<int> main() async {
   print('EXAMPLE::Sleeping....');
   await MqttUtilities.asyncSleep(60);
 
+  /// Print the ping/pong cycle latency data before disconnecting.
+  print('EXAMPLE::Keep alive latencies');
+  print(
+      'The latency of the last ping/pong cycle is ${client.lastCycleLatency} milliseconds');
+  print(
+      'The average latency of all the ping/pong cycles is ${client.averageCycleLatency} milliseconds');
+
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic);
@@ -193,6 +205,11 @@ void onDisconnected() {
   } else {
     print('EXAMPLE:: Pong count is incorrect, expected 3. actual $pongCount');
   }
+  if (pingCount == 3) {
+    print('EXAMPLE:: Ping count is correct');
+  } else {
+    print('EXAMPLE:: Ping count is incorrect, expected 3. actual $pingCount');
+  }
 }
 
 /// The successful connect callback
@@ -205,4 +222,12 @@ void onConnected() {
 void pong() {
   print('EXAMPLE::Ping response client callback invoked');
   pongCount++;
+  print(
+      'EXAMPLE::Latency of this ping/pong cycle is ${client.lastCycleLatency} milliseconds');
+}
+
+/// Ping callback
+void ping() {
+  print('EXAMPLE::Ping sent client callback invoked');
+  pingCount++;
 }
