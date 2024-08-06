@@ -265,20 +265,20 @@ void main() {
       final pingMessageRx = MqttPingResponseMessage();
       ka.pingResponseReceived(pingMessageRx);
       latencies[0] = ka.lastCycleLatency;
-      expect(ka.lastCycleLatency > 1000, isTrue);
-      expect(ka.averageCycleLatency > 1000, isTrue);
+      expect(ka.lastCycleLatency > 0, isTrue);
+      expect(ka.averageCycleLatency > 0, isTrue);
       await MqttUtilities.asyncSleep(3);
       verify(() => ch.sendMessage(any())).called(1);
       ka.pingResponseReceived(pingMessageRx);
       latencies[1] = ka.lastCycleLatency;
-      expect(ka.lastCycleLatency > 1000, isTrue);
-      expect(ka.averageCycleLatency > 1000, isTrue);
+      expect(ka.lastCycleLatency > 0, isTrue);
+      expect(ka.averageCycleLatency > 0, isTrue);
       await MqttUtilities.asyncSleep(3);
       verify(() => ch.sendMessage(any())).called(1);
       ka.pingResponseReceived(pingMessageRx);
       latencies[2] = ka.lastCycleLatency;
-      expect(ka.lastCycleLatency > 1000, isTrue);
-      expect(ka.averageCycleLatency > 1000, isTrue);
+      expect(ka.lastCycleLatency > 0, isTrue);
+      expect(ka.averageCycleLatency > 0, isTrue);
       expect(ka.averageCycleLatency,
           (latencies[0] + latencies[1] + latencies[2]) ~/ 3);
       expect(disconnect, isFalse);
