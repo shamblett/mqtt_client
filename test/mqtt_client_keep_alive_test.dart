@@ -237,7 +237,7 @@ void main() {
       expect(ka.disconnectTimer, isNull);
     });
     test('Latency counts', () async {
-      final latencies = <int>[0, 0];
+      final latencies = <int>[0, 0, 0];
       final clientEventBus = events.EventBus();
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
@@ -260,22 +260,27 @@ void main() {
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
-      await MqttUtilities.asyncSleep(3);
+      await MqttUtilities.asyncSleep(4);
       verify(() => ch.sendMessage(any())).called(1);
-      await MqttUtilities.asyncSleep(1);
       final pingMessageRx = MqttPingResponseMessage();
       ka.pingResponseReceived(pingMessageRx);
       latencies[0] = ka.lastCycleLatency;
       expect(ka.lastCycleLatency > 1000, isTrue);
       expect(ka.averageCycleLatency > 1000, isTrue);
-      await MqttUtilities.asyncSleep(2);
+      await MqttUtilities.asyncSleep(3);
       verify(() => ch.sendMessage(any())).called(1);
-      await MqttUtilities.asyncSleep(1);
       ka.pingResponseReceived(pingMessageRx);
       latencies[1] = ka.lastCycleLatency;
       expect(ka.lastCycleLatency > 1000, isTrue);
       expect(ka.averageCycleLatency > 1000, isTrue);
-      expect(ka.averageCycleLatency, (latencies[0] + latencies[1]) ~/ 2);
+      await MqttUtilities.asyncSleep(3);
+      verify(() => ch.sendMessage(any())).called(1);
+      ka.pingResponseReceived(pingMessageRx);
+      latencies[2] = ka.lastCycleLatency;
+      expect(ka.lastCycleLatency > 1000, isTrue);
+      expect(ka.averageCycleLatency > 1000, isTrue);
+      expect(ka.averageCycleLatency,
+          (latencies[0] + latencies[1] + latencies[2]) ~/ 3);
       expect(disconnect, isFalse);
       ka.stop();
       expect(ka.averageCycleLatency, 0);

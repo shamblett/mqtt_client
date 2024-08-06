@@ -177,8 +177,10 @@ class MqttConnectionKeepAlive {
     // Calculate latencies
     lastCycleLatency = DateTime.now().millisecondsSinceEpoch - _lastPingTime;
     _cycleCount++;
-    averageCycleLatency =
-        (averageCycleLatency + lastCycleLatency) ~/ _cycleCount;
+    // Average latency calculation is
+    // new_avg = prev_avg + ((new_value − prev_avg) ~/ n + 1)
+    averageCycleLatency +=
+        (lastCycleLatency - averageCycleLatency) ~/ _cycleCount;
 
     // Call the pong callback if not null
     if (pongCallback != null) {
