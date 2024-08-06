@@ -250,7 +250,7 @@ class MqttClient {
     subscriptionsManager?.onUnsubscribed = cb;
   }
 
-  /// Ping response received callback.
+  /// Ping response(pong) received callback.
   /// If set when a ping response is received from the broker
   /// this will be called.
   /// Can be used for health monitoring outside of the client itself.
@@ -263,6 +263,28 @@ class MqttClient {
     _pongCallback = cb;
     keepAlive?.pongCallback = cb;
   }
+
+  /// Ping request(ping) sent callback.
+  /// If set when a ping request is sent from the client
+  /// this will be called.
+  /// Can be used in tandem with the [pongCallback] for latency calculations.
+  PingCallback? _pingCallback;
+
+  /// The ping sent callback
+  PingCallback? get pingCallback => _pingCallback;
+
+  set pingCallback(PingCallback? cb) {
+    _pingCallback = cb;
+    keepAlive?.pingCallback = cb;
+  }
+
+  /// The latency of the last ping/pong cycle in milliseconds.
+  /// Cleared on disconnect.
+  int? get lastCycleLatency => keepAlive?.lastCycleLatency;
+
+  /// The average latency of all ping/pong cycles in a connection period in
+  /// milliseconds. Cleared on disconnect.
+  int? get averageCycleLatency => keepAlive?.averageCycleLatency;
 
   /// The event bus
   @protected
@@ -319,6 +341,9 @@ class MqttClient {
           keepAlivePeriod, disconnectOnNoResponsePeriod);
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
+      }
+      if (pingCallback != null) {
+        keepAlive!.pingCallback = pingCallback;
       }
     } else {
       MqttLogger.log('MqttClient::connect - keep alive is disabled');
