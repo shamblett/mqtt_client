@@ -14,8 +14,7 @@ import 'package:aws_signature_v4/aws_signature_v4.dart';
 
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:mqtt_client/mqtt_client.dart';
-//HTTP import 'package:http/http.dart';
-import 'package:sigv4/sigv4.dart';
+import 'package:http/http.dart';
 
 /// An example of connecting to the AWS IoT Core MQTT broker and publishing to a devices topic.
 /// This example uses MQTT over Websockets with AWS IAM Credentials
@@ -24,10 +23,6 @@ import 'package:sigv4/sigv4.dart';
 /// More instructions can be found at https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html and
 /// https://docs.aws.amazon.com/iot/latest/developerguide/protocols.html, please read this
 /// before setting up and running this example.
-
-/// Note the dependency on the http package has been removed from the client, as such lines below
-/// depending on this are commented out. If you wish to run this example please re add package http
-/// at version 1.2.1 to the pubspec.yaml and uncomment lines starting with HTTP.
 
 // This function is based on the one from package flutter-aws-iot, but adapted slightly
 String getWebSocketURL(
@@ -71,31 +66,40 @@ Future<bool> attachPolicy(
     required String iotApiUrl,
     required String region,
     required String policyName}) async {
-  final sigv4Client = Sigv4Client(
-      keyId: accessKey,
-      accessKey: secretKey,
-      sessionToken: sessionToken,
-      region: region,
-      serviceName: 'execute-api');
+  final creds = AWSCredentials(accessKey, secretKey, sessionToken);
+  final signer = AWSSigV4Signer(
+    credentialsProvider: AWSCredentialsProvider(creds),
+  );
+
+  final scope = AWSCredentialScope(region: region, service: AWSService.iot);
 
   final body = json.encode({'target': identityId});
 
-  //HTTP remove the two lines below.
-  print(sigv4Client);
-  print(body);
+  final request = AWSHttpRequest(
+    method: AWSHttpMethod.put,
+    uri: Uri.parse('$iotApiUrl/$policyName'),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: body.codeUnits,
+  );
 
-  //HTTPfinal request =
-  //HTTPsigv4Client.request('$iotApiUrl/$policyName', method: 'PUT', body: body);
+  final signedRequest = await signer.sign(
+    request,
+    credentialScope: scope,
+  );
 
-  //HTTP var result = await put(request.url, headers: request.headers, body: body);
+  final result = await put(
+    signedRequest.uri,
+    headers: signedRequest.headers,
+    body: signedRequest.body,
+  );
 
-  //HTTPf (result.statusCode != 200) {
-  //HTTPprint('Error attaching IoT Policy ${result.body}');
-  //HTTP}
+  if (result.statusCode != 200) {
+    print('Error attaching IoT Policy ${result.body}');
+  }
 
-  //HTTPreturn result.statusCode == 200;
-  //HTTP remove the line below
-  return true;
+  return result.statusCode == 200;
 }
 
 Future<int> main() async {
