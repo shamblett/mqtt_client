@@ -49,8 +49,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     MqttLogger.log('MqttBrowserWsConnection::connect -  WS URL is $uriString');
     try {
       // Connect and save the socket.
-      final client = WebSocket(
-          uriString, (protocols.toList()).map((e) => e.toJS).toList().toJS);
+      final client =
+          WebSocket(uriString, protocols.map((e) => e.toJS).toList().toJS);
       this.client = client;
       client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -122,8 +122,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
         'MqttBrowserWsConnection::connectAuto -  WS URL is $uriString');
     try {
       // Connect and save the socket.
-      final client = WebSocket(
-          uriString, (protocols.toList()).map((e) => e.toJS).toList().toJS);
+      final client =
+          WebSocket(uriString, protocols.map((e) => e.toJS).toList().toJS);
       this.client = client;
       client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
