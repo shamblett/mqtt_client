@@ -183,8 +183,14 @@ class MqttClient {
       ? connectionHandler!.connectionStatus
       : _connectionStatus;
 
-  /// The connection message to use to override the default
-  MqttConnectMessage? connectionMessage;
+  /// The connection message to use to override the default.
+  MqttConnectMessage? _connectionMessage;
+  MqttConnectMessage? get connectionMessage => _connectionMessage;
+  set connectionMessage(MqttConnectMessage? connMessage) {
+    _connectionMessage = connMessage;
+    _connectionMessage?.variableHeader?.protocolVersion = Protocol.version;
+    _connectionMessage?.variableHeader?.protocolName = Protocol.name;
+  }
 
   /// Client disconnect callback, called on unsolicited disconnect.
   /// This will not be called even if set if [autoReconnect} is set,instead
@@ -575,11 +581,15 @@ class MqttClient {
   void setProtocolV31() {
     Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
     Protocol.name = MqttClientConstants.mqttV31ProtocolName;
+    connectionMessage?.withProtocolVersion(Protocol.version);
+    connectionMessage?.withProtocolName(Protocol.name);
   }
 
   /// Set the protocol version to V3.1.1
   void setProtocolV311() {
     Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
     Protocol.name = MqttClientConstants.mqttV311ProtocolName;
+    connectionMessage?.withProtocolVersion(Protocol.version);
+    connectionMessage?.withProtocolName(Protocol.name);
   }
 }
