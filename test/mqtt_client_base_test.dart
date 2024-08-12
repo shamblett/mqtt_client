@@ -525,7 +525,7 @@ void main() {
       Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
       Protocol.name = MqttClientConstants.mqttV31ProtocolName;
     });
-    test('Protocol with connect message', () {
+    test('Protocol set with connect message', () {
       Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
       Protocol.name = MqttClientConstants.mqttV31ProtocolName;
       final client = MqttClient('localhost', 'abcd');
@@ -540,6 +540,17 @@ void main() {
           MqttClientConstants.mqttV311ProtocolVersion);
       expect(client.connectionMessage?.variableHeader?.protocolName,
           MqttClientConstants.mqttV311ProtocolName);
+    });
+    test('Protocol set on connect message', () {
+      Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
+      Protocol.name = MqttClientConstants.mqttV31ProtocolName;
+      expect(Protocol.version, MqttClientConstants.mqttV31ProtocolVersion);
+      expect(Protocol.name, MqttClientConstants.mqttV31ProtocolName);
+      MqttConnectMessage()
+        ..withProtocolName(MqttClientConstants.mqttV311ProtocolName)
+        ..withProtocolVersion(MqttClientConstants.mqttV311ProtocolVersion);
+      expect(Protocol.version, MqttClientConstants.mqttV311ProtocolVersion);
+      expect(Protocol.name, MqttClientConstants.mqttV311ProtocolName);
     });
     test('Byte Buffer', () {
       final uBuff = typed.Uint8Buffer(10);
