@@ -8,7 +8,7 @@
 // The following scheme can be used conditionally import either the server or browser client
 // automatically.
 //
-// import 'server.dart' if (dart.library.html) 'browser.dart' as mqttsetup;
+// import 'server.dart' if (dart.library.js_interop) 'browser.dart' as mqttsetup;
 // ...
 // var client = mqttsetup.setup(serverAddress, uniqueID, port);
 //
