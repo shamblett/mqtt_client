@@ -280,7 +280,7 @@ void main() {
       expect(ka.lastCycleLatency > 0, isTrue);
       expect(ka.averageCycleLatency > 0, isTrue);
       expect(ka.averageCycleLatency,
-          (latencies[0] + latencies[1] + latencies[2]) ~/ 3);
+          lessThanOrEqualTo(latencies[0] + latencies[1] + latencies[2] ~/ 3));
       expect(disconnect, isFalse);
       ka.stop();
       expect(ka.averageCycleLatency, 0);

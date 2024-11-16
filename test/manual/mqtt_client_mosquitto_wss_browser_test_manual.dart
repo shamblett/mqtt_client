@@ -36,6 +36,7 @@ void main() {
       client.onConnected = connectCallback;
       client.pongCallback = pongCallback;
       client.keepAlivePeriod = 10;
+      client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
       final connMess = MqttConnectMessage()
           .withClientIdentifier(testClientId)
           .withWillTopic('willtopic')

@@ -5,13 +5,14 @@
  * Copyright :  S.Hamblett
  */
 
-library mqtt_browser_client;
+library;
 
 import 'dart:async';
-import 'package:universal_html/html.dart';
+import 'dart:js_interop';
 import 'dart:typed_data';
 import 'package:event_bus/event_bus.dart' as events;
 import 'package:typed_data/typed_data.dart' as typed;
+import 'package:web/web.dart';
 import 'mqtt_client.dart';
 
 part 'src/mqtt_browser_client.dart';
