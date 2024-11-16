@@ -1,3 +1,6 @@
+# 10.6.0
+Issues 503 - partial, update to package web
+
 # 10.5.1
 Issues 559
 
