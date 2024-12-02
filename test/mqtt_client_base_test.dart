@@ -997,4 +997,22 @@ void main() {
           isTrue);
     });
   });
+  group('Conversions', () {
+    group('Bytes To String as String', () {
+      test('String 1', () {
+        final original = 'Hello, 世界!';
+        final buffer = typed.Uint8Buffer();
+        buffer.addAll(utf8.encode(original)); // Encode the string to bytes
+        final decoded = MqttPublishPayload.bytesToStringAsString(buffer);
+        expect(decoded == original, isTrue);
+      });
+      test('String 2', () {
+        final original = 'Seu próximo agendamento iniciará em 5 minutos.';
+        final buffer = typed.Uint8Buffer();
+        buffer.addAll(utf8.encode(original)); // Encode the string to bytes
+        final decoded = MqttPublishPayload.bytesToStringAsString(buffer);
+        expect(decoded == original, isTrue);
+      });
+    });
+  });
 }
