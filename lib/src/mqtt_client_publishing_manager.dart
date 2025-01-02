@@ -158,12 +158,10 @@ class PublishingManager implements IPublishingManager {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
         _fireMessageReceived(topic, msg);
-        _notifyPublish(msg);
       } else if (pubMsg.header!.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 requires an acknowledgement
         // Send the message for processing to whoever is waiting.
         _fireMessageReceived(topic, msg);
-        _notifyPublish(msg);
         // If configured the client will send the acknowledgement, else the user must.
         final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
         if (!manuallyAcknowledgeQos1) {
