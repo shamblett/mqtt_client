@@ -73,9 +73,6 @@ Future<int> main() async {
   client.published!.listen((MqttPublishMessage message) {
     print(
         'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
-    if (message.variableHeader!.topicName == topic3) {
-      print('EXAMPLE:: Non subscribed topic received.');
-    }
   });
 
   final builder1 = MqttClientPayloadBuilder();
