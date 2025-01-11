@@ -5,18 +5,18 @@ DocumentName: mqtt_client
 DocumentNamespace: https://pub.dev/packages/mqtt_client
 LicenseListVersion: 3.8
 Creator: Tool: https://pub.dev/packages/sbom
-Created: 2025-01-02T13:34:15Z
+Created: 2025-01-11T10:59:21Z
 
 
 PackageName: mqtt-client
 SPDXID: SPDXRef-Package-mqtt-client
-PackageVersion: 10.6.3
+PackageVersion: 10.6.4
 PackageFileName: mqtt_client
 PackageSupplier: NOASSERTION
 PackageOriginator: NOASSERTION
 PackageDownloadLocation: https://pub.dev/packages/mqtt_client
 FilesAnalyzed: true
-PackageVerificationCode: d6aafed9b5b67fcd125ad2c76427c8c1df8a8f76
+PackageVerificationCode: e88f03e37537734feb2fc6a69dd795c6dea73cc5
 PackageHomePage: https://pub.dev/packages/mqtt_client
 PackageLicenseConcluded: MIT
 PackageLicenseInfoFromFiles: NOASSERTION
@@ -424,7 +424,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/messages/mqtt_client_mqtt_message_type.dart
 SPDXID: SPDXRef-mqtt-client-mqtt-message-type-44
 FileType: SOURCE
-FileChecksum: SHA1: d0bb61e9f3456f64485c58bbca4ae2f77db14870
+FileChecksum: SHA1: 07b1e01c024005b00d4b0ab5c59469bcffb28ddf
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -901,7 +901,7 @@ FileCopyrightText: NOASSERTION
 FileName: pubspec.yaml
 SPDXID: SPDXRef-pubspec-97
 FileType: TEXT
-FileChecksum: SHA1: da9c16da3f9b6e1eef279930dc66878fa441cf3c
+FileChecksum: SHA1: 6f7fadf73b4a27117f4cca301da7c670cb97c99e
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
