@@ -63,6 +63,7 @@ class SynchronousMqttServerConnectionHandler
           }
 
           this.connection = connection;
+          connection.onBadCertificate = onBadCertificate;
         } else if (secure) {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '

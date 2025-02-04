@@ -137,7 +137,9 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
         'MqttWs2Connection::connect - WS URL is $uriString, protocols are $protocols');
 
     try {
-      SecureSocket.connect(uri.host, uri.port, context: context).then((socket) {
+      SecureSocket.connect(uri.host, uri.port,
+              context: context, onBadCertificate: onBadCertificate)
+          .then((socket) {
         MqttLogger.log('MqttWs2Connection::connect - securing socket');
         _performWSHandshake(socket, uri).then((_) {
           client = WebSocket.fromUpgradedSocket(

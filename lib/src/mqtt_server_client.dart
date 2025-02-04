@@ -119,10 +119,9 @@ class MqttServerClient extends MqttClient {
       connectionHandler.useWebSocket = false;
       connectionHandler.useAlternateWebSocketImplementation = false;
       connectionHandler.securityContext = securityContext;
-      connectionHandler.onBadCertificate =
-          onBadCertificate as bool Function(Object certificate)?;
     }
-
+    connectionHandler.onBadCertificate =
+        onBadCertificate as bool Function(Object certificate)?;
     this.connectionHandler = connectionHandler;
     return await super.connect(username, password);
   }
