@@ -15,6 +15,7 @@ class SynchronousMqttServerConnectionHandler
   SynchronousMqttServerConnectionHandler(super.clientEventBus,
       {required int maxConnectionAttempts,
       required super.socketOptions,
+      required super.socketTimeout,
       reconnectTimePeriod = 5000})
       : super(maxConnectionAttempts: maxConnectionAttempts) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
@@ -44,12 +45,13 @@ class SynchronousMqttServerConnectionHandler
                 'SynchronousMqttServerConnectionHandler::internalConnect - '
                 'alternate websocket implementation selected');
             connection = MqttServerWs2Connection(
-                securityContext, clientEventBus, socketOptions);
+                securityContext, clientEventBus, socketOptions, socketTimeout);
           } else {
             MqttLogger.log(
                 'SynchronousMqttServerConnectionHandler::internalConnect - '
                 'websocket selected');
-            connection = MqttServerWsConnection(clientEventBus, socketOptions);
+            connection = MqttServerWsConnection(
+                clientEventBus, socketOptions, socketTimeout);
           }
 
           final websocketProtocols = this.websocketProtocols;
@@ -68,14 +70,14 @@ class SynchronousMqttServerConnectionHandler
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '
               'secure selected');
-          connection = MqttServerSecureConnection(
-              securityContext, clientEventBus, onBadCertificate, socketOptions);
+          connection = MqttServerSecureConnection(securityContext,
+              clientEventBus, onBadCertificate, socketOptions, socketTimeout);
         } else {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect - '
               'insecure TCP selected');
-          connection =
-              MqttServerNormalConnection(clientEventBus, socketOptions);
+          connection = MqttServerNormalConnection(
+              clientEventBus, socketOptions, socketTimeout);
         }
         connection.onDisconnected = onDisconnected;
       }
@@ -91,14 +93,21 @@ class SynchronousMqttServerConnectionHandler
               'SynchronousMqttServerConnectionHandler::internalConnect - calling connectAuto');
           await connection.connectAuto(hostname, port);
         }
-      } on Exception {
+      } on Exception catch (e) {
         // Ignore exceptions in an auto reconnect sequence
         if (autoReconnectInProgress) {
           MqttLogger.log(
               'SynchronousMqttServerConnectionHandler::internalConnect'
               ' exception thrown during auto reconnect - ignoring');
         } else {
-          rethrow;
+          // Rethrow all raised exceptions except for socket timeout.
+          if (_isSocketTimeout(e)) {
+            MqttLogger.log(
+                'SynchronousMqttServerConnectionHandler::internalConnect'
+                ' socket timeout exceeded');
+          } else {
+            rethrow;
+          }
         }
       }
       MqttLogger.log(

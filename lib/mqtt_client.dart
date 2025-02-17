@@ -30,6 +30,8 @@ part 'src/exception/mqtt_client_connection_exception.dart';
 
 part 'src/exception/mqtt_client_noconnection_exception.dart';
 
+part 'src/exception/mqtt_client_sockettimeout_exception.dart';
+
 part 'src/exception/mqtt_client_invalid_header_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_message_exception.dart';

@@ -11,17 +11,21 @@ part of '../../../mqtt_server_client.dart';
 abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
   /// Default constructor
-  MqttServerConnection(super.clientEventBus, this.socketOptions);
+  MqttServerConnection(
+      super.clientEventBus, this.socketOptions, this.socketTimeout);
 
   /// Initializes a new instance of the MqttConnection class.
   MqttServerConnection.fromConnect(
-      server, port, clientEventBus, this.socketOptions)
+      server, port, clientEventBus, this.socketOptions, this.socketTimeout)
       : super(clientEventBus) {
     connect(server, port);
   }
 
   /// Socket options, applicable only to TCP sockets
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
+
+  /// Socket timeout duration
+  Duration? socketTimeout;
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
@@ -95,5 +99,13 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
     return socketOptions.isNotEmpty;
+  }
+
+  // Check for a timeout exception
+  bool _isSocketTimeout(SocketException e) {
+    if (e.message.contains('Connection timed out')) {
+      return true;
+    }
+    return false;
   }
 }
