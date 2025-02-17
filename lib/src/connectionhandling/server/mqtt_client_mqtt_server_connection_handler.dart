@@ -42,14 +42,4 @@ abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
 
   /// Socket timeout duration.
   Duration? socketTimeout;
-
-  // Check for a timeout exception
-  bool _isSocketTimeout(Exception e) {
-    if (e is SocketException) {
-      if (e.message.contains('Connection timed out')) {
-        return true;
-      }
-    }
-    return false;
-  }
 }

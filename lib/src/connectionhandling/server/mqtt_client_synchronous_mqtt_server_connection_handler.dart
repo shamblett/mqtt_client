@@ -101,7 +101,7 @@ class SynchronousMqttServerConnectionHandler
               ' exception thrown during auto reconnect - ignoring');
         } else {
           // Rethrow all raised exceptions except for socket timeout.
-          if (_isSocketTimeout(e)) {
+          if (e is SocketTimeoutException) {
             MqttLogger.log(
                 'SynchronousMqttServerConnectionHandler::internalConnect'
                 ' socket timeout exceeded');
