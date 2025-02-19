@@ -77,7 +77,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       final context = SecurityContext.defaultContext;
       final currDir = path.current + path.separator;
@@ -113,7 +115,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       ch.onDisconnected = disconnectCB;
       final context = SecurityContext();
@@ -136,7 +140,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       // Skip bad certificate
       ch.onBadCertificate = (_) => true;
