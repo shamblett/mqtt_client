@@ -398,6 +398,9 @@ void main() {
         client.logging(on: true);
         final start = DateTime.now();
         client.socketTimeout = Duration(seconds: 2);
+        expect(client.connectTimeoutPeriod, 2000);
+        client.connectTimeoutPeriod = 5000;
+        expect(client.connectTimeoutPeriod, 2000);
         try {
           await client.connect();
         } on NoConnectionException {

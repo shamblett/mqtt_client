@@ -51,12 +51,6 @@ class MqttServerClient extends MqttClient {
   /// Max connection attempts
   final int maxConnectionAttempts;
 
-  /// Socket timeout duration.
-  /// Specifies the maximum time a connect call will wait for connection.
-  /// Can be used to stop excessive waiting time at the network layer.
-  /// For TCP sockets only, not websockets.
-  Duration? socketTimeout;
-
   /// The client supports the setting of both integer and boolean raw socket options
   /// as supported by the Dart IO library [RawSocketOption](https://api.dart.dev/stable/2.19.3/dart-io/RawSocketOption-class.html) class.
   /// Please consult the documentation for the above class before using this.

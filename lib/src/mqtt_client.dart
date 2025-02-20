@@ -76,17 +76,38 @@ class MqttClient {
   /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
   bool resubscribeOnAutoReconnect = true;
 
+  /// Socket timeout duration.
+  /// Specifies the maximum time a connect call will wait for connection.
+  /// Can be used to stop excessive waiting time at the network layer.
+  /// For TCP sockets only, not websockets.
+  ///
+  /// Note this takes precedence over [connectTimeoutPeriod], if this is set
+  /// [connectTimeoutPeriod] will adopt this value.
+  Duration? _socketTimeout;
+  Duration? get socketTimeout => _socketTimeout;
+  set socketTimeout(Duration? period) {
+    _socketTimeout = period;
+    if (period != null) {
+      _connectTimeoutPeriod = period.inMilliseconds;
+    }
+  }
+
   /// Connect timeout value in milliseconds, i.e the time period between
   /// successive connection attempts.
   /// Minimum value is 1000ms, defaults to 5000ms.
+  ///
+  /// if [socketTimeout] is set then its value will take precedence so this will only
+  /// apply if you do not set [socketTimeout].
   int _connectTimeoutPeriod = 5000;
   int get connectTimeoutPeriod => _connectTimeoutPeriod;
   set connectTimeoutPeriod(int period) {
-    int periodToSet = period;
-    if (period < 1000) {
-      periodToSet = 5000;
+    if (_socketTimeout == null) {
+      int periodToSet = period;
+      if (period < 1000) {
+        periodToSet = 5000;
+      }
+      _connectTimeoutPeriod = periodToSet;
     }
-    _connectTimeoutPeriod = periodToSet;
   }
 
   /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
