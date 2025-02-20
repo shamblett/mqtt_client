@@ -44,16 +44,17 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
         _startListening();
         completer.complete();
       }).catchError((e) {
-        onError(e);
-        completer.completeError(e);
+        if (_isSocketTimeout(e)) {
+          final message =
+              'MqttNormalConnection::connect - The connection to the message broker '
+              '{$server}:{$port} could not be made, a socket timeout has occurred';
+          MqttLogger.log(message);
+        } else {
+          onError(e);
+          completer.completeError(e);
+        }
       });
     } on SocketException catch (e) {
-      if (_isSocketTimeout(e)) {
-        final message =
-            'MqttNormalConnection::connect - The connection to the message broker '
-            '{$server}:{$port} could not be made, a socket timeout has occurred';
-        throw (SocketTimeoutException(message));
-      }
       final message =
           'MqttNormalConnection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
@@ -87,16 +88,17 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
         _startListening();
         completer.complete();
       }).catchError((e) {
-        onError(e);
-        completer.completeError(e);
+        if (_isSocketTimeout(e)) {
+          final message =
+              'MqttNormalConnection::connectAuto - The connection to the message broker '
+              '{$server}:{$port} could not be made, a socket timeout has occurred';
+          MqttLogger.log(message);
+        } else {
+          onError(e);
+          completer.completeError(e);
+        }
       });
     } on SocketException catch (e) {
-      if (_isSocketTimeout(e)) {
-        final message =
-            'MqttNormalConnection::connectAuto - The connection to the message broker '
-            '{$server}:{$port} could not be made, a socket timeout has occurred';
-        throw (SocketTimeoutException(message));
-      }
       final message =
           'MqttNormalConnection::connectAuto - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';

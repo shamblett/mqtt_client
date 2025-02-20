@@ -391,5 +391,31 @@ void main() {
                   sourcePort: sourcePort,
                   timeout: timeout));
     });
+    test('Socket Timeout', () async {
+      await IOOverrides.runZoned(() async {
+        bool testOk = false;
+        final client = MqttServerClient('localhost', '', maxConnectionAttempts: 1);
+        client.logging(on: true);
+        final start = DateTime.now();
+        client.socketTimeout = Duration(seconds: 2);
+        try {
+          await client.connect();
+        } on NoConnectionException {
+          testOk = true;
+        }
+        final end = DateTime.now();
+        expect(end.isAfter(start), isTrue);
+        expect(end.subtract(Duration(seconds: 2)), start);
+        expect(testOk, isTrue);
+      },
+          socketConnect: (dynamic host, int port,
+                  {dynamic sourceAddress,
+                  int sourcePort = 0,
+                  Duration? timeout}) =>
+              MqttMockSocketTimeout.connect(host, port,
+                  sourceAddress: sourceAddress,
+                  sourcePort: sourcePort,
+                  timeout: timeout));
+    });
   });
 }
