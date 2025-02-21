@@ -394,10 +394,14 @@ void main() {
     test('Socket Timeout', () async {
       await IOOverrides.runZoned(() async {
         bool testOk = false;
-        final client = MqttServerClient('localhost', '', maxConnectionAttempts: 1);
+        final client =
+            MqttServerClient('localhost', '', maxConnectionAttempts: 1);
         client.logging(on: true);
         final start = DateTime.now();
-        client.socketTimeout = Duration(seconds: 2);
+        client.socketTimeout = 500;
+        expect(client.socketTimeout, isNull);
+        expect(client.connectTimeoutPeriod, 5000);
+        client.socketTimeout = 2000;
         expect(client.connectTimeoutPeriod, 10);
         client.connectTimeoutPeriod = 5000;
         expect(client.connectTimeoutPeriod, 10);
