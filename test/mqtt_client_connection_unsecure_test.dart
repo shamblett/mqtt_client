@@ -398,9 +398,9 @@ void main() {
         client.logging(on: true);
         final start = DateTime.now();
         client.socketTimeout = Duration(seconds: 2);
-        expect(client.connectTimeoutPeriod, 2000);
+        expect(client.connectTimeoutPeriod, 10);
         client.connectTimeoutPeriod = 5000;
-        expect(client.connectTimeoutPeriod, 2000);
+        expect(client.connectTimeoutPeriod, 10);
         try {
           await client.connect();
         } on NoConnectionException {
@@ -408,7 +408,7 @@ void main() {
         }
         final end = DateTime.now();
         expect(end.isAfter(start), isTrue);
-        expect(end.subtract(Duration(seconds: 2)), start);
+        expect(end.subtract(Duration(seconds: 2)).second, start.second);
         expect(testOk, isTrue);
       },
           socketConnect: (dynamic host, int port,

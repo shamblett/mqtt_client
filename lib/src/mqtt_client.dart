@@ -88,16 +88,18 @@ class MqttClient {
   set socketTimeout(Duration? period) {
     _socketTimeout = period;
     if (period != null) {
-      _connectTimeoutPeriod = period.inMilliseconds;
+      _connectTimeoutPeriod = 10;
     }
   }
 
   /// Connect timeout value in milliseconds, i.e the time period between
   /// successive connection attempts.
+  ///
   /// Minimum value is 1000ms, defaults to 5000ms.
   ///
   /// if [socketTimeout] is set then its value will take precedence so this will only
-  /// apply if you do not set [socketTimeout].
+  /// apply if you do not set [socketTimeout]. If you do then this value will be set to 10ms
+  /// which effectively disables it.
   int _connectTimeoutPeriod = 5000;
   int get connectTimeoutPeriod => _connectTimeoutPeriod;
   set connectTimeoutPeriod(int period) {
