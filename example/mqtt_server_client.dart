@@ -50,8 +50,14 @@ Future<int> main() async {
   /// If you intend to use a keep alive you must set it here otherwise keep alive will be disabled.
   client.keepAlivePeriod = 20;
 
-  /// The connection timeout period can be set if needed, the default is 5 seconds.
+  /// The connection timeout period can be set, the default is 5 seconds.
+  /// if [client.socketTimeout] is set then this will take precedence and this setting will be
+  /// disabled.
   client.connectTimeoutPeriod = 2000; // milliseconds
+
+  /// The socket timeout period can be set, the minimum value is 1000ms.
+  /// If set then this setting takes precedence and [client.connectionTimeoutPeriod] is disabled.
+  /// client.socketTimeout = 2000; // milliseconds
 
   /// Add the unsolicited disconnection callback
   client.onDisconnected = onDisconnected;
