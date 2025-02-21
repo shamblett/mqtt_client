@@ -93,10 +93,6 @@ class SynchronousMqttServerConnectionHandler
               'SynchronousMqttServerConnectionHandler::internalConnect - calling connectAuto');
           await connection.connectAuto(hostname, port);
         }
-      } on SocketTimeoutException {
-        // Socket timeout exceptions are ignored for both normal and auto reconnect sequences.
-        MqttLogger.log('SynchronousMqttServerConnectionHandler::internalConnect'
-            ' socket timeout exceeded');
       } on Exception {
         // Ignore exceptions in an auto reconnect sequence
         if (autoReconnectInProgress) {

@@ -396,7 +396,6 @@ void main() {
         bool testOk = false;
         final client =
             MqttServerClient('localhost', '', maxConnectionAttempts: 1);
-        client.logging(on: true);
         final start = DateTime.now();
         client.socketTimeout = 500;
         expect(client.socketTimeout, isNull);
