@@ -17,7 +17,7 @@ Future<int> main() async {
     var client = MqttServerClient.withPort(
         'test.mosquitto.org', 'client-id-123456789', 1883);
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
     const topic = 'xd/+';
     await client.connect();
     expect(client.connectionStatus.state, MqttConnectionState.connected);
@@ -31,7 +31,7 @@ Future<int> main() async {
     sleep(Duration(seconds: 5));
     client = MqttServerClient.withPort(
         'test.mosquitto.org', 'client-id-123456789', 1883);
-    client.logging(on: true);
+    client.logging(on: false);
     client.autoReconnect = true;
     client.resubscribeOnAutoReconnect = false;
     expect(client.connectionStatus.state, MqttConnectionState.disconnected);

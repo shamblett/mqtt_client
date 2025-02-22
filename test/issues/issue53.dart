@@ -13,7 +13,7 @@ Future<int> main() async {
   client.setProtocolV311();
   client.keepAlivePeriod = 20;
   client.port = 1883;
-  client.logging(on: true);
+  client.logging(on: false);
 
   client.onDisconnected = () {
     print('==> Disconnected | Time: ${DateTime.now().toUtc()}');

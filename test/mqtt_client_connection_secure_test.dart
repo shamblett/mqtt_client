@@ -17,6 +17,7 @@ import 'package:typed_data/typed_data.dart' as typed;
 import 'package:path/path.dart' as path;
 import 'package:event_bus/event_bus.dart' as events;
 import 'support/mqtt_client_mockbroker.dart';
+import 'support/mqtt_client_mock_socket.dart';
 
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {
@@ -77,7 +78,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       final context = SecurityContext.defaultContext;
       final currDir = path.current + path.separator;
@@ -113,7 +116,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       ch.onDisconnected = disconnectCB;
       final context = SecurityContext();
@@ -136,7 +141,9 @@ void main() {
       await broker.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       ch.secure = true;
       // Skip bad certificate
       ch.onBadCertificate = (_) => true;
@@ -149,6 +156,38 @@ void main() {
           MqttConnectMessage().withClientIdentifier(testClientId));
       expect(ch.connectionStatus.state, MqttConnectionState.connected);
       ch.close();
+    });
+    test('Socket Timeout', () async {
+      await IOOverrides.runZoned(() async {
+        bool testOk = false;
+        final client =
+            MqttServerClient('localhost', '', maxConnectionAttempts: 1);
+        final start = DateTime.now();
+        client.socketTimeout = 500;
+        expect(client.socketTimeout, isNull);
+        expect(client.connectTimeoutPeriod, 5000);
+        client.socketTimeout = 2000;
+        expect(client.connectTimeoutPeriod, 10);
+        client.connectTimeoutPeriod = 5000;
+        expect(client.connectTimeoutPeriod, 10);
+        try {
+          await client.connect();
+        } on NoConnectionException {
+          testOk = true;
+        }
+        final end = DateTime.now();
+        expect(end.isAfter(start), isTrue);
+        expect(end.subtract(Duration(seconds: 2)).second, start.second);
+        expect(testOk, isTrue);
+      },
+          socketConnect: (dynamic host, int port,
+                  {dynamic sourceAddress,
+                  int sourcePort = 0,
+                  Duration? timeout}) =>
+              MqttMockSecureSocketTimeout.connect(host, port,
+                  sourceAddress: sourceAddress,
+                  sourcePort: sourcePort,
+                  timeout: timeout));
     });
   });
 }

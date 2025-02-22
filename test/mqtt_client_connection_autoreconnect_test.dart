@@ -34,7 +34,7 @@ void main() {
         }
 
         final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
+        client.logging(on: false);
         client.autoReconnect = true;
         client.onAutoReconnect = autoReconnect;
         client.onDisconnected = disconnect;
@@ -77,7 +77,7 @@ void main() {
         }
 
         final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
+        client.logging(on: false);
         client.autoReconnect = true;
         client.onAutoReconnect = autoReconnect;
         client.onDisconnected = disconnect;
@@ -120,7 +120,7 @@ void main() {
         }
 
         final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
+        client.logging(on: false);
         client.autoReconnect = true;
         client.keepAlivePeriod = 1;
         client.onAutoReconnect = autoReconnect;

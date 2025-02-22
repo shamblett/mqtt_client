@@ -16,7 +16,7 @@ Future<int> main() async {
     final client = MqttServerClient.withPort(
         'test.mosquitto.org', 'client-id-123456789', 1883);
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
 
     // Main test starts here
     print('ISSUE: Main test start');

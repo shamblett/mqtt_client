@@ -18,7 +18,7 @@ Future<int> main() async {
     final client = MqttServerClient.withPort(
         'test.mosquitto.org', 'client-id-123456789', 8883);
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
     const topic = 'xd/+';
 
     // Subscribe callback, we do the auto reconnect when we know we have subscribed

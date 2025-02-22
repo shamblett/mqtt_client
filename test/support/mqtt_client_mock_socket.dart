@@ -341,3 +341,53 @@ class MqttMockSocketScenario3 extends MockSocket {
     return outgoing;
   }
 }
+
+///
+/// Socket Timeout
+///
+class MqttMockSocketTimeout extends MockSocket {
+  dynamic onDataFunc;
+  dynamic onDoneFunc;
+
+  bool initial = true;
+
+  static Future<MqttMockSocketTimeout> connect(host, int port,
+      {sourceAddress, int sourcePort = 0, Duration? timeout}) async {
+    final completer = Completer<MqttMockSocketTimeout>();
+    final extSocket = MqttMockSocketTimeout();
+    extSocket.port = port;
+    extSocket.host = host;
+    if (timeout != null) {
+      await Future.delayed(timeout);
+      throw SocketException('Connection timed out, host: $host, port: $port',
+          port: port);
+    }
+    completer.complete(extSocket);
+    return completer.future;
+  }
+}
+
+///
+/// Socket Timeout - Secure
+///
+class MqttMockSecureSocketTimeout extends MockSocket {
+  dynamic onDataFunc;
+  dynamic onDoneFunc;
+
+  bool initial = true;
+
+  static Future<MqttMockSecureSocketTimeout> connect(host, int port,
+      {sourceAddress, int sourcePort = 0, Duration? timeout}) async {
+    final completer = Completer<MqttMockSecureSocketTimeout>();
+    final extSocket = MqttMockSecureSocketTimeout();
+    extSocket.port = port;
+    extSocket.host = host;
+    if (timeout != null) {
+      await Future.delayed(timeout);
+      throw SocketException('Connection timed out, host: $host, port: $port',
+          port: port);
+    }
+    completer.complete(extSocket);
+    return completer.future;
+  }
+}

@@ -38,7 +38,7 @@ void main() {
       }
 
       final client = MqttServerClient('localhost', testClientId);
-      client.logging(on: true);
+      client.logging(on: false);
       client.keepAlivePeriod = 1;
       client.autoReconnect = true;
       final socketOption = RawSocketOption.fromInt(6, 0x10, 2);

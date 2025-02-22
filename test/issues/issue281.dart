@@ -6,7 +6,7 @@ Future<void> main() async {
   client.keepAlivePeriod = 60;
   client.onConnected = onConnected;
   client.onDisconnected = onDisconnected;
-  client.logging(on: true);
+  client.logging(on: false);
   client.setProtocolV311();
 
   // let's connect to mqtt broker

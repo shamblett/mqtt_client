@@ -33,7 +33,9 @@ void main() {
       try {
         final clientEventBus = events.EventBus();
         final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-            maxConnectionAttempts: 3, socketOptions: socketOptions);
+            maxConnectionAttempts: 3,
+            socketOptions: socketOptions,
+            socketTimeout: null);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsBad, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -59,7 +61,9 @@ void main() {
       try {
         final clientEventBus = events.EventBus();
         final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-            maxConnectionAttempts: 3, socketOptions: socketOptions);
+            maxConnectionAttempts: 3,
+            socketOptions: socketOptions,
+            socketTimeout: null);
         ch.useWebSocket = true;
         await ch.connect(mockBrokerAddressWsNoScheme, mockBrokerPortWs,
             MqttConnectMessage().withClientIdentifier(testClientId));
@@ -97,7 +101,9 @@ void main() {
       await brokerWs.start();
       final clientEventBus = events.EventBus();
       final ch = SynchronousMqttServerConnectionHandler(clientEventBus,
-          maxConnectionAttempts: 3, socketOptions: socketOptions);
+          maxConnectionAttempts: 3,
+          socketOptions: socketOptions,
+          socketTimeout: null);
       MqttLogger.loggingOn = false;
       ch.useWebSocket = true;
       ch.websocketProtocols = <String>['SJHprotocol'];
