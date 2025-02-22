@@ -17,7 +17,7 @@ Future<int> main() async {
     final client =
         MqttServerClient.withPort('localhost', 'client-id-123456789', 1883);
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
     client.keepAlivePeriod = 3;
     const topic = 'xd/+';
 

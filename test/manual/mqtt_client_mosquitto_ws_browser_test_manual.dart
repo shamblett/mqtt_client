@@ -32,7 +32,7 @@ void main() {
       final sleeper = MqttCancellableAsyncSleep(25000);
       final client = MqttBrowserClient(mosquittoServer, testClientId);
       client.port = mosquittoPort;
-      client.logging(on: true);
+      client.logging(on: false);
       client.onConnected = connectCallback;
       client.pongCallback = pongCallback;
       client.keepAlivePeriod = 10;

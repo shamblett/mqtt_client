@@ -44,14 +44,12 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
         _startListening();
         completer.complete();
       }).catchError((e) {
-        if (e is SocketException) {
-          if (_isSocketTimeout(e)) {
-            final message =
-                'MqttNormalConnection::connect - The connection to the message broker '
-                '{$server}:{$port} could not be made, a socket timeout has occurred';
-            MqttLogger.log(message);
-            completer.complete();
-          }
+        if (_isSocketTimeout(e)) {
+          final message =
+              'MqttNormalConnection::connect - The connection to the message broker '
+              '{$server}:{$port} could not be made, a socket timeout has occurred';
+          MqttLogger.log(message);
+          completer.complete();
         } else {
           onError(e);
           completer.completeError(e);
@@ -91,17 +89,15 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
         _startListening();
         completer.complete();
       }).catchError((e) {
-        if (e is SocketException) {
-          if (_isSocketTimeout(e)) {
-            final message =
-                'MqttNormalConnection::connectAuto - The connection to the message broker '
-                '{$server}:{$port} could not be made, a socket timeout has occurred';
-            MqttLogger.log(message);
-            completer.complete();
-          } else {
-            onError(e);
-            completer.completeError(e);
-          }
+        if (_isSocketTimeout(e)) {
+          final message =
+              'MqttNormalConnection::connectAuto - The connection to the message broker '
+              '{$server}:{$port} could not be made, a socket timeout has occurred';
+          MqttLogger.log(message);
+          completer.complete();
+        } else {
+          onError(e);
+          completer.completeError(e);
         }
       });
     } on SocketException catch (e) {

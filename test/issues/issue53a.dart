@@ -14,7 +14,7 @@ Future<int> main() async {
   client.keepAlivePeriod = 60;
   client.port = 443;
   client.useWebSocket = true;
-  client.logging(on: true);
+  client.logging(on: false);
 
   client.onDisconnected = () {
     print('\n\n\n==> Disconnected | Time: ${DateTime.now().toUtc()}\n\n\n');

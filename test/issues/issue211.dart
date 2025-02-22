@@ -15,6 +15,6 @@ void main() async {
     maxConnectionAttempts: 1,
   );
   mqttClient.useWebSocket = true;
-  mqttClient.logging(on: true);
+  mqttclient.logging(on: false);
   await mqttClient.connect();
 }

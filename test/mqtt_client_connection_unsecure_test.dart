@@ -351,7 +351,7 @@ void main() {
     test('Normal publish', () async {
       await IOOverrides.runZoned(() async {
         final client = MqttServerClient('localhost', 'SJHMQTTClient');
-        client.logging(on: true);
+        client.logging(on: false);
         const username = 'unused';
         print(username);
         const password = 'password';

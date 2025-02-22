@@ -23,7 +23,7 @@ void main() {
     test('Invalid URL', () async {
       try {
         final client = MqttBrowserClient(mockBrokerAddressWsBad, testClientId);
-        client.logging(on: true);
+        client.logging(on: false);
         await client.connect();
       } on Exception catch (e) {
         expect(e is NoConnectionException, true);
@@ -38,7 +38,7 @@ void main() {
       try {
         final client =
             MqttBrowserClient(mockBrokerAddressWsNoScheme, testClientId);
-        client.logging(on: true);
+        client.logging(on: false);
         await client.connect();
       } on Exception catch (e) {
         expect(e is NoConnectionException, true);
@@ -55,7 +55,7 @@ void main() {
       final client = MqttBrowserClient('ws://hhhhhhhhh/ws', testClientId);
       client.port = 10000;
       client.keepAlivePeriod = 20;
-      client.logging(on: true);
+      client.logging(on: false);
       final connMess = MqttConnectMessage()
           .startClean() // Non persistent session for testing
           .withWillQos(MqttQos.atLeastOnce);
@@ -81,7 +81,7 @@ void main() {
 
       final client = MqttBrowserClient(localServer, testClientId);
       client.port = localPort;
-      client.logging(on: true);
+      client.logging(on: false);
       client.keepAlivePeriod = 20;
       final connMess = MqttConnectMessage()
           .startClean() // Non persistent session for testing

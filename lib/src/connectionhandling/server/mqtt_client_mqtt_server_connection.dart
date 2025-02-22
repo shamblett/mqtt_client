@@ -102,9 +102,11 @@ abstract class MqttServerConnection<T extends Object>
   }
 
   // Check for a timeout exception
-  bool _isSocketTimeout(SocketException e) {
-    if (e.message.contains('Connection timed out')) {
-      return true;
+  bool _isSocketTimeout(Exception e) {
+    if (e is SocketException) {
+      if (e.message.contains('Connection timed out')) {
+        return true;
+      }
     }
     return false;
   }
