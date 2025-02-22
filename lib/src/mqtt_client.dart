@@ -85,6 +85,8 @@ class MqttClient {
   ///
   /// Note this takes precedence over [connectTimeoutPeriod], if this is set
   /// [connectTimeoutPeriod] will be disabled.
+  ///
+  /// Minimum value is 1000ms.
   int? _socketTimeout;
   int? get socketTimeout => _socketTimeout;
   set socketTimeout(int? period) {
