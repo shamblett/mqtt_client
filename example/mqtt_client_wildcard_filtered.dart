@@ -71,7 +71,8 @@ Future<int> main() async {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -82,7 +83,8 @@ Future<int> main() async {
   const topic1 = 'ebcon/#'; // Wildcard topic
   client.subscribe(topic1, MqttQos.atMostOnce);
   print(
-      'EXAMPLE::We have subscribed to test/# and ebcon/# but due to topic filtering you will only see messages for ebcon/#');
+    'EXAMPLE::We have subscribed to test/# and ebcon/# but due to topic filtering you will only see messages for ebcon/#',
+  );
 
   /// We can filter the incoming subscribed topics by using topic filtering.
   /// As many filters can be attached to the clients change notifier as needed.
@@ -93,11 +95,13 @@ Future<int> main() async {
   // Now listen on the filtered updates, not the client updates
   topicFilter.updates.listen((List<MqttReceivedMessage<MqttMessage?>> c) {
     final recMess = c[0].payload as MqttPublishMessage;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     print(
-        'EXAMPLE::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Filtered Change notification for ebcon/#:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 

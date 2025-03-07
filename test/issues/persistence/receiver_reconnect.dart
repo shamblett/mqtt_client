@@ -25,7 +25,8 @@ Future<int> main() async {
   // Subscribe to counter, Qos 1
   client.subscribe(topic, MqttQos.atLeastOnce);
   print(
-      'EXAMPLE:: Sleeping to allow the subscription acknowledges to be received....');
+    'EXAMPLE:: Sleeping to allow the subscription acknowledges to be received....',
+  );
   await MqttUtilities.asyncSleep(2);
 
   // Listen for the counter messages

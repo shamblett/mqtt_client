@@ -33,57 +33,69 @@ void main() {
           'llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll';
       final exception = ClientIdentifierException(clid);
       expect(
-          exception.toString(),
-          'mqtt-client::ClientIdentifierException: Client id $clid is too long at ${clid.length}, '
-          'Maximum ClientIdentifier length is ${MqttClientConstants.maxClientIdentifierLength}');
+        exception.toString(),
+        'mqtt-client::ClientIdentifierException: Client id $clid is too long at ${clid.length}, '
+        'Maximum ClientIdentifier length is ${MqttClientConstants.maxClientIdentifierLength}',
+      );
     });
     test('Connection', () {
       const state = MqttConnectionState.disconnected;
       final exception = ConnectionException(state);
       expect(
-          exception.toString(),
-          'mqtt-client::ConnectionException: The connection must be in the Connected state in '
-          'order to perform this operation. Current state is disconnected');
+        exception.toString(),
+        'mqtt-client::ConnectionException: The connection must be in the Connected state in '
+        'order to perform this operation. Current state is disconnected',
+      );
     });
     test('No Connection', () {
       final exception = NoConnectionException('the message');
-      expect(exception.toString(),
-          'mqtt-client::NoConnectionException: the message');
+      expect(
+        exception.toString(),
+        'mqtt-client::NoConnectionException: the message',
+      );
     });
     test('Invalid Header', () {
       const message = 'Corrupt Header Packet';
       final exception = InvalidHeaderException(message);
-      expect(exception.toString(),
-          'mqtt-client::InvalidHeaderException: $message');
+      expect(
+        exception.toString(),
+        'mqtt-client::InvalidHeaderException: $message',
+      );
     });
     test('Invalid Message', () {
       const message = 'Corrupt Message Packet';
       final exception = InvalidMessageException(message);
-      expect(exception.toString(),
-          'mqtt-client::InvalidMessageException: $message');
+      expect(
+        exception.toString(),
+        'mqtt-client::InvalidMessageException: $message',
+      );
     });
     test('Invalid Payload Size', () {
       const size = 2000;
       const max = 1000;
       final exception = InvalidPayloadSizeException(size, max);
       expect(
-          exception.toString(),
-          'mqtt-client::InvalidPayloadSizeException: The size of the payload ($size bytes) must '
-          'be equal to or greater than 0 and less than $max bytes');
+        exception.toString(),
+        'mqtt-client::InvalidPayloadSizeException: The size of the payload ($size bytes) must '
+        'be equal to or greater than 0 and less than $max bytes',
+      );
     });
     test('Invalid Topic', () {
       const message = 'Too long';
       const topic = 'kkkk-yyyy';
       final exception = InvalidTopicException(message, topic);
-      expect(exception.toString(),
-          'mqtt-client::InvalidTopicException: Topic $topic is $message');
+      expect(
+        exception.toString(),
+        'mqtt-client::InvalidTopicException: Topic $topic is $message',
+      );
     });
     test('Invalid Instantiation', () {
       final exception = IncorrectInstantiationException();
       expect(
-          exception.toString(),
-          'mqtt-client::ClientIncorrectInstantiationException: Incorrect instantiation, do not'
-          'instantiate MqttClient directly, use MqttServerClient or MqttBrowserClient');
+        exception.toString(),
+        'mqtt-client::ClientIncorrectInstantiationException: Incorrect instantiation, do not'
+        'instantiate MqttClient directly, use MqttServerClient or MqttBrowserClient',
+      );
     });
   });
 
@@ -95,8 +107,10 @@ void main() {
         final pubTopic = PublicationTopic(topic);
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
-        expect(exception.toString(),
-            'Exception: mqtt_client::Topic: rawTopic must contain at least one character');
+        expect(
+          exception.toString(),
+          'Exception: mqtt_client::Topic: rawTopic must contain at least one character',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -113,9 +127,10 @@ void main() {
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::Topic: The length of the supplied rawTopic '
-            '(65536) is longer than the maximum allowable (${Topic.maxTopicLength})');
+          exception.toString(),
+          'Exception: mqtt_client::Topic: The length of the supplied rawTopic '
+          '(65536) is longer than the maximum allowable (${Topic.maxTopicLength})',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -128,9 +143,10 @@ void main() {
         print(pubTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that '
-            'contains MQTT topic wildcards (# or +)');
+          exception.toString(),
+          'Exception: mqtt_client::PublicationTopic: Cannot publish to a topic that '
+          'contains MQTT topic wildcards (# or +)',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -141,9 +157,10 @@ void main() {
         print(pubTopic1.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::PublicationTopic: Cannot publish to a topic '
-            'that contains MQTT topic wildcards (# or +)');
+          exception.toString(),
+          'Exception: mqtt_client::PublicationTopic: Cannot publish to a topic '
+          'that contains MQTT topic wildcards (# or +)',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -171,9 +188,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must '
-            'be immediately preceeded by a the rawTopic separator /');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: Topics using the # wildcard longer than 1 character must '
+          'be immediately preceeded by a the rawTopic separator /',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -186,9 +204,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
-            'only be present at the end of a topic');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
+          'only be present at the end of a topic',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -201,9 +220,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
-            'only be present at the end of a topic');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
+          'only be present at the end of a topic',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -216,9 +236,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
-            'only be present at the end of a topic');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: The rawTopic wildcard # can '
+          'only be present at the end of a topic',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -231,9 +252,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: rawTopic Fragment contains a '
-            'wildcard but is more than one character long');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: rawTopic Fragment contains a '
+          'wildcard but is more than one character long',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -246,9 +268,10 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::SubscriptionTopic: rawTopic Fragment contains a '
-            'wildcard but is more than one character long');
+          exception.toString(),
+          'Exception: mqtt_client::SubscriptionTopic: rawTopic Fragment contains a '
+          'wildcard but is more than one character long',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -265,20 +288,22 @@ void main() {
         print(subTopic.rawTopic); // wont get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::Topic: The length of the supplied rawTopic '
-            '(65536) is longer than the maximum allowable (${Topic.maxTopicLength})');
+          exception.toString(),
+          'Exception: mqtt_client::Topic: The length of the supplied rawTopic '
+          '(65536) is longer than the maximum allowable (${Topic.maxTopicLength})',
+        );
         raised = true;
       }
       expect(raised, isTrue);
     });
     test(
-        'MultiWildcard at end of topic is valid when preceeded by topic separator',
-        () {
-      const topic = 'a/topic/#';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.rawTopic, topic);
-    });
+      'MultiWildcard at end of topic is valid when preceeded by topic separator',
+      () {
+        const topic = 'a/topic/#';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.rawTopic, topic);
+      },
+    );
     test('No Wildcards of any type is valid', () {
       const topic = 'a/topic/with/no/wildcard/is/good';
       final subTopic = SubscriptionTopic(topic);
@@ -297,66 +322,85 @@ void main() {
     test('MultiWildcard only topic matches any random', () {
       const topic = '#';
       final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
-          isTrue);
+      expect(
+        subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
+        isTrue,
+      );
     });
     test('MultiWildcard only topic matches topic starting with separator', () {
       const topic = '#';
       final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('/finance/ibm/closingprice')),
-          isTrue);
+      expect(
+        subTopic.matches(PublicationTopic('/finance/ibm/closingprice')),
+        isTrue,
+      );
     });
-    test('MultiWildcard at end matches topic that does not match same depth',
-        () {
-      const topic = 'finance/#';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance')), isTrue);
-    });
-    test('MultiWildcard at end matches topic with anything at Wildcard level',
-        () {
-      const topic = 'finance/#';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance/ibm')), isTrue);
-    });
+    test(
+      'MultiWildcard at end matches topic that does not match same depth',
+      () {
+        const topic = 'finance/#';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.matches(PublicationTopic('finance')), isTrue);
+      },
+    );
+    test(
+      'MultiWildcard at end matches topic with anything at Wildcard level',
+      () {
+        const topic = 'finance/#';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.matches(PublicationTopic('finance/ibm')), isTrue);
+      },
+    );
     test('Single Wildcard at end matches anything in same level', () {
       const topic = 'finance/+/closingprice';
       final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
-          isTrue);
+      expect(
+        subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
+        isTrue,
+      );
     });
     test(
-        'More than one single Wildcard at different levels matches topic with any value at those levels',
-        () {
-      const topic = 'finance/+/closingprice/month/+';
-      final subTopic = SubscriptionTopic(topic);
-      expect(
+      'More than one single Wildcard at different levels matches topic with any value at those levels',
+      () {
+        const topic = 'finance/+/closingprice/month/+';
+        final subTopic = SubscriptionTopic(topic);
+        expect(
           subTopic.matches(
-              PublicationTopic('finance/ibm/closingprice/month/october')),
-          isTrue);
-    });
+            PublicationTopic('finance/ibm/closingprice/month/october'),
+          ),
+          isTrue,
+        );
+      },
+    );
     test(
-        'Single and MultiWildcard matches topic with any value at those levels and deeper',
-        () {
-      const topic = 'finance/+/closingprice/month/#';
-      final subTopic = SubscriptionTopic(topic);
-      expect(
+      'Single and MultiWildcard matches topic with any value at those levels and deeper',
+      () {
+        const topic = 'finance/+/closingprice/month/#';
+        final subTopic = SubscriptionTopic(topic);
+        expect(
           subTopic.matches(
-              PublicationTopic('finance/ibm/closingprice/month/october/2014')),
-          isTrue);
-    });
+            PublicationTopic('finance/ibm/closingprice/month/october/2014'),
+          ),
+          isTrue,
+        );
+      },
+    );
     test('Single Wildcard matches topic empty fragment at that point', () {
       const topic = 'finance/+/closingprice';
       final subTopic = SubscriptionTopic(topic);
       expect(
-          subTopic.matches(PublicationTopic('finance//closingprice')), isTrue);
+        subTopic.matches(PublicationTopic('finance//closingprice')),
+        isTrue,
+      );
     });
     test(
-        'Single Wildcard at end matches topic with empty last fragment at that spot',
-        () {
-      const topic = 'finance/ibm/+';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance/ibm/')), isTrue);
-    });
+      'Single Wildcard at end matches topic with empty last fragment at that spot',
+      () {
+        const topic = 'finance/ibm/+';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.matches(PublicationTopic('finance/ibm/')), isTrue);
+      },
+    );
     test('Single level non equal topics do not match', () {
       const topic = 'finance';
       final subTopic = SubscriptionTopic(topic);
@@ -365,28 +409,32 @@ void main() {
     test('Single Wildcard at end does not match topic that goes deeper', () {
       const topic = 'finance/+';
       final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
-          isFalse);
+      expect(
+        subTopic.matches(PublicationTopic('finance/ibm/closingprice')),
+        isFalse,
+      );
     });
     test(
-        'Single Wildcard at end does not match topic that does not contain anything at same level',
-        () {
-      const topic = 'finance/+';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('finance')), isFalse);
-    });
+      'Single Wildcard at end does not match topic that does not contain anything at same level',
+      () {
+        const topic = 'finance/+';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.matches(PublicationTopic('finance')), isFalse);
+      },
+    );
     test('Multi level non equal topics do not match', () {
       const topic = 'finance/ibm/closingprice';
       final subTopic = SubscriptionTopic(topic);
       expect(subTopic.matches(PublicationTopic('some/random/topic')), isFalse);
     });
     test(
-        'MultiWildcard does not match topic with difference before Wildcard level',
-        () {
-      const topic = 'finance/#';
-      final subTopic = SubscriptionTopic(topic);
-      expect(subTopic.matches(PublicationTopic('money/ibm')), isFalse);
-    });
+      'MultiWildcard does not match topic with difference before Wildcard level',
+      () {
+        const topic = 'finance/#';
+        final subTopic = SubscriptionTopic(topic);
+        expect(subTopic.matches(PublicationTopic('money/ibm')), isFalse);
+      },
+    );
     test('Topics differing only by case do not match', () {
       const topic = 'finance';
       final subTopic = SubscriptionTopic(topic);
@@ -490,8 +538,10 @@ void main() {
         final count = enc.getCharCount(buff);
         print(count); // won't get here
       } on Exception catch (exception) {
-        expect(exception.toString(),
-            'Exception: mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes');
+        expect(
+          exception.toString(),
+          'Exception: mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -505,9 +555,10 @@ void main() {
         print(buff.toString()); // won't get here
       } on Exception catch (exception) {
         expect(
-            exception.toString(),
-            'Exception: mqtt_client::MQTTEncoding: The input string has extended '
-            'UTF characters, which are not supported');
+          exception.toString(),
+          'Exception: mqtt_client::MQTTEncoding: The input string has extended '
+          'UTF characters, which are not supported',
+        );
         raised = true;
       }
       expect(raised, isTrue);
@@ -536,10 +587,14 @@ void main() {
       client.setProtocolV311();
       expect(Protocol.version, MqttClientConstants.mqttV311ProtocolVersion);
       expect(Protocol.name, MqttClientConstants.mqttV311ProtocolName);
-      expect(client.connectionMessage?.variableHeader?.protocolVersion,
-          MqttClientConstants.mqttV311ProtocolVersion);
-      expect(client.connectionMessage?.variableHeader?.protocolName,
-          MqttClientConstants.mqttV311ProtocolName);
+      expect(
+        client.connectionMessage?.variableHeader?.protocolVersion,
+        MqttClientConstants.mqttV311ProtocolVersion,
+      );
+      expect(
+        client.connectionMessage?.variableHeader?.protocolName,
+        MqttClientConstants.mqttV311ProtocolName,
+      );
     });
     test('Protocol set on connect message', () {
       Protocol.version = MqttClientConstants.mqttV31ProtocolVersion;
@@ -697,8 +752,16 @@ void main() {
       final bl = builder.addInt(123456789030405);
       expect(bl, isNotNull);
       expect(builder.length, 8);
-      expect(builder.payload!.toList(),
-          <int>[0x05, 0x26, 0x0E, 0x86, 0x48, 0x70, 0x00, 0x00]);
+      expect(builder.payload!.toList(), <int>[
+        0x05,
+        0x26,
+        0x0E,
+        0x86,
+        0x48,
+        0x70,
+        0x00,
+        0x00,
+      ]);
     });
 
     test('Add string', () {
@@ -731,8 +794,16 @@ void main() {
       final bl = builder.addUTF16String(arabic);
       expect(bl, isNotNull);
       expect(builder.length, 8);
-      expect(builder.payload!.toList(),
-          <int>[0x33, 0x06, 0x44, 0x06, 0x27, 0x06, 0x45, 0x06]);
+      expect(builder.payload!.toList(), <int>[
+        0x33,
+        0x06,
+        0x44,
+        0x06,
+        0x27,
+        0x06,
+        0x45,
+        0x06,
+      ]);
     });
 
     test('Add arabic string', () {
@@ -779,14 +850,15 @@ void main() {
         0x2A,
         0x06,
         0x34,
-        0x06
+        0x06,
       ]);
     });
 
     test('Add UTF8 string', () {
       final builder = MqttClientPayloadBuilder();
-      final bl = builder.addUTF8String(json
-          .encode(<String, String>{'type': 'msgText', 'data': 'تست 😀 😁 '}));
+      final bl = builder.addUTF8String(
+        json.encode(<String, String>{'type': 'msgText', 'data': 'تست 😀 😁 '}),
+      );
       expect(bl, isNotNull);
       expect(builder.length, 45);
       expect(builder.payload!.toList(), <int>[
@@ -834,7 +906,7 @@ void main() {
         129,
         32,
         34,
-        125
+        125,
       ]);
     });
 
@@ -851,16 +923,34 @@ void main() {
       final bl = builder.addDouble(1.5e43);
       expect(bl, isNotNull);
       expect(builder.length, 8);
-      expect(
-          builder.payload!.toList(), <int>[91, 150, 146, 56, 33, 134, 229, 72]);
+      expect(builder.payload!.toList(), <int>[
+        91,
+        150,
+        146,
+        56,
+        33,
+        134,
+        229,
+        72,
+      ]);
     });
 
     test('Chaining', () {
       final builder = MqttClientPayloadBuilder();
       builder.addBool(val: true).addByte(0x80).addInt(10);
       expect(builder.length, 10);
-      expect(
-          builder.payload!.toList(), <int>[1, 0x80, 10, 0, 0, 0, 0, 0, 0, 0]);
+      expect(builder.payload!.toList(), <int>[
+        1,
+        0x80,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+      ]);
     });
 
     test('Clear', () {
@@ -883,10 +973,11 @@ void main() {
       expect(sleeper.isRunning, false);
       final now = DateTime.now();
       expect(
-          start.millisecondsSinceEpoch +
-                  const Duration(milliseconds: 200).inMilliseconds <=
-              now.millisecondsSinceEpoch,
-          true);
+        start.millisecondsSinceEpoch +
+                const Duration(milliseconds: 200).inMilliseconds <=
+            now.millisecondsSinceEpoch,
+        true,
+      );
       expect(sleeper.isRunning, false);
     });
     test('Normal expiry - check', () async {
@@ -895,10 +986,11 @@ void main() {
       await sleeper.sleep();
       final now = DateTime.now();
       expect(
-          start.millisecondsSinceEpoch +
-                  const Duration(milliseconds: 200).inMilliseconds <=
-              now.millisecondsSinceEpoch,
-          false);
+        start.millisecondsSinceEpoch +
+                const Duration(milliseconds: 200).inMilliseconds <=
+            now.millisecondsSinceEpoch,
+        false,
+      );
     });
 
     test('Cancel', () async {
@@ -912,8 +1004,10 @@ void main() {
       Future<void>.delayed(const Duration(milliseconds: 100), action);
       await sleeper.sleep();
       final now = DateTime.now();
-      expect(now.millisecondsSinceEpoch - start.millisecondsSinceEpoch < 200,
-          true);
+      expect(
+        now.millisecondsSinceEpoch - start.millisecondsSinceEpoch < 200,
+        true,
+      );
     });
   });
 
@@ -921,15 +1015,17 @@ void main() {
     test('To String', () {
       final status = MqttClientConnectionStatus();
       expect(
-          status.toString(),
-          'Connection status is disconnected with return code of noneSpecified and '
-          'a disconnection origin of none');
+        status.toString(),
+        'Connection status is disconnected with return code of noneSpecified and '
+        'a disconnection origin of none',
+      );
       status.state = MqttConnectionState.faulted;
       status.returnCode = MqttConnectReturnCode.identifierRejected;
       expect(
-          status.toString(),
-          'Connection status is faulted with return code of identifierRejected '
-          'and a disconnection origin of none');
+        status.toString(),
+        'Connection status is faulted with return code of identifierRejected '
+        'and a disconnection origin of none',
+      );
     });
   });
 
@@ -947,19 +1043,21 @@ void main() {
     test('Client Id ', () {
       final client = MqttClient('aaaa', 'bbbb');
       expect(
-          client
-              .getConnectMessage('username', 'password')
-              .payload
-              .clientIdentifier,
-          'bbbb');
+        client
+            .getConnectMessage('username', 'password')
+            .payload
+            .clientIdentifier,
+        'bbbb',
+      );
       final userConnect = MqttConnectMessage().withClientIdentifier('cccc');
       client.connectionMessage = userConnect;
       expect(
-          client
-              .getConnectMessage('username', 'password')
-              .payload
-              .clientIdentifier,
-          'cccc');
+        client
+            .getConnectMessage('username', 'password')
+            .payload
+            .clientIdentifier,
+        'cccc',
+      );
     });
     test('Connect timeout period', () async {
       final client = MqttClient('aaaa', 'bbbb');
@@ -993,8 +1091,10 @@ void main() {
       MqttLogger.log('Some output - ', message);
       expect(MqttLogger.testOutput.isNotEmpty, isTrue);
       expect(MqttLogger.testOutput.contains('Some output'), isTrue);
-      expect(MqttLogger.testOutput.contains('MqttMessageType.subscribeAck'),
-          isTrue);
+      expect(
+        MqttLogger.testOutput.contains('MqttMessageType.subscribeAck'),
+        isTrue,
+      );
     });
   });
   group('Conversions', () {

@@ -70,13 +70,11 @@ class Mqtt {
     // This Works!
     var builder1 = MqttClientPayloadBuilder();
     builder1.addString(
-      json.encode(
-        {
-          'type': 'msgText',
-          'data': 'Works!',
-          'identifier': Random().nextInt(1000000),
-        },
-      ),
+      json.encode({
+        'type': 'msgText',
+        'data': 'Works!',
+        'identifier': Random().nextInt(1000000),
+      }),
     );
 
     client.publishMessage('u/$id', MqttQos.exactlyOnce, builder1.payload);

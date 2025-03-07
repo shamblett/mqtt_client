@@ -17,7 +17,10 @@ abstract class IPublishingManager {
   /// The message to send.
   /// The message identifier assigned to the message.
   int publish(
-      PublicationTopic topic, MqttQos qualityOfService, typed.Uint8Buffer data);
+    PublicationTopic topic,
+    MqttQos qualityOfService,
+    typed.Uint8Buffer data,
+  );
 
   /// The message received event
   MessageReceived? publishEvent;

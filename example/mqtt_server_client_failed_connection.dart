@@ -99,7 +99,8 @@ void onDisconnected() {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   } else {
     print(
-        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
+      'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting',
+    );
     exit(-1);
   }
 }

@@ -57,25 +57,30 @@ class MockBrokerWs {
     final completer = Completer<void>();
     HttpServer.bind(InternetAddress.loopbackIPv4, port).then((dynamic server) {
       print(
-          'Mockbroker WS server is running on http://${server.address.address}:$port/');
+        'Mockbroker WS server is running on http://${server.address.address}:$port/',
+      );
       server.listen((HttpRequest request) {
         print(
-            'Mockbroker WS server::listen - request received ${request.uri.path}');
+          'Mockbroker WS server::listen - request received ${request.uri.path}',
+        );
         if (request.uri.path == '/ws') {
           final websocketHeader = request.headers.value('Origin');
           if (websocketHeader != 'SJH') {
             return completer.completeError((request) => websocketHeader);
           } else {
             print(
-                'Mockbroker WS server::listen - Origin header is correctly set');
+              'Mockbroker WS server::listen - Origin header is correctly set',
+            );
           }
-          final websocketProtocol =
-              request.headers.value('sec-websocket-protocol');
+          final websocketProtocol = request.headers.value(
+            'sec-websocket-protocol',
+          );
           if (websocketProtocol != 'SJHprotocol') {
             return completer.completeError((request) => websocketProtocol);
           } else {
             print(
-                'Mockbroker WS server::listen - WS protocol is correctly set');
+              'Mockbroker WS server::listen - WS protocol is correctly set',
+            );
           }
           print('Mockbroker WS server::listen - upgrading');
           WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
@@ -111,8 +116,9 @@ Future<void> main(List<String> argv) async {
   final brokerWs = MockBrokerWs();
 
   void messageHandlerConnect(typed.Uint8Buffer? messageArrived) {
-    final ack = MqttConnectAckMessage()
-        .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+    final ack = MqttConnectAckMessage().withReturnCode(
+      MqttConnectReturnCode.connectionAccepted,
+    );
     print('WS Broker - sending connect ack');
     brokerWs.sendMessage(ack);
   }

@@ -32,7 +32,7 @@ enum MqttReadWriteFlags {
   topicName,
 
   /// Message identifier
-  messageIdentifier
+  messageIdentifier,
 }
 
 /// Represents the base class for the Variable Header portion

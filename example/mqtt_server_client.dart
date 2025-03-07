@@ -113,7 +113,8 @@ Future<int> main() async {
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -130,8 +131,9 @@ Future<int> main() async {
   /// Also you must re-listen after disconnecting.
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
@@ -139,7 +141,8 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 
@@ -148,7 +151,8 @@ Future<int> main() async {
   /// publishing handshake with the broker.
   client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
+      'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}',
+    );
   });
 
   /// Lets publish to our topic
@@ -174,9 +178,11 @@ Future<int> main() async {
   /// Print the ping/pong cycle latency data before disconnecting.
   print('EXAMPLE::Keep alive latencies');
   print(
-      'The latency of the last ping/pong cycle is ${client.lastCycleLatency} milliseconds');
+    'The latency of the last ping/pong cycle is ${client.lastCycleLatency} milliseconds',
+  );
   print(
-      'The average latency of all the ping/pong cycles is ${client.averageCycleLatency} milliseconds');
+    'The average latency of all the ping/pong cycles is ${client.averageCycleLatency} milliseconds',
+  );
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');
@@ -203,7 +209,8 @@ void onDisconnected() {
     print('EXAMPLE::OnDisconnected callback is solicited, this is correct');
   } else {
     print(
-        'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting');
+      'EXAMPLE::OnDisconnected callback is unsolicited or none, this is incorrect - exiting',
+    );
     exit(-1);
   }
   if (pongCount == 3) {
@@ -221,7 +228,8 @@ void onDisconnected() {
 /// The successful connect callback
 void onConnected() {
   print(
-      'EXAMPLE::OnConnected client callback - Client connection was successful');
+    'EXAMPLE::OnConnected client callback - Client connection was successful',
+  );
 }
 
 /// Pong callback
@@ -229,7 +237,8 @@ void pong() {
   print('EXAMPLE::Ping response client callback invoked');
   pongCount++;
   print(
-      'EXAMPLE::Latency of this ping/pong cycle is ${client.lastCycleLatency} milliseconds');
+    'EXAMPLE::Latency of this ping/pong cycle is ${client.lastCycleLatency} milliseconds',
+  );
 }
 
 /// Ping callback

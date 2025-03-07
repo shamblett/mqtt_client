@@ -66,7 +66,8 @@ abstract class MqttConnectionBase<T extends Object> {
     _disconnect();
     if (onDisconnected != null) {
       MqttLogger.log(
-          'MqttConnectionBase::_onError - calling disconnected callback');
+        'MqttConnectionBase::_onError - calling disconnected callback',
+      );
       onDisconnected!();
     }
   }
@@ -77,7 +78,8 @@ abstract class MqttConnectionBase<T extends Object> {
     _disconnect();
     if (onDisconnected != null) {
       MqttLogger.log(
-          'MqttConnectionBase::_onDone - calling disconnected callback');
+        'MqttConnectionBase::_onDone - calling disconnected callback',
+      );
       onDisconnected!();
     }
   }

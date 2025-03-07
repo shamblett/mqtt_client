@@ -14,7 +14,9 @@ class MqttConnectPayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttConnectPayload class.
   MqttConnectPayload.fromByteBuffer(
-      this.variableHeader, MqttByteBuffer payloadStream) {
+    this.variableHeader,
+    MqttByteBuffer payloadStream,
+  ) {
     readFrom(payloadStream);
   }
 

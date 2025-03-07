@@ -17,11 +17,18 @@ class SubscriptionsManager {
   ///  Creates a new instance of a SubscriptionsManager that uses the
   ///  specified connection to manage subscriptions.
   SubscriptionsManager(
-      this.connectionHandler, this.publishingManager, this._clientEventBus) {
-    connectionHandler!
-        .registerForMessage(MqttMessageType.subscribeAck, confirmSubscription);
-    connectionHandler!
-        .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
+    this.connectionHandler,
+    this.publishingManager,
+    this._clientEventBus,
+  ) {
+    connectionHandler!.registerForMessage(
+      MqttMessageType.subscribeAck,
+      confirmSubscription,
+    );
+    connectionHandler!.registerForMessage(
+      MqttMessageType.unsubscribeAck,
+      confirmUnsubscribe,
+    );
     // Start listening for published messages and re subscribe events.
     _clientEventBus!.on<MessageReceived>().listen(publishMessageReceived);
     _clientEventBus!.on<Resubscribe>().listen(_resubscribe);
@@ -67,7 +74,8 @@ class SubscriptionsManager {
   /// Stream for all subscribed topics
   final _subscriptionNotifier =
       StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
-          sync: true);
+        sync: true,
+      );
 
   /// Subscription notifier
   Stream<List<MqttReceivedMessage<MqttMessage>>> get subscriptionNotifier =>
@@ -116,8 +124,10 @@ class SubscriptionsManager {
       connectionHandler!.sendMessage(msg);
       return sub;
     } on Exception catch (e) {
-      MqttLogger.log('Subscriptionsmanager::createNewSubscription '
-          'exception raised, text is $e');
+      MqttLogger.log(
+        'Subscriptionsmanager::createNewSubscription '
+        'exception raised, text is $e',
+      );
       if (onSubscribeFail != null) {
         onSubscribeFail!(topic);
       }
@@ -138,7 +148,8 @@ class SubscriptionsManager {
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     final unsubscribeMsg = MqttUnsubscribeMessage()
         .withMessageIdentifier(
-            messageIdentifierDispenser.getNextMessageIdentifier())
+          messageIdentifierDispenser.getNextMessageIdentifier(),
+        )
         .fromTopic(topic);
     if (expectAcknowledge) {
       unsubscribeMsg.expectAcknowledgement();
@@ -164,11 +175,13 @@ class SubscriptionsManager {
   bool confirmSubscription(MqttMessage? msg) {
     final subAck = msg as MqttSubscribeAckMessage;
     String topic;
-    if (pendingSubscriptions
-        .containsKey(subAck.variableHeader!.messageIdentifier)) {
-      topic = pendingSubscriptions[subAck.variableHeader!.messageIdentifier]!
-          .topic
-          .rawTopic;
+    if (pendingSubscriptions.containsKey(
+      subAck.variableHeader!.messageIdentifier,
+    )) {
+      topic =
+          pendingSubscriptions[subAck.variableHeader!.messageIdentifier]!
+              .topic
+              .rawTopic;
       subscriptions[topic] =
           pendingSubscriptions[subAck.variableHeader!.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader!.messageIdentifier);
@@ -228,7 +241,8 @@ class SubscriptionsManager {
   void _resubscribe(Resubscribe resubscribeEvent) {
     if (resubscribeOnAutoReconnect) {
       MqttLogger.log(
-          'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}');
+        'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}',
+      );
       final subscriptionList = subscriptions.values.toList();
       final pendingSubscriptionList = pendingSubscriptions.values.toList();
       subscriptions.clear();
@@ -236,13 +250,15 @@ class SubscriptionsManager {
 
       for (final subscription in [
         ...subscriptionList,
-        ...pendingSubscriptionList
+        ...pendingSubscriptionList,
       ]) {
         createNewSubscription(subscription!.topic.rawTopic, subscription.qos);
       }
     } else {
-      MqttLogger.log('Subscriptionsmanager::_resubscribe - '
-          'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false');
+      MqttLogger.log(
+        'Subscriptionsmanager::_resubscribe - '
+        'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false',
+      );
     }
   }
 

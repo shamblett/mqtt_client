@@ -62,7 +62,8 @@ Future<int> main() async {
     print('iotcore client connected');
   } else {
     print(
-        'ERROR iotcore client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'ERROR iotcore client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
   }
   // Troubleshooting tips can be found here https://cloud.google.com/iot/docs/troubleshooting

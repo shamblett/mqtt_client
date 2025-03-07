@@ -29,5 +29,5 @@ enum MqttQos {
   /// Failure indication
   /// This is a QOS value of 128, used in a sub ack message to indicate failure
   /// to subscribe to a topic
-  failure
+  failure,
 }

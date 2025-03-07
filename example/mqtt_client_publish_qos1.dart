@@ -42,7 +42,8 @@ Future<int> main() async {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -60,10 +61,12 @@ Future<int> main() async {
     final recMess = messageList[0];
     if (recMess is! MqttReceivedMessage<MqttPublishMessage>) return;
     final pubMess = recMess.payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(pubMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      pubMess.payload.message,
+    );
     print(
-        'EXAMPLE::Change notification:: topic is <${recMess.topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${recMess.topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 
@@ -72,7 +75,8 @@ Future<int> main() async {
   /// publishing handshake with the broker.
   client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
+      'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}',
+    );
   });
 
   final builder1 = MqttClientPayloadBuilder();

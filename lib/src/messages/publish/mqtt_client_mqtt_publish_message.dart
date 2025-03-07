@@ -19,7 +19,9 @@ class MqttPublishMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishMessage class.
   MqttPublishMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
@@ -34,10 +36,15 @@ class MqttPublishMessage extends MqttMessage {
   @override
   void readFrom(MqttByteBuffer messageStream) {
     super.readFrom(messageStream);
-    variableHeader =
-        MqttPublishVariableHeader.fromByteBuffer(header, messageStream);
+    variableHeader = MqttPublishVariableHeader.fromByteBuffer(
+      header,
+      messageStream,
+    );
     payload = MqttPublishPayload.fromByteBuffer(
-        header, variableHeader, messageStream);
+      header,
+      variableHeader,
+      messageStream,
+    );
   }
 
   /// Writes the message to the supplied stream.

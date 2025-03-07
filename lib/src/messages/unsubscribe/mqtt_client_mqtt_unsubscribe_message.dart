@@ -18,7 +18,9 @@ class MqttUnsubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
@@ -40,8 +42,10 @@ class MqttUnsubscribeMessage extends MqttMessage {
       header!.qos = MqttQos.atLeastOnce;
       header!.retain = false;
     }
-    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    header!.writeTo(
+      variableHeader!.getWriteLength() + payload.getWriteLength(),
+      messageStream,
+    );
     variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
@@ -49,10 +53,14 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   @override
   void readFrom(MqttByteBuffer messageStream) {
-    variableHeader =
-        MqttUnsubscribeVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttUnsubscribeVariableHeader.fromByteBuffer(
+      messageStream,
+    );
     payload = MqttUnsubscribePayload.fromByteBuffer(
-        header, variableHeader, messageStream);
+      header,
+      variableHeader,
+      messageStream,
+    );
   }
 
   /// Adds a topic to the list of topics to unsubscribe from.

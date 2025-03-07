@@ -76,7 +76,8 @@ Future<int> main() async {
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, $status');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, $status',
+    );
     client.disconnect();
     exit(-1);
   }

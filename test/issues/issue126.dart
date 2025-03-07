@@ -40,8 +40,9 @@ Future<int> main() async {
   var status = MqttClientConnectionStatus();
   try {
     status = await client.connect(
-        'Signature|LTAI4FqgKhnxCTkovhEXoXLp|post-cn-0pp1c8ab60y',
-        'bMen4ngonwNS3is39Y89az1SQCg=');
+      'Signature|LTAI4FqgKhnxCTkovhEXoXLp|post-cn-0pp1c8ab60y',
+      'bMen4ngonwNS3is39Y89az1SQCg=',
+    );
   } on Exception catch (e) {
     print('EXAMPLE::client exception - $e');
   }
@@ -58,7 +59,8 @@ Future<int> main() async {
 
   /// Ok, lets try a subscription
   print(
-      'EXAMPLE::Subscribing to the /hfp/v1/journey/ongoing/+/+/+/2550/2/# topic');
+    'EXAMPLE::Subscribing to the /hfp/v1/journey/ongoing/+/+/+/2550/2/# topic',
+  );
   const topic = '/hfp/v1/journey/ongoing/+/+/+/2550/2/#';
   client.subscribe(topic, MqttQos.atMostOnce);
 
@@ -66,10 +68,12 @@ Future<int> main() async {
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 

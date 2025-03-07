@@ -14,7 +14,10 @@ class MqttUnsubscribePayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttUnsubscribePayload class.
   MqttUnsubscribePayload.fromByteBuffer(
-      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
+    this.header,
+    this.variableHeader,
+    MqttByteBuffer payloadStream,
+  ) {
     readFrom(payloadStream);
   }
 

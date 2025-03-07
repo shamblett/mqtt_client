@@ -28,5 +28,5 @@ enum MqttConnectReturnCode {
   notAuthorized,
 
   /// Default
-  noneSpecified
+  noneSpecified,
 }

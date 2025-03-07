@@ -15,7 +15,7 @@ abstract class MqttBrowserConnection<T extends Object>
 
   /// Initializes a new instance of the MqttBrowserConnection class.
   MqttBrowserConnection.fromConnect(server, port, clientEventBus)
-      : super(clientEventBus) {
+    : super(clientEventBus) {
     connect(server, port);
   }
 
@@ -27,7 +27,8 @@ abstract class MqttBrowserConnection<T extends Object>
       onListen();
     } on Exception catch (e) {
       MqttLogger.log(
-          'MqttBrowserConnection::_startListening - exception raised $e');
+        'MqttBrowserConnection::_startListening - exception raised $e',
+      );
     }
   }
 
@@ -64,8 +65,9 @@ abstract class MqttBrowserConnection<T extends Object>
         msg = MqttMessage.createFrom(messageStream);
       } on Exception {
         MqttLogger.log(
-            'MqttBrowserConnection::_ondata - message is not yet valid, '
-            'waiting for more data ...');
+          'MqttBrowserConnection::_ondata - message is not yet valid, '
+          'waiting for more data ...',
+        );
         messageIsValid = false;
       }
       if (!messageIsValid) {
@@ -75,7 +77,9 @@ abstract class MqttBrowserConnection<T extends Object>
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log(
-            'MqttBrowserConnection::_onData - message received ', msg);
+          'MqttBrowserConnection::_onData - message received ',
+          msg,
+        );
         if (!clientEventBus!.streamController.isClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
@@ -83,10 +87,12 @@ abstract class MqttBrowserConnection<T extends Object>
             clientEventBus!.fire(MessageAvailable(msg));
           }
           MqttLogger.log(
-              'MqttBrowserConnection::_onData - message available event fired');
+            'MqttBrowserConnection::_onData - message available event fired',
+          );
         } else {
           MqttLogger.log(
-              'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed');
+            'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed',
+          );
         }
       }
     }

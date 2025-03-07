@@ -25,14 +25,15 @@ import 'package:http/http.dart';
 /// before setting up and running this example.
 
 // This function is based on the one from package flutter-aws-iot, but adapted slightly
-String getWebSocketURL(
-    {required String accessKey,
-    required String secretKey,
-    required String sessionToken,
-    required String region,
-    required String scheme,
-    required String endpoint,
-    required String urlPath}) {
+String getWebSocketURL({
+  required String accessKey,
+  required String secretKey,
+  required String sessionToken,
+  required String region,
+  required String scheme,
+  required String endpoint,
+  required String urlPath,
+}) {
   final creds = AWSCredentials(accessKey, secretKey, sessionToken);
 
   final signer = AWSSigV4Signer(
@@ -40,32 +41,38 @@ String getWebSocketURL(
   );
 
   final scope = AWSCredentialScope(
-      region: region, service: AWSService('iotdevicegateway'));
+    region: region,
+    service: AWSService('iotdevicegateway'),
+  );
 
   final request = AWSHttpRequest(
     method: AWSHttpMethod.get,
     uri: Uri.https(endpoint, urlPath),
   );
 
-  ServiceConfiguration serviceConfiguration =
-      const BaseServiceConfiguration(omitSessionToken: true);
+  ServiceConfiguration serviceConfiguration = const BaseServiceConfiguration(
+    omitSessionToken: true,
+  );
 
-  var signed = signer.presignSync(request,
-      credentialScope: scope,
-      expiresIn: Duration(hours: 1),
-      serviceConfiguration: serviceConfiguration);
+  var signed = signer.presignSync(
+    request,
+    credentialScope: scope,
+    expiresIn: Duration(hours: 1),
+    serviceConfiguration: serviceConfiguration,
+  );
   var finalParams = signed.query;
   return '$scheme$endpoint$urlPath?$finalParams';
 }
 
-Future<bool> attachPolicy(
-    {required String accessKey,
-    required String secretKey,
-    required String sessionToken,
-    required String identityId,
-    required String iotApiUrl,
-    required String region,
-    required String policyName}) async {
+Future<bool> attachPolicy({
+  required String accessKey,
+  required String secretKey,
+  required String sessionToken,
+  required String identityId,
+  required String iotApiUrl,
+  required String region,
+  required String policyName,
+}) async {
   final creds = AWSCredentials(accessKey, secretKey, sessionToken);
   final signer = AWSSigV4Signer(
     credentialsProvider: AWSCredentialsProvider(creds),
@@ -78,16 +85,11 @@ Future<bool> attachPolicy(
   final request = AWSHttpRequest(
     method: AWSHttpMethod.put,
     uri: Uri.parse('$iotApiUrl/$policyName'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: {'Content-Type': 'application/json'},
     body: body.codeUnits,
   );
 
-  final signedRequest = await signer.sign(
-    request,
-    credentialScope: scope,
-  );
+  final signedRequest = await signer.sign(request, credentialScope: scope);
 
   final result = await put(
     signedRequest.uri,
@@ -130,31 +132,36 @@ Future<int> main() async {
   // You CAN attach a policy to an UNAUTHENTICATED user for control, but this is not necessary
   // Make sure that the the credentials that call this API have the right IAM permissions for AttachPolicy (https://docs.aws.amazon.com/iot/latest/apireference/API_AttachPolicy.html)
   if (!await attachPolicy(
-      accessKey: accessKey,
-      secretKey: secretKey,
-      sessionToken: sessionToken,
-      identityId: identityId,
-      iotApiUrl: iotApiUrl,
-      region: region,
-      policyName: policyName)) {
+    accessKey: accessKey,
+    secretKey: secretKey,
+    sessionToken: sessionToken,
+    identityId: identityId,
+    iotApiUrl: iotApiUrl,
+    region: region,
+    policyName: policyName,
+  )) {
     print('MQTT client setup error - attachPolicy failed');
     exit(-1);
   }
 
   // Transform the url into a Websocket url using SigV4 signing
   String signedUrl = getWebSocketURL(
-      accessKey: accessKey,
-      secretKey: secretKey,
-      sessionToken: sessionToken,
-      region: region,
-      scheme: scheme,
-      endpoint: baseUrl,
-      urlPath: urlPath);
+    accessKey: accessKey,
+    secretKey: secretKey,
+    sessionToken: sessionToken,
+    region: region,
+    scheme: scheme,
+    endpoint: baseUrl,
+    urlPath: urlPath,
+  );
 
   // Create the client with the signed url
   MqttServerClient client = MqttServerClient.withPort(
-      signedUrl, identityId, port,
-      maxConnectionAttempts: 2);
+    signedUrl,
+    identityId,
+    port,
+    maxConnectionAttempts: 2,
+  );
 
   // Set the protocol to V3.1.1 for AWS IoT Core, if you fail to do this you will not receive a connect ack with the response code
   client.setProtocolV311();
@@ -166,8 +173,9 @@ Future<int> main() async {
   client.disconnectOnNoResponsePeriod = 90;
   client.keepAlivePeriod = 30;
 
-  final MqttConnectMessage connMess =
-      MqttConnectMessage().withClientIdentifier(identityId);
+  final MqttConnectMessage connMess = MqttConnectMessage().withClientIdentifier(
+    identityId,
+  );
 
   client.connectionMessage = connMess;
 
@@ -196,15 +204,18 @@ Future<int> main() async {
     // Print incoming messages from another client on this topic
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final recMess = c[0].payload as MqttPublishMessage;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final pt = MqttPublishPayload.bytesToStringAsString(
+        recMess.payload.message,
+      );
       print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+      );
       print('');
     });
   } else {
     print(
-        'ERROR MQTT client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'ERROR MQTT client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
   }
 

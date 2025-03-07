@@ -14,7 +14,7 @@ class MqttConnectAckVariableHeader extends MqttVariableHeader {
 
   /// Initializes a new instance of the MqttConnectVariableHeader class.
   MqttConnectAckVariableHeader.fromByteBuffer(super.headerStream)
-      : super.fromByteBuffer();
+    : super.fromByteBuffer();
 
   /// Session present flag.
   /// Only available for the 3.1.1 protocol, for 3.1 this is always false.

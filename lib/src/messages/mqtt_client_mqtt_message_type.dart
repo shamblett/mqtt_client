@@ -55,5 +55,5 @@ enum MqttMessageType {
   disconnect,
 
   /// Reserved by the MQTT spec, should not be used.
-  reserved2
+  reserved2,
 }

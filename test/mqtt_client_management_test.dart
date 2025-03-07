@@ -17,7 +17,8 @@ void main() {
   group('Topic filtering', () {
     final clientUpdates =
         StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
-            sync: true);
+          sync: true,
+        );
     final payload = MqttMessage();
     test('Exact match', () {
       const topicToFilter = 'testtopic';
@@ -60,15 +61,20 @@ void main() {
       var called = 0;
       final message0 = MqttReceivedMessage<MqttMessage>('testtopic/0', payload);
       final message1 = MqttReceivedMessage<MqttMessage>('testtopic/1', payload);
-      final message2 =
-          MqttReceivedMessage<MqttMessage>('testtopic1/1', payload);
+      final message2 = MqttReceivedMessage<MqttMessage>(
+        'testtopic1/1',
+        payload,
+      );
       final filter = MqttClientTopicFilter(topicToFilter, clientUpdates.stream);
       filter.updates.listen((List<MqttReceivedMessage<MqttMessage?>> c) {
         expect(c[called].topic, 'testtopic/$called');
         called++;
       });
-      clientUpdates.add(
-          <MqttReceivedMessage<MqttMessage>>[message0, message1, message2]);
+      clientUpdates.add(<MqttReceivedMessage<MqttMessage>>[
+        message0,
+        message1,
+        message2,
+      ]);
       expect(called, 1);
     });
     test('Multiple filters - valid topics received', () {
@@ -80,16 +86,23 @@ void main() {
       payload.header!.qos = MqttQos.atLeastOnce;
       payload.header!.retain = true;
 
-      final message0 =
-          MqttReceivedMessage<MqttMessage>(topicNumberOfSystems1, payload);
+      final message0 = MqttReceivedMessage<MqttMessage>(
+        topicNumberOfSystems1,
+        payload,
+      );
 
-      final message1 =
-          MqttReceivedMessage<MqttMessage>(topicNumberOfSystems2, payload);
+      final message1 = MqttReceivedMessage<MqttMessage>(
+        topicNumberOfSystems2,
+        payload,
+      );
 
-      final topicFilterSystemStructure =
-          MqttClientTopicFilter(topicSystemStructure, clientUpdates.stream);
-      topicFilterSystemStructure.updates
-          .listen((List<MqttReceivedMessage<MqttMessage?>> c) {
+      final topicFilterSystemStructure = MqttClientTopicFilter(
+        topicSystemStructure,
+        clientUpdates.stream,
+      );
+      topicFilterSystemStructure.updates.listen((
+        List<MqttReceivedMessage<MqttMessage?>> c,
+      ) {
         expect(c[0].topic, 'PLCs/1/numberOfSystems');
         expect(c[1].topic, 'PLCs/2/numberOfSystems');
         called++;
@@ -106,21 +119,29 @@ void main() {
       payload.header!.qos = MqttQos.atLeastOnce;
       payload.header!.retain = true;
 
-      final message0 =
-          MqttReceivedMessage<MqttMessage>(topicNumberOfSystems, payload);
+      final message0 = MqttReceivedMessage<MqttMessage>(
+        topicNumberOfSystems,
+        payload,
+      );
 
-      final topicFilterSystemStructure =
-          MqttClientTopicFilter(topicSystemStructure, clientUpdates.stream);
+      final topicFilterSystemStructure = MqttClientTopicFilter(
+        topicSystemStructure,
+        clientUpdates.stream,
+      );
 
-      final topicFilterNumberOfSystems =
-          MqttClientTopicFilter(topicNumberOfSystems, clientUpdates.stream);
-      topicFilterNumberOfSystems.updates
-          .listen((List<MqttReceivedMessage<MqttMessage?>> c) {
+      final topicFilterNumberOfSystems = MqttClientTopicFilter(
+        topicNumberOfSystems,
+        clientUpdates.stream,
+      );
+      topicFilterNumberOfSystems.updates.listen((
+        List<MqttReceivedMessage<MqttMessage?>> c,
+      ) {
         expect(c[called1].topic, 'PLCs/numberOfSystems');
         called1++;
       });
-      topicFilterSystemStructure.updates
-          .listen((List<MqttReceivedMessage<MqttMessage?>> c) {
+      topicFilterSystemStructure.updates.listen((
+        List<MqttReceivedMessage<MqttMessage?>> c,
+      ) {
         expect(c[called2].topic, 'PLCs/+/systemStructure');
         called2++;
       });

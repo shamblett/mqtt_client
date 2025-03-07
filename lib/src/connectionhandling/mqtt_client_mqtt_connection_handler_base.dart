@@ -11,8 +11,10 @@ part of '../../mqtt_client.dart';
 ///  to serverand browser connection handler implementations.
 abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
-  MqttConnectionHandlerBase(this.clientEventBus,
-      {required this.maxConnectionAttempts});
+  MqttConnectionHandlerBase(
+    this.clientEventBus, {
+    required this.maxConnectionAttempts,
+  });
 
   /// Successful connection callback.
   @override
@@ -95,12 +97,16 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Connect to the specific Mqtt Connection.
   @override
   Future<MqttClientConnectionStatus> connect(
-      String server, int port, MqttConnectMessage? message) async {
+    String server,
+    int port,
+    MqttConnectMessage? message,
+  ) async {
     // Save the parameters for auto reconnect.
     this.server = server;
     this.port = port;
     MqttLogger.log(
-        'MqttConnectionHandlerBase::connect - server $server, port $port');
+      'MqttConnectionHandlerBase::connect - server $server, port $port',
+    );
     // ignore: unnecessary_this
     this.connectionMessage = message;
     try {
@@ -115,7 +121,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Connect to the specific Mqtt Connection internally.
   @protected
   Future<MqttClientConnectionStatus> internalConnect(
-      String hostname, int port, MqttConnectMessage? message);
+    String hostname,
+    int port,
+    MqttConnectMessage? message,
+  );
 
   /// Auto reconnect
   @protected
@@ -134,14 +143,16 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     // If we are connected disconnect from the broker.
     if (reconnectEvent.wasConnected) {
       MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect');
+        'MqttConnectionHandlerBase::autoReconnect - was connected, sending disconnect',
+      );
       sendMessage(MqttDisconnectMessage());
       connectionStatus.state = MqttConnectionState.disconnecting;
     }
     connection.disconnect(auto: true);
     connection.onDisconnected = null;
     MqttLogger.log(
-        'MqttConnectionHandlerBase::autoReconnect - attempting reconnection');
+      'MqttConnectionHandlerBase::autoReconnect - attempting reconnection',
+    );
     connectionStatus = await connect(server!, port!, connectionMessage);
     autoReconnectInProgress = false;
     if (connectionStatus.state == MqttConnectionState.connected) {
@@ -149,14 +160,16 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       // Fire the re subscribe event.
       clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
       MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete');
+        'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete',
+      );
       // If the auto reconnect callback is set call it
       if (onAutoReconnected != null) {
         onAutoReconnected!();
       }
     } else {
       MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - auto reconnect failed - re trying');
+        'MqttConnectionHandlerBase::autoReconnect - auto reconnect failed - re trying',
+      );
       clientEventBus!.fire(AutoReconnect());
     }
   }
@@ -198,7 +211,9 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Registers for the receipt of messages when they arrive.
   @override
   void registerForMessage(
-      MqttMessageType msgType, MessageCallbackFunction? callback) {
+    MqttMessageType msgType,
+    MessageCallbackFunction? callback,
+  ) {
     messageProcessorRegistry[msgType] = callback;
   }
 
@@ -226,13 +241,15 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   void messageAvailable(MessageAvailable event) {
     final messageType = event.message!.header!.messageType;
     MqttLogger.log(
-        'MqttConnectionHandlerBase::messageAvailable - message type is $messageType');
+      'MqttConnectionHandlerBase::messageAvailable - message type is $messageType',
+    );
     final callback = messageProcessorRegistry[messageType!];
     if (callback != null) {
       callback(event.message);
     } else {
       MqttLogger.log(
-          'MqttConnectionHandlerBase::messageAvailable - WARN - no registered callback for this message type');
+        'MqttConnectionHandlerBase::messageAvailable - WARN - no registered callback for this message type',
+      );
     }
   }
 
@@ -253,7 +270,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @protected
   void _performConnectionDisconnect() {
     MqttLogger.log(
-        'MqttConnectionHandlerBase::_performConnectionDisconnect entered');
+      'MqttConnectionHandlerBase::_performConnectionDisconnect entered',
+    );
     connectionStatus.state = MqttConnectionState.disconnected;
   }
 
@@ -274,14 +292,18 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
               MqttConnectReturnCode.notAuthorized ||
           ackMsg.variableHeader.returnCode ==
               MqttConnectReturnCode.badUsernameOrPassword) {
-        MqttLogger.log('MqttConnectionHandlerBase::_connectAckProcessor '
-            'connection rejected');
+        MqttLogger.log(
+          'MqttConnectionHandlerBase::_connectAckProcessor '
+          'connection rejected',
+        );
         connectionStatus.returnCode = ackMsg.variableHeader.returnCode;
         _performConnectionDisconnect();
       } else {
         // Initialize the keepalive to start the ping based keepalive process.
-        MqttLogger.log('MqttConnectionHandlerBase:_connectAckProcessor '
-            '- state = connected');
+        MqttLogger.log(
+          'MqttConnectionHandlerBase:_connectAckProcessor '
+          '- state = connected',
+        );
         connectionStatus.state = MqttConnectionState.connected;
         connectionStatus.returnCode = MqttConnectReturnCode.connectionAccepted;
         connectionStatus.connectAckMessage = msg;

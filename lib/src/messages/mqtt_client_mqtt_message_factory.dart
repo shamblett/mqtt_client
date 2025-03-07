@@ -11,7 +11,9 @@ part of '../../mqtt_client.dart';
 class MqttMessageFactory {
   /// Gets an instance of an MqttMessage based on the message type requested.
   static MqttMessage getMessage(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     MqttMessage message;
     switch (header.messageType) {
       case MqttMessageType.connect:
@@ -27,16 +29,22 @@ class MqttMessageFactory {
         message = MqttPublishAckMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.publishComplete:
-        message =
-            MqttPublishCompleteMessage.fromByteBuffer(header, messageStream);
+        message = MqttPublishCompleteMessage.fromByteBuffer(
+          header,
+          messageStream,
+        );
         break;
       case MqttMessageType.publishReceived:
-        message =
-            MqttPublishReceivedMessage.fromByteBuffer(header, messageStream);
+        message = MqttPublishReceivedMessage.fromByteBuffer(
+          header,
+          messageStream,
+        );
         break;
       case MqttMessageType.publishRelease:
-        message =
-            MqttPublishReleaseMessage.fromByteBuffer(header, messageStream);
+        message = MqttPublishReleaseMessage.fromByteBuffer(
+          header,
+          messageStream,
+        );
         break;
       case MqttMessageType.subscribe:
         message = MqttSubscribeMessage.fromByteBuffer(header, messageStream);
@@ -48,8 +56,10 @@ class MqttMessageFactory {
         message = MqttUnsubscribeMessage.fromByteBuffer(header, messageStream);
         break;
       case MqttMessageType.unsubscribeAck:
-        message =
-            MqttUnsubscribeAckMessage.fromByteBuffer(header, messageStream);
+        message = MqttUnsubscribeAckMessage.fromByteBuffer(
+          header,
+          messageStream,
+        );
         break;
       case MqttMessageType.pingRequest:
         message = MqttPingRequestMessage.fromHeader(header);
@@ -62,8 +72,9 @@ class MqttMessageFactory {
         break;
       default:
         throw InvalidHeaderException(
-            'The Message Type specified ($header.messageType) is not a valid '
-            'MQTT Message type or currently not supported.');
+          'The Message Type specified ($header.messageType) is not a valid '
+          'MQTT Message type or currently not supported.',
+        );
     }
     return message;
   }

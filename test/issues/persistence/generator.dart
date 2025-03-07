@@ -26,7 +26,8 @@ Future<int> main() async {
     print('ISSUE:: client connected');
   } else {
     print(
-        'ISSUE::ERROR client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'ISSUE::ERROR client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
     exit(-1);
   }

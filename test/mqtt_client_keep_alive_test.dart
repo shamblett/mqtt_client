@@ -30,19 +30,18 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -67,20 +66,19 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
       ka.pongCallback = pongCallback;
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -103,19 +101,18 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2, 2);
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -137,19 +134,18 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2, 2);
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -171,19 +167,18 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.disconnected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -209,20 +204,19 @@ void main() {
         pingCalled = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 2);
       ka.pingCallback = pingCallback;
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -244,19 +238,18 @@ void main() {
         disconnect = true;
       }
 
-      clientEventBus
-          .on<DisconnectOnNoPingResponse>()
-          .listen(disconnectOnNoPingResponse);
-      final ch = MockCH(
-        clientEventBus,
-        maxConnectionAttempts: 3,
+      clientEventBus.on<DisconnectOnNoPingResponse>().listen(
+        disconnectOnNoPingResponse,
       );
+      final ch = MockCH(clientEventBus, maxConnectionAttempts: 3);
       ch.connectionStatus.state = MqttConnectionState.connected;
       final ka = MqttConnectionKeepAlive(ch, clientEventBus, 3);
-      verify(() => ch.registerForMessage(MqttMessageType.pingRequest, any()))
-          .called(1);
-      verify(() => ch.registerForMessage(MqttMessageType.pingResponse, any()))
-          .called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingRequest, any()),
+      ).called(1);
+      verify(
+        () => ch.registerForMessage(MqttMessageType.pingResponse, any()),
+      ).called(1);
       verify(() => ch.registerForAllSentMessages(ka.messageSent)).called(1);
       expect(ka.pingTimer?.isActive, isTrue);
       expect(ka.disconnectTimer, isNull);
@@ -279,8 +272,10 @@ void main() {
       latencies[2] = ka.lastCycleLatency;
       expect(ka.lastCycleLatency > 0, isTrue);
       expect(ka.averageCycleLatency > 0, isTrue);
-      expect(ka.averageCycleLatency,
-          lessThanOrEqualTo(latencies[0] + latencies[1] + latencies[2] ~/ 3));
+      expect(
+        ka.averageCycleLatency,
+        lessThanOrEqualTo(latencies[0] + latencies[1] + latencies[2] ~/ 3),
+      );
       expect(disconnect, isFalse);
       ka.stop();
       expect(ka.averageCycleLatency, 0);

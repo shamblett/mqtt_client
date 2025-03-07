@@ -16,7 +16,10 @@ class MqttPublishPayload extends MqttPayload {
 
   /// Initializes a new instance of the MqttPublishPayload class.
   MqttPublishPayload.fromByteBuffer(
-      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
+    this.header,
+    this.variableHeader,
+    MqttByteBuffer payloadStream,
+  ) {
     readFrom(payloadStream);
   }
 

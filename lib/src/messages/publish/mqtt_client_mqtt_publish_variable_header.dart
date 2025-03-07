@@ -14,7 +14,9 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
 
   /// Initializes a new instance of the MqttPublishVariableHeader class.
   MqttPublishVariableHeader.fromByteBuffer(
-      this.header, MqttByteBuffer variableHeaderStream) {
+    this.header,
+    MqttByteBuffer variableHeaderStream,
+  ) {
     readFrom(variableHeaderStream);
   }
 
@@ -55,6 +57,7 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   }
 
   @override
-  String toString() => 'Publish Variable Header: TopicName={$topicName}, '
+  String toString() =>
+      'Publish Variable Header: TopicName={$topicName}, '
       'MessageIdentifier={$messageIdentifier}, VH Length={$length}';
 }

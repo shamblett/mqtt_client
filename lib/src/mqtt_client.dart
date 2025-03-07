@@ -135,9 +135,10 @@ class MqttClient {
       publishingManager?.acknowledgeQos1Message(message);
 
   /// The number of QOS 1 messages awaiting manual acknowledge.
-  int get messagesAwaitingManualAcknowledge => publishingManager == null
-      ? 0
-      : publishingManager!.awaitingManualAcknowledge.length;
+  int get messagesAwaitingManualAcknowledge =>
+      publishingManager == null
+          ? 0
+          : publishingManager!.awaitingManualAcknowledge.length;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -196,9 +197,10 @@ class MqttClient {
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
   @Deprecated('Use ConnectionStatus, not this')
-  MqttConnectionState? get connectionState => connectionHandler != null
-      ? connectionHandler!.connectionStatus.state
-      : MqttConnectionState.disconnected;
+  MqttConnectionState? get connectionState =>
+      connectionHandler != null
+          ? connectionHandler!.connectionStatus.state
+          : MqttConnectionState.disconnected;
 
   final MqttClientConnectionStatus _connectionStatus =
       MqttClientConnectionStatus();
@@ -206,9 +208,10 @@ class MqttClient {
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
   /// Set after every connection attempt.
-  MqttClientConnectionStatus? get connectionStatus => connectionHandler != null
-      ? connectionHandler!.connectionStatus
-      : _connectionStatus;
+  MqttClientConnectionStatus? get connectionStatus =>
+      connectionHandler != null
+          ? connectionHandler!.connectionStatus
+          : _connectionStatus;
 
   /// The connection message to use to override the default.
   MqttConnectMessage? _connectionMessage;
@@ -328,8 +331,10 @@ class MqttClient {
       subscriptionsManager?.subscriptionNotifier;
 
   /// Common client connection method.
-  Future<MqttClientConnectionStatus?> connect(
-      [String? username, String? password]) async {
+  Future<MqttClientConnectionStatus?> connect([
+    String? username,
+    String? password,
+  ]) async {
     // Protect against an incorrect instantiation
     if (!instantiationCorrect) {
       throw IncorrectInstantiationException();
@@ -357,11 +362,15 @@ class MqttClient {
     connectionHandler.onFailedConnectionAttempt = onFailedConnectionAttempt;
 
     MqttLogger.log(
-        'MqttClient::connect - Connection timeout period is $connectTimeoutPeriod milliseconds');
+      'MqttClient::connect - Connection timeout period is $connectTimeoutPeriod milliseconds',
+    );
     publishingManager = PublishingManager(connectionHandler, clientEventBus);
     publishingManager!.manuallyAcknowledgeQos1 = _manuallyAcknowledgeQos1;
     subscriptionsManager = SubscriptionsManager(
-        connectionHandler, publishingManager, clientEventBus);
+      connectionHandler,
+      publishingManager,
+      clientEventBus,
+    );
     subscriptionsManager!.onSubscribed = onSubscribed;
     subscriptionsManager!.onUnsubscribed = onUnsubscribed;
     subscriptionsManager!.onSubscribeFail = onSubscribeFail;
@@ -369,9 +378,14 @@ class MqttClient {
         resubscribeOnAutoReconnect;
     if (keepAlivePeriod != MqttClientConstants.defaultKeepAlive) {
       MqttLogger.log(
-          'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds');
-      keepAlive = MqttConnectionKeepAlive(connectionHandler, clientEventBus,
-          keepAlivePeriod, disconnectOnNoResponsePeriod);
+        'MqttClient::connect - keep alive is enabled with a value of $keepAlivePeriod seconds',
+      );
+      keepAlive = MqttConnectionKeepAlive(
+        connectionHandler,
+        clientEventBus,
+        keepAlivePeriod,
+        disconnectOnNoResponsePeriod,
+      );
       if (pongCallback != null) {
         keepAlive!.pongCallback = pongCallback;
       }
@@ -398,12 +412,13 @@ class MqttClient {
   ///  Returns an MqttConnectMessage that can be used to connect to a
   ///  message broker if the user has not set one.
   MqttConnectMessage getConnectMessage(String? username, String? password) =>
-      connectionMessage ??= MqttConnectMessage()
-          .withClientIdentifier(clientIdentifier)
-          // Explicitly set the will flag
-          .withWillQos(MqttQos.atMostOnce)
-          .authenticateAs(username, password)
-          .startClean();
+      connectionMessage ??=
+          MqttConnectMessage()
+              .withClientIdentifier(clientIdentifier)
+              // Explicitly set the will flag
+              .withWillQos(MqttQos.atMostOnce)
+              .authenticateAs(username, password)
+              .startClean();
 
   /// Auto reconnect method, used to invoke a manual auto reconnect sequence.
   /// If [autoReconnect] is not set this method does nothing.
@@ -413,7 +428,8 @@ class MqttClient {
   void doAutoReconnect({bool force = false}) {
     if (!autoReconnect) {
       MqttLogger.log(
-          'MqttClient::doAutoReconnect - auto reconnect is not set, exiting');
+        'MqttClient::doAutoReconnect - auto reconnect is not set, exiting',
+      );
       return;
     }
 
@@ -421,8 +437,9 @@ class MqttClient {
       // Fire a manual auto reconnect request.
       final wasConnected =
           connectionStatus!.state == MqttConnectionState.connected;
-      clientEventBus!
-          .fire(AutoReconnect(userRequested: true, wasConnected: wasConnected));
+      clientEventBus!.fire(
+        AutoReconnect(userRequested: true, wasConnected: wasConnected),
+      );
     }
   }
 
@@ -452,16 +469,23 @@ class MqttClient {
   /// Raises InvalidTopicException if the topic supplied violates the
   /// MQTT topic format rules.
   int publishMessage(
-      String topic, MqttQos qualityOfService, typed.Uint8Buffer data,
-      {bool retain = false}) {
+    String topic,
+    MqttQos qualityOfService,
+    typed.Uint8Buffer data, {
+    bool retain = false,
+  }) {
     if (connectionHandler?.connectionStatus.state !=
         MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
     }
     try {
       final pubTopic = PublicationTopic(topic);
-      return publishingManager!
-          .publish(pubTopic, qualityOfService, data, retain);
+      return publishingManager!.publish(
+        pubTopic,
+        qualityOfService,
+        data,
+        retain,
+      );
     } on Exception catch (e) {
       throw InvalidTopicException(e.toString(), topic);
     }
@@ -471,8 +495,10 @@ class MqttClient {
   /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
-    subscriptionsManager!
-        .unsubscribe(topic, expectAcknowledge: expectAcknowledge);
+    subscriptionsManager!.unsubscribe(
+      topic,
+      expectAcknowledge: expectAcknowledge,
+    );
   }
 
   /// Gets the current status of a subscription.
@@ -499,7 +525,8 @@ class MqttClient {
   /// time period specified by [disconnectOnNoResponsePeriod].
   void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
     MqttLogger.log(
-        'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds');
+      'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds',
+    );
     // Destroy the existing client socket
     connectionHandler?.connection.disconnect();
     internalDisconnect();
@@ -510,7 +537,8 @@ class MqttClient {
   /// time period specified by [disconnectOnNoResponsePeriod].
   void disconnectOnNoMessageSent(DisconnectOnNoMessageSent event) {
     MqttLogger.log(
-        'MqttClient::disconnectOnNoMessageSent - disconnecting, no message sent due to exception like socket exception');
+      'MqttClient::disconnectOnNoMessageSent - disconnecting, no message sent due to exception like socket exception',
+    );
     // Destroy the existing client socket
     connectionHandler?.connection.disconnect();
     internalDisconnect();
@@ -525,7 +553,8 @@ class MqttClient {
     final connectionHandler = this.connectionHandler;
     if (connectionHandler == null) {
       MqttLogger.log(
-          'MqttClient::internalDisconnect - not invoking disconnect, no connection handler');
+        'MqttClient::internalDisconnect - not invoking disconnect, no connection handler',
+      );
       return;
     }
     if (autoReconnect && connectionHandler.initialConnectionComplete) {
@@ -534,7 +563,8 @@ class MqttClient {
         clientEventBus!.fire(AutoReconnect(userRequested: false));
       } else {
         MqttLogger.log(
-            'MqttClient::internalDisconnect - not invoking auto connect, already in progress');
+          'MqttClient::internalDisconnect - not invoking auto connect, already in progress',
+        );
       }
     } else {
       // Unsolicited disconnect only if we are connected initially
@@ -578,21 +608,25 @@ class MqttClient {
   @protected
   void checkCredentials(String? username, String? password) {
     if (username != null) {
-      MqttLogger.log("Authenticating with username '{$username}' "
-          "and password '{$password}'");
+      MqttLogger.log(
+        "Authenticating with username '{$username}' "
+        "and password '{$password}'",
+      );
       if (username.trim().length >
           MqttClientConstants.recommendedMaxUsernamePasswordLength) {
         MqttLogger.log(
-            'MqttClient::checkCredentials - Username length (${username.trim().length}) '
-            'exceeds the max recommended in the MQTT spec. ');
+          'MqttClient::checkCredentials - Username length (${username.trim().length}) '
+          'exceeds the max recommended in the MQTT spec. ',
+        );
       }
     }
     if (password != null &&
         password.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
       MqttLogger.log(
-          'MqttClient::checkCredentials - Password length (${password.trim().length}) '
-          'exceeds the max recommended in the MQTT spec. ');
+        'MqttClient::checkCredentials - Password length (${password.trim().length}) '
+        'exceeds the max recommended in the MQTT spec. ',
+      );
     }
   }
 

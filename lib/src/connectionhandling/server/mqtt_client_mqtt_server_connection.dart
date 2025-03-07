@@ -12,12 +12,19 @@ abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
   /// Default constructor
   MqttServerConnection(
-      super.clientEventBus, this.socketOptions, this.socketTimeout);
+    super.clientEventBus,
+    this.socketOptions,
+    this.socketTimeout,
+  );
 
   /// Initializes a new instance of the MqttConnection class.
   MqttServerConnection.fromConnect(
-      server, port, clientEventBus, this.socketOptions, this.socketTimeout)
-      : super(clientEventBus) {
+    server,
+    port,
+    clientEventBus,
+    this.socketOptions,
+    this.socketTimeout,
+  ) : super(clientEventBus) {
     connect(server, port);
   }
 
@@ -61,8 +68,9 @@ abstract class MqttServerConnection<T extends Object>
         msg = MqttMessage.createFrom(messageStream);
       } on Exception {
         MqttLogger.log(
-            'MqttServerConnection::_ondata - message is not yet valid, '
-            'waiting for more data ...');
+          'MqttServerConnection::_ondata - message is not yet valid, '
+          'waiting for more data ...',
+        );
         messageIsValid = false;
       }
       if (!messageIsValid) {
@@ -72,7 +80,9 @@ abstract class MqttServerConnection<T extends Object>
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log(
-            'MqttServerConnection::_onData - message received ', msg);
+          'MqttServerConnection::_onData - message received ',
+          msg,
+        );
         if (!clientEventBus!.streamController.isClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
@@ -80,10 +90,12 @@ abstract class MqttServerConnection<T extends Object>
             clientEventBus!.fire(MessageAvailable(msg));
           }
           MqttLogger.log(
-              'MqttServerConnection::_onData - message available event fired');
+            'MqttServerConnection::_onData - message available event fired',
+          );
         } else {
           MqttLogger.log(
-              'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed');
+            'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed',
+          );
         }
       }
     }
@@ -93,7 +105,8 @@ abstract class MqttServerConnection<T extends Object>
   bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
     if (socketOptions.isNotEmpty) {
       MqttLogger.log(
-          'MqttServerConnection::__applySocketOptions - Socket options supplied, applying');
+        'MqttServerConnection::__applySocketOptions - Socket options supplied, applying',
+      );
       for (final option in socketOptions) {
         socket.setRawOption(option);
       }

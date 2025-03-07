@@ -60,13 +60,18 @@ abstract class IMqttConnectionHandler {
   /// The port to connect to
   /// The connect message to use to initiate the connection
   Future<MqttClientConnectionStatus> connect(
-      String server, int port, MqttConnectMessage message);
+    String server,
+    int port,
+    MqttConnectMessage message,
+  );
 
   /// Register the specified callback to receive messages of a specific type.
   /// The type of message that the callback should be sent
   /// The callback function that will accept the message type
   void registerForMessage(
-      MqttMessageType msgType, MessageCallbackFunction msgProcessorCallback);
+    MqttMessageType msgType,
+    MessageCallbackFunction msgProcessorCallback,
+  );
 
   ///  Sends a message to a message broker.
   void sendMessage(MqttMessage message);

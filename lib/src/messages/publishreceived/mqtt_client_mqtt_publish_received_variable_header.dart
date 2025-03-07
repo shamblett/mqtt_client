@@ -14,7 +14,8 @@ class MqttPublishReceivedVariableHeader extends MqttVariableHeader {
 
   /// Initializes a new instance of the MqttPublishReceivedVariableHeader class.
   MqttPublishReceivedVariableHeader.fromByteBuffer(
-      MqttByteBuffer headerStream) {
+    MqttByteBuffer headerStream,
+  ) {
     readFrom(headerStream);
   }
 

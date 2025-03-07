@@ -46,7 +46,9 @@ class MqttHeader {
   set messageSize(int value) {
     if (value < 0 || value > MqttClientConstants.maxMessageSize) {
       throw InvalidPayloadSizeException(
-          value, MqttClientConstants.maxMessageSize);
+        value,
+        MqttClientConstants.maxMessageSize,
+      );
     }
     _messageSize = value;
   }
@@ -63,8 +65,9 @@ class MqttHeader {
     if (headerStream.length < 2) {
       headerStream.reset();
       throw InvalidHeaderException(
-          'The supplied header is invalid. Header must be at '
-          'least 2 bytes long.');
+        'The supplied header is invalid. Header must be at '
+        'least 2 bytes long.',
+      );
     }
     final firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
@@ -78,14 +81,16 @@ class MqttHeader {
       _messageSize = readRemainingLength(headerStream);
     } on Exception {
       throw InvalidHeaderException(
-          'The header being processed contained an invalid size byte pattern. '
-          'Message size must take a most 4 bytes, and the last byte '
-          'must have bit 8 set to 0.');
+        'The header being processed contained an invalid size byte pattern. '
+        'Message size must take a most 4 bytes, and the last byte '
+        'must have bit 8 set to 0.',
+      );
     } on Error {
       throw InvalidHeaderException(
-          'The header being processed contained an invalid size byte pattern. '
-          'Message size must take a most 4 bytes, and the last byte '
-          'must have bit 8 set to 0.');
+        'The header being processed contained an invalid size byte pattern. '
+        'Message size must take a most 4 bytes, and the last byte '
+        'must have bit 8 set to 0.',
+      );
     }
   }
 

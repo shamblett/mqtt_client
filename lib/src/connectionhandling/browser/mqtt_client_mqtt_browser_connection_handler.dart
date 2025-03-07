@@ -11,6 +11,8 @@ part of '../../../mqtt_browser_client.dart';
 ///  for browser based connection handler implementations.
 abstract class MqttBrowserConnectionHandler extends MqttConnectionHandlerBase {
   /// Initializes a new instance of the [MqttBrowserConnectionHandler] class.
-  MqttBrowserConnectionHandler(super.clientEventBus,
-      {required int super.maxConnectionAttempts});
+  MqttBrowserConnectionHandler(
+    super.clientEventBus, {
+    required int super.maxConnectionAttempts,
+  });
 }

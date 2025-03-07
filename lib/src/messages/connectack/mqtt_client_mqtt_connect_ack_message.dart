@@ -23,7 +23,9 @@ class MqttConnectAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttConnectAckMessage class.
   MqttConnectAckMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }

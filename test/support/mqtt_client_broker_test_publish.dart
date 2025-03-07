@@ -18,7 +18,8 @@ Future<int> main() async {
     print('Mosquitto client connected');
   } else {
     print(
-        'ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus}');
+      'ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus}',
+    );
     client.disconnect();
   }
   // Publish a known topic

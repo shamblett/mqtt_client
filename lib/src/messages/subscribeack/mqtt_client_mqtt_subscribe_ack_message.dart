@@ -18,7 +18,9 @@ class MqttSubscribeAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeAckMessage class.
   MqttSubscribeAckMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
@@ -33,8 +35,10 @@ class MqttSubscribeAckMessage extends MqttMessage {
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    header!.writeTo(
+      variableHeader!.getWriteLength() + payload.getWriteLength(),
+      messageStream,
+    );
     variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
@@ -42,10 +46,14 @@ class MqttSubscribeAckMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   @override
   void readFrom(MqttByteBuffer messageStream) {
-    variableHeader =
-        MqttSubscribeAckVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttSubscribeAckVariableHeader.fromByteBuffer(
+      messageStream,
+    );
     payload = MqttSubscribeAckPayload.fromByteBuffer(
-        header, variableHeader, messageStream);
+      header,
+      variableHeader,
+      messageStream,
+    );
   }
 
   /// Sets the message identifier on the subscribe message.

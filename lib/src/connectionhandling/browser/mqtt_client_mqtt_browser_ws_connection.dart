@@ -14,8 +14,10 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
 
   /// Initializes a new instance of the MqttConnection class.
   MqttBrowserWsConnection.fromConnect(
-      String server, int port, events.EventBus eventBus)
-      : super(eventBus) {
+    String server,
+    int port,
+    events.EventBus eventBus,
+  ) : super(eventBus) {
     connect(server, port);
   }
 
@@ -49,8 +51,10 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     MqttLogger.log('MqttBrowserWsConnection::connect -  WS URL is $uriString');
     try {
       // Connect and save the socket.
-      final client =
-          WebSocket(uriString, protocols.map((e) => e.toJS).toList().toJS);
+      final client = WebSocket(
+        uriString,
+        protocols.map((e) => e.toJS).toList().toJS,
+      );
       this.client = client;
       client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -69,7 +73,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
 
       closeEvents = client.onClose.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connect - websocket is closed');
+          'MqttBrowserWsConnection::connect - websocket is closed',
+        );
         openEvents?.cancel();
         closeEvents?.cancel();
         errorEvents?.cancel();
@@ -78,7 +83,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
 
       errorEvents = client.onError.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connect - websocket has erred');
+          'MqttBrowserWsConnection::connect - websocket has erred',
+        );
         openEvents?.cancel();
         closeEvents?.cancel();
         errorEvents?.cancel();
@@ -119,11 +125,14 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     uri = uri.replace(port: port);
     final uriString = uri.toString();
     MqttLogger.log(
-        'MqttBrowserWsConnection::connectAuto -  WS URL is $uriString');
+      'MqttBrowserWsConnection::connectAuto -  WS URL is $uriString',
+    );
     try {
       // Connect and save the socket.
-      final client =
-          WebSocket(uriString, protocols.map((e) => e.toJS).toList().toJS);
+      final client = WebSocket(
+        uriString,
+        protocols.map((e) => e.toJS).toList().toJS,
+      );
       this.client = client;
       client.binaryType = 'arraybuffer';
       messageStream = MqttByteBuffer(typed.Uint8Buffer());
@@ -133,7 +142,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
       StreamSubscription<Event>? errorEvents;
       openEvents = client.onOpen.listen((event) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connectAuto - websocket is open');
+          'MqttBrowserWsConnection::connectAuto - websocket is open',
+        );
         openEvents?.cancel();
         closeEvents?.cancel();
         errorEvents?.cancel();
@@ -143,7 +153,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
 
       closeEvents = client.onClose.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connectAuto - websocket is closed');
+          'MqttBrowserWsConnection::connectAuto - websocket is closed',
+        );
         openEvents?.cancel();
         closeEvents?.cancel();
         errorEvents?.cancel();
@@ -152,7 +163,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
 
       errorEvents = client.onError.listen((e) {
         MqttLogger.log(
-            'MqttBrowserWsConnection::connectAuto - websocket has errored');
+          'MqttBrowserWsConnection::connectAuto - websocket has errored',
+        );
         openEvents?.cancel();
         closeEvents?.cancel();
         errorEvents?.cancel();
@@ -165,7 +177,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
       throw NoConnectionException(message);
     }
     MqttLogger.log(
-        'MqttBrowserWsConnection::connectAuto - connection is waiting');
+      'MqttBrowserWsConnection::connectAuto - connection is waiting',
+    );
     return completer.future;
   }
 
@@ -203,7 +216,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     return [
       webSocket.onClose.listen((e) {
         MqttLogger.log(
-            'MqttBrowserConnection::_startListening - websocket is closed');
+          'MqttBrowserConnection::_startListening - websocket is closed',
+        );
         onDone();
       }),
       webSocket.onMessage.listen((MessageEvent e) {
@@ -211,7 +225,8 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
       }),
       webSocket.onError.listen((e) {
         MqttLogger.log(
-            'MqttBrowserConnection::_startListening - websocket has errored');
+          'MqttBrowserConnection::_startListening - websocket has errored',
+        );
         onError(e);
       }),
     ];

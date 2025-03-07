@@ -19,10 +19,13 @@ class MqttPublishReleaseMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
-    variableHeader =
-        MqttPublishReleaseVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttPublishReleaseVariableHeader.fromByteBuffer(
+      messageStream,
+    );
   }
 
   /// Gets or sets the variable header contents. Contains extended

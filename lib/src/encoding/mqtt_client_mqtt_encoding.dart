@@ -21,7 +21,8 @@ class MqttEncoding {
     final stringConverted = utf8.encoder.convert(s);
     if (stringConverted.length > 65535) {
       throw Exception(
-          'MqttUtf8Encoding::toUtf8 -  UTF8 string length is invalid, length is ${stringConverted.length}');
+        'MqttUtf8Encoding::toUtf8 -  UTF8 string length is invalid, length is ${stringConverted.length}',
+      );
     }
     final stringBytes = typed.Uint8Buffer();
     stringBytes.add(stringConverted.length >> 8);
@@ -39,7 +40,8 @@ class MqttEncoding {
   int getCharCount(typed.Uint8Buffer bytes) {
     if (bytes.length < 2) {
       throw Exception(
-          'mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes');
+        'mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes',
+      );
     }
     return (bytes[0] << 8) + bytes[1];
   }
@@ -55,8 +57,9 @@ class MqttEncoding {
       if (Protocol.version == MqttClientConstants.mqttV31ProtocolVersion) {
         if (s.codeUnitAt(i) > 0x7F) {
           throw Exception(
-              'mqtt_client::MQTTEncoding: The input string has extended '
-              'UTF characters, which are not supported');
+            'mqtt_client::MQTTEncoding: The input string has extended '
+            'UTF characters, which are not supported',
+          );
         }
       }
     }

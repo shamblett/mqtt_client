@@ -16,10 +16,12 @@ Future<void> main() async {
     client.subscribe("/hfp/v2/journey/#", MqttQos.atMostOnce);
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final recMess = c![0].payload as MqttPublishMessage;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message!);
+      final pt = MqttPublishPayload.bytesToStringAsString(
+        recMess.payload.message!,
+      );
       print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- ${pt.length} -->');
+        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- ${pt.length} -->',
+      );
       print('');
     });
   } on NoConnectionException catch (e) {

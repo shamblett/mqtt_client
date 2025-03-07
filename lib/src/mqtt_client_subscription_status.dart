@@ -16,5 +16,5 @@ enum MqttSubscriptionStatus {
   pending,
 
   /// The subscription is currently active and messages will be received.
-  active
+  active,
 }

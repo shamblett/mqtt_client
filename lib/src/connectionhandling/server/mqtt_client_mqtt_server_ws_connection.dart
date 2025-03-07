@@ -11,16 +11,19 @@ part of '../../../mqtt_server_client.dart';
 class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   /// Default constructor
   MqttServerWsConnection(
-      super.eventBus, super.socketOptions, super.socketTimeout);
+    super.eventBus,
+    super.socketOptions,
+    super.socketTimeout,
+  );
 
   /// Initializes a new instance of the MqttConnection class.
   MqttServerWsConnection.fromConnect(
-      String server,
-      int port,
-      events.EventBus eventBus,
-      List<RawSocketOption> socketOptions,
-      Duration? socketTimeout)
-      : super(eventBus, socketOptions, socketTimeout) {
+    String server,
+    int port,
+    events.EventBus eventBus,
+    List<RawSocketOption> socketOptions,
+    Duration? socketTimeout,
+  ) : super(eventBus, socketOptions, socketTimeout) {
     connect(server, port);
   }
 
@@ -44,7 +47,8 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     try {
       uri = Uri.parse(server);
     } on Exception {
-      final message = 'MqttWsConnection::connect - The URI supplied for the WS '
+      final message =
+          'MqttWsConnection::connect - The URI supplied for the WS '
           'connection is not valid - $server';
       throw NoConnectionException(message);
     }
@@ -59,30 +63,35 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
 
     final uriString = uri.toString();
     MqttLogger.log(
-        'MqttWsConnection::connect - WS URL is $uriString, protocols are $protocols');
+      'MqttWsConnection::connect - WS URL is $uriString, protocols are $protocols',
+    );
     HttpClient? httpClient;
     if (onBadCertificate != null) {
-      httpClient = HttpClient()
-        ..badCertificateCallback = (cert, host, port) {
-          return onBadCertificate!(cert);
-        };
+      httpClient =
+          HttpClient()
+            ..badCertificateCallback = (cert, host, port) {
+              return onBadCertificate!(cert);
+            };
     }
     try {
       // Connect and save the socket.
-      WebSocket.connect(uriString,
-              protocols: protocols.isNotEmpty ? protocols : null,
-              headers: headers,
-              customClient: httpClient)
+      WebSocket.connect(
+            uriString,
+            protocols: protocols.isNotEmpty ? protocols : null,
+            headers: headers,
+            customClient: httpClient,
+          )
           .then((socket) {
-        client = socket;
-        readWrapper = ReadWrapper();
-        messageStream = MqttByteBuffer(typed.Uint8Buffer());
-        _startListening();
-        completer.complete();
-      }).catchError((e) {
-        onError(e);
-        completer.completeError(e);
-      });
+            client = socket;
+            readWrapper = ReadWrapper();
+            messageStream = MqttByteBuffer(typed.Uint8Buffer());
+            _startListening();
+            completer.complete();
+          })
+          .catchError((e) {
+            onError(e);
+            completer.completeError(e);
+          });
     } on Exception {
       final message =
           'MqttWsConnection::connect - The connection to the message broker '
@@ -118,20 +127,24 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
 
     final uriString = uri.toString();
     MqttLogger.log(
-        'MqttWsConnection::connectAuto - WS URL is $uriString, protocols are $protocols');
+      'MqttWsConnection::connectAuto - WS URL is $uriString, protocols are $protocols',
+    );
     try {
       // Connect and save the socket.
-      WebSocket.connect(uriString,
-              protocols: protocols.isNotEmpty ? protocols : null,
-              headers: headers)
+      WebSocket.connect(
+            uriString,
+            protocols: protocols.isNotEmpty ? protocols : null,
+            headers: headers,
+          )
           .then((socket) {
-        client = socket;
-        _startListening();
-        completer.complete();
-      }).catchError((e) {
-        onError(e);
-        completer.completeError(e);
-      });
+            client = socket;
+            _startListening();
+            completer.complete();
+          })
+          .catchError((e) {
+            onError(e);
+            completer.completeError(e);
+          });
     } on Exception {
       final message =
           'MqttWsConnection::connectAuto - The connection to the message broker '
