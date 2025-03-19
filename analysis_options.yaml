@@ -15,3 +15,14 @@ linter:
     - always_declare_return_types
     - prefer_single_quotes
     - unawaited_futures
+
+dart_code_metrics:
+  exclude:
+    metrics:
+      - test/**
+      - example/**
+    rules:
+      - test/**
+      - example/**
+  extends:
+    - package:dart_code_metrics_presets/dart_all.yaml

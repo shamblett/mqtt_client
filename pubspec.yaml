@@ -28,6 +28,7 @@ dev_dependencies:
   http: '^1.2.2'
   aws_signature_v4: '^0.6.3'
   aws_common: '^0.7.4'
+  dart_code_metrics_presets: '^2.21.0'
 
 false_secrets:
   - /test/pem/self_signed.key
