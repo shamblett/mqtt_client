@@ -9,6 +9,12 @@ part of '../../../mqtt_server_client.dart';
 
 /// The MQTT server secure connection class
 class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
+  /// The security context for secure usage
+  SecurityContext? context;
+
+  /// Callback function to handle bad certificate. if true, ignore the error.
+  bool Function(X509Certificate certificate)? onBadCertificate;
+
   /// Default constructor
   MqttServerSecureConnection(
     this.context,
@@ -28,12 +34,6 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   ) : super(eventBus, socketOptions, socketTimeout) {
     connect(server, port);
   }
-
-  /// The security context for secure usage
-  SecurityContext? context;
-
-  /// Callback function to handle bad certificate. if true, ignore the error.
-  bool Function(X509Certificate certificate)? onBadCertificate;
 
   /// Connect
   @override
@@ -76,23 +76,23 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               completer.completeError(e);
             }
           });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttSecureConnection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on HandshakeException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on HandshakeException catch (e, stack) {
       final message =
           'MqttSecureConnection::connect - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on TlsException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on TlsException catch (e, stack) {
       final message =
           'MqttSecureConnection::TLS exception raised on secure '
           'connection. Error is ${e.toString()}';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
@@ -140,23 +140,23 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               completer.completeError(e);
             }
           });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttSecureConnection::connectAuto - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on HandshakeException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on HandshakeException catch (e, stack) {
       final message =
           'MqttSecureConnection::connectAuto - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on TlsException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on TlsException catch (e, stack) {
       final message =
           'MqttSecureConnection::connectAuto - TLS exception raised on secure '
           'connection. Error is ${e.toString()}';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }

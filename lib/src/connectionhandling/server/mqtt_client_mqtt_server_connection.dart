@@ -10,6 +10,12 @@ part of '../../../mqtt_server_client.dart';
 /// The MQTT client server connection base class
 abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
+  /// Socket options, applicable only to TCP sockets
+  List<RawSocketOption> socketOptions = <RawSocketOption>[];
+
+  /// Socket timeout duration
+  Duration? socketTimeout;
+
   /// Default constructor
   MqttServerConnection(
     super.clientEventBus,
@@ -26,23 +32,6 @@ abstract class MqttServerConnection<T extends Object>
     this.socketTimeout,
   ) : super(clientEventBus) {
     connect(server, port);
-  }
-
-  /// Socket options, applicable only to TCP sockets
-  List<RawSocketOption> socketOptions = <RawSocketOption>[];
-
-  /// Socket timeout duration
-  Duration? socketTimeout;
-
-  /// Create the listening stream subscription and subscribe the callbacks
-  void _startListening() {
-    stopListening();
-    MqttLogger.log('MqttServerConnection::_startListening');
-    try {
-      listeners.add(onListen());
-    } on Exception catch (e) {
-      print('MqttServerConnection::_startListening - exception raised $e');
-    }
   }
 
   /// Implement stream subscription
@@ -122,5 +111,16 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
     return false;
+  }
+
+  // Create the listening stream subscription and subscribe the callbacks
+  void _startListening() {
+    stopListening();
+    MqttLogger.log('MqttServerConnection::_startListening');
+    try {
+      listeners.add(onListen());
+    } on Exception catch (e) {
+      print('MqttServerConnection::_startListening - exception raised $e');
+    }
   }
 }

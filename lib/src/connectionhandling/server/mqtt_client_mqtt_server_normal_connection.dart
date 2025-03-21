@@ -61,18 +61,18 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
               completer.completeError(e);
             }
           });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttNormalConnection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on Exception catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on Exception catch (e, stack) {
       completer.completeError(e);
       final message =
           'MqttNormalConnection::Connect - The connection to the message '
           'broker {$server}:{$port} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
@@ -109,18 +109,18 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
               completer.completeError(e);
             }
           });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttNormalConnection::connectAuto - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on Exception catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on Exception catch (e, stack) {
       completer.completeError(e);
       final message =
           'MqttNormalConnection::ConnectAuto - The connection to the message '
           'broker {$server}:{$port} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }

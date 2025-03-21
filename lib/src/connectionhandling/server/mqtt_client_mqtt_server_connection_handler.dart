@@ -10,14 +10,6 @@ part of '../../../mqtt_server_client.dart';
 ///  This class provides specific connection functionality
 ///  for server based connections.
 abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
-  /// Initializes a new instance of the [MqttServerConnectionHandler] class.
-  MqttServerConnectionHandler(
-    super.clientEventBus, {
-    required super.maxConnectionAttempts,
-    required this.socketOptions,
-    required this.socketTimeout,
-  });
-
   /// Use a websocket rather than TCP
   bool useWebSocket = false;
 
@@ -44,4 +36,12 @@ abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
 
   /// Socket timeout duration.
   Duration? socketTimeout;
+
+  /// Initializes a new instance of the [MqttServerConnectionHandler] class.
+  MqttServerConnectionHandler(
+    super.clientEventBus, {
+    required super.maxConnectionAttempts,
+    required this.socketOptions,
+    required this.socketTimeout,
+  });
 }
