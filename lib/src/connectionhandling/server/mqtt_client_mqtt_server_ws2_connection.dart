@@ -10,30 +10,31 @@ part of '../../../mqtt_server_client.dart';
 
 /// Detatched socket class for alternative websocket support
 class _DetachedSocket extends Stream<Uint8List> implements Socket {
-  _DetachedSocket(this._socket, this._subscription);
-
   final StreamSubscription<Uint8List>? _subscription;
   final Socket _socket;
-
-  @override
-  StreamSubscription<Uint8List> listen(
-    void Function(Uint8List event)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) {
-    _subscription!
-      ..onData(onData)
-      ..onError(onError)
-      ..onDone(onDone);
-    return _subscription!;
-  }
 
   @override
   Encoding get encoding => _socket.encoding;
 
   @override
+  Future<dynamic> get done => _socket.done;
+
+  @override
+  int get port => _socket.port;
+
+  @override
+  InternetAddress get address => _socket.address;
+
+  @override
+  InternetAddress get remoteAddress => _socket.remoteAddress;
+
+  @override
+  int get remotePort => _socket.remotePort;
+
+  @override
   set encoding(Encoding value) => _socket.encoding = value;
+
+  _DetachedSocket(this._socket, this._subscription);
 
   @override
   void write(Object? obj) => _socket.write(obj);
@@ -69,21 +70,6 @@ class _DetachedSocket extends Stream<Uint8List> implements Socket {
   Future<dynamic> close() => _socket.close();
 
   @override
-  Future<dynamic> get done => _socket.done;
-
-  @override
-  int get port => _socket.port;
-
-  @override
-  InternetAddress get address => _socket.address;
-
-  @override
-  InternetAddress get remoteAddress => _socket.remoteAddress;
-
-  @override
-  int get remotePort => _socket.remotePort;
-
-  @override
   bool setOption(SocketOption option, bool enabled) =>
       _socket.setOption(option, enabled);
 
@@ -93,10 +79,29 @@ class _DetachedSocket extends Stream<Uint8List> implements Socket {
 
   @override
   void setRawOption(RawSocketOption option) => _socket.setRawOption(option);
+
+  @override
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    _subscription!
+      ..onData(onData)
+      ..onError(onError)
+      ..onDone(onDone);
+    return _subscription!;
+  }
 }
 
 /// The MQTT server alternative websocket connection class
 class MqttServerWs2Connection extends MqttServerWsConnection {
+  /// The security context for secure usage
+  SecurityContext? context;
+
+  StreamSubscription<dynamic>? _subscription;
+
   /// Default constructor
   MqttServerWs2Connection(
     this.context,
@@ -115,11 +120,6 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
   ) : super(eventBus, socketOptions, socketTimeout) {
     connect(server, port);
   }
-
-  /// The security context for secure usage
-  SecurityContext? context;
-
-  StreamSubscription<dynamic>? _subscription;
 
   /// Connect
   @override
