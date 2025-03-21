@@ -10,12 +10,6 @@ part of '../../mqtt_client.dart';
 ///  This class provides shared connection functionality
 ///  to serverand browser connection handler implementations.
 abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
-  /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
-  MqttConnectionHandlerBase(
-    this.clientEventBus, {
-    required this.maxConnectionAttempts,
-  });
-
   /// Successful connection callback.
   @override
   ConnectCallback? onConnected;
@@ -93,6 +87,12 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   /// Connection status
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
+
+  /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
+  MqttConnectionHandlerBase(
+    this.clientEventBus, {
+    required this.maxConnectionAttempts,
+  });
 
   /// Connect to the specific Mqtt Connection.
   @override
@@ -266,15 +266,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     return connectionStatus.state;
   }
 
-  /// Disconnects the underlying connection object.
-  @protected
-  void _performConnectionDisconnect() {
-    MqttLogger.log(
-      'MqttConnectionHandlerBase::_performConnectionDisconnect entered',
-    );
-    connectionStatus.state = MqttConnectionState.disconnected;
-  }
-
   /// Processes the connect acknowledgement message.
   @protected
   bool connectAckProcessor(MqttMessage msg) {
@@ -332,5 +323,14 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     clientEventBus!.on<AutoReconnect>().listen(autoReconnect);
     clientEventBus!.on<MessageAvailable>().listen(messageAvailable);
     clientEventBus!.on<ConnectAckMessageAvailable>().listen(connectAckReceived);
+  }
+
+  /// Disconnects the underlying connection object.
+  @protected
+  void _performConnectionDisconnect() {
+    MqttLogger.log(
+      'MqttConnectionHandlerBase::_performConnectionDisconnect entered',
+    );
+    connectionStatus.state = MqttConnectionState.disconnected;
   }
 }

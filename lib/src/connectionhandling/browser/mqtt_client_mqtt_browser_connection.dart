@@ -19,19 +19,6 @@ abstract class MqttBrowserConnection<T extends Object>
     connect(server, port);
   }
 
-  /// Create the listening stream subscription and subscribe the callbacks
-  void _startListening() {
-    stopListening();
-    MqttLogger.log('MqttBrowserConnection::_startListening');
-    try {
-      onListen();
-    } on Exception catch (e) {
-      MqttLogger.log(
-        'MqttBrowserConnection::_startListening - exception raised $e',
-      );
-    }
-  }
-
   /// Implement stream subscription
   List<StreamSubscription> onListen();
 
@@ -95,6 +82,19 @@ abstract class MqttBrowserConnection<T extends Object>
           );
         }
       }
+    }
+  }
+
+  /// Create the listening stream subscription and subscribe the callbacks
+  void _startListening() {
+    stopListening();
+    MqttLogger.log('MqttBrowserConnection::_startListening');
+    try {
+      onListen();
+    } on Exception catch (e) {
+      MqttLogger.log(
+        'MqttBrowserConnection::_startListening - exception raised $e',
+      );
     }
   }
 }

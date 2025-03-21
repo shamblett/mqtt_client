@@ -12,9 +12,6 @@ typedef MessageCallbackFunction = bool Function(MqttMessage? message);
 
 /// The connection handler interface class
 abstract class IMqttConnectionHandler {
-  /// The connection status
-  MqttClientConnectionStatus get connectionStatus;
-
   /// Successful connection callback
   ConnectCallback? onConnected;
 
@@ -44,6 +41,9 @@ abstract class IMqttConnectionHandler {
 
   /// Callback function to handle bad certificate. if true, ignore the error.
   bool Function(Object certificate)? onBadCertificate;
+
+  /// The connection status
+  MqttClientConnectionStatus get connectionStatus;
 
   /// Runs the disconnection process to stop communicating
   /// with a message broker.

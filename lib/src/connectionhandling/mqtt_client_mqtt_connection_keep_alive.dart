@@ -22,6 +22,47 @@ typedef PingCallback = void Function();
 /// Optionally a disconnect on no response property can be set to force disconnect the client
 /// if the broker does not respond to a ping request for a specified period of time.
 class MqttConnectionKeepAlive {
+  /// The keep alive period in  milliseconds
+  late int keepAlivePeriod;
+
+  /// The period of time to wait if the broker does not respond to a ping request, in milliseconds.
+  /// If this time period is exceeded the client is forcibly disconnected.
+  /// The default is 0, which disables this functionality.
+  int disconnectOnNoResponsePeriod = 0;
+
+  /// The timer that manages the ping callbacks.
+  Timer? pingTimer;
+
+  /// Timer that manages the disconnect on no ping response period.
+  Timer? disconnectTimer;
+
+  /// Ping response received callback.
+  PongCallback? pongCallback;
+
+  /// Ping request sent callback.
+  PingCallback? pingCallback;
+
+  /// Latency(time between sending a ping and receiving a pong) in ms
+  /// of the last ping/pong cycle. Reset on disconnect.
+  int lastCycleLatency = 0;
+
+  /// Average latency(time between sending a ping and receiving a pong) in ms
+  /// of all the ping/pong cycles in a connection period. Reset on disconnect.
+  int averageCycleLatency = 0;
+
+  /// The event bus
+  events.EventBus? _clientEventBus;
+
+  // The connection handler
+  late IMqttConnectionHandler _connectionHandler;
+
+  // Used to synchronise shutdown and ping operations.
+  bool _shutdownPadlock = false;
+
+  int _cycleCount = 0;
+
+  int _lastPingTime = 0;
+
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
   MqttConnectionKeepAlive(
     IMqttConnectionHandler connectionHandler,
@@ -31,8 +72,11 @@ class MqttConnectionKeepAlive {
   ]) {
     _connectionHandler = connectionHandler;
     _clientEventBus = eventBus;
-    this.disconnectOnNoResponsePeriod = disconnectOnNoResponsePeriod * 1000;
-    keepAlivePeriod = keepAliveSeconds * 1000;
+    this.disconnectOnNoResponsePeriod =
+        disconnectOnNoResponsePeriod *
+        MqttClientConstants.millisecondsMultiplier;
+    keepAlivePeriod =
+        keepAliveSeconds * MqttClientConstants.millisecondsMultiplier;
     // Register for message handling of ping request and response messages.
     connectionHandler.registerForMessage(
       MqttMessageType.pingRequest,
@@ -56,47 +100,6 @@ class MqttConnectionKeepAlive {
           'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds',
         );
   }
-
-  /// The keep alive period in  milliseconds
-  late int keepAlivePeriod;
-
-  /// The period of time to wait if the broker does not respond to a ping request, in milliseconds.
-  /// If this time period is exceeded the client is forcibly disconnected.
-  /// The default is 0, which disables this functionality.
-  int disconnectOnNoResponsePeriod = 0;
-
-  /// The timer that manages the ping callbacks.
-  Timer? pingTimer;
-
-  /// Timer that manages the disconnect on no ping response period.
-  Timer? disconnectTimer;
-
-  /// The connection handler
-  late IMqttConnectionHandler _connectionHandler;
-
-  /// Used to synchronise shutdown and ping operations.
-  bool _shutdownPadlock = false;
-
-  /// Ping response received callback.
-  PongCallback? pongCallback;
-
-  /// Ping request sent callback.
-  PingCallback? pingCallback;
-
-  /// Latency(time between sending a ping and receiving a pong) in ms
-  /// of the last ping/pong cycle. Reset on disconnect.
-  int lastCycleLatency = 0;
-
-  int _lastPingTime = 0;
-
-  /// Average latency(time between sending a ping and receiving a pong) in ms
-  /// of all the ping/pong cycles in a connection period. Reset on disconnect.
-  int averageCycleLatency = 0;
-
-  int _cycleCount = 0;
-
-  /// The event bus
-  events.EventBus? _clientEventBus;
 
   /// Pings the message broker if there has been no activity for
   /// the specified amount of idle time.

@@ -15,7 +15,8 @@ class SynchronousMqttBrowserConnectionHandler
   SynchronousMqttBrowserConnectionHandler(
     super.clientEventBus, {
     required super.maxConnectionAttempts,
-    reconnectTimePeriod = 5000,
+    reconnectTimePeriod =
+        MqttClientConstants.defaultConnectionAttemptTimeoutPeriod,
   }) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();

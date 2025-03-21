@@ -9,14 +9,6 @@ part of '../../mqtt_client.dart';
 
 /// The MQTT client connection base class
 abstract class MqttConnectionBase<T extends Object> {
-  /// Default constructor
-  MqttConnectionBase(this.clientEventBus);
-
-  /// Initializes a new instance of the MqttConnection class.
-  MqttConnectionBase.fromConnect(String server, int port, this.clientEventBus) {
-    connect(server, port);
-  }
-
   /// The socket that maintains the connection to the MQTT broker.
   @protected
   T? client;
@@ -40,6 +32,14 @@ abstract class MqttConnectionBase<T extends Object> {
   /// The event bus
   @protected
   events.EventBus? clientEventBus;
+
+  /// Default constructor
+  MqttConnectionBase(this.clientEventBus);
+
+  /// Initializes a new instance of the MqttConnection class.
+  MqttConnectionBase.fromConnect(String server, int port, this.clientEventBus) {
+    connect(server, port);
+  }
 
   /// Connect, must be overridden in connection classes
   Future<void> connect(String server, int port);
@@ -84,12 +84,6 @@ abstract class MqttConnectionBase<T extends Object> {
     }
   }
 
-  /// Internal disconnect with stop listeners and dispose client
-  void _disconnect() {
-    stopListening();
-    disposeClient();
-  }
-
   /// User requested or auto disconnect disconnection
   @protected
   void disconnect({bool auto = false}) {
@@ -98,5 +92,11 @@ abstract class MqttConnectionBase<T extends Object> {
     } else {
       onDone();
     }
+  }
+
+  /// Internal disconnect with stop listeners and dispose client
+  void _disconnect() {
+    stopListening();
+    disposeClient();
   }
 }

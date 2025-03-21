@@ -9,6 +9,9 @@ part of '../../../mqtt_browser_client.dart';
 
 /// The MQTT connection class for the browser websocket interface
 class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
+  /// The websocket subprotocol list
+  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
+
   /// Default constructor
   MqttBrowserWsConnection(super.eventBus);
 
@@ -21,9 +24,6 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     connect(server, port);
   }
 
-  /// The websocket subprotocol list
-  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
-
   /// Connect
   @override
   Future<MqttClientConnectionStatus?> connect(String server, int port) {
@@ -33,11 +33,11 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttBrowserWsConnection::connect - The URI supplied for the WS '
           'connection is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final message =
@@ -90,11 +90,11 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
         errorEvents?.cancel();
         return completer.complete(MqttClientConnectionStatus());
       });
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttBrowserWsConnection::connect - The connection to the message broker '
           '{$uriString} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     MqttLogger.log('MqttBrowserWsConnection::connect - connection is waiting');
     return completer.future;
@@ -109,11 +109,11 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttBrowserWsConnection::connectAuto - The URI supplied for the WS '
           'connection is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final message =
@@ -170,11 +170,11 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
         errorEvents?.cancel();
         return completer.complete(MqttClientConnectionStatus());
       });
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttBrowserWsConnection::connectAuto - The connection to the message broker '
           '{$uriString} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     MqttLogger.log(
       'MqttBrowserWsConnection::connectAuto - connection is waiting',
