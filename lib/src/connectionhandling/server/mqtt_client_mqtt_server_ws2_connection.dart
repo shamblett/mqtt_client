@@ -129,11 +129,11 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connect - The URI supplied for the WS2 connection '
           'is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'wss') {
       final message =
@@ -179,23 +179,23 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
               completer.completeError(e);
             });
       });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttWs2Connection::connect - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on HandshakeException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on HandshakeException catch (e, stack) {
       final message =
           'MqttWs2Connection::connect - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on TlsException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on TlsException catch (e, stack) {
       final message =
           'MqttWs2Connection::connect - TLS exception raised on secure connection. '
           'Error is ${e.toString()}';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
@@ -208,11 +208,11 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connectAuto - The URI supplied for the WS2 connection '
           'is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'wss') {
       final message =
@@ -250,23 +250,23 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
               completer.completeError(e);
             });
       });
-    } on SocketException catch (e) {
+    } on SocketException catch (e, stack) {
       final message =
           'MqttWs2Connection::connectAuto - The connection to the message broker '
           '{$server}:{$port} could not be made. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on HandshakeException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on HandshakeException catch (e, stack) {
       final message =
           'MqttWs2Connection::connectAuto - Handshake exception to the message broker '
           '{$server}:{$port}. Error is ${e.toString()}';
       completer.completeError(e);
-      throw NoConnectionException(message);
-    } on TlsException catch (e) {
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
+    } on TlsException catch (e, stack) {
       final message =
           'MqttWs2Connection::connectAuto - TLS exception raised on secure connection. '
           'Error is ${e.toString()}';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
@@ -317,14 +317,14 @@ bool _parseResponse(String resp, String key) {
   if (bodyOffset < 0) {
     return true;
   }
-  final lines = _response.substring(0, bodyOffset).split('\n');
+  final lines = '${_response.characters.getRange(0, bodyOffset)}'.split('\n');
   if (lines.isEmpty) {
     throw NoConnectionException(
       'MqttWs2Connection::server returned invalid response',
     );
   }
   // split apart the status line
-  final status = lines[0].split(' ');
+  final status = lines.first.split(' ');
   if (status.length < 3) {
     throw NoConnectionException(
       'MqttWs2Connection::server returned malformed status line',
@@ -340,7 +340,8 @@ bool _parseResponse(String resp, String key) {
         'MqttWs2Connection::server returned malformed header line',
       );
     }
-    headers[l.substring(0, space - 1).toLowerCase()] = l.substring(space + 1);
+    headers['${l.characters.getRange(0, space - 1)}'.toLowerCase()] =
+        '${l.characters.getRange(space + 1)}';
   }
   var body = '';
   // if we have a Content-Length key we can't stop till we read the body.
@@ -349,7 +350,8 @@ bool _parseResponse(String resp, String key) {
     if (_response.length < bodyOffset + bodyLength + 2) {
       return true;
     }
-    body = _response.substring(bodyOffset, bodyOffset + bodyLength + 2);
+    body =
+        '${_response.characters.getRange(bodyOffset, bodyOffset + bodyLength + 2)}';
   }
   // if we make it to here we have read all we are going to read.
   // now lets see if we like what we found.

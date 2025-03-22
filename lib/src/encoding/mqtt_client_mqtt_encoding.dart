@@ -43,7 +43,7 @@ class MqttEncoding {
         'mqtt_client::MQTTEncoding: Length byte array must comprise 2 bytes',
       );
     }
-    return (bytes[0] << 8) + bytes[1];
+    return (bytes.first << 8) + bytes[1];
   }
 
   /// Calculates the number of bytes produced by encoding the

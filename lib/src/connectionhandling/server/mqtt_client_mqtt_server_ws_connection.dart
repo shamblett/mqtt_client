@@ -9,6 +9,16 @@ part of '../../../mqtt_server_client.dart';
 
 /// The MQTT server connection class for the websocket interface
 class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
+  /// Callback function to handle bad certificate (self signed).
+  /// if true, ignore the error.
+  bool Function(X509Certificate certificate)? onBadCertificate;
+
+  /// The websocket sub protocol list
+  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
+
+  /// User defined websocket headers
+  Map<String, dynamic>? headers;
+
   /// Default constructor
   MqttServerWsConnection(
     super.eventBus,
@@ -27,16 +37,6 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     connect(server, port);
   }
 
-  /// Callback function to handle bad certificate (self signed).
-  /// if true, ignore the error.
-  bool Function(X509Certificate certificate)? onBadCertificate;
-
-  /// The websocket sub protocol list
-  List<String> protocols = MqttClientConstants.protocolsMultipleDefault;
-
-  /// User defined websocket headers
-  Map<String, dynamic>? headers;
-
   /// Connect
   @override
   Future<MqttClientConnectionStatus?> connect(String server, int port) {
@@ -46,11 +46,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connect - The URI supplied for the WS '
           'connection is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final message =
@@ -92,11 +92,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
             onError(e);
             completer.completeError(e);
           });
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connect - The connection to the message broker '
           '{$uriString} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
@@ -110,11 +110,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     Uri uri;
     try {
       uri = Uri.parse(server);
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connectAuto - The URI supplied for the WS '
           'connection is not valid - $server';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     if (uri.scheme != 'ws' && uri.scheme != 'wss') {
       final message =
@@ -145,11 +145,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
             onError(e);
             completer.completeError(e);
           });
-    } on Exception {
+    } on Exception catch (_, stack) {
       final message =
           'MqttWsConnection::connectAuto - The connection to the message broker '
           '{$uriString} could not be made.';
-      throw NoConnectionException(message);
+      Error.throwWithStackTrace(NoConnectionException(message), stack);
     }
     return completer.future;
   }
