@@ -9,6 +9,41 @@ part of '../../../mqtt_client.dart';
 
 /// Class that contains details related to an MQTT Connect messages payload.
 class MqttConnectPayload extends MqttPayload {
+  /// Variable header
+  MqttConnectVariableHeader? variableHeader = MqttConnectVariableHeader();
+
+  /// Will topic
+  String? willTopic;
+
+  /// Will message
+  String? willMessage;
+
+  String? _username;
+
+  String _clientIdentifier = '';
+
+  String? _password;
+
+  /// Client identifier
+  String get clientIdentifier => _clientIdentifier;
+
+  /// User name
+  String? get username => _username;
+
+  /// Password
+  String? get password => _password;
+
+  set clientIdentifier(String id) {
+    if (id.length > MqttClientConstants.maxClientIdentifierLength) {
+      throw ClientIdentifierException(id);
+    }
+    _clientIdentifier = id;
+  }
+
+  set username(String? name) => _username = name != null ? name.trim() : name;
+
+  set password(String? pwd) => _password = pwd != null ? pwd.trim() : pwd;
+
   /// Initializes a new instance of the MqttConnectPayload class.
   MqttConnectPayload(this.variableHeader);
 
@@ -19,39 +54,6 @@ class MqttConnectPayload extends MqttPayload {
   ) {
     readFrom(payloadStream);
   }
-
-  String _clientIdentifier = '';
-
-  /// Client identifier
-  String get clientIdentifier => _clientIdentifier;
-
-  set clientIdentifier(String id) {
-    if (id.length > MqttClientConstants.maxClientIdentifierLength) {
-      throw ClientIdentifierException(id);
-    }
-    _clientIdentifier = id;
-  }
-
-  /// Variable header
-  MqttConnectVariableHeader? variableHeader = MqttConnectVariableHeader();
-  String? _username;
-
-  /// User name
-  String? get username => _username;
-
-  set username(String? name) => _username = name != null ? name.trim() : name;
-  String? _password;
-
-  /// Password
-  String? get password => _password;
-
-  set password(String? pwd) => _password = pwd != null ? pwd.trim() : pwd;
-
-  /// Will topic
-  String? willTopic;
-
-  /// Will message
-  String? willMessage;
 
   /// Creates a payload from the specified header stream.
   @override

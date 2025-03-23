@@ -9,6 +9,12 @@ part of '../../../mqtt_client.dart';
 
 /// An Mqtt message that is used to initiate a connection to a message broker.
 class MqttConnectMessage extends MqttMessage {
+  /// The variable header contents. Contains extended metadata about the message
+  MqttConnectVariableHeader? variableHeader;
+
+  /// The payload of the Mqtt Message.
+  late MqttConnectPayload payload;
+
   /// Initializes a new instance of the MqttConnectMessage class.
   /// Only called via the MqttMessage.create operation during processing of
   /// an Mqtt message stream.
@@ -107,12 +113,6 @@ class MqttConnectMessage extends MqttMessage {
     }
     return this;
   }
-
-  /// The variable header contents. Contains extended metadata about the message
-  MqttConnectVariableHeader? variableHeader;
-
-  /// The payload of the Mqtt Message.
-  late MqttConnectPayload payload;
 
   /// Writes the message to the supplied stream.
   @override

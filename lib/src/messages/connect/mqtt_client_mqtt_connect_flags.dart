@@ -9,15 +9,6 @@ part of '../../../mqtt_client.dart';
 
 /// Represents the connect flags part of the MQTT Variable Header
 class MqttConnectFlags {
-  /// Initializes a new instance of the MqttConnectFlags class.
-  MqttConnectFlags();
-
-  /// Initializes a new instance of the MqttConnectFlags class configured
-  /// as per the supplied stream.
-  MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {
-    readFrom(connectFlagsStream);
-  }
-
   /// Reserved1
   bool reserved1 = false;
 
@@ -38,6 +29,15 @@ class MqttConnectFlags {
 
   /// Username present
   bool usernameFlag = false;
+
+  /// Initializes a new instance of the MqttConnectFlags class.
+  MqttConnectFlags();
+
+  /// Initializes a new instance of the MqttConnectFlags class configured
+  /// as per the supplied stream.
+  MqttConnectFlags.fromByteBuffer(MqttByteBuffer connectFlagsStream) {
+    readFrom(connectFlagsStream);
+  }
 
   /// Return the connect flag value
   int connectFlagByte() =>
