@@ -28,21 +28,6 @@ typedef FailedConnectionAttemptCallback = void Function(int attemptNumber);
 /// This class now provides common functionality between server side
 /// and web based clients.
 class MqttClient {
-  /// Initializes a new instance of the MqttClient class using the
-  /// default Mqtt Port.
-  /// The server hostname to connect to
-  /// The client identifier to use to connect with
-  MqttClient(this.server, this.clientIdentifier) {
-    port = MqttClientConstants.defaultMqttPort;
-  }
-
-  /// Initializes a new instance of the MqttClient class using
-  /// the supplied Mqtt Port.
-  /// The server/hostname to connect to.
-  /// The client identifier to use to connect with.
-  /// The port to use
-  MqttClient.withPort(this.server, this.clientIdentifier, this.port);
-
   /// Server name.
   /// Note that a server name that is a host name must conform to the name
   /// syntax described in RFC952 [https://datatracker.ietf.org/doc/html/rfc952]
@@ -75,6 +60,21 @@ class MqttClient {
   /// In this case the caller must perform their own re subscriptions manually using [unsubscribe],
   /// [subscribe] and [resubscribe] as needed from the appropriate callbacks.
   bool resubscribeOnAutoReconnect = true;
+
+  /// Initializes a new instance of the MqttClient class using the
+  /// default Mqtt Port.
+  /// The server hostname to connect to
+  /// The client identifier to use to connect with
+  MqttClient(this.server, this.clientIdentifier) {
+    port = MqttClientConstants.defaultMqttPort;
+  }
+
+  /// Initializes a new instance of the MqttClient class using
+  /// the supplied Mqtt Port.
+  /// The server/hostname to connect to.
+  /// The client identifier to use to connect with.
+  /// The port to use
+  MqttClient.withPort(this.server, this.clientIdentifier, this.port);
 
   /// Socket timeout period.
   ///
@@ -486,8 +486,11 @@ class MqttClient {
         data,
         retain,
       );
-    } on Exception catch (e) {
-      throw InvalidTopicException(e.toString(), topic);
+    } on Exception catch (e, stack) {
+      Error.throwWithStackTrace(
+        InvalidTopicException(e.toString(), topic),
+        stack,
+      );
     }
   }
 

@@ -10,6 +10,10 @@ part of '../../../mqtt_client.dart';
 /// Implementation of an MQTT Publish Acknowledgement Message, used to ACK a
 /// publish message that has it's QOS set to AtLeast or Exactly Once.
 class MqttPublishAckMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message
+  late MqttPublishAckVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttPublishAckMessage class.
   MqttPublishAckMessage() {
     header = MqttHeader().asType(MqttMessageType.publishAck);
@@ -24,10 +28,6 @@ class MqttPublishAckMessage extends MqttMessage {
     this.header = header;
     variableHeader = MqttPublishAckVariableHeader.fromByteBuffer(messageStream);
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message
-  late MqttPublishAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

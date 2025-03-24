@@ -9,18 +9,6 @@ part of '../../mqtt_client.dart';
 
 /// Represents the Fixed Header of an MQTT message.
 class MqttHeader {
-  /// Initializes a new instance of the MqttHeader class.
-  MqttHeader();
-
-  /// Initializes a new instance of MqttHeader' based on data
-  /// contained within the supplied stream.
-  MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
-    readFrom(headerStream);
-  }
-
-  /// Backing storage for the payload size.
-  int _messageSize = 0;
-
   /// Gets or sets the type of the MQTT message.
   MqttMessageType? messageType;
 
@@ -38,6 +26,9 @@ class MqttHeader {
   /// otherwise, false.
   bool retain = false;
 
+  // Backing storage for the payload size.
+  int _messageSize = 0;
+
   /// Gets or sets the size of the variable header + payload
   /// section of the message.
   /// The size of the variable header + payload.
@@ -51,6 +42,15 @@ class MqttHeader {
       );
     }
     _messageSize = value;
+  }
+
+  /// Initializes a new instance of the MqttHeader class.
+  MqttHeader();
+
+  /// Initializes a new instance of MqttHeader' based on data
+  /// contained within the supplied stream.
+  MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
+    readFrom(headerStream);
   }
 
   /// Writes the header to a supplied stream.
@@ -79,17 +79,23 @@ class MqttHeader {
     // Decode the remaining bytes as the remaining/payload size, input param is the 2nd to last byte of the header byte list
     try {
       _messageSize = readRemainingLength(headerStream);
-    } on Exception {
-      throw InvalidHeaderException(
-        'The header being processed contained an invalid size byte pattern. '
-        'Message size must take a most 4 bytes, and the last byte '
-        'must have bit 8 set to 0.',
+    } on Exception catch (_, stack) {
+      Error.throwWithStackTrace(
+        InvalidHeaderException(
+          'The header being processed contained an invalid size byte pattern. '
+          'Message size must take a most 4 bytes, and the last byte '
+          'must have bit 8 set to 0.',
+        ),
+        stack,
       );
-    } on Error {
-      throw InvalidHeaderException(
-        'The header being processed contained an invalid size byte pattern. '
-        'Message size must take a most 4 bytes, and the last byte '
-        'must have bit 8 set to 0.',
+    } on Error catch (_, stack) {
+      Error.throwWithStackTrace(
+        InvalidHeaderException(
+          'The header being processed contained an invalid size byte pattern. '
+          'Message size must take a most 4 bytes, and the last byte '
+          'must have bit 8 set to 0.',
+        ),
+        stack,
       );
     }
   }

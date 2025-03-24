@@ -133,11 +133,7 @@ class MqttByteBuffer {
   /// Seek. Sets the position in the buffer. If overflow occurs
   /// the position is set to the end of the buffer.
   void seek(int seek) {
-    if ((seek <= length) && (seek >= 0)) {
-      _position = seek;
-    } else {
-      _position = length;
-    }
+    ((seek <= length) && (seek >= 0)) ? _position = seek : _position = length;
   }
 
   /// Writes an MQTT string member

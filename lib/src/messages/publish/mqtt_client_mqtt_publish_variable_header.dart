@@ -9,6 +9,9 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of the variable header for an MQTT Connect message.
 class MqttPublishVariableHeader extends MqttVariableHeader {
+  /// Standard header
+  MqttHeader? header;
+
   /// Initializes a new instance of the MqttPublishVariableHeader class.
   MqttPublishVariableHeader(this.header);
 
@@ -19,9 +22,6 @@ class MqttPublishVariableHeader extends MqttVariableHeader {
   ) {
     readFrom(variableHeaderStream);
   }
-
-  /// Standard header
-  MqttHeader? header;
 
   /// Creates a variable header from the specified header stream.
   @override

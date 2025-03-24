@@ -32,7 +32,9 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   /// May override to be notified when [changes] is first observed.
   @override
   @mustCallSuper
-  void observed() {}
+  void observed() {
+    return;
+  }
 
   /// May override to be notified when [changes] is no longer observed.
   @override

@@ -31,3 +31,5 @@ dart_code_metrics:
     - avoid-non-null-assertion : false
     - newline-before-return : false
     - avoid-late-keyword : false
+    - prefer-match-file-name : false
+    - avoid-global-state : false

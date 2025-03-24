@@ -9,6 +9,15 @@ part of '../../../mqtt_client.dart';
 
 /// Class that contains details related to an MQTT Subscribe messages payload
 class MqttSubscribePayload extends MqttPayload {
+  /// Variable header
+  MqttVariableHeader? variableHeader;
+
+  /// Message header
+  MqttHeader? header;
+
+  /// The collection of subscriptions, Key is the topic, Value is the qos
+  Map<String?, MqttQos?> subscriptions = <String?, MqttQos?>{};
+
   /// Initializes a new instance of the MqttSubscribePayload class.
   MqttSubscribePayload();
 
@@ -20,15 +29,6 @@ class MqttSubscribePayload extends MqttPayload {
   ) {
     readFrom(payloadStream);
   }
-
-  /// Variable header
-  MqttVariableHeader? variableHeader;
-
-  /// Message header
-  MqttHeader? header;
-
-  /// The collection of subscriptions, Key is the topic, Value is the qos
-  Map<String?, MqttQos?> subscriptions = <String?, MqttQos?>{};
 
   /// Writes the payload to the supplied stream.
   @override

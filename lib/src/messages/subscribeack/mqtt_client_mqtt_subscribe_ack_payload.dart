@@ -10,6 +10,15 @@ part of '../../../mqtt_client.dart';
 /// Class that contains details related to an MQTT Subscribe Ack
 /// messages payload.
 class MqttSubscribeAckPayload extends MqttPayload {
+  /// Variable header
+  MqttVariableHeader? variableHeader;
+
+  /// Message header
+  MqttHeader? header;
+
+  /// The collection of Qos grants, Key is the topic, Value is the qos
+  List<MqttQos> qosGrants = <MqttQos>[];
+
   /// Initializes a new instance of the MqttSubscribeAckPayload class.
   MqttSubscribeAckPayload();
 
@@ -21,15 +30,6 @@ class MqttSubscribeAckPayload extends MqttPayload {
   ) {
     readFrom(payloadStream);
   }
-
-  /// Variable header
-  MqttVariableHeader? variableHeader;
-
-  /// Message header
-  MqttHeader? header;
-
-  /// The collection of Qos grants, Key is the topic, Value is the qos
-  List<MqttQos> qosGrants = <MqttQos>[];
 
   /// Writes the payload to the supplied stream.
   @override

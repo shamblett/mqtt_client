@@ -9,6 +9,10 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Publish Complete Message.
 class MqttPublishCompleteMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message
+  late MqttPublishCompleteVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttPublishCompleteMessage class.
   MqttPublishCompleteMessage() {
     header = MqttHeader().asType(MqttMessageType.publishComplete);
@@ -25,10 +29,6 @@ class MqttPublishCompleteMessage extends MqttMessage {
       messageStream,
     );
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message
-  late MqttPublishCompleteVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override
