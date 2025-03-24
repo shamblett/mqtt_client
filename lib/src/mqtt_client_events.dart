@@ -9,7 +9,6 @@ part of '../mqtt_client.dart';
 
 /// The message available event raised by the Connection class
 class MessageAvailable {
-
   // The message associated with the event
   final MqttMessage? _message;
 
@@ -18,12 +17,10 @@ class MessageAvailable {
 
   /// Constructor
   MessageAvailable(this._message);
-
 }
 
 /// The connect acknowledge message available event raised by the Connection class
 class ConnectAckMessageAvailable {
-
   // The message associated with the event
   final MqttMessage? _message;
 
@@ -36,7 +33,6 @@ class ConnectAckMessageAvailable {
 
 /// Message recieved class for publishing
 class MessageReceived {
-
   // The message associated with the event
   final MqttMessage _message;
 
@@ -55,7 +51,6 @@ class MessageReceived {
 
 /// Auto reconnect event
 class AutoReconnect {
-
   /// If set auto reconnect has been invoked through the client
   /// [doAutoReconnect] method, i.e. a user request.
   bool userRequested = false;
@@ -69,7 +64,6 @@ class AutoReconnect {
 
 /// Re subscribe event
 class Resubscribe {
-
   /// If set re subscribe has been triggered from auto reconnect.
   bool fromAutoReconnect = false;
 

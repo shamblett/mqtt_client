@@ -9,7 +9,6 @@ part of '../mqtt_client.dart';
 
 /// Represents a MQTT message that has been received from a broker.
 class MqttReceivedMessage<T> extends observe.ChangeRecord {
-
   /// The topic the message was received on.
   String topic;
 

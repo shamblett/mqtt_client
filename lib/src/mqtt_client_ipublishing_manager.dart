@@ -11,7 +11,6 @@ part of '../mqtt_client.dart';
 /// messages to the broker and how it passed on messages that are
 /// received from the broker.
 abstract class IPublishingManager {
-
   /// The message received event
   MessageReceived? publishEvent;
 
