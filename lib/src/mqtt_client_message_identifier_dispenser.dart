@@ -9,13 +9,6 @@ part of '../mqtt_client.dart';
 
 /// Message identifier handling
 class MessageIdentifierDispenser {
-  /// Factory constructor
-  factory MessageIdentifierDispenser() => _singleton;
-
-  MessageIdentifierDispenser._internal();
-
-  static final MessageIdentifierDispenser _singleton =
-      MessageIdentifierDispenser._internal();
 
   /// Maximum message identifier
   static const int maxMessageIdentifier = 32768;
@@ -26,11 +19,20 @@ class MessageIdentifierDispenser {
   /// Minimum message identifier
   static const int startMessageIdentifier = 1;
 
-  /// Message identifier, zero is forbidden
+  static final MessageIdentifierDispenser _singleton =
+  MessageIdentifierDispenser._internal();
+
+
+  // Message identifier, zero is forbidden
   int _mid = initialValue;
 
   /// Mid
   int get mid => _mid;
+
+  MessageIdentifierDispenser._internal();
+
+  /// Factory constructor
+  factory MessageIdentifierDispenser() => _singleton;
 
   /// Gets the next message identifier
   int getNextMessageIdentifier() {

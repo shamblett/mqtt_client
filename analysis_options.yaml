@@ -33,3 +33,4 @@ dart_code_metrics:
     - avoid-late-keyword : false
     - prefer-match-file-name : false
     - avoid-global-state : false
+    - no-magic-number : false

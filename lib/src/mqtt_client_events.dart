@@ -9,50 +9,52 @@ part of '../mqtt_client.dart';
 
 /// The message available event raised by the Connection class
 class MessageAvailable {
-  /// Constructor
-  MessageAvailable(this._message);
 
-  /// The message associated with the event
+  // The message associated with the event
   final MqttMessage? _message;
 
   /// Message
   MqttMessage? get message => _message;
+
+  /// Constructor
+  MessageAvailable(this._message);
+
 }
 
 /// The connect acknowledge message available event raised by the Connection class
 class ConnectAckMessageAvailable {
-  /// Constructor
-  ConnectAckMessageAvailable(this._message);
 
-  /// The message associated with the event
+  // The message associated with the event
   final MqttMessage? _message;
 
   /// Message
   MqttMessage? get message => _message;
+
+  /// Constructor
+  ConnectAckMessageAvailable(this._message);
 }
 
 /// Message recieved class for publishing
 class MessageReceived {
-  /// Constructor
-  MessageReceived(this._topic, this._message);
 
-  /// The message associated with the event
+  // The message associated with the event
   final MqttMessage _message;
+
+  // The topic
+  final PublicationTopic _topic;
 
   /// Message
   MqttMessage get message => _message;
 
-  /// The topic
-  final PublicationTopic _topic;
-
   /// Topic
   PublicationTopic get topic => _topic;
+
+  /// Constructor
+  MessageReceived(this._topic, this._message);
 }
 
 /// Auto reconnect event
 class AutoReconnect {
-  /// Constructor
-  AutoReconnect({this.userRequested = false, this.wasConnected = false});
 
   /// If set auto reconnect has been invoked through the client
   /// [doAutoReconnect] method, i.e. a user request.
@@ -60,15 +62,19 @@ class AutoReconnect {
 
   /// True if the previous state was connected
   bool wasConnected = false;
+
+  /// Constructor
+  AutoReconnect({this.userRequested = false, this.wasConnected = false});
 }
 
 /// Re subscribe event
 class Resubscribe {
-  /// Constructor
-  Resubscribe({this.fromAutoReconnect = false});
 
   /// If set re subscribe has been triggered from auto reconnect.
   bool fromAutoReconnect = false;
+
+  /// Constructor
+  Resubscribe({this.fromAutoReconnect = false});
 }
 
 /// Disconnect on keep alive on no ping response event

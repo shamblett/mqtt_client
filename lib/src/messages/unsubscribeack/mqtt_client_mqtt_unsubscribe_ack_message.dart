@@ -9,6 +9,11 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Unsubscribe Ack Message.
 class MqttUnsubscribeAckMessage extends MqttMessage {
+
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
+  late MqttUnsubscribeAckVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttUnsubscribeAckMessage class.
   MqttUnsubscribeAckMessage() {
     header = MqttHeader().asType(MqttMessageType.unsubscribeAck);
@@ -24,9 +29,6 @@ class MqttUnsubscribeAckMessage extends MqttMessage {
     readFrom(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message.
-  late MqttUnsubscribeAckVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

@@ -11,6 +11,10 @@ part of '../mqtt_client.dart';
 /// messages to the broker and how it passed on messages that are
 /// received from the broker.
 abstract class IPublishingManager {
+
+  /// The message received event
+  MessageReceived? publishEvent;
+
   /// Publish a message to the broker on the specified topic.
   /// The topic to send the message to
   /// The QOS to use when publishing the message.
@@ -21,7 +25,4 @@ abstract class IPublishingManager {
     MqttQos qualityOfService,
     typed.Uint8Buffer data,
   );
-
-  /// The message received event
-  MessageReceived? publishEvent;
 }
