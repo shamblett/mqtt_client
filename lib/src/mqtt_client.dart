@@ -1,3 +1,5 @@
+// ignore_for_file: member-ordering
+
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
