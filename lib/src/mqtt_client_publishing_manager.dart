@@ -34,6 +34,45 @@ part of '../mqtt_client.dart';
 ///                                                                                                   | v
 ///                                                                                            Message Processor
 class PublishingManager implements IPublishingManager {
+  /// Handles dispensing of message ids for messages published to a topic.
+  MessageIdentifierDispenser messageIdentifierDispenser =
+      MessageIdentifierDispenser();
+
+  /// Stores messages that have been pubished but not yet acknowledged.
+  Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
+
+  /// Stores Qos 1 messages that have been received but not yet acknowledged as
+  /// manual acknowledgement has been selected.
+  Map<int, MqttPublishMessage> awaitingManualAcknowledge =
+      <int, MqttPublishMessage>{};
+
+  /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
+  Map<int?, MqttPublishMessage> receivedMessages = <int?, MqttPublishMessage>{};
+
+  /// Stores a cache of data converters used when publishing data to a broker.
+  Map<Type, Object> dataConverters = <Type, Object>{};
+
+  /// The current connection handler.
+  IMqttConnectionHandler? connectionHandler;
+
+  /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
+  /// the client. The user must do this when the message has been taken off the update stream
+  /// using the [acknowledgeQos1Message] method.
+  bool manuallyAcknowledgeQos1 = false;
+
+  /// Raised when a message has been received by the client and the relevant QOS handshake is complete.
+  @override
+  MessageReceived? publishEvent;
+
+  final StreamController<MqttPublishMessage> _published =
+      StreamController<MqttPublishMessage>.broadcast();
+
+  /// The event bus
+  final events.EventBus? _clientEventBus;
+
+  /// The stream on which all confirmed published messages are added to
+  StreamController<MqttPublishMessage> get published => _published;
+
   /// Initializes a new instance of the PublishingManager class.
   PublishingManager(this.connectionHandler, this._clientEventBus) {
     connectionHandler!.registerForMessage(
@@ -57,45 +96,6 @@ class PublishingManager implements IPublishingManager {
       handlePublishReceived,
     );
   }
-
-  /// Handles dispensing of message ids for messages published to a topic.
-  MessageIdentifierDispenser messageIdentifierDispenser =
-      MessageIdentifierDispenser();
-
-  /// Stores messages that have been pubished but not yet acknowledged.
-  Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
-
-  /// Stores Qos 1 messages that have been received but not yet acknowledged as
-  /// manual acknowledgement has been selected.
-  Map<int, MqttPublishMessage> awaitingManualAcknowledge =
-      <int, MqttPublishMessage>{};
-
-  /// Stores messages that have been received from a broker with qos level 2 (Exactly Once).
-  Map<int?, MqttPublishMessage> receivedMessages = <int?, MqttPublishMessage>{};
-
-  /// Stores a cache of data converters used when publishing data to a broker.
-  Map<Type, Object> dataConverters = <Type, Object>{};
-
-  /// The current connection handler.
-  IMqttConnectionHandler? connectionHandler;
-
-  final StreamController<MqttPublishMessage> _published =
-      StreamController<MqttPublishMessage>.broadcast();
-
-  /// The stream on which all confirmed published messages are added to
-  StreamController<MqttPublishMessage> get published => _published;
-
-  /// Indicates that received QOS 1 messages(AtLeastOnce) are not to be automatically acknowledged by
-  /// the client. The user must do this when the message has been taken off the update stream
-  /// using the [acknowledgeQos1Message] method.
-  bool manuallyAcknowledgeQos1 = false;
-
-  /// Raised when a message has been received by the client and the relevant QOS handshake is complete.
-  @override
-  MessageReceived? publishEvent;
-
-  /// The event bus
-  final events.EventBus? _clientEventBus;
 
   /// Publish a message to the broker on the specified topic.
   /// The topic to send the message to

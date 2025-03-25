@@ -8,30 +8,6 @@
 part of '../mqtt_server_client.dart';
 
 class MqttServerClient extends MqttClient {
-  /// Initializes a new instance of the MqttServerClient class using the
-  /// default Mqtt Port.
-  /// The server hostname or URL to connect to
-  /// The client identifier to use to connect with
-  MqttServerClient(
-    super.server,
-    super.clientIdentifier, {
-    this.maxConnectionAttempts =
-        MqttClientConstants.defaultMaxConnectionAttempts,
-  });
-
-  /// Initializes a new instance of the MqttServerClient class using
-  /// the supplied Mqtt Port.
-  /// The server hostname to connect to
-  /// The client identifier to use to connect with
-  /// The port to use
-  MqttServerClient.withPort(
-    super.server,
-    super.clientIdentifier,
-    super.port, {
-    this.maxConnectionAttempts =
-        MqttClientConstants.defaultMaxConnectionAttempts,
-  }) : super.withPort();
-
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
@@ -79,6 +55,30 @@ class MqttServerClient extends MqttClient {
       connectionHandler.websocketHeaders = header;
     }
   }
+
+  /// Initializes a new instance of the MqttServerClient class using the
+  /// default Mqtt Port.
+  /// The server hostname or URL to connect to
+  /// The client identifier to use to connect with
+  MqttServerClient(
+    super.server,
+    super.clientIdentifier, {
+    this.maxConnectionAttempts =
+        MqttClientConstants.defaultMaxConnectionAttempts,
+  });
+
+  /// Initializes a new instance of the MqttServerClient class using
+  /// the supplied Mqtt Port.
+  /// The server hostname to connect to
+  /// The client identifier to use to connect with
+  /// The port to use
+  MqttServerClient.withPort(
+    super.server,
+    super.clientIdentifier,
+    super.port, {
+    this.maxConnectionAttempts =
+        MqttClientConstants.defaultMaxConnectionAttempts,
+  }) : super.withPort();
 
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.

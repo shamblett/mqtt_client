@@ -14,26 +14,6 @@ typedef UnsubscribeCallback = void Function(String? topic);
 
 /// A class that can manage the topic subscription process.
 class SubscriptionsManager {
-  ///  Creates a new instance of a SubscriptionsManager that uses the
-  ///  specified connection to manage subscriptions.
-  SubscriptionsManager(
-    this.connectionHandler,
-    this.publishingManager,
-    this._clientEventBus,
-  ) {
-    connectionHandler!.registerForMessage(
-      MqttMessageType.subscribeAck,
-      confirmSubscription,
-    );
-    connectionHandler!.registerForMessage(
-      MqttMessageType.unsubscribeAck,
-      confirmUnsubscribe,
-    );
-    // Start listening for published messages and re subscribe events.
-    _clientEventBus!.on<MessageReceived>().listen(publishMessageReceived);
-    _clientEventBus!.on<Resubscribe>().listen(_resubscribe);
-  }
-
   /// Dispenser used for keeping track of subscription ids
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
@@ -80,6 +60,26 @@ class SubscriptionsManager {
   /// Subscription notifier
   Stream<List<MqttReceivedMessage<MqttMessage>>> get subscriptionNotifier =>
       _subscriptionNotifier.stream;
+
+  ///  Creates a new instance of a SubscriptionsManager that uses the
+  ///  specified connection to manage subscriptions.
+  SubscriptionsManager(
+    this.connectionHandler,
+    this.publishingManager,
+    this._clientEventBus,
+  ) {
+    connectionHandler!.registerForMessage(
+      MqttMessageType.subscribeAck,
+      confirmSubscription,
+    );
+    connectionHandler!.registerForMessage(
+      MqttMessageType.unsubscribeAck,
+      confirmUnsubscribe,
+    );
+    // Start listening for published messages and re subscribe events.
+    _clientEventBus!.on<MessageReceived>().listen(publishMessageReceived);
+    _clientEventBus!.on<Resubscribe>().listen(_resubscribe);
+  }
 
   /// Registers a new subscription with the subscription manager.
   Subscription? registerSubscription(String topic, MqttQos qos) {
@@ -192,7 +192,7 @@ class SubscriptionsManager {
     // Check the Qos, we can get a failure indication(value 0x80) here if the
     // topic cannot be subscribed to.
     if (subAck.payload.qosGrants.isEmpty ||
-        subAck.payload.qosGrants[0] == MqttQos.failure) {
+        subAck.payload.qosGrants.first == MqttQos.failure) {
       subscriptions.remove(topic);
       if (onSubscribeFail != null) {
         onSubscribeFail!(topic);
@@ -234,6 +234,9 @@ class SubscriptionsManager {
     return status;
   }
 
+  /// Closes the subscription notifier
+  void closeSubscriptionNotifier() => _subscriptionNotifier.close();
+
   // Re subscribe.
   // Takes all active completed and pending subscriptions and re subscribes them if
   // [resubscribeOnAutoReconnect] is true.
@@ -261,7 +264,4 @@ class SubscriptionsManager {
       );
     }
   }
-
-  /// Closes the subscription notifier
-  void closeSubscriptionNotifier() => _subscriptionNotifier.close();
 }
