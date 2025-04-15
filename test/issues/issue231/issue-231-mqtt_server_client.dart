@@ -100,7 +100,8 @@ Future<int> main() async {
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -114,8 +115,9 @@ Future<int> main() async {
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
@@ -123,7 +125,8 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 
@@ -132,7 +135,8 @@ Future<int> main() async {
   /// publishing handshake with the broker.
   client.published.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}');
+      'EXAMPLE::Published notification:: topic is ${message.variableHeader.topicName}, with Qos ${message.header.qos}',
+    );
   });
 
   /// Lets publish to our topic
@@ -186,7 +190,8 @@ void onDisconnected() {
 /// The successful connect callback
 void onConnected() {
   print(
-      'EXAMPLE::OnConnected client callback - Client connection was sucessful');
+    'EXAMPLE::OnConnected client callback - Client connection was sucessful',
+  );
 }
 
 /// Pong callback

@@ -9,6 +9,12 @@ part of '../../../mqtt_client.dart';
 
 /// An Mqtt message that is used to initiate a connection to a message broker.
 class MqttConnectMessage extends MqttMessage {
+  /// The variable header contents. Contains extended metadata about the message
+  MqttConnectVariableHeader? variableHeader;
+
+  /// The payload of the Mqtt Message.
+  late MqttConnectPayload payload;
+
   /// Initializes a new instance of the MqttConnectMessage class.
   /// Only called via the MqttMessage.create operation during processing of
   /// an Mqtt message stream.
@@ -20,7 +26,9 @@ class MqttConnectMessage extends MqttMessage {
 
   ///  Initializes a new instance of the MqttConnectMessage class.
   MqttConnectMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
@@ -48,7 +56,8 @@ class MqttConnectMessage extends MqttMessage {
 
   /// Sets the keep alive period
   @Deprecated(
-      'This will be removed, you must now set this through the client keepAlivePeriod')
+    'This will be removed, you must now set this through the client keepAlivePeriod',
+  )
   MqttConnectMessage keepAliveFor(int keepAliveSeconds) {
     variableHeader!.keepAlive = keepAliveSeconds;
     return this;
@@ -105,17 +114,13 @@ class MqttConnectMessage extends MqttMessage {
     return this;
   }
 
-  /// The variable header contents. Contains extended metadata about the message
-  MqttConnectVariableHeader? variableHeader;
-
-  /// The payload of the Mqtt Message.
-  late MqttConnectPayload payload;
-
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    header!.writeTo(
+      variableHeader!.getWriteLength() + payload.getWriteLength(),
+      messageStream,
+    );
     variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }

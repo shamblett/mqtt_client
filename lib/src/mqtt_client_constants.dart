@@ -31,6 +31,9 @@ class MqttClientConstants {
   /// Default maximum connection attempts
   static const int defaultMaxConnectionAttempts = 3;
 
+  /// Default connection attempt timeout period, milliseconds,
+  static const int defaultConnectionAttemptTimeoutPeriod = 5000;
+
   /// Protocol variants
   /// V3
   static const int mqttV31ProtocolVersion = 3;
@@ -48,10 +51,13 @@ class MqttClientConstants {
   static const List<String> protocolsMultipleDefault = <String>[
     'mqtt',
     'mqttv3.1',
-    'mqttv3.11'
+    'mqttv3.11',
   ];
 
   /// The default websocket subprotocol list for brokers who expect
   /// this field to be a single entry
   static const List<String> protocolsSingleDefault = <String>['mqtt'];
+
+  /// Seconds to milliseconds multiplier
+  static const int millisecondsMultiplier = 1000;
 }

@@ -15,20 +15,8 @@ abstract class MqttBrowserConnection<T extends Object>
 
   /// Initializes a new instance of the MqttBrowserConnection class.
   MqttBrowserConnection.fromConnect(server, port, clientEventBus)
-      : super(clientEventBus) {
+    : super(clientEventBus) {
     connect(server, port);
-  }
-
-  /// Create the listening stream subscription and subscribe the callbacks
-  void _startListening() {
-    stopListening();
-    MqttLogger.log('MqttBrowserConnection::_startListening');
-    try {
-      onListen();
-    } on Exception catch (e) {
-      MqttLogger.log(
-          'MqttBrowserConnection::_startListening - exception raised $e');
-    }
   }
 
   /// Implement stream subscription
@@ -37,6 +25,16 @@ abstract class MqttBrowserConnection<T extends Object>
   /// OnData listener callback
   void onData(dynamic /*String|List<int>*/ byteData) {
     MqttLogger.log('MqttBrowserConnection::_onData');
+
+    // Normally the byteData is a ByteBuffer,
+    // but for SKWasm / WASM, the byteData is a JSArrayBuffer,
+    // so we need to convert it to a Dart ByteBuffer
+    // before we convert it to a Uint8List.
+    // ignore: invalid_runtime_check_with_js_interop_types
+    if (byteData is JSArrayBuffer) {
+      byteData = byteData.toDart;
+    }
+
     // Protect against 0 bytes but should never happen.
     var data = Uint8List.view(byteData);
     if (data.isEmpty) {
@@ -54,8 +52,9 @@ abstract class MqttBrowserConnection<T extends Object>
         msg = MqttMessage.createFrom(messageStream);
       } on Exception {
         MqttLogger.log(
-            'MqttBrowserConnection::_ondata - message is not yet valid, '
-            'waiting for more data ...');
+          'MqttBrowserConnection::_ondata - message is not yet valid, '
+          'waiting for more data ...',
+        );
         messageIsValid = false;
       }
       if (!messageIsValid) {
@@ -65,7 +64,9 @@ abstract class MqttBrowserConnection<T extends Object>
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log(
-            'MqttBrowserConnection::_onData - message received ', msg);
+          'MqttBrowserConnection::_onData - message received ',
+          msg,
+        );
         if (!clientEventBus!.streamController.isClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
@@ -73,12 +74,27 @@ abstract class MqttBrowserConnection<T extends Object>
             clientEventBus!.fire(MessageAvailable(msg));
           }
           MqttLogger.log(
-              'MqttBrowserConnection::_onData - message available event fired');
+            'MqttBrowserConnection::_onData - message available event fired',
+          );
         } else {
           MqttLogger.log(
-              'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed');
+            'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed',
+          );
         }
       }
+    }
+  }
+
+  /// Create the listening stream subscription and subscribe the callbacks
+  void _startListening() {
+    stopListening();
+    MqttLogger.log('MqttBrowserConnection::_startListening');
+    try {
+      onListen();
+    } on Exception catch (e) {
+      MqttLogger.log(
+        'MqttBrowserConnection::_startListening - exception raised $e',
+      );
     }
   }
 }

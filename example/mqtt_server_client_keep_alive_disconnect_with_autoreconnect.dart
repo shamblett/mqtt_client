@@ -111,7 +111,8 @@ Future<int> main() async {
   } else {
     /// Use status here rather than state if you also want the broker return code.
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -128,8 +129,9 @@ Future<int> main() async {
   /// Also you must re-listen after disconnecting.
   client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
     final recMess = c![0].payload as MqttPublishMessage;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
@@ -137,7 +139,8 @@ Future<int> main() async {
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 
@@ -146,7 +149,8 @@ Future<int> main() async {
   /// publishing handshake with the broker.
   client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
+      'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}',
+    );
   });
 
   /// Lets publish to our topic
@@ -188,23 +192,27 @@ void onSubscribed(String topic) {
 /// The pre auto re connect callback
 void onAutoReconnect() {
   print(
-      'EXAMPLE::onAutoReconnect client callback - Client auto reconnection sequence will start');
+    'EXAMPLE::onAutoReconnect client callback - Client auto reconnection sequence will start',
+  );
 }
 
 /// The post auto re connect callback
 void onAutoReconnected() {
   print(
-      'EXAMPLE::onAutoReconnected client callback - Client auto reconnection sequence has completed');
+    'EXAMPLE::onAutoReconnected client callback - Client auto reconnection sequence has completed',
+  );
 }
 
 /// The successful connect callback
 void onConnected() {
   print(
-      'EXAMPLE::OnConnected client callback - Client connection was successful');
+    'EXAMPLE::OnConnected client callback - Client connection was successful',
+  );
 }
 
 /// Pong callback
 void pong() {
   print(
-      'EXAMPLE::Ping response client callback invoked - you may want to stop your ping responses here');
+    'EXAMPLE::Ping response client callback invoked - you may want to stop your ping responses here',
+  );
 }

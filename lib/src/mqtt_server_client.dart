@@ -8,30 +8,6 @@
 part of '../mqtt_server_client.dart';
 
 class MqttServerClient extends MqttClient {
-  /// Initializes a new instance of the MqttServerClient class using the
-  /// default Mqtt Port.
-  /// The server hostname or URL to connect to
-  /// The client identifier to use to connect with
-  MqttServerClient(
-    super.server,
-    super.clientIdentifier, {
-    this.maxConnectionAttempts =
-        MqttClientConstants.defaultMaxConnectionAttempts,
-  });
-
-  /// Initializes a new instance of the MqttServerClient class using
-  /// the supplied Mqtt Port.
-  /// The server hostname to connect to
-  /// The client identifier to use to connect with
-  /// The port to use
-  MqttServerClient.withPort(
-    super.server,
-    super.clientIdentifier,
-    super.port, {
-    this.maxConnectionAttempts =
-        MqttClientConstants.defaultMaxConnectionAttempts,
-  }) : super.withPort();
-
   /// The security context for secure usage
   SecurityContext securityContext = SecurityContext.defaultContext;
 
@@ -80,6 +56,30 @@ class MqttServerClient extends MqttClient {
     }
   }
 
+  /// Initializes a new instance of the MqttServerClient class using the
+  /// default Mqtt Port.
+  /// The server hostname or URL to connect to
+  /// The client identifier to use to connect with
+  MqttServerClient(
+    super.server,
+    super.clientIdentifier, {
+    this.maxConnectionAttempts =
+        MqttClientConstants.defaultMaxConnectionAttempts,
+  });
+
+  /// Initializes a new instance of the MqttServerClient class using
+  /// the supplied Mqtt Port.
+  /// The server hostname to connect to
+  /// The client identifier to use to connect with
+  /// The port to use
+  MqttServerClient.withPort(
+    super.server,
+    super.clientIdentifier,
+    super.port, {
+    this.maxConnectionAttempts =
+        MqttClientConstants.defaultMaxConnectionAttempts,
+  }) : super.withPort();
+
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.
   /// If a username and password are supplied these will override
@@ -87,21 +87,26 @@ class MqttServerClient extends MqttClient {
   /// supply your own connection message and use the authenticateAs method to
   /// set these parameters do not set them again here.
   @override
-  Future<MqttClientConnectionStatus?> connect(
-      [String? username, String? password]) async {
+  Future<MqttClientConnectionStatus?> connect([
+    String? username,
+    String? password,
+  ]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
-    clientEventBus
-        ?.on<DisconnectOnNoPingResponse>()
-        .listen(disconnectOnNoPingResponse);
-    clientEventBus
-        ?.on<DisconnectOnNoMessageSent>()
-        .listen(disconnectOnNoMessageSent);
+    clientEventBus?.on<DisconnectOnNoPingResponse>().listen(
+      disconnectOnNoPingResponse,
+    );
+    clientEventBus?.on<DisconnectOnNoMessageSent>().listen(
+      disconnectOnNoMessageSent,
+    );
     final connectionHandler = SynchronousMqttServerConnectionHandler(
-        clientEventBus,
-        maxConnectionAttempts: maxConnectionAttempts,
-        reconnectTimePeriod: connectTimeoutPeriod,
-        socketOptions: socketOptions);
+      clientEventBus,
+      maxConnectionAttempts: maxConnectionAttempts,
+      reconnectTimePeriod: connectTimeoutPeriod,
+      socketOptions: socketOptions,
+      socketTimeout:
+          socketTimeout != null ? Duration(milliseconds: socketTimeout!) : null,
+    );
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;
@@ -119,10 +124,9 @@ class MqttServerClient extends MqttClient {
       connectionHandler.useWebSocket = false;
       connectionHandler.useAlternateWebSocketImplementation = false;
       connectionHandler.securityContext = securityContext;
-      connectionHandler.onBadCertificate =
-          onBadCertificate as bool Function(Object certificate)?;
     }
-
+    connectionHandler.onBadCertificate =
+        onBadCertificate as bool Function(Object certificate)?;
     this.connectionHandler = connectionHandler;
     return await super.connect(username, password);
   }

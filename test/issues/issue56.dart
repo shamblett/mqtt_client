@@ -8,7 +8,7 @@ Future<int> main() async {
   const username = 'md-hi75gqj';
   const password = 'user_K8SzwBbLqBEwfIqM';
   final client = MqttServerClient(broker, '');
-  client.logging(on: true);
+  client.logging(on: false);
   client.onDisconnected = onDisconnected;
   final connMess = MqttConnectMessage()
       .withClientIdentifier('Mqtt_MyClientUniqueId')

@@ -13,7 +13,7 @@ Future<int> main() async {
   client.setProtocolV311();
   client.keepAlivePeriod = 20;
   client.port = 1883;
-  client.logging(on: true);
+  client.logging(on: false);
 
   client.onDisconnected = () {
     print('==> Disconnected | Time: ${DateTime.now().toUtc()}');
@@ -21,8 +21,9 @@ Future<int> main() async {
     exit(-1);
   };
 
-  client.connectionMessage =
-      MqttConnectMessage().withClientIdentifier(clientId);
+  client.connectionMessage = MqttConnectMessage().withClientIdentifier(
+    clientId,
+  );
 
   client.connectionMessage.startClean();
 
@@ -30,13 +31,11 @@ Future<int> main() async {
 
   final builder = MqttClientPayloadBuilder();
   builder.addString(
-    json.encode(
-      <String, dynamic>{
-        'type': 'msgText',
-        'data': 'message data',
-        'identifier': Random().nextInt(1000000),
-      },
-    ),
+    json.encode(<String, dynamic>{
+      'type': 'msgText',
+      'data': 'message data',
+      'identifier': Random().nextInt(1000000),
+    }),
   );
 
   client.publishMessage('u\SJHTest', MqttQos.exactlyOnce, builder.payload);

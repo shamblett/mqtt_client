@@ -14,7 +14,7 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
 
   /// Initializes a new instance of the MqttConnectVariableHeader class.
   MqttConnectVariableHeader.fromByteBuffer(super.headerStream)
-      : super.fromByteBuffer();
+    : super.fromByteBuffer();
 
   /// Creates a variable header from the specified header stream.
   @override
@@ -47,7 +47,8 @@ class MqttConnectVariableHeader extends MqttVariableHeader {
   }
 
   @override
-  String toString() => 'Connect Variable Header: ProtocolName=$protocolName, '
+  String toString() =>
+      'Connect Variable Header: ProtocolName=$protocolName, '
       'ProtocolVersion=$protocolVersion, '
       'ConnectFlags=${connectFlags.toString()}, '
       'KeepAlive=$keepAlive';

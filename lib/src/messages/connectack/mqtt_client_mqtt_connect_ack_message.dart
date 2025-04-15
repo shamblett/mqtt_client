@@ -12,6 +12,10 @@ part of '../../../mqtt_client.dart';
 /// On successful connection the [MqttClientConnectionStatus] class is updated
 /// with this message as returned by the broker.
 class MqttConnectAckMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message
+  late MqttConnectAckVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttConnectAckMessage class.
   /// Only called via the MqttMessage.Create operation during processing
   /// of an Mqtt message stream.
@@ -23,14 +27,12 @@ class MqttConnectAckMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttConnectAckMessage class.
   MqttConnectAckMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message
-  late MqttConnectAckVariableHeader variableHeader;
 
   /// Reads a message from the supplied stream.
   @override

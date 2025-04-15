@@ -8,6 +8,9 @@
 part of '../mqtt_browser_client.dart';
 
 class MqttBrowserClient extends MqttClient {
+  /// Max connection attempts
+  final int maxConnectionAttempts;
+
   /// Initializes a new instance of the MqttServerClient class using the
   /// default Mqtt Port.
   /// The server hostname or URL to connect to
@@ -32,9 +35,6 @@ class MqttBrowserClient extends MqttClient {
         MqttClientConstants.defaultMaxConnectionAttempts,
   }) : super.withPort();
 
-  /// Max connection attempts
-  final int maxConnectionAttempts;
-
   /// Performs a connect to the message broker with an optional
   /// username and password for the purposes of authentication.
   /// If a username and password are supplied these will override
@@ -42,19 +42,23 @@ class MqttBrowserClient extends MqttClient {
   /// supply your own connection message and use the authenticateAs method to
   /// set these parameters do not set them again here.
   @override
-  Future<MqttClientConnectionStatus?> connect(
-      [String? username, String? password]) async {
+  Future<MqttClientConnectionStatus?> connect([
+    String? username,
+    String? password,
+  ]) async {
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
-    clientEventBus
-        ?.on<DisconnectOnNoPingResponse>()
-        .listen(disconnectOnNoPingResponse);
-    clientEventBus
-        ?.on<DisconnectOnNoMessageSent>()
-        .listen(disconnectOnNoMessageSent);
-    connectionHandler = SynchronousMqttBrowserConnectionHandler(clientEventBus,
-        maxConnectionAttempts: maxConnectionAttempts,
-        reconnectTimePeriod: connectTimeoutPeriod);
+    clientEventBus?.on<DisconnectOnNoPingResponse>().listen(
+      disconnectOnNoPingResponse,
+    );
+    clientEventBus?.on<DisconnectOnNoMessageSent>().listen(
+      disconnectOnNoMessageSent,
+    );
+    connectionHandler = SynchronousMqttBrowserConnectionHandler(
+      clientEventBus,
+      maxConnectionAttempts: maxConnectionAttempts,
+      reconnectTimePeriod: connectTimeoutPeriod,
+    );
     return await super.connect(username, password);
   }
 }

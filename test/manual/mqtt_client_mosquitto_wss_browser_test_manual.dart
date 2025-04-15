@@ -32,10 +32,11 @@ void main() {
       final sleeper = MqttCancellableAsyncSleep(25000);
       final client = MqttBrowserClient(mosquittoServer, testClientId);
       client.port = mosquittoPort;
-      client.logging(on: true);
+      client.logging(on: false);
       client.onConnected = connectCallback;
       client.pongCallback = pongCallback;
       client.keepAlivePeriod = 10;
+      client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
       final connMess = MqttConnectMessage()
           .withClientIdentifier(testClientId)
           .withWillTopic('willtopic')
@@ -52,7 +53,8 @@ void main() {
           connectionOK = true;
         } else {
           print(
-              'Browser client connection failed - disconnecting, status is ${client.connectionStatus}');
+            'Browser client connection failed - disconnecting, status is ${client.connectionStatus}',
+          );
           client.disconnect();
         }
         await sleeper.sleep();
@@ -64,7 +66,8 @@ void main() {
         }
       } on NoConnectionException {
         print(
-            '>>>>> TEST NOT OK - No connection exception thrown, cannot connect to Mosquitto');
+          '>>>>> TEST NOT OK - No connection exception thrown, cannot connect to Mosquitto',
+        );
         ok = false;
       }
       expect(ok, isTrue);

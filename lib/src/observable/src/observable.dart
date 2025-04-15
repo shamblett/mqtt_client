@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library observable.src.observable;
+library;
 
 import 'dart:async';
 
@@ -26,6 +26,10 @@ abstract class Observable<C extends ChangeRecord> {
   /// Changes should produced in order, if significant.
   Stream<List<C>?> get changes => _delegate.changes;
 
+  /// True if this object has any observers.
+  @Deprecated('Use ChangeNotifier instead to have this method available')
+  bool get hasObservers => _delegate.hasObservers;
+
   /// May override to be notified when [changes] is first observed.
   @protected
   @mustCallSuper
@@ -39,10 +43,6 @@ abstract class Observable<C extends ChangeRecord> {
   @Deprecated('Use ChangeNotifier instead to have this method available')
   // REMOVE IGNORE when https://github.com/dart-lang/observable/issues/10
   void unobserved() => _delegate.unobserved();
-
-  /// True if this object has any observers.
-  @Deprecated('Use ChangeNotifier instead to have this method available')
-  bool get hasObservers => _delegate.hasObservers;
 
   /// If [hasObservers], synchronously emits [changes] that have been queued.
   ///

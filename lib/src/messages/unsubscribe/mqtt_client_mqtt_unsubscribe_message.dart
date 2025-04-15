@@ -9,6 +9,13 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Unsubscribe Message.
 class MqttUnsubscribeMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
+  MqttUnsubscribeVariableHeader? variableHeader;
+
+  /// Gets or sets the payload of the Mqtt Message.
+  late MqttUnsubscribePayload payload;
+
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage() {
     header = MqttHeader().asType(MqttMessageType.unsubscribe);
@@ -18,17 +25,12 @@ class MqttUnsubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttUnsubscribeMessage class.
   MqttUnsubscribeMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     readFrom(messageStream);
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message.
-  MqttUnsubscribeVariableHeader? variableHeader;
-
-  /// Gets or sets the payload of the Mqtt Message.
-  late MqttUnsubscribePayload payload;
 
   /// Writes the message to the supplied stream.
   @override
@@ -40,8 +42,10 @@ class MqttUnsubscribeMessage extends MqttMessage {
       header!.qos = MqttQos.atLeastOnce;
       header!.retain = false;
     }
-    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    header!.writeTo(
+      variableHeader!.getWriteLength() + payload.getWriteLength(),
+      messageStream,
+    );
     variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
@@ -49,10 +53,14 @@ class MqttUnsubscribeMessage extends MqttMessage {
   /// Reads a message from the supplied stream.
   @override
   void readFrom(MqttByteBuffer messageStream) {
-    variableHeader =
-        MqttUnsubscribeVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttUnsubscribeVariableHeader.fromByteBuffer(
+      messageStream,
+    );
     payload = MqttUnsubscribePayload.fromByteBuffer(
-        header, variableHeader, messageStream);
+      header,
+      variableHeader,
+      messageStream,
+    );
   }
 
   /// Adds a topic to the list of topics to unsubscribe from.

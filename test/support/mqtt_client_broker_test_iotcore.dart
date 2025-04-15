@@ -27,13 +27,14 @@ Future<int> main() async {
   client.setProtocolV311();
   //final String currDir = path.current + path.separator;
   //client.trustedCertPath = currDir + path.join('test', 'pem', 'roots.pem');
-  client.logging(on: true);
+  client.logging(on: false);
   await client.connect(username, password);
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
     print('iotcore client connected');
   } else {
     print(
-        'ERROR iotcore client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'ERROR iotcore client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
   }
   // Publish a known topic

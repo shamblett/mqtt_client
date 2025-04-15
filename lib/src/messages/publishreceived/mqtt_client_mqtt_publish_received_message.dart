@@ -9,6 +9,10 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Publish Received Message.
 class MqttPublishReceivedMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
+  late MqttPublishReceivedVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
   MqttPublishReceivedMessage() {
     header = MqttHeader().asType(MqttMessageType.publishReceived);
@@ -17,15 +21,14 @@ class MqttPublishReceivedMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishReceivedMessage class.
   MqttPublishReceivedMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
-    variableHeader =
-        MqttPublishReceivedVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttPublishReceivedVariableHeader.fromByteBuffer(
+      messageStream,
+    );
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message.
-  late MqttPublishReceivedVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

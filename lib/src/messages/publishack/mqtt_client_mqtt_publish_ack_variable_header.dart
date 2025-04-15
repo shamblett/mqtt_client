@@ -10,10 +10,10 @@ part of '../../../mqtt_client.dart';
 /// Implementation of the variable header for an MQTT Publish
 /// Acknowledgement message.
 class MqttPublishAckVariableHeader extends MqttVariableHeader {
-  /// Initializes a new instance of the MqttPublishAckVariableHeader class.
+  /// Initializes a new instance of the [MqttPublishAckVariableHeader] class.
   MqttPublishAckVariableHeader();
 
-  /// Initializes a new instance of the <see cref="MqttConnectVariableHeader" /> class.
+  /// Initializes a new instance of the [MqttPublishAckVariableHeader] class.
   MqttPublishAckVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
     readFrom(headerStream);
   }

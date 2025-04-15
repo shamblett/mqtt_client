@@ -21,131 +21,167 @@ void main() {
 
   group('Auto Reconnect', () {
     test('Connected - User Requested - Not Forced', () async {
-      await IOOverrides.runZoned(() async {
-        var autoReconnectCallbackCalled = false;
-        var disconnectCallbackCalled = false;
+      await IOOverrides.runZoned(
+        () async {
+          var autoReconnectCallbackCalled = false;
+          var disconnectCallbackCalled = false;
 
-        void autoReconnect() {
-          autoReconnectCallbackCalled = true;
-        }
+          void autoReconnect() {
+            autoReconnectCallbackCalled = true;
+          }
 
-        void disconnect() {
-          disconnectCallbackCalled = true;
-        }
+          void disconnect() {
+            disconnectCallbackCalled = true;
+          }
 
-        final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
-        client.autoReconnect = true;
-        client.onAutoReconnect = autoReconnect;
-        client.onDisconnected = disconnect;
-        const username = 'unused 1';
-        print(username);
-        const password = 'password 1';
-        print(password);
-        await client.connect();
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-        await MqttUtilities.asyncSleep(2);
-        client.doAutoReconnect();
-        await MqttUtilities.asyncSleep(2);
-        expect(autoReconnectCallbackCalled, isFalse);
-        expect(disconnectCallbackCalled, isFalse);
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-      },
-          socketConnect: (dynamic host, int port,
-                  {dynamic sourceAddress,
-                  int sourcePort = 0,
-                  Duration? timeout}) =>
-              MqttMockSocketSimpleConnect.connect(host, port,
-                  sourceAddress: sourceAddress,
-                  sourcePort: sourcePort,
-                  timeout: timeout));
+          final client = MqttServerClient('localhost', testClientId);
+          client.logging(on: false);
+          client.autoReconnect = true;
+          client.onAutoReconnect = autoReconnect;
+          client.onDisconnected = disconnect;
+          const username = 'unused 1';
+          print(username);
+          const password = 'password 1';
+          print(password);
+          await client.connect();
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+          await MqttUtilities.asyncSleep(2);
+          client.doAutoReconnect();
+          await MqttUtilities.asyncSleep(2);
+          expect(autoReconnectCallbackCalled, isFalse);
+          expect(disconnectCallbackCalled, isFalse);
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketSimpleConnect.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
     });
 
     test('Connected - User Requested - Forced', () async {
-      await IOOverrides.runZoned(() async {
-        var autoReconnectCallbackCalled = false;
-        var disconnectCallbackCalled = false;
+      await IOOverrides.runZoned(
+        () async {
+          var autoReconnectCallbackCalled = false;
+          var disconnectCallbackCalled = false;
 
-        void autoReconnect() {
-          autoReconnectCallbackCalled = true;
-        }
+          void autoReconnect() {
+            autoReconnectCallbackCalled = true;
+          }
 
-        void disconnect() {
-          disconnectCallbackCalled = true;
-        }
+          void disconnect() {
+            disconnectCallbackCalled = true;
+          }
 
-        final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
-        client.autoReconnect = true;
-        client.onAutoReconnect = autoReconnect;
-        client.onDisconnected = disconnect;
-        const username = 'unused 1';
-        print(username);
-        const password = 'password 1';
-        print(password);
-        await client.connect();
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-        await MqttUtilities.asyncSleep(2);
-        client.doAutoReconnect(force: true);
-        await MqttUtilities.asyncSleep(2);
-        expect(autoReconnectCallbackCalled, isTrue);
-        expect(disconnectCallbackCalled, isFalse);
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-      },
-          socketConnect: (dynamic host, int port,
-                  {dynamic sourceAddress,
-                  int sourcePort = 0,
-                  Duration? timeout}) =>
-              MqttMockSocketSimpleConnect.connect(host, port,
-                  sourceAddress: sourceAddress,
-                  sourcePort: sourcePort,
-                  timeout: timeout));
+          final client = MqttServerClient('localhost', testClientId);
+          client.logging(on: false);
+          client.autoReconnect = true;
+          client.onAutoReconnect = autoReconnect;
+          client.onDisconnected = disconnect;
+          const username = 'unused 1';
+          print(username);
+          const password = 'password 1';
+          print(password);
+          await client.connect();
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+          await MqttUtilities.asyncSleep(2);
+          client.doAutoReconnect(force: true);
+          await MqttUtilities.asyncSleep(2);
+          expect(autoReconnectCallbackCalled, isTrue);
+          expect(disconnectCallbackCalled, isFalse);
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketSimpleConnect.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
     });
 
     test('Connected - Broker Disconnects Remains Active', () async {
-      await IOOverrides.runZoned(() async {
-        var autoReconnectCallbackCalled = false;
-        var disconnectCallbackCalled = false;
+      await IOOverrides.runZoned(
+        () async {
+          var autoReconnectCallbackCalled = false;
+          var disconnectCallbackCalled = false;
 
-        void autoReconnect() {
-          autoReconnectCallbackCalled = true;
-        }
+          void autoReconnect() {
+            autoReconnectCallbackCalled = true;
+          }
 
-        void disconnect() {
-          disconnectCallbackCalled = true;
-        }
+          void disconnect() {
+            disconnectCallbackCalled = true;
+          }
 
-        final client = MqttServerClient('localhost', testClientId);
-        client.logging(on: true);
-        client.autoReconnect = true;
-        client.keepAlivePeriod = 1;
-        client.onAutoReconnect = autoReconnect;
-        client.onDisconnected = disconnect;
-        const username = 'unused 3';
-        print(username);
-        const password = 'password 3';
-        print(password);
-        await client.connect();
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-        await MqttUtilities.asyncSleep(2);
-        expect(autoReconnectCallbackCalled, isTrue);
-        expect(disconnectCallbackCalled, isFalse);
-        expect(client.connectionStatus!.state == MqttConnectionState.connected,
-            isTrue);
-      },
-          socketConnect: (dynamic host, int port,
-                  {dynamic sourceAddress,
-                  int sourcePort = 0,
-                  Duration? timeout}) =>
-              MqttMockSocketScenario2.connect(host, port,
-                  sourceAddress: sourceAddress,
-                  sourcePort: sourcePort,
-                  timeout: timeout));
+          final client = MqttServerClient('localhost', testClientId);
+          client.logging(on: false);
+          client.autoReconnect = true;
+          client.keepAlivePeriod = 1;
+          client.onAutoReconnect = autoReconnect;
+          client.onDisconnected = disconnect;
+          const username = 'unused 3';
+          print(username);
+          const password = 'password 3';
+          print(password);
+          await client.connect();
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+          await MqttUtilities.asyncSleep(2);
+          expect(autoReconnectCallbackCalled, isTrue);
+          expect(disconnectCallbackCalled, isFalse);
+          expect(
+            client.connectionStatus!.state == MqttConnectionState.connected,
+            isTrue,
+          );
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketScenario2.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
     });
   });
 }

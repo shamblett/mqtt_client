@@ -52,7 +52,8 @@ class MockBrokerWs {
     final completer = Completer<void>();
     HttpServer.bind(InternetAddress.loopbackIPv4, port).then((dynamic server) {
       print(
-          'Mockbroker WS server is running on http://${server.address.address}:$port/');
+        'Mockbroker WS server is running on http://${server.address.address}:$port/',
+      );
       server.listen((HttpRequest request) {
         if (request.uri.path == '/ws') {
           final websocketHeader = request.headers.value('Origin');
@@ -60,15 +61,18 @@ class MockBrokerWs {
             return completer.completeError((request) => websocketHeader);
           } else {
             print(
-                'Mockbroker WS server::listen - Origin header is correctly set');
+              'Mockbroker WS server::listen - Origin header is correctly set',
+            );
           }
-          final websocketProtocol =
-              request.headers.value('sec-websocket-protocol');
+          final websocketProtocol = request.headers.value(
+            'sec-websocket-protocol',
+          );
           if (websocketProtocol != 'SJHprotocol') {
             return completer.completeError((request) => websocketProtocol);
           } else {
             print(
-                'Mockbroker WS server::listen - WS protocol is correctly set');
+              'Mockbroker WS server::listen - WS protocol is correctly set',
+            );
           }
           WebSocketTransformer.upgrade(request).then((WebSocket websocket) {
             _webSocket = websocket;
@@ -117,10 +121,12 @@ class MockBrokerSecure {
     final context = SecurityContext();
     final currDir = path.current + path.separator;
     context.useCertificateChain(
-        currDir + path.join('test', 'pem', '$pemName.cert'));
+      currDir + path.join('test', 'pem', '$pemName.cert'),
+    );
     context.usePrivateKey(currDir + path.join('test', 'pem', '$pemName.key'));
-    SecureServerSocket.bind('localhost', brokerPort, context)
-        .then((SecureServerSocket server) {
+    SecureServerSocket.bind('localhost', brokerPort, context).then((
+      SecureServerSocket server,
+    ) {
       listener = server;
       listener!.listen(_connectAccept);
       print('MockBrokerSecure::we are bound');

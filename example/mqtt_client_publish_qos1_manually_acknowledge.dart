@@ -43,7 +43,8 @@ Future<int> main() async {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -62,23 +63,27 @@ Future<int> main() async {
       final recMess = messageList[0];
       if (recMess is! MqttReceivedMessage<MqttPublishMessage>) return;
       final pubMess = recMess.payload;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(pubMess.payload.message);
+      final pt = MqttPublishPayload.bytesToStringAsString(
+        pubMess.payload.message,
+      );
       print(
-          'EXAMPLE::Change notification:: topic is <${recMess.topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${recMess.topic}>, payload is <-- $pt -->',
+      );
       // Perform any required business logic processing before manually acknowledging
       // the message. You don't have to check anything about the publish message, the
       // acknowledgeQos1Message method will only send an acknowledge for the publish message
       // if it is Qos 1, manual acknowledge has been selected and there is an acknowledge outstanding.
       // If you need to know the acknowledge has been sent the return code will be true.
       print(
-          'EXAMPLE::Manually Acknowledging message id ${pubMess.variableHeader?.messageIdentifier}');
+        'EXAMPLE::Manually Acknowledging message id ${pubMess.variableHeader?.messageIdentifier}',
+      );
       final ackRes = client.acknowledgeQos1Message(pubMess);
       ackRes!
           ? print('EXAMPLE::Manual acknowledge succeeded')
           : print('EXAMPLE::No Manual acknowledge');
       print(
-          'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}');
+        'EXAMPLE::Outstanding manual acknowledge message count is ${client.messagesAwaitingManualAcknowledge}',
+      );
     });
   } catch (e, s) {
     print(s);
@@ -91,7 +96,8 @@ Future<int> main() async {
   /// received publish message on completion of any business logic processing.
   client.published!.listen((MqttPublishMessage message) {
     print(
-        'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}');
+      'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}',
+    );
     if (message.variableHeader!.topicName == topic3) {
       print('EXAMPLE:: Non subscribed topic received.');
     }

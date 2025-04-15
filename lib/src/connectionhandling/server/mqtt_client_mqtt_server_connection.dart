@@ -10,28 +10,28 @@ part of '../../../mqtt_server_client.dart';
 /// The MQTT client server connection base class
 abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
-  /// Default constructor
-  MqttServerConnection(super.clientEventBus, this.socketOptions);
-
-  /// Initializes a new instance of the MqttConnection class.
-  MqttServerConnection.fromConnect(
-      server, port, clientEventBus, this.socketOptions)
-      : super(clientEventBus) {
-    connect(server, port);
-  }
-
   /// Socket options, applicable only to TCP sockets
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
-  /// Create the listening stream subscription and subscribe the callbacks
-  void _startListening() {
-    stopListening();
-    MqttLogger.log('MqttServerConnection::_startListening');
-    try {
-      listeners.add(onListen());
-    } on Exception catch (e) {
-      print('MqttServerConnection::_startListening - exception raised $e');
-    }
+  /// Socket timeout duration
+  Duration? socketTimeout;
+
+  /// Default constructor
+  MqttServerConnection(
+    super.clientEventBus,
+    this.socketOptions,
+    this.socketTimeout,
+  );
+
+  /// Initializes a new instance of the MqttConnection class.
+  MqttServerConnection.fromConnect(
+    server,
+    port,
+    clientEventBus,
+    this.socketOptions,
+    this.socketTimeout,
+  ) : super(clientEventBus) {
+    connect(server, port);
   }
 
   /// Implement stream subscription
@@ -57,8 +57,9 @@ abstract class MqttServerConnection<T extends Object>
         msg = MqttMessage.createFrom(messageStream);
       } on Exception {
         MqttLogger.log(
-            'MqttServerConnection::_ondata - message is not yet valid, '
-            'waiting for more data ...');
+          'MqttServerConnection::_ondata - message is not yet valid, '
+          'waiting for more data ...',
+        );
         messageIsValid = false;
       }
       if (!messageIsValid) {
@@ -68,7 +69,9 @@ abstract class MqttServerConnection<T extends Object>
       if (messageIsValid) {
         messageStream.shrink();
         MqttLogger.log(
-            'MqttServerConnection::_onData - message received ', msg);
+          'MqttServerConnection::_onData - message received ',
+          msg,
+        );
         if (!clientEventBus!.streamController.isClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
@@ -76,10 +79,12 @@ abstract class MqttServerConnection<T extends Object>
             clientEventBus!.fire(MessageAvailable(msg));
           }
           MqttLogger.log(
-              'MqttServerConnection::_onData - message available event fired');
+            'MqttServerConnection::_onData - message available event fired',
+          );
         } else {
           MqttLogger.log(
-              'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed');
+            'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed',
+          );
         }
       }
     }
@@ -89,11 +94,33 @@ abstract class MqttServerConnection<T extends Object>
   bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
     if (socketOptions.isNotEmpty) {
       MqttLogger.log(
-          'MqttServerConnection::__applySocketOptions - Socket options supplied, applying');
+        'MqttServerConnection::__applySocketOptions - Socket options supplied, applying',
+      );
       for (final option in socketOptions) {
         socket.setRawOption(option);
       }
     }
     return socketOptions.isNotEmpty;
+  }
+
+  // Check for a timeout exception
+  bool _isSocketTimeout(Exception e) {
+    if (e is SocketException) {
+      if (e.message.contains('Connection timed out')) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Create the listening stream subscription and subscribe the callbacks
+  void _startListening() {
+    stopListening();
+    MqttLogger.log('MqttServerConnection::_startListening');
+    try {
+      listeners.add(onListen());
+    } on Exception catch (e) {
+      print('MqttServerConnection::_startListening - exception raised $e');
+    }
   }
 }

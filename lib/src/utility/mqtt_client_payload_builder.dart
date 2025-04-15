@@ -10,11 +10,6 @@ part of '../../mqtt_client.dart';
 /// Utility class to assist with the building of message topic payloads.
 /// Implements the builder pattern, i.e. returns itself to allow chaining.
 class MqttClientPayloadBuilder {
-  /// Construction
-  MqttClientPayloadBuilder() {
-    _payload = typed.Uint8Buffer();
-  }
-
   typed.Uint8Buffer? _payload;
 
   /// Payload
@@ -22,6 +17,11 @@ class MqttClientPayloadBuilder {
 
   /// Length
   int get length => _payload!.length;
+
+  /// Construction
+  MqttClientPayloadBuilder() {
+    _payload = typed.Uint8Buffer();
+  }
 
   /// Add a buffer
   MqttClientPayloadBuilder addBuffer(typed.Uint8Buffer buffer) {

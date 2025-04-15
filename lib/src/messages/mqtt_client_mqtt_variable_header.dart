@@ -32,25 +32,12 @@ enum MqttReadWriteFlags {
   topicName,
 
   /// Message identifier
-  messageIdentifier
+  messageIdentifier,
 }
 
 /// Represents the base class for the Variable Header portion
 /// of some MQTT Messages.
 class MqttVariableHeader {
-  /// Initializes a new instance of the MqttVariableHeader class.
-  MqttVariableHeader() {
-    protocolName = Protocol.name;
-    protocolVersion = Protocol.version;
-    connectFlags = MqttConnectFlags();
-  }
-
-  /// Initializes a new instance of the MqttVariableHeader class,
-  /// populating it with data from a stream.
-  MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
-    readFrom(headerStream);
-  }
-
   /// The length, in bytes, consumed by the variable header.
   int length = 0;
 
@@ -77,8 +64,21 @@ class MqttVariableHeader {
   /// Message identifier
   int? messageIdentifier = 0;
 
-  /// Encoder
+  // Encoder
   final MqttEncoding _enc = MqttEncoding();
+
+  /// Initializes a new instance of the MqttVariableHeader class.
+  MqttVariableHeader() {
+    protocolName = Protocol.name;
+    protocolVersion = Protocol.version;
+    connectFlags = MqttConnectFlags();
+  }
+
+  /// Initializes a new instance of the MqttVariableHeader class,
+  /// populating it with data from a stream.
+  MqttVariableHeader.fromByteBuffer(MqttByteBuffer headerStream) {
+    readFrom(headerStream);
+  }
 
   /// Creates a variable header from the specified header stream.
   /// A subclass can override this method to do completely
@@ -188,11 +188,10 @@ class MqttVariableHeader {
   void readTopicName(MqttByteBuffer stream) {
     topicName = MqttByteBuffer.readMqttString(stream);
     // If the protocol si V311 allow extended UTF8 characters
-    if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
-      length += _enc.getByteCount(topicName);
-    } else {
-      length = topicName.length + 2; // 2 for length short at front of string.
-    }
+    Protocol.version == MqttClientConstants.mqttV311ProtocolVersion
+        ? length += _enc.getByteCount(topicName)
+        : length =
+            topicName.length + 2; // 2 for length short at front of string.
   }
 
   /// Message identifier

@@ -12,48 +12,12 @@ part of '../mqtt_client.dart';
 class SubscriptionTopic extends Topic {
   /// Creates a new instance of a rawTopic from a topic string.
   SubscriptionTopic(String rawTopic)
-      : super(rawTopic, <Validation>[
-          Topic.validateMinLength,
-          Topic.validateMaxLength,
-          _validateMultiWildcard,
-          _validateFragments
-        ]);
-
-  /// Validates all unique fragments in the topic match the
-  /// MQTT spec requirements.
-  static void _validateFragments(Topic topicInstance) {
-    // If any fragment contains a wildcard or a multi wildcard
-    // but is greater than 1 character long, then it's an error -
-    // wildcards must appear by themselves.
-    final invalidFragment = topicInstance.topicFragments.any(
-        (String fragment) =>
-            (fragment.contains(Topic.multiWildcard) ||
-                fragment.contains(Topic.wildcard)) &&
-            fragment.length > 1);
-    if (invalidFragment) {
-      throw Exception(
-          'mqtt_client::SubscriptionTopic: rawTopic Fragment contains '
-          'a wildcard but is more than one character long');
-    }
-  }
-
-  /// Validates the placement of the multi-wildcard character
-  /// in subscription topics.
-  static void _validateMultiWildcard(Topic topicInstance) {
-    if (topicInstance.rawTopic.contains(Topic.multiWildcard) &&
-        !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {
-      throw Exception('mqtt_client::SubscriptionTopic: The rawTopic wildcard # '
-          'can only be present at the end of a topic');
-    }
-    if (topicInstance.rawTopic.length > 1 &&
-        topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
-        !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
-      throw Exception(
-          'mqtt_client::SubscriptionTopic: Topics using the # wildcard '
-          'longer than 1 character must '
-          'be immediately preceeded by a the rawTopic separator /');
-    }
-  }
+    : super(rawTopic, <Validation>[
+        Topic.validateMinLength,
+        Topic.validateMaxLength,
+        _validateMultiWildcard,
+        _validateFragments,
+      ]);
 
   /// Checks if the rawTopic matches the supplied rawTopic using
   /// the MQTT rawTopic matching rules.
@@ -107,5 +71,46 @@ class SubscriptionTopic extends Topic {
     // If we exit out of the loop without a return then we have a full match rawTopic/rawTopic which would
     // have been caught by the original exact match check at the top anyway.
     return true;
+  }
+
+  // Validates the placement of the multi-wildcard character
+  // in subscription topics.
+  static void _validateMultiWildcard(Topic topicInstance) {
+    if (topicInstance.rawTopic.contains(Topic.multiWildcard) &&
+        !topicInstance.rawTopic.endsWith(Topic.multiWildcard)) {
+      throw Exception(
+        'mqtt_client::SubscriptionTopic: The rawTopic wildcard # '
+        'can only be present at the end of a topic',
+      );
+    }
+    if (topicInstance.rawTopic.length > 1 &&
+        topicInstance.rawTopic.endsWith(Topic.multiWildcard) &&
+        !topicInstance.rawTopic.endsWith(Topic.multiWildcardValidEnd)) {
+      throw Exception(
+        'mqtt_client::SubscriptionTopic: Topics using the # wildcard '
+        'longer than 1 character must '
+        'be immediately preceeded by a the rawTopic separator /',
+      );
+    }
+  }
+
+  // Validates all unique fragments in the topic match the
+  // MQTT spec requirements.
+  static void _validateFragments(Topic topicInstance) {
+    // If any fragment contains a wildcard or a multi wildcard
+    // but is greater than 1 character long, then it's an error -
+    // wildcards must appear by themselves.
+    final invalidFragment = topicInstance.topicFragments.any(
+      (String fragment) =>
+          (fragment.contains(Topic.multiWildcard) ||
+              fragment.contains(Topic.wildcard)) &&
+          fragment.length > 1,
+    );
+    if (invalidFragment) {
+      throw Exception(
+        'mqtt_client::SubscriptionTopic: rawTopic Fragment contains '
+        'a wildcard but is more than one character long',
+      );
+    }
   }
 }

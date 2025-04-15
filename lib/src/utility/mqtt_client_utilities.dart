@@ -34,14 +34,8 @@ class MqttUtilities {
 
 /// Cancellable asynchronous sleep support class
 class MqttCancellableAsyncSleep {
-  /// Timeout value in milliseconds
-  MqttCancellableAsyncSleep(this._timeout);
-
   /// Millisecond timeout
   final int _timeout;
-
-  /// Timeout
-  int get timeout => _timeout;
 
   /// The completer
   late Completer<void> _completer;
@@ -52,8 +46,14 @@ class MqttCancellableAsyncSleep {
   /// Timer running flag
   bool _running = false;
 
+  /// Timeout
+  int get timeout => _timeout;
+
   /// Running
   bool get isRunning => _running;
+
+  /// Timeout value in milliseconds
+  MqttCancellableAsyncSleep(this._timeout);
 
   /// Start the timer
   Future<void> sleep() {
