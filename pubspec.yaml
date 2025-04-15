@@ -27,7 +27,7 @@ dev_dependencies:
   sigv4: '^5.0.0'
   mocktail: '^1.0.4'
   aws_signature_v4: '^0.6.0'
-  aws_common: '^0.7.0'
+  aws_common: '^0.7.1'
 
 false_secrets:
   - /test/pem/self_signed.key
