@@ -12,73 +12,92 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:test/test.dart';
 
 Future<int> main() async {
-  test('Should maintain subscriptions after autoReconnect', () async {
-    final client = MqttServerClient.withPort(
-        'test.mosquitto.org', 'client-id-123456789', 1883);
-    client.autoReconnect = true;
-    client.logging(on: false);
-    const topic = 'xd/+';
-    var autoCompleteCount = 0;
+  test(
+    'Should maintain subscriptions after autoReconnect',
+    () async {
+      final client = MqttServerClient.withPort(
+        'test.mosquitto.org',
+        'client-id-123456789',
+        1883,
+      );
+      client.autoReconnect = true;
+      client.logging(on: false);
+      const topic = 'xd/+';
+      var autoCompleteCount = 0;
 
-    // Subscribe callback, we do the auto reconnect when we know we have subscribed
-    // second time is from the resubscribe so re publish.
-    var ignoreSubscribe = false;
-    void subCB(subTopic) async {
-      if (ignoreSubscribe) {
-        print(
-            'ISSUE: Received re-subscribe callback for our topic - re publishing');
-        client.publishMessage('xd/light', MqttQos.exactlyOnce,
-            (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
-        return;
+      // Subscribe callback, we do the auto reconnect when we know we have subscribed
+      // second time is from the resubscribe so re publish.
+      var ignoreSubscribe = false;
+      void subCB(subTopic) async {
+        if (ignoreSubscribe) {
+          print(
+            'ISSUE: Received re-subscribe callback for our topic - re publishing',
+          );
+          client.publishMessage(
+            'xd/light',
+            MqttQos.exactlyOnce,
+            (MqttClientPayloadBuilder()..addUTF8String('xd')).payload,
+          );
+          return;
+        }
+        if (topic == subTopic) {
+          print(
+            'ISSUE: Received subscribe callback for our topic - auto reconnecting',
+          );
+          client.doAutoReconnect(force: true);
+        } else {
+          print(
+            'ISSUE: Received subscribe callback for unknown topic $subTopic',
+          );
+        }
+        ignoreSubscribe = true;
+        print('ISSUE: Exiting subscribe callback');
       }
-      if (topic == subTopic) {
-        print(
-            'ISSUE: Received subscribe callback for our topic - auto reconnecting');
-        client.doAutoReconnect(force: true);
-      } else {
-        print('ISSUE: Received subscribe callback for unknown topic $subTopic');
+
+      void autoComplete() {
+        autoCompleteCount++;
       }
-      ignoreSubscribe = true;
-      print('ISSUE: Exiting subscribe callback');
-    }
 
-    void autoComplete() {
-      autoCompleteCount++;
-    }
+      // Main test starts here
+      print('ISSUE: Main test start');
+      client.onSubscribed = subCB; // Subscribe callback
+      client.onAutoReconnected = autoComplete; // Auto Reconnected callback
+      print('ISSUE: Connecting');
+      await client.connect();
+      client.subscribe(topic, MqttQos.exactlyOnce);
 
-    // Main test starts here
-    print('ISSUE: Main test start');
-    client.onSubscribed = subCB; // Subscribe callback
-    client.onAutoReconnected = autoComplete; // Auto Reconnected callback
-    print('ISSUE: Connecting');
-    await client.connect();
-    client.subscribe(topic, MqttQos.exactlyOnce);
+      // Now publish the message
+      print('ISSUE: Publishing');
+      client.publishMessage(
+        'xd/light',
+        MqttQos.exactlyOnce,
+        (MqttClientPayloadBuilder()..addUTF8String('xd')).payload,
+      );
 
-    // Now publish the message
-    print('ISSUE: Publishing');
-    client.publishMessage('xd/light', MqttQos.exactlyOnce,
-        (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
+      // Listen for our responses.
+      print('ISSUE: Listening >>>>');
+      final stream = client.updates
+          .expand((event) sync* {
+            for (var e in event) {
+              MqttPublishMessage message = e.payload;
+              yield utf8.decode(message.payload.message);
+            }
+          })
+          .timeout(Duration(seconds: 7));
 
-    // Listen for our responses.
-    print('ISSUE: Listening >>>>');
-    final stream = client.updates.expand((event) sync* {
-      for (var e in event) {
-        MqttPublishMessage message = e.payload;
-        yield utf8.decode(message.payload.message);
-      }
-    }).timeout(Duration(seconds: 7));
+      expect(await stream.first, equals('xd'));
 
-    expect(await stream.first, equals('xd'));
+      final delay = MqttCancellableAsyncSleep(10000);
+      await delay.sleep();
+      print('ISSUE: Second disconnect .....');
+      client.doAutoReconnect(force: true);
+      await delay.sleep();
+      expect(autoCompleteCount, 2);
 
-    final delay = MqttCancellableAsyncSleep(10000);
-    await delay.sleep();
-    print('ISSUE: Second disconnect .....');
-    client.doAutoReconnect(force: true);
-    await delay.sleep();
-    expect(autoCompleteCount, 2);
-
-    print('ISSUE: Test complete');
-  }, timeout: Timeout.factor(2));
+      print('ISSUE: Test complete');
+    },
+    timeout: Timeout.factor(2),
+  );
 
   return 0;
 }

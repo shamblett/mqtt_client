@@ -33,7 +33,7 @@ class Mqtt {
     client.keepAlivePeriod = 60;
     client.port = 443;
     client.useWebSocket = true;
-    client.logging(on: true);
+    client.logging(on: false);
 
     client.onDisconnected = () {
       print('\n\n\n==> Disconnected | Time: ${DateTime.now().toUtc()}\n\n\n');
@@ -70,13 +70,11 @@ class Mqtt {
     // This Works!
     var builder1 = MqttClientPayloadBuilder();
     builder1.addString(
-      json.encode(
-        {
-          'type': 'msgText',
-          'data': 'Works!',
-          'identifier': Random().nextInt(1000000),
-        },
-      ),
+      json.encode({
+        'type': 'msgText',
+        'data': 'Works!',
+        'identifier': Random().nextInt(1000000),
+      }),
     );
 
     client.publishMessage('u/$id', MqttQos.exactlyOnce, builder1.payload);

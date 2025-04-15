@@ -36,7 +36,8 @@ bool pingServer(String server) {
     return false;
   } else {
     print(
-        'Server - $server is dead, exit code is ${result.exitCode} - skipping');
+      'Server - $server is dead, exit code is ${result.exitCode} - skipping',
+    );
     return true;
   }
 }
@@ -44,8 +45,9 @@ bool pingServer(String server) {
 void main() {
   final skipTests = pingServer('test.mosquitto.org');
   test('Broker Subscribe', () {
-    final result = Process.runSync(
-        'dart', <String>['test/mqtt_client_broker_test_subscribe.dart']);
+    final result = Process.runSync('dart', <String>[
+      'test/mqtt_client_broker_test_subscribe.dart',
+    ]);
     print('Broker Subscribe::stdout');
     print(result.stdout.toString());
     print('Broker Subscribe::stderr');
@@ -54,8 +56,9 @@ void main() {
   }, skip: skipTests);
 
   test('Broker Publish', () {
-    final result = Process.runSync(
-        'dart', <String>['test/mqtt_client_broker_test_publish.dart']);
+    final result = Process.runSync('dart', <String>[
+      'test/mqtt_client_broker_test_publish.dart',
+    ]);
     print('Broker Publish::stdout');
     print(result.stdout.toString());
     print('Broker Publish::stderr');

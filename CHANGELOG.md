@@ -1,3 +1,24 @@
+# 10.8.0
+Issue 589
+
+# 10.7.0
+Issue 586
+
+# 10.6.4
+Issue 583
+
+# 10.6.3
+Issue 577
+
+# 10.6.2
+Issue 578
+
+# 10.6.1
+Issue 568
+
+# 10.6.0
+Issues 503 - partial, update to package web
+
 # 10.5.1
 Issues 559
 

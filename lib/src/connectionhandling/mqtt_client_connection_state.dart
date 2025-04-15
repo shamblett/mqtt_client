@@ -18,7 +18,7 @@ enum MqttDisconnectionOrigin {
   solicited,
 
   /// None set
-  none
+  none,
 }
 
 /// Enumeration that indicates various client connection states
@@ -37,5 +37,5 @@ enum MqttConnectionState {
 
   /// The MQTT Connection is faulted and no longer communicating
   /// with the broker.
-  faulted
+  faulted,
 }

@@ -27,11 +27,16 @@ class MockSocket extends Mock implements Socket {
 
   String host = '';
 
-  late StreamSubscription<Uint8List> outgoing =
-      Stream<Uint8List>.empty().listen((event) {});
+  late StreamSubscription<Uint8List> outgoing = Stream<Uint8List>.empty()
+      .listen((event) {});
 
-  static Future<MockSocket> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MockSocket> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MockSocket>();
     final extSocket = MockSocket();
     extSocket.port = port;
@@ -46,8 +51,12 @@ class MockSocket extends Mock implements Socket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     final out = Uint8List.fromList(mockBytes);
     onData!(out);
     return outgoing;
@@ -76,8 +85,13 @@ class MqttMockSocketSimpleConnect extends MockSocket {
   dynamic onDataFunc;
   bool initial = true;
 
-  static Future<MqttMockSocketSimpleConnect> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketSimpleConnect> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketSimpleConnect>();
     final extSocket = MqttMockSocketSimpleConnect();
     extSocket.port = port;
@@ -104,8 +118,12 @@ class MqttMockSocketSimpleConnect extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     onDataFunc = onData;
     return outgoing;
   }
@@ -115,8 +133,13 @@ class MqttMockSocketSimpleConnect extends MockSocket {
 /// Connect to bad host name
 ///
 class MqttMockSocketInvalidHost extends MockSocket {
-  static Future<MqttMockSocketInvalidHost> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketInvalidHost> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketInvalidHost>();
     final extSocket = MqttMockSocketInvalidHost();
     extSocket.port = port;
@@ -134,17 +157,25 @@ class MqttMockSocketInvalidHost extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-          {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
-      outgoing;
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) => outgoing;
 }
 
 ///
 /// Connect to bad port
 ///
 class MqttMockSocketInvalidPort extends MockSocket {
-  static Future<MqttMockSocketInvalidPort> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketInvalidPort> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketInvalidPort>();
     final extSocket = MqttMockSocketInvalidPort();
     extSocket.port = port;
@@ -162,9 +193,12 @@ class MqttMockSocketInvalidPort extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-          {Function? onError, void Function()? onDone, bool? cancelOnError}) =>
-      outgoing;
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) => outgoing;
 }
 
 ///
@@ -173,8 +207,13 @@ class MqttMockSocketInvalidPort extends MockSocket {
 class MqttMockSocketSimpleConnectNoAck extends MockSocket {
   dynamic onDataFunc;
 
-  static Future<MqttMockSocketSimpleConnectNoAck> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketSimpleConnectNoAck> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketSimpleConnectNoAck>();
     final extSocket = MqttMockSocketSimpleConnectNoAck();
     extSocket.port = port;
@@ -189,8 +228,12 @@ class MqttMockSocketSimpleConnectNoAck extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     onDataFunc = onData;
     return outgoing;
   }
@@ -205,8 +248,13 @@ class MqttMockSocketScenario1 extends MockSocket {
 
   static bool initial = true;
 
-  static Future<MqttMockSocketScenario1> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketScenario1> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketScenario1>();
     final extSocket = MqttMockSocketScenario1();
     extSocket.port = port;
@@ -220,8 +268,9 @@ class MqttMockSocketScenario1 extends MockSocket {
     mockBytes.addAll(data);
     if (initial) {
       initial = false;
-      final ack = MqttConnectAckMessage()
-          .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+      final ack = MqttConnectAckMessage().withReturnCode(
+        MqttConnectReturnCode.connectionAccepted,
+      );
       final buff = Uint8Buffer();
       final ms = MqttByteBuffer(buff);
       ack.writeTo(ms);
@@ -234,8 +283,12 @@ class MqttMockSocketScenario1 extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     onDataFunc = onData;
     onDoneFunc = onDone;
     return outgoing;
@@ -251,8 +304,13 @@ class MqttMockSocketScenario2 extends MockSocket {
 
   static bool initial = true;
 
-  static Future<MqttMockSocketScenario2> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketScenario2> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketScenario2>();
     final extSocket = MqttMockSocketScenario2();
     extSocket.port = port;
@@ -266,8 +324,9 @@ class MqttMockSocketScenario2 extends MockSocket {
     mockBytes.addAll(data);
     if (initial) {
       initial = false;
-      final ack = MqttConnectAckMessage()
-          .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+      final ack = MqttConnectAckMessage().withReturnCode(
+        MqttConnectReturnCode.connectionAccepted,
+      );
       final buff = Uint8Buffer();
       final ms = MqttByteBuffer(buff);
       ack.writeTo(ms);
@@ -281,8 +340,12 @@ class MqttMockSocketScenario2 extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     onDataFunc = onData;
     onDoneFunc = onDone;
     return outgoing;
@@ -298,8 +361,13 @@ class MqttMockSocketScenario3 extends MockSocket {
 
   bool initial = true;
 
-  static Future<MqttMockSocketScenario3> connect(host, int port,
-      {sourceAddress, int sourcePort = 0, Duration? timeout}) {
+  static Future<MqttMockSocketScenario3> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) {
     final completer = Completer<MqttMockSocketScenario3>();
     final extSocket = MqttMockSocketScenario3();
     extSocket.port = port;
@@ -313,8 +381,9 @@ class MqttMockSocketScenario3 extends MockSocket {
     mockBytes.addAll(data);
     if (initial) {
       initial = false;
-      final ack = MqttConnectAckMessage()
-          .withReturnCode(MqttConnectReturnCode.connectionAccepted);
+      final ack = MqttConnectAckMessage().withReturnCode(
+        MqttConnectReturnCode.connectionAccepted,
+      );
       final buff = Uint8Buffer();
       final ms = MqttByteBuffer(buff);
       ack.writeTo(ms);
@@ -334,10 +403,78 @@ class MqttMockSocketScenario3 extends MockSocket {
   }
 
   @override
-  StreamSubscription<Uint8List> listen(void Function(Uint8List event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<Uint8List> listen(
+    void Function(Uint8List event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
     onDataFunc = onData;
     onDoneFunc = onDone;
     return outgoing;
+  }
+}
+
+///
+/// Socket Timeout
+///
+class MqttMockSocketTimeout extends MockSocket {
+  dynamic onDataFunc;
+  dynamic onDoneFunc;
+
+  bool initial = true;
+
+  static Future<MqttMockSocketTimeout> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) async {
+    final completer = Completer<MqttMockSocketTimeout>();
+    final extSocket = MqttMockSocketTimeout();
+    extSocket.port = port;
+    extSocket.host = host;
+    if (timeout != null) {
+      await Future.delayed(timeout);
+      throw SocketException(
+        'Connection timed out, host: $host, port: $port',
+        port: port,
+      );
+    }
+    completer.complete(extSocket);
+    return completer.future;
+  }
+}
+
+///
+/// Socket Timeout - Secure
+///
+class MqttMockSecureSocketTimeout extends MockSocket {
+  dynamic onDataFunc;
+  dynamic onDoneFunc;
+
+  bool initial = true;
+
+  static Future<MqttMockSecureSocketTimeout> connect(
+    host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) async {
+    final completer = Completer<MqttMockSecureSocketTimeout>();
+    final extSocket = MqttMockSecureSocketTimeout();
+    extSocket.port = port;
+    extSocket.host = host;
+    if (timeout != null) {
+      await Future.delayed(timeout);
+      throw SocketException(
+        'Connection timed out, host: $host, port: $port',
+        port: port,
+      );
+    }
+    completer.complete(extSocket);
+    return completer.future;
   }
 }

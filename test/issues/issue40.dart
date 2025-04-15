@@ -14,9 +14,10 @@ Future<int> main() async {
 
     client.onDisconnected = onDisconnected;
 
-    final connMess = MqttConnectMessage()
-        .withClientIdentifier('Mqtt_MyClientUniqueId')
-        .startClean();
+    final connMess =
+        MqttConnectMessage()
+            .withClientIdentifier('Mqtt_MyClientUniqueId')
+            .startClean();
     print('EXAMPLE::Mosquitto client connecting....');
     client.connectionMessage = connMess;
 
@@ -34,7 +35,8 @@ Future<int> main() async {
       completer.complete();
     } else {
       print(
-          'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionState}');
+        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionState}',
+      );
       client.disconnect();
       completer.completeError(null);
     }
@@ -75,11 +77,13 @@ Future<int> main() async {
 
   client.updates.listen((List<MqttReceivedMessage> c) {
     final recMess = c[0].payload as MqttPublishMessage;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- ${pt} -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- ${pt} -->',
+    );
     print('');
   });
 

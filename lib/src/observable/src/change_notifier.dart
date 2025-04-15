@@ -17,22 +17,30 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
   bool _scheduled = false;
   List<C>? _queue;
 
+  /// Whether [changes] has at least one active listener.
+  ///
+  /// May be used to optimize whether to produce change records.
+  @override
+  bool get hasObservers => _changes.hasListener;
+
   /// Emits a list of changes when the state of the object changes.
   ///
   /// Changes should produced in order, if significant.
   @override
   Stream<List<C>> get changes =>
       (_changes = StreamController<List<C>>.broadcast(
-        sync: true,
-        onListen: observed,
-        onCancel: unobserved,
-      ))
+            sync: true,
+            onListen: observed,
+            onCancel: unobserved,
+          ))
           .stream;
 
   /// May override to be notified when [changes] is first observed.
   @override
   @mustCallSuper
-  void observed() {}
+  void observed() {
+    return;
+  }
 
   /// May override to be notified when [changes] is no longer observed.
   @override
@@ -56,12 +64,6 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
     }
     return false;
   }
-
-  /// Whether [changes] has at least one active listener.
-  ///
-  /// May be used to optimize whether to produce change records.
-  @override
-  bool get hasObservers => _changes.hasListener == true;
 
   /// Schedules [change] to be delivered.
   ///

@@ -9,15 +9,6 @@ part of '../../../mqtt_client.dart';
 
 /// Class that contains details related to an MQTT Unsubscribe messages payload
 class MqttUnsubscribePayload extends MqttPayload {
-  /// Initializes a new instance of the MqttUnsubscribePayload class.
-  MqttUnsubscribePayload();
-
-  /// Initializes a new instance of the MqttUnsubscribePayload class.
-  MqttUnsubscribePayload.fromByteBuffer(
-      this.header, this.variableHeader, MqttByteBuffer payloadStream) {
-    readFrom(payloadStream);
-  }
-
   /// Variable header
   MqttVariableHeader? variableHeader;
 
@@ -26,6 +17,18 @@ class MqttUnsubscribePayload extends MqttPayload {
 
   /// The collection of subscriptions.
   List<String> subscriptions = <String>[];
+
+  /// Initializes a new instance of the MqttUnsubscribePayload class.
+  MqttUnsubscribePayload();
+
+  /// Initializes a new instance of the MqttUnsubscribePayload class.
+  MqttUnsubscribePayload.fromByteBuffer(
+    this.header,
+    this.variableHeader,
+    MqttByteBuffer payloadStream,
+  ) {
+    readFrom(payloadStream);
+  }
 
   /// Writes the payload to the supplied stream.
   @override

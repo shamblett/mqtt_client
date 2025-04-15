@@ -34,7 +34,8 @@ Future<int> main() async {
     print('EXAMPLE::Mosquitto client connected');
   } else {
     print(
-        'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}');
+      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, status is ${client.connectionStatus}',
+    );
     client.disconnect();
     exit(-1);
   }
@@ -44,11 +45,13 @@ Future<int> main() async {
 
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     print(
-        'EXAMPLE::1st Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::1st Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 
@@ -75,11 +78,13 @@ Future<int> main() async {
   client.subscribe(topic, MqttQos.exactlyOnce);
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
 
     print(
-        'EXAMPLE::2nd Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::2nd Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
   client.publishMessage(topic, MqttQos.exactlyOnce, builder.payload);

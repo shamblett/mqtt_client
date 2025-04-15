@@ -48,9 +48,10 @@ Future<int> main() async {
   client.securityContext = context;
 
   // Setup the connection Message
-  final connMess = MqttConnectMessage()
-      .withClientIdentifier('<your_client_id>')
-      .startClean();
+  final connMess =
+      MqttConnectMessage()
+          .withClientIdentifier('<your_client_id>')
+          .startClean();
   client.connectionMessage = connMess;
 
   // Connect the client
@@ -79,15 +80,18 @@ Future<int> main() async {
     // Print incoming messages from another client on this topic
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final recMess = c[0].payload as MqttPublishMessage;
-      final pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final pt = MqttPublishPayload.bytesToStringAsString(
+        recMess.payload.message,
+      );
       print(
-          'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+      );
       print('');
     });
   } else {
     print(
-        'ERROR MQTT client connection failed - disconnecting, state is ${client.connectionStatus!.state}');
+      'ERROR MQTT client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+    );
     client.disconnect();
   }
 

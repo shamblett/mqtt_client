@@ -9,22 +9,23 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of the variable header for an MQTT ConnectAck message.
 class MqttConnectAckVariableHeader extends MqttVariableHeader {
-  /// Initializes a new instance of the MqttConnectVariableHeader class.
-  MqttConnectAckVariableHeader();
-
-  /// Initializes a new instance of the MqttConnectVariableHeader class.
-  MqttConnectAckVariableHeader.fromByteBuffer(super.headerStream)
-      : super.fromByteBuffer();
-
-  /// Session present flag.
-  /// Only available for the 3.1.1 protocol, for 3.1 this is always false.
+  // Session present flag.
+  // Only available for the 3.1.1 protocol, for 3.1 this is always false.
   bool _sessionPresent = false;
+
   bool get sessionPresent => _sessionPresent;
   set sessionPresent(bool present) {
     if (Protocol.version == MqttClientConstants.mqttV311ProtocolVersion) {
       _sessionPresent = present;
     }
   }
+
+  /// Initializes a new instance of the MqttConnectVariableHeader class.
+  MqttConnectAckVariableHeader();
+
+  /// Initializes a new instance of the MqttConnectVariableHeader class.
+  MqttConnectAckVariableHeader.fromByteBuffer(super.headerStream)
+    : super.fromByteBuffer();
 
   /// Writes the variable header for an MQTT Connect message to
   /// the supplied stream.

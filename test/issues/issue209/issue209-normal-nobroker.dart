@@ -13,10 +13,13 @@ import 'package:test/test.dart';
 
 Future<int> main() async {
   test('Should try three times then fail', () async {
-    final client =
-        MqttServerClient.withPort('billy', 'client-id-123456789', 1883);
+    final client = MqttServerClient.withPort(
+      'billy',
+      'client-id-123456789',
+      1883,
+    );
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
 
     // Main test starts here
     print('ISSUE: Main test start');

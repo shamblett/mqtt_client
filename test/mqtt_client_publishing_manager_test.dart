@@ -40,9 +40,11 @@ void main() {
     test('Numbering overflows back to 1', () {
       final dispenser = MessageIdentifierDispenser();
       dispenser.reset();
-      for (var i = 0;
-          i == MessageIdentifierDispenser.maxMessageIdentifier;
-          i++) {
+      for (
+        var i = 0;
+        i == MessageIdentifierDispenser.maxMessageIdentifier;
+        i++
+      ) {
         dispenser.getNextMessageIdentifier();
       }
       // One more call should overflow us and reset us back to 1.
@@ -55,8 +57,10 @@ void main() {
     final con = MockCON();
     final ch = MockCH();
     final clientEventBus = events.EventBus();
-    final testCHNS = TestConnectionHandlerNoSend(clientEventBus,
-        socketOptions: socketOptions);
+    final testCHNS = TestConnectionHandlerNoSend(
+      clientEventBus,
+      socketOptions: socketOptions,
+    );
     testCHNS.connection = con;
     ch.connection = con;
     MessageCallbackFunction? cbFunc;
@@ -64,55 +68,75 @@ void main() {
     test('Register for publish messages', () {
       testCHNS.registerForMessage(MqttMessageType.publish, cbFunc);
       expect(
-          testCHNS.messageProcessorRegistry
-              .containsKey(MqttMessageType.publish),
-          isTrue);
+        testCHNS.messageProcessorRegistry.containsKey(MqttMessageType.publish),
+        isTrue,
+      );
       expect(
-          testCHNS.messageProcessorRegistry[MqttMessageType.publish], cbFunc);
+        testCHNS.messageProcessorRegistry[MqttMessageType.publish],
+        cbFunc,
+      );
     });
     test('Register for publish ack messages', () {
       testCHNS.registerForMessage(MqttMessageType.publishAck, cbFunc);
       expect(
-          testCHNS.messageProcessorRegistry
-              .containsKey(MqttMessageType.publishAck),
-          isTrue);
-      expect(testCHNS.messageProcessorRegistry[MqttMessageType.publishAck],
-          cbFunc);
+        testCHNS.messageProcessorRegistry.containsKey(
+          MqttMessageType.publishAck,
+        ),
+        isTrue,
+      );
+      expect(
+        testCHNS.messageProcessorRegistry[MqttMessageType.publishAck],
+        cbFunc,
+      );
     });
     test('Register for publish complete messages', () {
       testCHNS.registerForMessage(MqttMessageType.publishComplete, cbFunc);
       expect(
-          testCHNS.messageProcessorRegistry
-              .containsKey(MqttMessageType.publishComplete),
-          isTrue);
-      expect(testCHNS.messageProcessorRegistry[MqttMessageType.publishComplete],
-          cbFunc);
+        testCHNS.messageProcessorRegistry.containsKey(
+          MqttMessageType.publishComplete,
+        ),
+        isTrue,
+      );
+      expect(
+        testCHNS.messageProcessorRegistry[MqttMessageType.publishComplete],
+        cbFunc,
+      );
     });
     test('Register for publish received messages', () {
       testCHNS.registerForMessage(MqttMessageType.publishReceived, cbFunc);
       expect(
-          testCHNS.messageProcessorRegistry
-              .containsKey(MqttMessageType.publishReceived),
-          isTrue);
-      expect(testCHNS.messageProcessorRegistry[MqttMessageType.publishReceived],
-          cbFunc);
+        testCHNS.messageProcessorRegistry.containsKey(
+          MqttMessageType.publishReceived,
+        ),
+        isTrue,
+      );
+      expect(
+        testCHNS.messageProcessorRegistry[MqttMessageType.publishReceived],
+        cbFunc,
+      );
     });
     test('Register for publish release messages', () {
       testCHNS.registerForMessage(MqttMessageType.publishRelease, cbFunc);
       expect(
-          testCHNS.messageProcessorRegistry
-              .containsKey(MqttMessageType.publishRelease),
-          isTrue);
-      expect(testCHNS.messageProcessorRegistry[MqttMessageType.publishRelease],
-          cbFunc);
+        testCHNS.messageProcessorRegistry.containsKey(
+          MqttMessageType.publishRelease,
+        ),
+        isTrue,
+      );
+      expect(
+        testCHNS.messageProcessorRegistry[MqttMessageType.publishRelease],
+        cbFunc,
+      );
     });
   });
 
   group('Publishing', () {
     test('Publish at least once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -121,7 +145,11 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       final msgId = pm.publish(
-          PublicationTopic('A/rawTopic'), MqttQos.atMostOnce, buff, true);
+        PublicationTopic('A/rawTopic'),
+        MqttQos.atMostOnce,
+        buff,
+        true,
+      );
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isFalse);
       final pubMess = testCHS.sentMessages[0] as MqttPublishMessage;
@@ -130,14 +158,18 @@ void main() {
       expect(pubMess.header!.qos, MqttQos.atMostOnce);
       expect(pubMess.header!.retain, true);
       expect(pubMess.variableHeader!.topicName, 'A/rawTopic');
-      expect(pubMess.payload.toString(),
-          'Payload: {4 bytes={<116><101><115><116>');
+      expect(
+        pubMess.payload.toString(),
+        'Payload: {4 bytes={<116><101><115><116>',
+      );
     });
 
     test('Publish at least once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       final buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
@@ -145,8 +177,11 @@ void main() {
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
       pm.messageIdentifierDispenser.reset();
-      final msgId =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
+      final msgId = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.atLeastOnce,
+        buff,
+      );
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final pubMess = pm.publishedMessages[1]!;
@@ -155,13 +190,17 @@ void main() {
       expect(pubMess.header!.qos, MqttQos.atLeastOnce);
       expect(pubMess.header!.retain, false);
       expect(pubMess.variableHeader!.topicName, 'A/rawTopic');
-      expect(pubMess.payload.toString(),
-          'Payload: {4 bytes={<116><101><115><116>');
+      expect(
+        pubMess.payload.toString(),
+        'Payload: {4 bytes={<116><101><115><116>',
+      );
     });
     test('Publish at exactly once', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -169,8 +208,11 @@ void main() {
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final msgId =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+      final msgId = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.exactlyOnce,
+        buff,
+      );
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       final pubMess = pm.publishedMessages[1]!;
@@ -178,29 +220,42 @@ void main() {
       expect(pubMess.variableHeader!.messageIdentifier, 1);
       expect(pubMess.header!.qos, MqttQos.exactlyOnce);
       expect(pubMess.variableHeader!.topicName, 'A/rawTopic');
-      expect(pubMess.payload.toString(),
-          'Payload: {4 bytes={<116><101><115><116>');
+      expect(
+        pubMess.payload.toString(),
+        'Payload: {4 bytes={<116><101><115><116>',
+      );
     });
-    test('Publish consecutive topics', () {
+    test('Publish consecutive topics', () async {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       final buff = typed.Uint8Buffer(4);
       buff[0] = 't'.codeUnitAt(0);
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final msgId1 =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
-      final msgId2 =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+      final msgId1 = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.exactlyOnce,
+        buff,
+      );
+      final msgId2 = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.exactlyOnce,
+        buff,
+      );
       expect(msgId2, msgId1 + 1);
     });
-    test('Publish at least once and ack', () {
+    test('Publish at least once and ack', () async {
+      var messageOnPublished = false;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -208,17 +263,29 @@ void main() {
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final msgId =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.atLeastOnce, buff);
+      pm.published.stream.listen((message) {
+        messageOnPublished = true;
+      });
+      final msgId = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.atLeastOnce,
+        buff,
+      );
       expect(msgId, 1);
       pm.handlePublishAcknowledgement(
-          MqttPublishAckMessage().withMessageIdentifier(msgId));
+        MqttPublishAckMessage().withMessageIdentifier(msgId),
+      );
       expect(pm.publishedMessages.containsKey(1), isFalse);
+      await Future.delayed(Duration(seconds: 1));
+      expect(messageOnPublished, isTrue);
     });
-    test('Publish exactly once, release and complete', () {
+    test('Publish exactly once, release and complete', () async {
+      var messageOnPublished = false;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final buff = typed.Uint8Buffer(4);
@@ -226,22 +293,35 @@ void main() {
       buff[1] = 'e'.codeUnitAt(0);
       buff[2] = 's'.codeUnitAt(0);
       buff[3] = 't'.codeUnitAt(0);
-      final msgId =
-          pm.publish(PublicationTopic('A/rawTopic'), MqttQos.exactlyOnce, buff);
+      pm.published.stream.listen((message) {
+        messageOnPublished = true;
+      });
+      final msgId = pm.publish(
+        PublicationTopic('A/rawTopic'),
+        MqttQos.exactlyOnce,
+        buff,
+      );
       expect(msgId, 1);
       expect(pm.publishedMessages.containsKey(1), isTrue);
       pm.handlePublishReceived(
-          MqttPublishReceivedMessage().withMessageIdentifier(msgId));
+        MqttPublishReceivedMessage().withMessageIdentifier(msgId),
+      );
       final pubMessRel = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel.variableHeader.messageIdentifier, msgId);
       pm.handlePublishComplete(
-          MqttPublishCompleteMessage().withMessageIdentifier(msgId));
+        MqttPublishCompleteMessage().withMessageIdentifier(msgId),
+      );
       expect(pm.publishedMessages, isEmpty);
+      await Future.delayed(Duration(seconds: 1));
+      expect(messageOnPublished, isTrue);
     });
-    test('Publish received at most once', () {
+    test('Publish received at most once', () async {
+      var nothingOnPublished = true;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -253,14 +333,22 @@ void main() {
           .toTopic('A/rawTopic')
           .withQos(MqttQos.atMostOnce)
           .publishData(data);
+      pm.published.stream.listen((MqttPublishMessage message) {
+        nothingOnPublished = false;
+      });
       pm.handlePublish(pubMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
       expect(testCHS.sentMessages.isEmpty, isTrue);
+      await Future.delayed(Duration(seconds: 1));
+      expect(nothingOnPublished, isTrue);
     });
-    test('Publish received at least once', () {
+    test('Publish received at least once', () async {
+      var nothingOnPublished = true;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -272,37 +360,58 @@ void main() {
           .toTopic('A/rawTopic')
           .withQos(MqttQos.atLeastOnce)
           .publishData(data);
+      pm.published.stream.listen((MqttPublishMessage message) {
+        nothingOnPublished = true;
+      });
       pm.handlePublish(pubMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
-      expect(testCHS.sentMessages[0]!.header!.messageType,
-          MqttMessageType.publishAck);
+      expect(
+        testCHS.sentMessages[0]!.header!.messageType,
+        MqttMessageType.publishAck,
+      );
+      await Future.delayed(Duration(seconds: 1));
+      expect(nothingOnPublished, isTrue);
     });
-    test('Publish received at least once  - manual acknowledge in force', () {
+    test(
+      'Publish received at least once  - manual acknowledge in force',
+      () async {
+        var nothingOnPublished = true;
+        final clientEventBus = events.EventBus();
+        final testCHS = TestConnectionHandlerSend(
+          clientEventBus,
+          socketOptions: socketOptions,
+        );
+        final pm = PublishingManager(testCHS, clientEventBus);
+        pm.manuallyAcknowledgeQos1 = true;
+        const msgId = 1;
+        final data = typed.Uint8Buffer(3);
+        data[0] = 0;
+        data[1] = 1;
+        data[2] = 2;
+        final pubMess = MqttPublishMessage()
+            .withMessageIdentifier(msgId)
+            .toTopic('A/rawTopic')
+            .withQos(MqttQos.atLeastOnce)
+            .publishData(data);
+        pm.published.stream.listen((MqttPublishMessage message) {
+          nothingOnPublished = true;
+        });
+        pm.handlePublish(pubMess);
+        expect(pm.receivedMessages.containsKey(msgId), isFalse);
+        expect(testCHS.sentMessages.length, 0);
+        expect(pm.awaitingManualAcknowledge.length, 1);
+        expect(pm.awaitingManualAcknowledge.keys.contains(msgId), isTrue);
+        await Future.delayed(Duration(seconds: 1));
+        expect(nothingOnPublished, isTrue);
+      },
+    );
+    test('Publish received exactly once', () async {
+      var nothingOnPublished = true;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
-      final pm = PublishingManager(testCHS, clientEventBus);
-      pm.manuallyAcknowledgeQos1 = true;
-      const msgId = 1;
-      final data = typed.Uint8Buffer(3);
-      data[0] = 0;
-      data[1] = 1;
-      data[2] = 2;
-      final pubMess = MqttPublishMessage()
-          .withMessageIdentifier(msgId)
-          .toTopic('A/rawTopic')
-          .withQos(MqttQos.atLeastOnce)
-          .publishData(data);
-      pm.handlePublish(pubMess);
-      expect(pm.receivedMessages.containsKey(msgId), isFalse);
-      expect(testCHS.sentMessages.length, 0);
-      expect(pm.awaitingManualAcknowledge.length, 1);
-      expect(pm.awaitingManualAcknowledge.keys.contains(msgId), isTrue);
-    });
-    test('Publish recieved exactly once', () {
-      final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -314,15 +423,25 @@ void main() {
           .toTopic('A/rawTopic')
           .withQos(MqttQos.exactlyOnce)
           .publishData(data);
+      pm.published.stream.listen((MqttPublishMessage message) {
+        nothingOnPublished = false;
+      });
       pm.handlePublish(pubMess);
       expect(pm.receivedMessages.containsKey(msgId), isTrue);
-      expect(testCHS.sentMessages[0]!.header!.messageType,
-          MqttMessageType.publishReceived);
+      expect(
+        testCHS.sentMessages[0]!.header!.messageType,
+        MqttMessageType.publishReceived,
+      );
+      await Future.delayed(Duration(seconds: 1));
+      expect(nothingOnPublished, isTrue);
     });
-    test('Release recieved exactly once', () {
+    test('Release received exactly once', () async {
+      var nothingOnPublished = true;
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       const msgId = 1;
       final data = typed.Uint8Buffer(3);
@@ -334,20 +453,31 @@ void main() {
           .toTopic('A/rawTopic')
           .withQos(MqttQos.exactlyOnce)
           .publishData(data);
+      pm.published.stream.listen((MqttPublishMessage message) {
+        nothingOnPublished = false;
+      });
       pm.handlePublish(pubMess);
       expect(pm.receivedMessages.containsKey(msgId), isTrue);
-      expect(testCHS.sentMessages[0]!.header!.messageType,
-          MqttMessageType.publishReceived);
+      expect(
+        testCHS.sentMessages[0]!.header!.messageType,
+        MqttMessageType.publishReceived,
+      );
       final relMess = MqttPublishReleaseMessage().withMessageIdentifier(msgId);
       pm.handlePublishRelease(relMess);
       expect(pm.receivedMessages.containsKey(msgId), isFalse);
-      expect(testCHS.sentMessages[1]!.header!.messageType,
-          MqttMessageType.publishComplete);
+      expect(
+        testCHS.sentMessages[1]!.header!.messageType,
+        MqttMessageType.publishComplete,
+      );
+      await Future.delayed(Duration(seconds: 1));
+      expect(nothingOnPublished, isTrue);
     });
     test('Publish exactly once, interleaved scenario 1', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final payload1 = MqttClientPayloadBuilder();
@@ -355,34 +485,46 @@ void main() {
       final payload2 = MqttClientPayloadBuilder();
       payload2.addString('test2');
       final msgId1 = pm.publish(
-          PublicationTopic('topic1'), MqttQos.exactlyOnce, payload1.payload!);
+        PublicationTopic('topic1'),
+        MqttQos.exactlyOnce,
+        payload1.payload!,
+      );
       expect(msgId1, 1);
       final msgId2 = pm.publish(
-          PublicationTopic('topic2'), MqttQos.exactlyOnce, payload2.payload!);
+        PublicationTopic('topic2'),
+        MqttQos.exactlyOnce,
+        payload2.payload!,
+      );
       expect(msgId2, 2);
       expect(pm.publishedMessages.containsKey(msgId1), isTrue);
       expect(pm.publishedMessages.containsKey(msgId2), isTrue);
       expect(pm.publishedMessages.length, 2);
       testCHS.sentMessages.clear();
       pm.handlePublishReceived(
-          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
+        MqttPublishReceivedMessage().withMessageIdentifier(msgId1),
+      );
       pm.handlePublishReceived(
-          MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
+        MqttPublishReceivedMessage().withMessageIdentifier(msgId2),
+      );
       expect(testCHS.sentMessages.length, 2);
       final pubMessRel2 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel2.variableHeader.messageIdentifier, msgId2);
       final pubMessRel1 = testCHS.sentMessages[0] as MqttPublishReleaseMessage;
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
       pm.handlePublishComplete(
-          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
+        MqttPublishCompleteMessage().withMessageIdentifier(msgId1),
+      );
       pm.handlePublishComplete(
-          MqttPublishCompleteMessage().withMessageIdentifier(msgId2));
+        MqttPublishCompleteMessage().withMessageIdentifier(msgId2),
+      );
       expect(pm.publishedMessages, isEmpty);
     });
     test('Publish exactly once, interleaved scenario 2', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final payload1 = MqttClientPayloadBuilder();
@@ -392,7 +534,10 @@ void main() {
 
       // Publish 1
       final msgId1 = pm.publish(
-          PublicationTopic('topic1'), MqttQos.exactlyOnce, payload1.payload!);
+        PublicationTopic('topic1'),
+        MqttQos.exactlyOnce,
+        payload1.payload!,
+      );
       expect(pm.publishedMessages.length, 1);
       expect(pm.publishedMessages.containsKey(msgId1), isTrue);
       expect(msgId1, 1);
@@ -400,19 +545,24 @@ void main() {
 
       // PubRel 1
       pm.handlePublishReceived(
-          MqttPublishReceivedMessage().withMessageIdentifier(msgId1));
+        MqttPublishReceivedMessage().withMessageIdentifier(msgId1),
+      );
       expect(testCHS.sentMessages.length, 2);
 
       // Publish 2
       final msgId2 = pm.publish(
-          PublicationTopic('topic2'), MqttQos.exactlyOnce, payload2.payload!);
+        PublicationTopic('topic2'),
+        MqttQos.exactlyOnce,
+        payload2.payload!,
+      );
       expect(msgId2, 2);
       expect(pm.publishedMessages.length, 2);
       expect(pm.publishedMessages.containsKey(msgId2), isTrue);
 
       // PubRel 2
       pm.handlePublishReceived(
-          MqttPublishReceivedMessage().withMessageIdentifier(msgId2));
+        MqttPublishReceivedMessage().withMessageIdentifier(msgId2),
+      );
       expect(testCHS.sentMessages.length, 4);
       final pubMessRel1 = testCHS.sentMessages[1] as MqttPublishReleaseMessage;
       expect(pubMessRel1.variableHeader.messageIdentifier, msgId1);
@@ -421,15 +571,18 @@ void main() {
 
       // PubComp 1
       pm.handlePublishComplete(
-          MqttPublishCompleteMessage().withMessageIdentifier(msgId1));
+        MqttPublishCompleteMessage().withMessageIdentifier(msgId1),
+      );
       expect(pm.publishedMessages.length, 1);
     });
   });
   group('Manual Acknowledge', () {
     test('Manual Acknowledge not set', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
       final message = MqttPublishMessage().withQos(MqttQos.atLeastOnce);
@@ -438,8 +591,10 @@ void main() {
     });
     test('Not Awaiting Acknowledge', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       pm.messageIdentifierDispenser.reset();
@@ -451,8 +606,10 @@ void main() {
     });
     test('Valid manual acknowledge', () {
       final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(clientEventBus,
-          socketOptions: socketOptions);
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.manuallyAcknowledgeQos1 = true;
       pm.messageIdentifierDispenser.reset();

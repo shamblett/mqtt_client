@@ -11,20 +11,11 @@ part of '../../mqtt_client.dart';
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
-  /// The byte buffer
-  MqttByteBuffer(this.buffer);
-
-  /// From a list
-  MqttByteBuffer.fromList(List<int> data) {
-    buffer = typed.Uint8Buffer();
-    buffer!.addAll(data);
-  }
-
-  /// The current position within the buffer.
-  int _position = 0;
-
   /// The underlying byte buffer
   typed.Uint8Buffer? buffer;
+
+  // The current position within the buffer.
+  int _position = 0;
 
   /// Position
   int get position => _position;
@@ -35,13 +26,22 @@ class MqttByteBuffer {
   /// Available bytes
   int get availableBytes => length - _position;
 
+  /// Skip bytes
+  set skipBytes(int bytes) => _position += bytes;
+
+  /// The byte buffer
+  MqttByteBuffer(this.buffer);
+
+  /// From a list
+  MqttByteBuffer.fromList(List<int> data) {
+    buffer = typed.Uint8Buffer();
+    buffer!.addAll(data);
+  }
+
   /// Resets the position to 0
   void reset() {
     _position = 0;
   }
-
-  /// Skip bytes
-  set skipBytes(int bytes) => _position += bytes;
 
   /// Add a list
   void addAll(List<int> data) {
@@ -87,9 +87,11 @@ class MqttByteBuffer {
   /// by the number of bytes read.
   typed.Uint8Buffer read(int count) {
     if ((length < count) || (_position + count) > length) {
-      throw Exception('mqtt_client::ByteBuffer: The buffer did not have '
-          'enough bytes for the read operation '
-          'length $length, count $count, position $_position, buffer $buffer');
+      throw Exception(
+        'mqtt_client::ByteBuffer: The buffer did not have '
+        'enough bytes for the read operation '
+        'length $length, count $count, position $_position, buffer $buffer',
+      );
     }
     final tmp = typed.Uint8Buffer();
     tmp.addAll(buffer!.getRange(_position, _position + count));
@@ -131,11 +133,7 @@ class MqttByteBuffer {
   /// Seek. Sets the position in the buffer. If overflow occurs
   /// the position is set to the end of the buffer.
   void seek(int seek) {
-    if ((seek <= length) && (seek >= 0)) {
-      _position = seek;
-    } else {
-      _position = length;
-    }
+    ((seek <= length) && (seek >= 0)) ? _position = seek : _position = length;
   }
 
   /// Writes an MQTT string member
@@ -147,7 +145,9 @@ class MqttByteBuffer {
   /// stringStream - The stream containing the string to write.
   /// stringToWrite - The string to write.
   static void writeMqttString(
-      MqttByteBuffer stringStream, String stringToWrite) {
+    MqttByteBuffer stringStream,
+    String stringToWrite,
+  ) {
     final enc = MqttEncoding();
     final stringBytes = enc.getBytes(stringToWrite);
     stringStream.write(stringBytes);
@@ -168,10 +168,10 @@ class MqttByteBuffer {
 
   @override
   String toString() {
-    if (buffer != null && buffer!.isNotEmpty) {
-      return buffer!.toList().toString();
-    } else {
-      return 'null or empty';
-    }
+    String tmp;
+    (buffer != null && buffer!.isNotEmpty)
+        ? tmp = buffer!.toList().toString()
+        : tmp = 'null or empty';
+    return tmp;
   }
 }

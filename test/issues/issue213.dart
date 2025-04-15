@@ -15,9 +15,12 @@ import 'package:test/test.dart';
 Future<int> main() async {
   test('State preservation across instances', () async {
     var client = MqttServerClient.withPort(
-        'test.mosquitto.org', 'client-id-123456789', 1883);
+      'test.mosquitto.org',
+      'client-id-123456789',
+      1883,
+    );
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
     const topic = 'xd/+';
     await client.connect();
     expect(client.connectionStatus.state, MqttConnectionState.connected);
@@ -30,8 +33,11 @@ Future<int> main() async {
     // OK, reinstantiate the client and do some basic checks before we connect
     sleep(Duration(seconds: 5));
     client = MqttServerClient.withPort(
-        'test.mosquitto.org', 'client-id-123456789', 1883);
-    client.logging(on: true);
+      'test.mosquitto.org',
+      'client-id-123456789',
+      1883,
+    );
+    client.logging(on: false);
     client.autoReconnect = true;
     client.resubscribeOnAutoReconnect = false;
     expect(client.connectionStatus.state, MqttConnectionState.disconnected);
@@ -45,8 +51,10 @@ Future<int> main() async {
     // Re check our state
     expect(client.connectionStatus.state, MqttConnectionState.connected);
     expect(client.autoReconnect, isTrue);
-    expect(client.getSubscriptionsStatus(topic),
-        MqttSubscriptionStatus.doesNotExist);
+    expect(
+      client.getSubscriptionsStatus(topic),
+      MqttSubscriptionStatus.doesNotExist,
+    );
 
     print("TEST - Second subscription");
     var secondSub = client.subscribe(topic, MqttQos.exactlyOnce);

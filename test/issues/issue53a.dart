@@ -14,7 +14,7 @@ Future<int> main() async {
   client.keepAlivePeriod = 60;
   client.port = 443;
   client.useWebSocket = true;
-  client.logging(on: true);
+  client.logging(on: false);
 
   client.onDisconnected = () {
     print('\n\n\n==> Disconnected | Time: ${DateTime.now().toUtc()}\n\n\n');
@@ -27,26 +27,27 @@ Future<int> main() async {
 
   client.connectionMessage.startClean();
 
-  await client.connect().then((MqttClientConnectionStatus e) async {
-    client.subscribe('u/$id', MqttQos.exactlyOnce);
+  await client
+      .connect()
+      .then((MqttClientConnectionStatus e) async {
+        client.subscribe('u/$id', MqttQos.exactlyOnce);
 
-    await MqttUtilities.asyncSleep(2);
+        await MqttUtilities.asyncSleep(2);
 
-    final builder = MqttClientPayloadBuilder();
-    builder.addString(
-      json.encode(
-        <String, dynamic>{
-          'type': 'msgText',
-          'data': 'TextMessage',
-          'identifier': Random().nextInt(1000000),
-        },
-      ),
-    );
+        final builder = MqttClientPayloadBuilder();
+        builder.addString(
+          json.encode(<String, dynamic>{
+            'type': 'msgText',
+            'data': 'TextMessage',
+            'identifier': Random().nextInt(1000000),
+          }),
+        );
 
-    client.publishMessage('u/$id', MqttQos.exactlyOnce, builder.payload);
-  }).catchError((e) {
-    print('Connection failed');
-  });
+        client.publishMessage('u/$id', MqttQos.exactlyOnce, builder.payload);
+      })
+      .catchError((e) {
+        print('Connection failed');
+      });
 
   print('Client exiting');
 

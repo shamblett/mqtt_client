@@ -14,7 +14,8 @@ class MqttPublishCompleteVariableHeader extends MqttVariableHeader {
 
   /// Initializes a new instance of the MqttPublishCompleteVariableHeader class.
   MqttPublishCompleteVariableHeader.fromByteBuffer(
-      MqttByteBuffer headerStream) {
+    MqttByteBuffer headerStream,
+  ) {
     readFrom(headerStream);
   }
 

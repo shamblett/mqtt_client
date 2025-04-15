@@ -22,31 +22,6 @@ typedef PingCallback = void Function();
 /// Optionally a disconnect on no response property can be set to force disconnect the client
 /// if the broker does not respond to a ping request for a specified period of time.
 class MqttConnectionKeepAlive {
-  /// Initializes a new instance of the MqttConnectionKeepAlive class.
-  MqttConnectionKeepAlive(IMqttConnectionHandler connectionHandler,
-      events.EventBus? eventBus, int keepAliveSeconds,
-      [int disconnectOnNoResponsePeriod = 0]) {
-    _connectionHandler = connectionHandler;
-    _clientEventBus = eventBus;
-    this.disconnectOnNoResponsePeriod = disconnectOnNoResponsePeriod * 1000;
-    keepAlivePeriod = keepAliveSeconds * 1000;
-    // Register for message handling of ping request and response messages.
-    connectionHandler.registerForMessage(
-        MqttMessageType.pingRequest, pingRequestReceived);
-    connectionHandler.registerForMessage(
-        MqttMessageType.pingResponse, pingResponseReceived);
-    connectionHandler.registerForAllSentMessages(messageSent);
-    // Start the timer so we do a ping whenever required.
-    pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
-    MqttLogger.log(
-        'MqttConnectionKeepAlive:: Initialised with a keep alive value of $keepAliveSeconds seconds');
-    disconnectOnNoResponsePeriod == 0
-        ? MqttLogger.log(
-            'MqttConnectionKeepAlive:: Disconnect on no ping response is disabled')
-        : MqttLogger.log(
-            'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds');
-  }
-
   /// The keep alive period in  milliseconds
   late int keepAlivePeriod;
 
@@ -61,12 +36,6 @@ class MqttConnectionKeepAlive {
   /// Timer that manages the disconnect on no ping response period.
   Timer? disconnectTimer;
 
-  /// The connection handler
-  late IMqttConnectionHandler _connectionHandler;
-
-  /// Used to synchronise shutdown and ping operations.
-  bool _shutdownPadlock = false;
-
   /// Ping response received callback.
   PongCallback? pongCallback;
 
@@ -77,16 +46,60 @@ class MqttConnectionKeepAlive {
   /// of the last ping/pong cycle. Reset on disconnect.
   int lastCycleLatency = 0;
 
-  int _lastPingTime = 0;
-
   /// Average latency(time between sending a ping and receiving a pong) in ms
   /// of all the ping/pong cycles in a connection period. Reset on disconnect.
   int averageCycleLatency = 0;
 
-  int _cycleCount = 0;
-
   /// The event bus
   events.EventBus? _clientEventBus;
+
+  // The connection handler
+  late IMqttConnectionHandler _connectionHandler;
+
+  // Used to synchronise shutdown and ping operations.
+  bool _shutdownPadlock = false;
+
+  int _cycleCount = 0;
+
+  int _lastPingTime = 0;
+
+  /// Initializes a new instance of the MqttConnectionKeepAlive class.
+  MqttConnectionKeepAlive(
+    IMqttConnectionHandler connectionHandler,
+    events.EventBus? eventBus,
+    int keepAliveSeconds, [
+    int disconnectOnNoResponsePeriod = 0,
+  ]) {
+    _connectionHandler = connectionHandler;
+    _clientEventBus = eventBus;
+    this.disconnectOnNoResponsePeriod =
+        disconnectOnNoResponsePeriod *
+        MqttClientConstants.millisecondsMultiplier;
+    keepAlivePeriod =
+        keepAliveSeconds * MqttClientConstants.millisecondsMultiplier;
+    // Register for message handling of ping request and response messages.
+    connectionHandler.registerForMessage(
+      MqttMessageType.pingRequest,
+      pingRequestReceived,
+    );
+    connectionHandler.registerForMessage(
+      MqttMessageType.pingResponse,
+      pingResponseReceived,
+    );
+    connectionHandler.registerForAllSentMessages(messageSent);
+    // Start the timer so we do a ping whenever required.
+    pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
+    MqttLogger.log(
+      'MqttConnectionKeepAlive:: Initialised with a keep alive value of $keepAliveSeconds seconds',
+    );
+    disconnectOnNoResponsePeriod == 0
+        ? MqttLogger.log(
+          'MqttConnectionKeepAlive:: Disconnect on no ping response is disabled',
+        )
+        : MqttLogger.log(
+          'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds',
+        );
+  }
 
   /// Pings the message broker if there has been no activity for
   /// the specified amount of idle time.
@@ -102,7 +115,8 @@ class MqttConnectionKeepAlive {
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::pingRequired - sending ping request');
+        'MqttConnectionKeepAlive::pingRequired - sending ping request',
+      );
       try {
         _connectionHandler.sendMessage(pingMsg);
         pinged = true;
@@ -112,23 +126,28 @@ class MqttConnectionKeepAlive {
         }
       } catch (e) {
         MqttLogger.log(
-            'MqttConnectionKeepAlive::pingRequired - exception occurred');
+          'MqttConnectionKeepAlive::pingRequired - exception occurred',
+        );
       }
     } else {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::pingRequired - NOT sending ping - not connected');
+        'MqttConnectionKeepAlive::pingRequired - NOT sending ping - not connected',
+      );
     }
     MqttLogger.log(
-        'MqttConnectionKeepAlive::pingRequired - restarting ping timer');
+      'MqttConnectionKeepAlive::pingRequired - restarting ping timer',
+    );
     pingTimer = Timer(Duration(milliseconds: keepAlivePeriod), pingRequired);
     if (disconnectOnNoResponsePeriod != 0) {
       if (disconnectTimer == null) {
         MqttLogger.log(
-            'MqttConnectionKeepAlive::pingRequired - starting disconnect timer');
+          'MqttConnectionKeepAlive::pingRequired - starting disconnect timer',
+        );
         if (pinged) {
           disconnectTimer = Timer(
-              Duration(milliseconds: disconnectOnNoResponsePeriod),
-              noPingResponseReceived);
+            Duration(milliseconds: disconnectOnNoResponsePeriod),
+            noPingResponseReceived,
+          );
         } else {
           noMessageSent();
         }
@@ -136,16 +155,19 @@ class MqttConnectionKeepAlive {
         if (disconnectTimer != null && !disconnectTimer!.isActive) {
           if (pinged) {
             MqttLogger.log(
-                'MqttConnectionKeepAlive::pingRequired - restarting disconnect timer');
+              'MqttConnectionKeepAlive::pingRequired - restarting disconnect timer',
+            );
             disconnectTimer = Timer(
-                Duration(milliseconds: disconnectOnNoResponsePeriod),
-                noPingResponseReceived);
+              Duration(milliseconds: disconnectOnNoResponsePeriod),
+              noPingResponseReceived,
+            );
           } else {
             noMessageSent();
           }
         } else {
           MqttLogger.log(
-              'MqttConnectionKeepAlive::pingRequired - disconnect timer is active, not restarting');
+            'MqttConnectionKeepAlive::pingRequired - disconnect timer is active, not restarting',
+          );
         }
       }
     }
@@ -211,18 +233,22 @@ class MqttConnectionKeepAlive {
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::noPingResponseReceived - connected, attempting to disconnect');
+        'MqttConnectionKeepAlive::noPingResponseReceived - connected, attempting to disconnect',
+      );
       if (_clientEventBus != null) {
         _clientEventBus!.fire(DisconnectOnNoPingResponse());
         MqttLogger.log(
-            'MqttConnectionKeepAlive::noPingResponseReceived - OK - disconnect event fired');
+          'MqttConnectionKeepAlive::noPingResponseReceived - OK - disconnect event fired',
+        );
       } else {
         MqttLogger.log(
-            'MqttConnectionKeepAlive::noPingResponseReceived - ERROR - disconnect event not fired, no event handler');
+          'MqttConnectionKeepAlive::noPingResponseReceived - ERROR - disconnect event not fired, no event handler',
+        );
       }
     } else {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::noPingResponseReceived - not disconnecting, not connected');
+        'MqttConnectionKeepAlive::noPingResponseReceived - not disconnecting, not connected',
+      );
     }
   }
 
@@ -231,18 +257,22 @@ class MqttConnectionKeepAlive {
     if (_connectionHandler.connectionStatus.state ==
         MqttConnectionState.connected) {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::noMessageSent - connected, attempting to disconnect');
+        'MqttConnectionKeepAlive::noMessageSent - connected, attempting to disconnect',
+      );
       if (_clientEventBus != null) {
         _clientEventBus!.fire(DisconnectOnNoMessageSent());
         MqttLogger.log(
-            'MqttConnectionKeepAlive::noMessageSent - OK - disconnect event fired');
+          'MqttConnectionKeepAlive::noMessageSent - OK - disconnect event fired',
+        );
       } else {
         MqttLogger.log(
-            'MqttConnectionKeepAlive::noMessageSent - ERROR - disconnect event not fired, no event handler');
+          'MqttConnectionKeepAlive::noMessageSent - ERROR - disconnect event not fired, no event handler',
+        );
       }
     } else {
       MqttLogger.log(
-          'MqttConnectionKeepAlive::noMessageSent - not disconnecting, not connected');
+        'MqttConnectionKeepAlive::noMessageSent - not disconnecting, not connected',
+      );
     }
   }
 }

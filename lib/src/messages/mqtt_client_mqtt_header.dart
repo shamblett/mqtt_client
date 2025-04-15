@@ -9,18 +9,6 @@ part of '../../mqtt_client.dart';
 
 /// Represents the Fixed Header of an MQTT message.
 class MqttHeader {
-  /// Initializes a new instance of the MqttHeader class.
-  MqttHeader();
-
-  /// Initializes a new instance of MqttHeader' based on data
-  /// contained within the supplied stream.
-  MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
-    readFrom(headerStream);
-  }
-
-  /// Backing storage for the payload size.
-  int _messageSize = 0;
-
   /// Gets or sets the type of the MQTT message.
   MqttMessageType? messageType;
 
@@ -38,6 +26,9 @@ class MqttHeader {
   /// otherwise, false.
   bool retain = false;
 
+  // Backing storage for the payload size.
+  int _messageSize = 0;
+
   /// Gets or sets the size of the variable header + payload
   /// section of the message.
   /// The size of the variable header + payload.
@@ -46,9 +37,20 @@ class MqttHeader {
   set messageSize(int value) {
     if (value < 0 || value > MqttClientConstants.maxMessageSize) {
       throw InvalidPayloadSizeException(
-          value, MqttClientConstants.maxMessageSize);
+        value,
+        MqttClientConstants.maxMessageSize,
+      );
     }
     _messageSize = value;
+  }
+
+  /// Initializes a new instance of the MqttHeader class.
+  MqttHeader();
+
+  /// Initializes a new instance of MqttHeader' based on data
+  /// contained within the supplied stream.
+  MqttHeader.fromByteBuffer(MqttByteBuffer headerStream) {
+    readFrom(headerStream);
   }
 
   /// Writes the header to a supplied stream.
@@ -63,8 +65,9 @@ class MqttHeader {
     if (headerStream.length < 2) {
       headerStream.reset();
       throw InvalidHeaderException(
-          'The supplied header is invalid. Header must be at '
-          'least 2 bytes long.');
+        'The supplied header is invalid. Header must be at '
+        'least 2 bytes long.',
+      );
     }
     final firstHeaderByte = headerStream.readByte();
     // Pull out the first byte
@@ -76,16 +79,24 @@ class MqttHeader {
     // Decode the remaining bytes as the remaining/payload size, input param is the 2nd to last byte of the header byte list
     try {
       _messageSize = readRemainingLength(headerStream);
-    } on Exception {
-      throw InvalidHeaderException(
+    } on Exception catch (_, stack) {
+      Error.throwWithStackTrace(
+        InvalidHeaderException(
           'The header being processed contained an invalid size byte pattern. '
           'Message size must take a most 4 bytes, and the last byte '
-          'must have bit 8 set to 0.');
-    } on Error {
-      throw InvalidHeaderException(
+          'must have bit 8 set to 0.',
+        ),
+        stack,
+      );
+    } on Error catch (_, stack) {
+      Error.throwWithStackTrace(
+        InvalidHeaderException(
           'The header being processed contained an invalid size byte pattern. '
           'Message size must take a most 4 bytes, and the last byte '
-          'must have bit 8 set to 0.');
+          'must have bit 8 set to 0.',
+        ),
+        stack,
+      );
     }
   }
 

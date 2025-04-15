@@ -21,7 +21,7 @@ Future<int> main() async {
   client.port = 80;
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// If you intend to use a keep alive value in your connect message that is not the default(60s)
   /// you must set it here
@@ -42,7 +42,8 @@ Future<int> main() async {
       .withClientIdentifier('2222')
       .keepAliveFor(10) // Must agree with the keep alive set above or not set
       .withWillTopic(
-          'Will-Topic') // If you set this you must set a will message
+        'Will-Topic',
+      ) // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
       .withWillRetain()
@@ -77,10 +78,12 @@ Future<int> main() async {
   /// notifications of published updates to each subscribed topic.
   client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
     final MqttPublishMessage recMess = c[0].payload;
-    final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+    final pt = MqttPublishPayload.bytesToStringAsString(
+      recMess.payload.message,
+    );
     print(
-        'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+      'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->',
+    );
     print('');
   });
 

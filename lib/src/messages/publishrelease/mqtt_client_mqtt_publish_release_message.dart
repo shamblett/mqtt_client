@@ -9,6 +9,10 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Publish Release Message.
 class MqttPublishReleaseMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
+  late MqttPublishReleaseVariableHeader variableHeader;
+
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage() {
     header = MqttHeader().asType(MqttMessageType.publishRelease);
@@ -19,15 +23,14 @@ class MqttPublishReleaseMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttPublishReleaseMessage class.
   MqttPublishReleaseMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
-    variableHeader =
-        MqttPublishReleaseVariableHeader.fromByteBuffer(messageStream);
+    variableHeader = MqttPublishReleaseVariableHeader.fromByteBuffer(
+      messageStream,
+    );
   }
-
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message.
-  late MqttPublishReleaseVariableHeader variableHeader;
 
   /// Writes the message to the supplied stream.
   @override

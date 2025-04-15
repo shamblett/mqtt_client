@@ -14,9 +14,12 @@ import 'package:test/test.dart';
 Future<int> main() async {
   test('Should maintain subscriptions after autoReconnect', () async {
     final client = MqttServerClient.withPort(
-        'ws://test.mosquitto.org', 'client-id-123456789', 8080);
+      'ws://test.mosquitto.org',
+      'client-id-123456789',
+      8080,
+    );
     client.autoReconnect = true;
-    client.logging(on: true);
+    client.logging(on: false);
     const topic = 'xd/+';
 
     // Subscribe callback, we do the auto reconnect when we know we have subscribed
@@ -25,14 +28,19 @@ Future<int> main() async {
     void subCB(subTopic) async {
       if (ignoreSubscribe) {
         print(
-            'ISSUE: Received re-subscribe callback for our topic - re publishing');
-        client.publishMessage('xd/light', MqttQos.exactlyOnce,
-            (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
+          'ISSUE: Received re-subscribe callback for our topic - re publishing',
+        );
+        client.publishMessage(
+          'xd/light',
+          MqttQos.exactlyOnce,
+          (MqttClientPayloadBuilder()..addUTF8String('xd')).payload,
+        );
         return;
       }
       if (topic == subTopic) {
         print(
-            'ISSUE: Received subscribe callback for our topic - auto reconnecting');
+          'ISSUE: Received subscribe callback for our topic - auto reconnecting',
+        );
         client.doAutoReconnect(force: true);
       } else {
         print('ISSUE: Received subscribe callback for unknown topic $subTopic');
@@ -51,17 +59,22 @@ Future<int> main() async {
 
     // Now publish the message
     print('ISSUE: Publishing');
-    client.publishMessage('xd/light', MqttQos.exactlyOnce,
-        (MqttClientPayloadBuilder()..addUTF8String('xd')).payload);
+    client.publishMessage(
+      'xd/light',
+      MqttQos.exactlyOnce,
+      (MqttClientPayloadBuilder()..addUTF8String('xd')).payload,
+    );
 
     // Listen for our responses.
     print('ISSUE: Listening >>>>');
-    final stream = client.updates.expand((event) sync* {
-      for (var e in event) {
-        MqttPublishMessage message = e.payload;
-        yield utf8.decode(message.payload.message);
-      }
-    }).timeout(Duration(seconds: 10));
+    final stream = client.updates
+        .expand((event) sync* {
+          for (var e in event) {
+            MqttPublishMessage message = e.payload;
+            yield utf8.decode(message.payload.message);
+          }
+        })
+        .timeout(Duration(seconds: 10));
 
     expect(await stream.first, equals('xd'));
     print('ISSUE: Test complete');

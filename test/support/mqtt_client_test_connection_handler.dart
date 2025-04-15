@@ -9,12 +9,19 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerNoSend(super.clientEventBus,
-      {super.maxConnectionAttempts, required super.socketOptions});
+  TestConnectionHandlerNoSend(
+    super.clientEventBus, {
+    super.maxConnectionAttempts,
+    required super.socketOptions,
+    super.socketTimeout,
+  });
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
-      String? hostname, int? port, MqttConnectMessage? message) {
+    String? hostname,
+    int? port,
+    MqttConnectMessage? message,
+  ) {
     final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
@@ -25,14 +32,21 @@ class TestConnectionHandlerNoSend extends MqttServerConnectionHandler {
 }
 
 class TestConnectionHandlerSend extends MqttServerConnectionHandler {
-  TestConnectionHandlerSend(super.clientEventBus,
-      {super.maxConnectionAttempts, required super.socketOptions});
+  TestConnectionHandlerSend(
+    super.clientEventBus, {
+    super.maxConnectionAttempts,
+    required super.socketOptions,
+    super.socketTimeout,
+  });
 
   List<MqttMessage?> sentMessages = <MqttMessage?>[];
 
   @override
   Future<MqttClientConnectionStatus> internalConnect(
-      String? hostname, int? port, MqttConnectMessage? message) {
+    String? hostname,
+    int? port,
+    MqttConnectMessage? message,
+  ) {
     final completer = Completer<MqttClientConnectionStatus>();
     return completer.future;
   }
@@ -44,7 +58,8 @@ class TestConnectionHandlerSend extends MqttServerConnectionHandler {
   @override
   void sendMessage(MqttMessage? message) {
     print(
-        'TestConnectionHandlerNoSend::send, message is ${message.toString()}');
+      'TestConnectionHandlerNoSend::send, message is ${message.toString()}',
+    );
     sentMessages.add(message);
   }
 }

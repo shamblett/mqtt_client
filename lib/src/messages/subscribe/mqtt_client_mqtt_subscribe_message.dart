@@ -9,6 +9,15 @@ part of '../../../mqtt_client.dart';
 
 /// Implementation of an MQTT Subscribe Message.
 class MqttSubscribeMessage extends MqttMessage {
+  /// Gets or sets the variable header contents. Contains extended
+  /// metadata about the message.
+  MqttSubscribeVariableHeader? variableHeader;
+
+  /// Gets or sets the payload of the Mqtt Message.
+  late MqttSubscribePayload payload;
+
+  String? _lastTopic;
+
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage() {
     header = MqttHeader().asType(MqttMessageType.subscribe);
@@ -19,26 +28,21 @@ class MqttSubscribeMessage extends MqttMessage {
 
   /// Initializes a new instance of the MqttSubscribeMessage class.
   MqttSubscribeMessage.fromByteBuffer(
-      MqttHeader header, MqttByteBuffer messageStream) {
+    MqttHeader header,
+    MqttByteBuffer messageStream,
+  ) {
     this.header = header;
     this.header!.qos = MqttQos.atLeastOnce;
     readFrom(messageStream);
   }
 
-  /// Gets or sets the variable header contents. Contains extended
-  /// metadata about the message.
-  MqttSubscribeVariableHeader? variableHeader;
-
-  /// Gets or sets the payload of the Mqtt Message.
-  late MqttSubscribePayload payload;
-
-  String? _lastTopic;
-
   /// Writes the message to the supplied stream.
   @override
   void writeTo(MqttByteBuffer messageStream) {
-    header!.writeTo(variableHeader!.getWriteLength() + payload.getWriteLength(),
-        messageStream);
+    header!.writeTo(
+      variableHeader!.getWriteLength() + payload.getWriteLength(),
+      messageStream,
+    );
     variableHeader!.writeTo(messageStream);
     payload.writeTo(messageStream);
   }
@@ -48,7 +52,10 @@ class MqttSubscribeMessage extends MqttMessage {
   void readFrom(MqttByteBuffer messageStream) {
     variableHeader = MqttSubscribeVariableHeader.fromByteBuffer(messageStream);
     payload = MqttSubscribePayload.fromByteBuffer(
-        header, variableHeader, messageStream);
+      header,
+      variableHeader,
+      messageStream,
+    );
   }
 
   /// Adds a new subscription topic with the AtMostOnce Qos Level.
