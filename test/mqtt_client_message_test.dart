@@ -592,8 +592,9 @@ void main() {
       expect(raised, isTrue);
     });
     test('Basic serialization', () {
-      final msg =
-          MqttConnectMessage().withClientIdentifier('mark').startClean();
+      final msg = MqttConnectMessage()
+          .withClientIdentifier('mark')
+          .startClean();
       print('Connect - Basic serialization::${msg.toString()}');
       final mb = MessageSerializationHelper.getMessageBytes(msg);
       expect(mb[0], 0x10);
@@ -1544,13 +1545,12 @@ void main() {
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
       expected[10] = 0x01;
-      final msg =
-          MqttSubscribeMessage()
-              .toTopic('fred')
-              .atQos(MqttQos.atLeastOnce)
-              .withMessageIdentifier(2)
-              .expectAcknowledgement()
-              .isDuplicate();
+      final msg = MqttSubscribeMessage()
+          .toTopic('fred')
+          .atQos(MqttQos.atLeastOnce)
+          .withMessageIdentifier(2)
+          .expectAcknowledgement()
+          .isDuplicate();
       print('Subscribe - Single topic::${msg.toString()}');
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1585,14 +1585,13 @@ void main() {
       expected[15] = 'r'.codeUnitAt(0);
       expected[16] = 'k'.codeUnitAt(0);
       expected[17] = 0x02;
-      final msg =
-          MqttSubscribeMessage()
-              .toTopic('fred')
-              .atQos(MqttQos.atLeastOnce)
-              .toTopic('mark')
-              .atQos(MqttQos.exactlyOnce)
-              .withMessageIdentifier(3)
-              .expectAcknowledgement();
+      final msg = MqttSubscribeMessage()
+          .toTopic('fred')
+          .atQos(MqttQos.atLeastOnce)
+          .toTopic('mark')
+          .atQos(MqttQos.exactlyOnce)
+          .withMessageIdentifier(3)
+          .expectAcknowledgement();
       print('Subscribe - multi topic::${msg.toString()}');
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1895,12 +1894,11 @@ void main() {
       expected[7] = 'r'.codeUnitAt(0);
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
-      final msg =
-          MqttUnsubscribeMessage()
-              .fromTopic('fred')
-              .withMessageIdentifier(3)
-              .expectAcknowledgement()
-              .isDuplicate();
+      final msg = MqttUnsubscribeMessage()
+          .fromTopic('fred')
+          .withMessageIdentifier(3)
+          .expectAcknowledgement()
+          .isDuplicate();
       print('Unsubscribe - Single topic::${msg.toString()}');
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1928,12 +1926,11 @@ void main() {
       expected[7] = 'r'.codeUnitAt(0);
       expected[8] = 'e'.codeUnitAt(0);
       expected[9] = 'd'.codeUnitAt(0);
-      final msg =
-          MqttUnsubscribeMessage()
-              .fromTopic('fred')
-              .withMessageIdentifier(3)
-              .expectAcknowledgement()
-              .isDuplicate();
+      final msg = MqttUnsubscribeMessage()
+          .fromTopic('fred')
+          .withMessageIdentifier(3)
+          .expectAcknowledgement()
+          .isDuplicate();
       print('Unsubscribe - Single topic::${msg.toString()}');
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);
@@ -1966,12 +1963,11 @@ void main() {
         expected[7] = 'r'.codeUnitAt(0);
         expected[8] = 'e'.codeUnitAt(0);
         expected[9] = 'd'.codeUnitAt(0);
-        final msg =
-            MqttUnsubscribeMessage()
-                .fromTopic('fred')
-                .withMessageIdentifier(3)
-                .expectAcknowledgement()
-                .isDuplicate();
+        final msg = MqttUnsubscribeMessage()
+            .fromTopic('fred')
+            .withMessageIdentifier(3)
+            .expectAcknowledgement()
+            .isDuplicate();
         print('Unsubscribe - Single topic::${msg.toString()}');
         final actual = MessageSerializationHelper.getMessageBytes(msg);
         expect(actual.length, expected.length);
@@ -2005,12 +2001,11 @@ void main() {
       expected[13] = 'a'.codeUnitAt(0);
       expected[14] = 'r'.codeUnitAt(0);
       expected[15] = 'k'.codeUnitAt(0);
-      final msg =
-          MqttUnsubscribeMessage()
-              .fromTopic('fred')
-              .fromTopic('mark')
-              .withMessageIdentifier(3)
-              .expectAcknowledgement();
+      final msg = MqttUnsubscribeMessage()
+          .fromTopic('fred')
+          .fromTopic('mark')
+          .withMessageIdentifier(3)
+          .expectAcknowledgement();
       print('Unubscribe - multi topic::${msg.toString()}');
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, expected.length);

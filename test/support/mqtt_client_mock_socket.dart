@@ -416,29 +416,31 @@ class MqttMockSocketScenario3 extends MockSocket {
 }
 
 ///
-/// Socket Timeout
+/// Socket Timeout Windows
 ///
-class MqttMockSocketTimeout extends MockSocket {
+class MqttMockSocketTimeoutWindows extends MockSocket {
   dynamic onDataFunc;
   dynamic onDoneFunc;
 
   bool initial = true;
 
-  static Future<MqttMockSocketTimeout> connect(
+  static Future<MqttMockSocketTimeoutWindows> connect(
     host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
     Duration? timeout,
   }) async {
-    final completer = Completer<MqttMockSocketTimeout>();
-    final extSocket = MqttMockSocketTimeout();
+    final completer = Completer<MqttMockSocketTimeoutWindows>();
+    final extSocket = MqttMockSocketTimeoutWindows();
     extSocket.port = port;
     extSocket.host = host;
     if (timeout != null) {
       await Future.delayed(timeout);
+      final osError = OSError('Connection timed out', 10060);
       throw SocketException(
         'Connection timed out, host: $host, port: $port',
+        osError: osError,
         port: port,
       );
     }
@@ -448,29 +450,31 @@ class MqttMockSocketTimeout extends MockSocket {
 }
 
 ///
-/// Socket Timeout - Secure
+/// Socket Timeout Nix
 ///
-class MqttMockSecureSocketTimeout extends MockSocket {
+class MqttMockSocketTimeoutNix extends MockSocket {
   dynamic onDataFunc;
   dynamic onDoneFunc;
 
   bool initial = true;
 
-  static Future<MqttMockSecureSocketTimeout> connect(
+  static Future<MqttMockSocketTimeoutNix> connect(
     host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
     Duration? timeout,
   }) async {
-    final completer = Completer<MqttMockSecureSocketTimeout>();
-    final extSocket = MqttMockSecureSocketTimeout();
+    final completer = Completer<MqttMockSocketTimeoutNix>();
+    final extSocket = MqttMockSocketTimeoutNix();
     extSocket.port = port;
     extSocket.host = host;
     if (timeout != null) {
       await Future.delayed(timeout);
+      final osError = OSError('Connection timed out', 110);
       throw SocketException(
         'Connection timed out, host: $host, port: $port',
+        osError: osError,
         port: port,
       );
     }
