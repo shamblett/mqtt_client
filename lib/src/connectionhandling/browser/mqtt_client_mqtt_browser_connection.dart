@@ -14,8 +14,11 @@ abstract class MqttBrowserConnection<T extends Object>
   MqttBrowserConnection(super.clientEventBus);
 
   /// Initializes a new instance of the MqttBrowserConnection class.
-  MqttBrowserConnection.fromConnect(server, port, clientEventBus)
-    : super(clientEventBus) {
+  MqttBrowserConnection.fromConnect(
+    String server,
+    int port,
+    events.EventBus clientEventBus,
+  ) : super(clientEventBus) {
     connect(server, port);
   }
 

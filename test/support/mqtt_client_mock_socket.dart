@@ -31,7 +31,7 @@ class MockSocket extends Mock implements Socket {
       .listen((event) {});
 
   static Future<MockSocket> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -86,7 +86,7 @@ class MqttMockSocketSimpleConnect extends MockSocket {
   bool initial = true;
 
   static Future<MqttMockSocketSimpleConnect> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -134,7 +134,7 @@ class MqttMockSocketSimpleConnect extends MockSocket {
 ///
 class MqttMockSocketInvalidHost extends MockSocket {
   static Future<MqttMockSocketInvalidHost> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -170,7 +170,7 @@ class MqttMockSocketInvalidHost extends MockSocket {
 ///
 class MqttMockSocketInvalidPort extends MockSocket {
   static Future<MqttMockSocketInvalidPort> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -208,7 +208,7 @@ class MqttMockSocketSimpleConnectNoAck extends MockSocket {
   dynamic onDataFunc;
 
   static Future<MqttMockSocketSimpleConnectNoAck> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -249,7 +249,7 @@ class MqttMockSocketScenario1 extends MockSocket {
   static bool initial = true;
 
   static Future<MqttMockSocketScenario1> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -305,7 +305,7 @@ class MqttMockSocketScenario2 extends MockSocket {
   static bool initial = true;
 
   static Future<MqttMockSocketScenario2> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -362,7 +362,7 @@ class MqttMockSocketScenario3 extends MockSocket {
   bool initial = true;
 
   static Future<MqttMockSocketScenario3> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -425,7 +425,7 @@ class MqttMockSocketTimeoutWindows extends MockSocket {
   bool initial = true;
 
   static Future<MqttMockSocketTimeoutWindows> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,
@@ -459,7 +459,7 @@ class MqttMockSocketTimeoutNix extends MockSocket {
   bool initial = true;
 
   static Future<MqttMockSocketTimeoutNix> connect(
-    host,
+    String host,
     int port, {
     sourceAddress,
     int sourcePort = 0,

@@ -29,9 +29,9 @@ abstract class MqttServerConnection<T extends Object>
 
   /// Initializes a new instance of the MqttConnection class.
   MqttServerConnection.fromConnect(
-    server,
-    port,
-    clientEventBus,
+    String server,
+    int port,
+    events.EventBus clientEventBus,
     this.socketOptions,
     this.socketTimeout,
   ) : super(clientEventBus) {
