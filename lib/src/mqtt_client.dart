@@ -137,10 +137,9 @@ class MqttClient {
       publishingManager?.acknowledgeQos1Message(message);
 
   /// The number of QOS 1 messages awaiting manual acknowledge.
-  int get messagesAwaitingManualAcknowledge =>
-      publishingManager == null
-          ? 0
-          : publishingManager!.awaitingManualAcknowledge.length;
+  int get messagesAwaitingManualAcknowledge => publishingManager == null
+      ? 0
+      : publishingManager!.awaitingManualAcknowledge.length;
 
   /// The Handler that is managing the connection to the remote server.
   @protected
@@ -199,10 +198,9 @@ class MqttClient {
   /// Gets the current connection state of the Mqtt Client.
   /// Will be removed, use connectionStatus
   @Deprecated('Use ConnectionStatus, not this')
-  MqttConnectionState? get connectionState =>
-      connectionHandler != null
-          ? connectionHandler!.connectionStatus.state
-          : MqttConnectionState.disconnected;
+  MqttConnectionState? get connectionState => connectionHandler != null
+      ? connectionHandler!.connectionStatus.state
+      : MqttConnectionState.disconnected;
 
   final MqttClientConnectionStatus _connectionStatus =
       MqttClientConnectionStatus();
@@ -210,10 +208,9 @@ class MqttClient {
   /// Gets the current connection status of the Mqtt Client.
   /// This is the connection state as above also with the broker return code.
   /// Set after every connection attempt.
-  MqttClientConnectionStatus? get connectionStatus =>
-      connectionHandler != null
-          ? connectionHandler!.connectionStatus
-          : _connectionStatus;
+  MqttClientConnectionStatus? get connectionStatus => connectionHandler != null
+      ? connectionHandler!.connectionStatus
+      : _connectionStatus;
 
   /// The connection message to use to override the default.
   MqttConnectMessage? _connectionMessage;
@@ -414,13 +411,12 @@ class MqttClient {
   ///  Returns an MqttConnectMessage that can be used to connect to a
   ///  message broker if the user has not set one.
   MqttConnectMessage getConnectMessage(String? username, String? password) =>
-      connectionMessage ??=
-          MqttConnectMessage()
-              .withClientIdentifier(clientIdentifier)
-              // Explicitly set the will flag
-              .withWillQos(MqttQos.atMostOnce)
-              .authenticateAs(username, password)
-              .startClean();
+      connectionMessage ??= MqttConnectMessage()
+          .withClientIdentifier(clientIdentifier)
+          // Explicitly set the will flag
+          .withWillQos(MqttQos.atMostOnce)
+          .authenticateAs(username, password)
+          .startClean();
 
   /// Auto reconnect method, used to invoke a manual auto reconnect sequence.
   /// If [autoReconnect] is not set this method does nothing.

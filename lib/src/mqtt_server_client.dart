@@ -104,8 +104,9 @@ class MqttServerClient extends MqttClient {
       maxConnectionAttempts: maxConnectionAttempts,
       reconnectTimePeriod: connectTimeoutPeriod,
       socketOptions: socketOptions,
-      socketTimeout:
-          socketTimeout != null ? Duration(milliseconds: socketTimeout!) : null,
+      socketTimeout: socketTimeout != null
+          ? Duration(milliseconds: socketTimeout!)
+          : null,
     );
     if (useWebSocket) {
       connectionHandler.secure = false;

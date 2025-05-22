@@ -10,6 +10,10 @@ part of '../../../mqtt_server_client.dart';
 /// The MQTT client server connection base class
 abstract class MqttServerConnection<T extends Object>
     extends MqttConnectionBase<T> {
+  /// Socket timeout OS error codes.
+  static const wsaETimedOut = 10060;
+  static const eTimedOut = 110;
+
   /// Socket options, applicable only to TCP sockets
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
@@ -106,7 +110,9 @@ abstract class MqttServerConnection<T extends Object>
   // Check for a timeout exception
   bool _isSocketTimeout(Exception e) {
     if (e is SocketException) {
-      if (e.message.contains('Connection timed out')) {
+      // There are different timeout codes for Linux and Windows so check for both
+      if (e.osError?.errorCode == wsaETimedOut ||
+          e.osError?.errorCode == eTimedOut) {
         return true;
       }
     }

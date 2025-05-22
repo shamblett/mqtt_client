@@ -191,7 +191,7 @@ class MqttVariableHeader {
     Protocol.version == MqttClientConstants.mqttV311ProtocolVersion
         ? length += _enc.getByteCount(topicName)
         : length =
-            topicName.length + 2; // 2 for length short at front of string.
+              topicName.length + 2; // 2 for length short at front of string.
   }
 
   /// Message identifier

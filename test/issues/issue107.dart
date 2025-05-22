@@ -14,10 +14,9 @@ Future<int> main() async {
     client.secure = true;
     client.onDisconnected = onDisconnected;
 
-    final connMess =
-        MqttConnectMessage()
-            .withClientIdentifier('Mqtt_MyClientUniqueId')
-            .startClean();
+    final connMess = MqttConnectMessage()
+        .withClientIdentifier('Mqtt_MyClientUniqueId')
+        .startClean();
     print('EXAMPLE::Mosquitto client connecting....');
     client.connectionMessage = connMess;
 
