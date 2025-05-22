@@ -48,10 +48,9 @@ Future<int> main() async {
   client.securityContext = context;
 
   // Setup the connection Message
-  final connMess =
-      MqttConnectMessage()
-          .withClientIdentifier('<your_client_id>')
-          .startClean();
+  final connMess = MqttConnectMessage()
+      .withClientIdentifier('<your_client_id>')
+      .startClean();
   client.connectionMessage = connMess;
 
   // Connect the client

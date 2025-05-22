@@ -178,10 +178,9 @@ class SubscriptionsManager {
     if (pendingSubscriptions.containsKey(
       subAck.variableHeader!.messageIdentifier,
     )) {
-      topic =
-          pendingSubscriptions[subAck.variableHeader!.messageIdentifier]!
-              .topic
-              .rawTopic;
+      topic = pendingSubscriptions[subAck.variableHeader!.messageIdentifier]!
+          .topic
+          .rawTopic;
       subscriptions[topic] =
           pendingSubscriptions[subAck.variableHeader!.messageIdentifier];
       pendingSubscriptions.remove(subAck.variableHeader!.messageIdentifier);

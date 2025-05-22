@@ -67,11 +67,10 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     );
     HttpClient? httpClient;
     if (onBadCertificate != null) {
-      httpClient =
-          HttpClient()
-            ..badCertificateCallback = (cert, host, port) {
-              return onBadCertificate!(cert);
-            };
+      httpClient = HttpClient()
+        ..badCertificateCallback = (cert, host, port) {
+          return onBadCertificate!(cert);
+        };
     }
     try {
       // Connect and save the socket.

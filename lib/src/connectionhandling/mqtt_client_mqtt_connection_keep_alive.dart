@@ -94,11 +94,11 @@ class MqttConnectionKeepAlive {
     );
     disconnectOnNoResponsePeriod == 0
         ? MqttLogger.log(
-          'MqttConnectionKeepAlive:: Disconnect on no ping response is disabled',
-        )
+            'MqttConnectionKeepAlive:: Disconnect on no ping response is disabled',
+          )
         : MqttLogger.log(
-          'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds',
-        );
+            'MqttConnectionKeepAlive:: Disconnect on no ping response is enabled with a value of $disconnectOnNoResponsePeriod seconds',
+          );
   }
 
   /// Pings the message broker if there has been no activity for
