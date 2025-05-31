@@ -47,7 +47,7 @@ try:
         publish_time = time.time() - start_time
         i=i+1
         print(i)
-        time.sleep(0.1)
+        time.sleep(10)
 
 except KeyboardInterrupt:
     client.loop_stop()

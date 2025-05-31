@@ -51,8 +51,9 @@ abstract class MqttServerConnection<T extends Object>
       return;
     }
 
+    MqttLogger.log('MqttConnection::onData - incoming adding data to message stream');
     messageStream.addAll(data);
-
+    MqttLogger.log('MqttConnection::onData - incoming data added to message stream');
     while (messageStream.isMessageAvailable()) {
       var messageIsValid = true;
       MqttMessage? msg;
@@ -71,7 +72,9 @@ abstract class MqttServerConnection<T extends Object>
         return;
       }
       if (messageIsValid) {
+        MqttLogger.log('MqttConnection::onData - about to shrink message stream');
         messageStream.shrink();
+        MqttLogger.log('MqttConnection::onData - shrunk message stream');
         MqttLogger.log(
           'MqttServerConnection::_onData - message received ',
           msg,

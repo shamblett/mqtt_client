@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 void main() async {
   final client = MqttServerClient('localhost', 'dart_client1111');
   client.port = 1883;
-  client.logging(on: false);
+  client.logging(on: true);
   final connMess = MqttConnectMessage();
 
   client.connectionMessage = connMess;
@@ -30,7 +30,7 @@ void main() async {
       print('Connected successfully');
 
       // Now it's safe to listen
-      client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      client.updates?.listen((List<MqttReceivedMessage<MqttMessage>> c) {
         i++;
         print(i);
 
