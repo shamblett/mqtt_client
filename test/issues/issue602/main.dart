@@ -6,7 +6,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 void main() async {
   final client = MqttServerClient('localhost', 'dart_client1111');
   client.port = 1883;
-  client.logging(on: true);
+  client.logging(on: false);
   final connMess = MqttConnectMessage();
 
   client.connectionMessage = connMess;
