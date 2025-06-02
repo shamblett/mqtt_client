@@ -11,6 +11,9 @@ part of '../../mqtt_client.dart';
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
+  /// Large buffer watermark, buffers larger than this are treated as large buffers.
+  static const largeBufferSize = 65535;
+
   /// The underlying byte buffer
   typed.Uint8Buffer? buffer;
 
@@ -50,7 +53,14 @@ class MqttByteBuffer {
 
   /// Shrink the buffer
   void shrink() {
-    buffer!.removeRange(0, _position);
+    // Check for a large buffer that contains only one message.
+    if (!isMessageAvailable() && buffer!.length >= largeBufferSize) {
+      // The buffer contains a single large message, no need to do a
+      // removeRange, just reallocate an empty buffer.
+      buffer = typed.Uint8Buffer();
+    } else {
+      buffer!.removeRange(0, _position);
+    }
     _position = 0;
   }
 
