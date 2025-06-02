@@ -29,6 +29,10 @@ class MqttByteBuffer {
   /// Available bytes
   int get availableBytes => length - _position;
 
+  // Indicates if we have a large buffer with a single message
+  bool get _isLarge =>
+      !isMessageAvailable() && buffer!.length >= largeBufferSize;
+
   /// Skip bytes
   set skipBytes(int bytes) => _position += bytes;
 
@@ -54,7 +58,7 @@ class MqttByteBuffer {
   /// Shrink the buffer
   void shrink() {
     // Check for a large buffer that contains only one message.
-    if (!isMessageAvailable() && buffer!.length >= largeBufferSize) {
+    if (_isLarge) {
       // The buffer contains a single large message, no need to do a
       // removeRange, just reallocate an empty buffer.
       buffer = typed.Uint8Buffer();
@@ -98,7 +102,7 @@ class MqttByteBuffer {
   typed.Uint8Buffer read(int count) {
     if ((length < count) || (_position + count) > length) {
       throw Exception(
-        'mqtt_client::ByteBuffer: The buffer did not have '
+        'mqtt_client::ByteBuffer::read: The buffer does not have '
         'enough bytes for the read operation '
         'length $length, count $count, position $_position, buffer $buffer',
       );
@@ -106,6 +110,25 @@ class MqttByteBuffer {
     _position += count;
     return typed.Uint8Buffer()
       ..addAll(buffer!.getRange(_position - count, _position));
+  }
+
+  /// Reads a sequence of bytes from the current
+  /// buffer and advances the position within the buffer
+  /// by the number of bytes read.
+  /// Specialised for use in payloads e.g publish payloads that may be
+  /// large.
+  typed.Uint8Buffer readPayload(int count) {
+    if ((length < count) || (_position + count) > length) {
+      throw Exception(
+        'mqtt_client::ByteBuffer::readPayload The buffer does not have '
+        'enough bytes for the read operation '
+        'length $length, count $count, position $_position, buffer $buffer',
+      );
+    }
+
+    buffer!.removeRange(0, _position);
+    _position = 0;
+    return buffer != null ? buffer! : typed.Uint8Buffer();
   }
 
   /// Writes a byte to the current position in the buffer

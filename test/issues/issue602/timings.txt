@@ -37,3 +37,29 @@ Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Len
 
  ---> From top to bottom this is taking 99.885ms to receive this complete message.
 
+ ---> full fix, optimise shrink and payload reading
+
+ 1-2025-06-02 10:38:19.246902 -- MqttConnection::onData
+ 1-2025-06-02 10:38:19.246945 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-02 10:38:19.247012 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-02 10:38:19.247572 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-02 10:38:19.251140 -- MqttConnection::onData
+ 1-2025-06-02 10:38:19.251174 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-02 10:38:19.253395 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-02 10:38:19.253456 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-02 10:38:19.256573 -- MqttConnection::onData
+ 1-2025-06-02 10:38:19.256611 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-02 10:38:19.259895 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-02 10:38:19.259947 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-02 10:38:19.260924 -- MqttConnection::onData
+ 1-2025-06-02 10:38:19.260941 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-02 10:38:19.261275 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-02 10:38:19.316286 -- MqttConnection::onData - about to shrink message stream
+ 1-2025-06-02 10:38:19.316330 -- MqttConnection::onData - shrunk message stream
+ 1-2025-06-02 10:38:19.316343 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
+ Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681328
+ Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
+
+ 1-2025-06-02 10:38:19.316600 -- MqttServerConnection::_onData - message available event fired
+
+---> From top to bottom this is taking 69.441ms to receive this complete message.
