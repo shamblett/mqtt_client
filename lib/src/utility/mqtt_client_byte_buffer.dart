@@ -94,8 +94,8 @@ class MqttByteBuffer {
       );
     }
     _position += count;
-    return typed.Uint8Buffer()
-      ..addAll(buffer!.getRange(_position - count, _position));
+    return typed.Uint8Buffer(count)
+      ..setRange(0, count, (buffer!.getRange(_position - count, _position)));
   }
 
   /// Writes a byte to the current position in the buffer
