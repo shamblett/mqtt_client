@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:mqtt5_client/mqtt5_client.dart';
-import 'package:mqtt5_client/mqtt5_server_client.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:typed_data/typed_buffers.dart';
 
 const String broker = 'localhost';
 const int port = 1883;
-const String topic = 'benchmark/test';
+const String topic = 'station1/all';
 const int expectedMessages = 1000;
 
 int receivedCount = 0;
