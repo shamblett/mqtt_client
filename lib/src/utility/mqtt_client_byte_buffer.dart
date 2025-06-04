@@ -88,7 +88,7 @@ class MqttByteBuffer {
   typed.Uint8Buffer read(int count) {
     if ((length < count) || (_position + count) > length) {
       throw Exception(
-        'mqtt_client::ByteBuffer: The buffer did not have '
+        'mqtt_client::ByteBuffer::read: The buffer does not have '
         'enough bytes for the read operation '
         'length $length, count $count, position $_position, buffer $buffer',
       );
