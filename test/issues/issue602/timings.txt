@@ -12,54 +12,21 @@ Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Len
 
  ---> From top to bottom this is taking 225.468ms to receive this complete message.
 
- ---> With Byte buffer remove duplicate buffer and don't allocate tmp buffer fix
+ ---> With Byte buffer remove duplicate buffer fix
 
-1-2025-06-01 11:45:48.134379 -- MqttConnection::onData
-1-2025-06-01 11:45:48.134445 -- MqttConnection::onData - incoming adding data to message stream
-1-2025-06-01 11:45:48.134520 -- MqttConnection::onData - incoming data added to message stream
-1-2025-06-01 11:45:48.135192 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
-1-2025-06-01 11:45:48.140928 -- MqttConnection::onData
-1-2025-06-01 11:45:48.140960 -- MqttConnection::onData - incoming adding data to message stream
-1-2025-06-01 11:45:48.143343 -- MqttConnection::onData - incoming data added to message stream
-1-2025-06-01 11:45:48.143414 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
-1-2025-06-01 11:45:48.147507 -- MqttConnection::onData
-1-2025-06-01 11:45:48.147530 -- MqttConnection::onData - incoming adding data to message stream
-1-2025-06-01 11:45:48.151694 -- MqttConnection::onData - incoming data added to message stream
-1-2025-06-01 11:45:48.285431 -- MqttConnection::onData - about to shrink message stream
-1-2025-06-01 11:45:48.300922 -- MqttConnection::onData - shrunk message stream
-1-2025-06-01 11:45:48.300945 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
-Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681322
-Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
-
-1-2025-06-01 11:45:48.301286 -- MqttServerConnection::_onData - message available event fired
-1-2025-06-01 11:45:48.301423 -- MqttConnectionHandlerBase::messageAvailable - message type is MqttMessageType.publish
-1-2025-06-01 11:45:48.302186 -- PublishingManager::handlePublish - publish received from broker with topic station1/all
-
- ---> From top to bottom this is taking 99.885ms to receive this complete message.
-
- ---> full fix, optimise shrink and payload reading
-
- 1-2025-06-02 10:38:19.246902 -- MqttConnection::onData
- 1-2025-06-02 10:38:19.246945 -- MqttConnection::onData - incoming adding data to message stream
- 1-2025-06-02 10:38:19.247012 -- MqttConnection::onData - incoming data added to message stream
- 1-2025-06-02 10:38:19.247572 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
- 1-2025-06-02 10:38:19.251140 -- MqttConnection::onData
- 1-2025-06-02 10:38:19.251174 -- MqttConnection::onData - incoming adding data to message stream
- 1-2025-06-02 10:38:19.253395 -- MqttConnection::onData - incoming data added to message stream
- 1-2025-06-02 10:38:19.253456 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
- 1-2025-06-02 10:38:19.256573 -- MqttConnection::onData
- 1-2025-06-02 10:38:19.256611 -- MqttConnection::onData - incoming adding data to message stream
- 1-2025-06-02 10:38:19.259895 -- MqttConnection::onData - incoming data added to message stream
- 1-2025-06-02 10:38:19.259947 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
- 1-2025-06-02 10:38:19.260924 -- MqttConnection::onData
- 1-2025-06-02 10:38:19.260941 -- MqttConnection::onData - incoming adding data to message stream
- 1-2025-06-02 10:38:19.261275 -- MqttConnection::onData - incoming data added to message stream
- 1-2025-06-02 10:38:19.316286 -- MqttConnection::onData - about to shrink message stream
- 1-2025-06-02 10:38:19.316330 -- MqttConnection::onData - shrunk message stream
- 1-2025-06-02 10:38:19.316343 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
- Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681328
+ 1-2025-06-04 11:06:12.850682 -- MqttConnection::onData
+ 1-2025-06-04 11:06:12.850721 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-04 11:06:12.851453 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-04 11:06:12.851587 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-04 11:06:12.857021 -- MqttConnection::onData
+ 1-2025-06-04 11:06:12.857046 -- MqttConnection::onData - incoming adding data to message stream
+ 1-2025-06-04 11:06:12.857835 -- MqttConnection::onData - incoming data added to message stream
+ 1-2025-06-04 11:06:12.960579 -- MqttConnection::onData - about to shrink message stream
+ 1-2025-06-04 11:06:12.965953 -- MqttConnection::onData - shrunk message stream
+ 1-2025-06-04 11:06:12.965978 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
+ Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681323
  Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
 
- 1-2025-06-02 10:38:19.316600 -- MqttServerConnection::_onData - message available event fired
+ 1-2025-06-04 11:06:12.966009 -- MqttServerConnection::_onData - message available event fired
 
----> From top to bottom this is taking 69.441ms to receive this complete message.
+ ---> From top to bottom this is taking 102.744ms to receive this complete message.
