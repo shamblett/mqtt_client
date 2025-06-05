@@ -21,6 +21,9 @@ class MqttLogger {
   /// Test mode
   static bool testMode = false;
 
+  /// Log publish message payload data
+  static bool logPayloads = true;
+
   /// Log method
   /// If the optimise parameter is supplied it must have a toString method,
   /// this allows large objects such as lots of payload data not to be
@@ -29,15 +32,13 @@ class MqttLogger {
     if (loggingOn) {
       final now = DateTime.now();
       var output = '';
-      if (optimise is bool) {
-        output = '${clientId.toString()}-$now -- $message';
-        print(output);
-      } else {
-        output = '${clientId.toString()}-$now -- $message$optimise';
-        print(output);
-      }
+      output = optimise is bool
+          ? '${clientId.toString()}-$now -- $message'
+          : '${clientId.toString()}-$now -- $message$optimise';
       if (testMode) {
         testOutput = output;
+      } else {
+        print(output);
       }
     }
   }
