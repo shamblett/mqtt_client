@@ -1,3 +1,8 @@
+# 10.9.0
+Issues 602 and 604
+- [Issue 602](https://github.com/shamblett/mqtt_client/issues/602)
+- [Issue 604](https://github.com/shamblett/mqtt_client/issues/604)
+
 # 10.8.1
 Issues 590 and 595
 - [Issue 590](https://github.com/shamblett/mqtt_client/issues/590)
