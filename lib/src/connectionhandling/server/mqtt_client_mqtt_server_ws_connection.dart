@@ -19,11 +19,15 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   /// User defined websocket headers
   Map<String, dynamic>? headers;
 
+  /// User-defined websocket path.
+  String? websocketPath;
+
   /// Default constructor
   MqttServerWsConnection(
     super.eventBus,
     super.socketOptions,
     super.socketTimeout,
+    this.websocketPath,
   );
 
   /// Initializes a new instance of the MqttConnection class.
@@ -60,6 +64,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     }
 
     uri = uri.replace(port: port);
+
+    // Add custom path if specified, otherwise default to /
+    if (websocketPath != null && websocketPath!.isNotEmpty) {
+      uri = uri.replace(path: websocketPath);
+    }
 
     final uriString = uri.toString();
     MqttLogger.log(
@@ -123,6 +132,11 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     }
 
     uri = uri.replace(port: port);
+
+    // Add custom path if specified, otherwise default to /
+    if (websocketPath != null && websocketPath!.isNotEmpty) {
+      uri = uri.replace(path: websocketPath);
+    }
 
     final uriString = uri.toString();
     MqttLogger.log(

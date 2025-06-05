@@ -56,6 +56,9 @@ class MqttServerClient extends MqttClient {
     }
   }
 
+  /// User-defined websocket path.
+  String? websocketPath;
+
   /// Initializes a new instance of the MqttServerClient class using the
   /// default Mqtt Port.
   /// The server hostname or URL to connect to
@@ -111,6 +114,7 @@ class MqttServerClient extends MqttClient {
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;
+      connectionHandler.websocketPath = websocketPath;
       connectionHandler.useAlternateWebSocketImplementation =
           useAlternateWebSocketImplementation;
       if (connectionHandler.useAlternateWebSocketImplementation) {

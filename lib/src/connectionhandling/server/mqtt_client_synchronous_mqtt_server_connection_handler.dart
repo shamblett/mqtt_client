@@ -18,10 +18,14 @@ class SynchronousMqttServerConnectionHandler
     required super.socketOptions,
     required super.socketTimeout,
     reconnectTimePeriod = 5000,
+    this.websocketPath,
   }) : super(maxConnectionAttempts: maxConnectionAttempts) {
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }
+
+  /// User-defined websocket path.
+  String? websocketPath;
 
   /// Synchronously connect to the specific Mqtt Connection.
   @override
@@ -56,6 +60,7 @@ class SynchronousMqttServerConnectionHandler
               clientEventBus,
               socketOptions,
               socketTimeout,
+              websocketPath,
             );
           } else {
             MqttLogger.log(
@@ -66,6 +71,7 @@ class SynchronousMqttServerConnectionHandler
               clientEventBus,
               socketOptions,
               socketTimeout,
+              websocketPath,
             );
           }
 
