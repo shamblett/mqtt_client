@@ -421,7 +421,7 @@ void main() {
       } on Exception catch (exception) {
         expect(
           exception.toString(),
-          'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 3, count 2, position 2, buffer [0, 2, 109]',
+          'Exception: mqtt_client::ByteBuffer::read: The buffer does not have enough bytes for the read operation length 3, count 2, position 2, buffer [0, 2, 109]',
         );
         raised = true;
       }
@@ -455,7 +455,7 @@ void main() {
       } on Exception catch (exception) {
         expect(
           exception.toString(),
-          'Exception: mqtt_client::ByteBuffer: The buffer did not have enough bytes for the read operation length 1, count 2, position 0, buffer [0]',
+          'Exception: mqtt_client::ByteBuffer::read: The buffer does not have enough bytes for the read operation length 1, count 2, position 0, buffer [0]',
         );
         raised = true;
       }
