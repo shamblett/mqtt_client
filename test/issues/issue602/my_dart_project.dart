@@ -101,8 +101,12 @@ Future<void> main() async {
 
     print('All $receivedCount messages received.');
     print('Total receiving time: ${duration.toStringAsFixed(4)} seconds');
-    print('Receiving speed: ${(receivedCount / duration).toStringAsFixed(2)} messages/second');
-    print('Data throughput: ${(mbReceived / duration).toStringAsFixed(4)} MB/s');
+    print(
+      'Receiving speed: ${(receivedCount / duration).toStringAsFixed(2)} messages/second',
+    );
+    print(
+      'Data throughput: ${(mbReceived / duration).toStringAsFixed(4)} MB/s',
+    );
   }
 }
 
