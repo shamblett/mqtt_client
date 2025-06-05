@@ -99,7 +99,9 @@ class MqttPublishMessage extends MqttMessage {
     final sb = StringBuffer();
     sb.write(super.toString());
     sb.writeln(variableHeader.toString());
-    sb.writeln(payload.toString());
+    MqttLogger.logPayloads
+        ? sb.writeln(payload.toString())
+        : sb.writeln(' ---> Payload logging is off <--- ');
     return sb.toString();
   }
 }

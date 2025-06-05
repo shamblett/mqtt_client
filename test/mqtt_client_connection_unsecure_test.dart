@@ -554,6 +554,66 @@ void main() {
             ),
       );
     });
+    test('Normal publish - no payload logging', () async {
+      await IOOverrides.runZoned(
+        () async {
+          final client = MqttServerClient('localhost', 'SJHMQTTClient');
+          client.logging(on: true, logPayloads: false);
+          MqttLogger.testMode = true;
+          const username = 'unused';
+          print(username);
+          const password = 'password';
+          print(password);
+          await client.connect();
+          if (client.connectionStatus!.state == MqttConnectionState.connected) {
+            print('Client connected');
+          } else {
+            print(
+              'ERROR Client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+            );
+            client.disconnect();
+          }
+          // Publish a known topic
+          const topic = 'Dart/SJH/mqtt_client';
+          final buff = typed.Uint8Buffer(5);
+          buff[0] = 'h'.codeUnitAt(0);
+          buff[1] = 'e'.codeUnitAt(0);
+          buff[2] = 'l'.codeUnitAt(0);
+          buff[3] = 'l'.codeUnitAt(0);
+          buff[4] = 'o'.codeUnitAt(0);
+          client.publishMessage(topic, MqttQos.exactlyOnce, buff);
+          // Manual acknowledge count should be 0
+          expect(client.messagesAwaitingManualAcknowledge, 0);
+          print('Sleeping....');
+          await MqttUtilities.asyncSleep(2);
+          expect(
+            MqttLogger.testOutput.contains('---> Payload logging is off <---'),
+            isTrue,
+          );
+          expect(!MqttLogger.testOutput.contains('hello'), isTrue);
+          print('Disconnecting');
+          client.disconnect();
+          expect(
+            client.connectionStatus!.state,
+            MqttConnectionState.disconnected,
+          );
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketSimpleConnect.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
+    });
     test('Socket Timeout - Windows', () async {
       await IOOverrides.runZoned(
         () async {
