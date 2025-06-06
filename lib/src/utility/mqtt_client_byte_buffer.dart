@@ -130,7 +130,7 @@ class MqttByteBuffer {
       buffer!.removeRange(0, _position);
       _position = 0;
     }
-    // _position is now guaranteed to be 0.
+    // _position is now guaranteed to be 0 and at the start of the payload data.
     // If the length of the buffer is equal to count then just return it.
     final savedData = typed.Uint8Buffer();
     if (buffer!.length == count) {
