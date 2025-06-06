@@ -1022,6 +1022,45 @@ void main() {
       }
       expect(raised, isTrue);
     });
+    test('Deserialisation - Large payload', () {
+      // Payload larger that large payload limit
+      final largePayload = List<int>.filled(32800, 0);
+      largePayload.first = 0xde;
+      largePayload.last = 0xad;
+      // Tests basic message deserialization from a raw byte array.
+      // Message Specs________________
+      // <30><0C><00><04>fred
+      final sampleMessage = <int>[
+        0x30,
+        0xA6,
+        0x80,
+        0x02,
+        0x00,
+        0x04,
+        'f'.codeUnitAt(0),
+        'r'.codeUnitAt(0),
+        'e'.codeUnitAt(0),
+        'd'.codeUnitAt(0),
+      ];
+      sampleMessage.addAll(largePayload);
+      final buff = typed.Uint8Buffer();
+      buff.addAll(sampleMessage);
+      final byteBuffer = MqttByteBuffer(buff);
+      final baseMessage = MqttMessage.createFrom(byteBuffer);
+      // Check that the message was correctly identified as a publish message.
+      expect(baseMessage, const TypeMatcher<MqttPublishMessage>());
+      // Validate the message deserialization
+      expect(baseMessage.header!.duplicate, isFalse);
+      expect(baseMessage.header!.retain, isFalse);
+      expect(baseMessage.header!.qos, MqttQos.atMostOnce);
+      expect(baseMessage.header!.messageType, MqttMessageType.publish);
+      expect(baseMessage.header!.messageSize, 32806);
+      final pm = baseMessage as MqttPublishMessage;
+      // Check the payload
+      expect(pm.payload.message.length, 32800);
+      expect(pm.payload.message.first, 0xde);
+      expect(pm.payload.message.last, 0xad);
+    });
     test('Serialisation - Qos Level 2 Exactly Once', () {
       final expected = <int>[
         0x34,
@@ -1163,6 +1202,16 @@ void main() {
       expect(actual[12], expected[12]); // o
       expect(actual[13], expected[13]); // !
     });
+    test('Serialisation - Large payload', () {
+      final payload = List<int>.filled(32800, 0);
+      final payloadBuff = typed.Uint8Buffer()..addAll(payload);
+      payload.first = 0xde;
+      payload.last = 0xad;;
+      final msg = MqttPublishMessage().toTopic('fred').publishData(payloadBuff);
+      final actual = MessageSerializationHelper.getMessageBytes(msg);
+      expect(actual.length, 32810);
+    });
+
     test('Serialisation - With non-default Qos', () {
       final msg = MqttPublishMessage()
           .toTopic('mark')
