@@ -108,7 +108,8 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     events.EventBus? eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
-  ) : super(eventBus, socketOptions, socketTimeout);
+    String? websocketPath,
+  ) : super(eventBus, socketOptions, socketTimeout, websocketPath);
 
   /// Initializes a new instance of the MqttWs2Connection class.
   MqttServerWs2Connection.fromConnect(
@@ -117,7 +118,7 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     events.EventBus eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
-  ) : super(eventBus, socketOptions, socketTimeout) {
+  ) : super(eventBus, socketOptions, socketTimeout, null) {
     connect(server, port);
   }
 
@@ -142,6 +143,11 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
       throw NoConnectionException(message);
     }
     uri = uri.replace(port: port);
+
+    // Add custom path if specified, otherwise default to /
+    if (super.websocketPath != null && super.websocketPath!.isNotEmpty) {
+      uri = uri.replace(path: super.websocketPath);
+    }
 
     final uriString = uri.toString();
     MqttLogger.log(
@@ -221,6 +227,11 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
       throw NoConnectionException(message);
     }
     uri = uri.replace(port: port);
+
+    // Add custom path if specified, otherwise default to /
+    if (super.websocketPath != null && super.websocketPath!.isNotEmpty) {
+      uri = uri.replace(path: super.websocketPath);
+    }
 
     final uriString = uri.toString();
     MqttLogger.log(
