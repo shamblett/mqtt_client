@@ -1023,7 +1023,7 @@ void main() {
       expect(raised, isTrue);
     });
     test('Deserialisation - Large payload', () {
-      // Payload larger that large payload limit
+      // Payload larger than large payload limit
       final largePayload = List<int>.filled(32800, 0);
       largePayload.first = 0xde;
       largePayload.last = 0xad;
@@ -1073,7 +1073,7 @@ void main() {
         0x30,
         0xA6,
         0x80,
-        0x06,
+        0x02,
         0x00,
         0x04,
         'f'.codeUnitAt(0),
@@ -1095,12 +1095,16 @@ void main() {
       expect(baseMessage.header!.retain, isFalse);
       expect(baseMessage.header!.qos, MqttQos.atMostOnce);
       expect(baseMessage.header!.messageType, MqttMessageType.publish);
-      expect(baseMessage.header!.messageSize, 32810);
+      expect(baseMessage.header!.messageSize, 32806);
       final pm = baseMessage as MqttPublishMessage;
       // Check the payload
       expect(pm.payload.message.length, 32800);
       expect(pm.payload.message.first, 0xde);
       expect(pm.payload.message.last, 0xad);
+      expect(byteBuffer.length, 2);
+      final secondMessage = MqttMessage.createFrom(byteBuffer);
+      // Check that the message was correctly identified as a ping response.
+      expect(secondMessage, const TypeMatcher<MqttPingResponseMessage>());
     });
     test('Serialisation - Qos Level 2 Exactly Once', () {
       final expected = <int>[
