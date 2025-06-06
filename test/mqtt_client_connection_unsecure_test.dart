@@ -587,7 +587,7 @@ void main() {
           print('Sleeping....');
           await MqttUtilities.asyncSleep(2);
           expect(
-            MqttLogger.testOutput.contains('---> Payload logging is off <---'),
+            MqttLogger.testOutput.contains('---> Payload logging is off'),
             isTrue,
           );
           expect(!MqttLogger.testOutput.contains('hello'), isTrue);
