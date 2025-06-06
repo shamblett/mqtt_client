@@ -1101,6 +1101,7 @@ void main() {
       expect(pm.payload.message.length, 32800);
       expect(pm.payload.message.first, 0xde);
       expect(pm.payload.message.last, 0xad);
+      byteBuffer.shrink();
       expect(byteBuffer.length, 2);
       final secondMessage = MqttMessage.createFrom(byteBuffer);
       // Check that the message was correctly identified as a ping response.
