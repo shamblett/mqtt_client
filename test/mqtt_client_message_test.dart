@@ -1082,7 +1082,8 @@ void main() {
         'd'.codeUnitAt(0),
       ];
       sampleMessage.addAll(largePayload);
-      sampleMessage.addAll([1,2,3,4]);
+      // Ping response
+      sampleMessage.addAll([0xD0,0x0]);
       final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final byteBuffer = MqttByteBuffer(buff);
@@ -1245,8 +1246,6 @@ void main() {
     test('Serialisation - Large payload', () {
       final payload = List<int>.filled(32800, 0);
       final payloadBuff = typed.Uint8Buffer()..addAll(payload);
-      payload.first = 0xde;
-      payload.last = 0xad;;
       final msg = MqttPublishMessage().toTopic('fred').publishData(payloadBuff);
       final actual = MessageSerializationHelper.getMessageBytes(msg);
       expect(actual.length, 32810);
