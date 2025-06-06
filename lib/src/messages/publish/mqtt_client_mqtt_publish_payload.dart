@@ -40,7 +40,7 @@ class MqttPublishPayload extends MqttPayload {
     // The length of the bytes is the length specified in the header,
     // minus any bytes spent in the variable header.
     final messageBytes = header!.messageSize - variableHeader!.length;
-    message = payloadStream.read(messageBytes);
+    message = payloadStream.readPayload(messageBytes);
   }
 
   /// Writes the payload to the supplied stream.
