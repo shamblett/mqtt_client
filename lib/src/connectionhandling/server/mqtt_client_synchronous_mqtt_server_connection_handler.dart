@@ -11,6 +11,9 @@ part of '../../../mqtt_server_client.dart';
 /// to the hostname in a synchronous manner.
 class SynchronousMqttServerConnectionHandler
     extends MqttServerConnectionHandler {
+  /// User-defined websocket path.
+  String? websocketPath;
+
   /// Initializes a new instance of the SynchronousMqttConnectionHandler class.
   SynchronousMqttServerConnectionHandler(
     super.clientEventBus, {
@@ -23,9 +26,6 @@ class SynchronousMqttServerConnectionHandler
     connectTimer = MqttCancellableAsyncSleep(reconnectTimePeriod);
     initialiseListeners();
   }
-
-  /// User-defined websocket path.
-  String? websocketPath;
 
   /// Synchronously connect to the specific Mqtt Connection.
   @override

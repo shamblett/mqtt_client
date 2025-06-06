@@ -27,6 +27,9 @@ class MqttServerClient extends MqttClient {
   /// Max connection attempts
   final int maxConnectionAttempts;
 
+  /// User-defined websocket path.
+  String? websocketPath;
+
   /// The client supports the setting of both integer and boolean raw socket options
   /// as supported by the Dart IO library [RawSocketOption](https://api.dart.dev/stable/2.19.3/dart-io/RawSocketOption-class.html) class.
   /// Please consult the documentation for the above class before using this.
@@ -55,9 +58,6 @@ class MqttServerClient extends MqttClient {
       connectionHandler.websocketHeaders = header;
     }
   }
-
-  /// User-defined websocket path.
-  String? websocketPath;
 
   /// Initializes a new instance of the MqttServerClient class using the
   /// default Mqtt Port.
