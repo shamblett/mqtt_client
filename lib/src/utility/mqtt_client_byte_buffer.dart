@@ -11,6 +11,12 @@ part of '../../mqtt_client.dart';
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
+
+  /// Large payload handling.
+  /// If count of bytes to read for a payload is larger than this then
+  /// large payload handling is invoked.
+  static const largePayload = 32767;
+
   /// The underlying byte buffer
   typed.Uint8Buffer? buffer;
 
@@ -109,10 +115,14 @@ class MqttByteBuffer {
   typed.Uint8Buffer readPayload(int count) {
     if ((length < count) || (_position + count) > length) {
       throw Exception(
-        'mqtt_client::ByteBuffer::read: The buffer does not have '
+        'mqtt_client::ByteBuffer::readPayload: The buffer does not have '
         'enough bytes for the read operation '
         'length $length, count $count, position $_position, buffer $buffer',
       );
+    }
+    // If not a large payload use the normal buffer read method.
+    if ( count <= largePayload ) {
+      return read(count);
     }
     // See where the position is, if not 0 we can remove the range 0.._position
     // as we know we are looking for a payload.
