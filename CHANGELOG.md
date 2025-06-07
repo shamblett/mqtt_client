@@ -1,3 +1,6 @@
+# 10.9.1
+- [Issue 602](https://github.com/shamblett/mqtt_client/issues/602)
+
 # 10.9.0
 Issues 602 and 604
 - [Issue 602](https://github.com/shamblett/mqtt_client/issues/602)
