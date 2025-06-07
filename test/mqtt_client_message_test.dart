@@ -1083,7 +1083,7 @@ void main() {
       ];
       sampleMessage.addAll(largePayload);
       // Ping response
-      sampleMessage.addAll([0xD0,0x0]);
+      sampleMessage.addAll([0xD0, 0x0]);
       final buff = typed.Uint8Buffer();
       buff.addAll(sampleMessage);
       final byteBuffer = MqttByteBuffer(buff);
