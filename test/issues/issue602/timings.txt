@@ -30,3 +30,56 @@ Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Len
  1-2025-06-04 11:06:12.966009 -- MqttServerConnection::_onData - message available event fired
 
  ---> From top to bottom this is taking 102.744ms to receive this complete message.
+
+ ---> Phase 2
+
+ ---> Staring point
+
+ 1-2025-06-06 09:34:42.843495 -- MqttConnection::onData
+ 1-2025-06-06 09:34:42.844101 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-06 09:34:42.849468 -- MqttConnection::onData
+ 1-2025-06-06 09:34:42.851880 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-06 09:34:42.856728 -- MqttConnection::onData
+ 1-2025-06-06 09:34:42.860684 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+ 1-2025-06-06 09:34:42.860917 -- MqttConnection::onData
+ 1-2025-06-06 09:34:43.006837 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
+ Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681327
+ Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
+  ---> Payload logging is off, payload size is 9681313 bytes <---
+
+ 1-2025-06-06 09:34:43.007226 -- MqttServerConnection::_onData - message available event fired
+ 1-2025-06-06 09:34:43.007272 -- MqttConnectionHandlerBase::messageAvailable - message type is MqttMessageType.publish
+
+---> Showing 145.920 ms publish message creation
+
+---> Adding toList() on the getRange call
+
+1-2025-06-06 09:39:53.065715 -- MqttConnection::onData
+1-2025-06-06 09:39:53.066209 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+1-2025-06-06 09:39:53.070209 -- MqttConnection::onData
+1-2025-06-06 09:39:53.072963 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+1-2025-06-06 09:39:53.076327 -- MqttConnection::onData
+1-2025-06-06 09:39:53.251499 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
+Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681327
+Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
+ ---> Payload logging is off, payload size is 9681313 bytes <---
+
+1-2025-06-06 09:39:53.251780 -- MqttServerConnection::_onData - message available event fired
+1-2025-06-06 09:39:53.251822 -- MqttConnectionHandlerBase::messageAvailable - message type is MqttMessageType.publish
+
+---> Gives 175.172ms, considerably worse.
+
+---> New payload specific buffer code
+
+1-2025-06-06 10:31:37.163618 -- MqttConnection::onData
+1-2025-06-06 10:31:37.164452 -- MqttServerConnection::_ondata - message is not yet valid, waiting for more data ...
+1-2025-06-06 10:31:37.165975 -- MqttConnection::onData
+1-2025-06-06 10:31:37.225203 -- MqttServerConnection::_onData - message received MQTTMessage of type MqttMessageType.publish
+Header: MessageType = MqttMessageType.publish, Duplicate = false, Retain = false, Qos = MqttQos.atMostOnce, Size = 9681329
+Publish Variable Header: TopicName={station1/all}, MessageIdentifier={0}, VH Length={14}
+ ---> Payload logging is off, payload size is 9681315 bytes <---
+1-2025-06-06 10:31:37.225349 -- MqttServerConnection::_onData - message available event fired
+1-2025-06-06 10:31:37.225421 -- MqttConnectionHandlerBase::messageAvailable - message type is MqttMessageType.publish
+
+---> Sizes look correct, time is now 59.228ms
+

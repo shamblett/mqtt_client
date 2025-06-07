@@ -11,6 +11,11 @@ part of '../../mqtt_client.dart';
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
+  /// Large payload handling.
+  /// If count of bytes to read for a payload is larger than this then
+  /// large payload handling is invoked.
+  static const largePayload = 32767;
+
   /// The underlying byte buffer
   typed.Uint8Buffer? buffer;
 
@@ -50,7 +55,9 @@ class MqttByteBuffer {
 
   /// Shrink the buffer
   void shrink() {
-    buffer!.removeRange(0, _position);
+    _position < buffer!.length
+        ? buffer!.removeRange(0, _position)
+        : buffer!.clear();
     _position = 0;
   }
 
@@ -96,6 +103,53 @@ class MqttByteBuffer {
     _position += count;
     return typed.Uint8Buffer()
       ..addAll(buffer!.getRange(_position - count, _position));
+  }
+
+  /// Reads a sequence of bytes from the current
+  /// buffer and advances the position within the buffer
+  /// by the number of bytes read.
+  ///
+  /// Specifically intended for reading payload data from publish messages which can
+  /// be quite large.
+  typed.Uint8Buffer readPayload(int count) {
+    if ((length < count) || (_position + count) > length) {
+      throw Exception(
+        'mqtt_client::ByteBuffer::readPayload: The buffer does not have '
+        'enough bytes for the read operation '
+        'length $length, count $count, position $_position, buffer $buffer',
+      );
+    }
+    // If not a large payload use the normal buffer read method.
+    if (count <= largePayload) {
+      return read(count);
+    }
+    // See where the position is, if not 0 we can remove the range 0.._position
+    // as we know we are looking for a payload.
+    if (_position != 0) {
+      buffer!.removeRange(0, _position);
+      _position = 0;
+    }
+    // _position is now guaranteed to be 0 and at the start of the payload data.
+    // If the length of the buffer is equal to count then just return it.
+    final savedData = typed.Uint8Buffer();
+    if (buffer!.length == count) {
+      _position = buffer!.length;
+      return typed.Uint8Buffer()..addAll(buffer!);
+    } else {
+      // Trailing data, save it.
+      savedData.addAll(buffer!.getRange(_position + count, length).toList());
+      // Remove it, leaving just the payload
+      buffer!.removeRange(_position + count, length);
+      // Save the payload data
+      final tmp = typed.Uint8Buffer()..addAll(buffer!);
+      // Clear the buffer
+      buffer!.clear();
+      // Restore the trailing data and set the position to zero
+      buffer!.addAll(savedData);
+      _position = 0;
+      // Return the payload
+      return tmp;
+    }
   }
 
   /// Writes a byte to the current position in the buffer
