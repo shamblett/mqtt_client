@@ -11,7 +11,6 @@ part of '../../mqtt_client.dart';
 /// This class is in effect a cut-down implementation of the C# NET
 /// System.IO class with Mqtt client specific extensions.
 class MqttByteBuffer {
-
   /// Large payload handling.
   /// If count of bytes to read for a payload is larger than this then
   /// large payload handling is invoked.
@@ -121,7 +120,7 @@ class MqttByteBuffer {
       );
     }
     // If not a large payload use the normal buffer read method.
-    if ( count <= largePayload ) {
+    if (count <= largePayload) {
       return read(count);
     }
     // See where the position is, if not 0 we can remove the range 0.._position
