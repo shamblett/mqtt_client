@@ -91,6 +91,8 @@ class MqttServerClient extends MqttClient {
     String? username,
     String? password,
   ]) async {
+    // A server client
+    MqttClientEnvironment.isWebClient = false;
     instantiationCorrect = true;
     clientEventBus = events.EventBus();
     clientEventBus?.on<DisconnectOnNoPingResponse>().listen(
