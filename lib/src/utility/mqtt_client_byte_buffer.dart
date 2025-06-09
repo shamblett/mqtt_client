@@ -100,9 +100,15 @@ class MqttByteBuffer {
         'length $length, count $count, position $_position, buffer $buffer',
       );
     }
+    final tmp = typed.Uint8Buffer();
+    tmp.addAll(buffer!.getRange(_position, _position + count));
     _position += count;
-    return typed.Uint8Buffer()
-      ..addAll(buffer!.getRange(_position - count, _position));
+    final tmp2 = typed.Uint8Buffer();
+    tmp2.addAll(tmp);
+    return tmp2;
+    //_position += count;
+    //return typed.Uint8Buffer()
+      //..addAll(buffer!.getRange(_position - count, _position));
   }
 
   /// Reads a sequence of bytes from the current

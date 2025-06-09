@@ -21,7 +21,7 @@ class MqttWebInitializer {
   }) {
     _client = MqttBrowserClient(params.url, '');
     final clientId = 'Geppo-Web}';
-    _client.logging(on: true);
+    _client.logging(on: false);
     _client.port = params.port;
     _client.setProtocolV311();
     _client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
@@ -42,6 +42,7 @@ class MqttWebInitializer {
         .withClientIdentifier(clientId)
         .withWillTopic(willTopic)
         .withWillMessage(willMessage)
+        .withWillQos(MqttQos.atLeastOnce)
         .startClean();
 
     connectMessage.withWillQos(MqttQos.exactlyOnce);
@@ -105,8 +106,12 @@ class MqttWebInitializer {
 void main() async {
   final browser = MqttWebInitializer();
   browser.initClient(params: MqttParams());
+  print('EXECUTING - Connecting');
   await browser.connect();
+  print('EXECUTING - Waiting before subscription');
+  await Future.delayed(Duration(seconds: 5));
   browser.subscribe('my/dashboard/topic/chatList/#', qos: MqttQos.exactlyOnce);
+  print('EXECUTING - Subscribed - waiting for disconnect');
   await Future.delayed(Duration(seconds: 10));
   browser.unsubscribe('my/dashboard/topic/chatList/#');
   browser.disconnect();
