@@ -45,12 +45,14 @@ void main() {
           .withWillQos(MqttQos.atLeastOnce);
       client.connectionMessage = connMess;
       var ok = true;
+      expect(MqttClientEnvironment.isWebClient, isFalse);
       try {
         await client.connect();
         var connectionOK = false;
         if (client.connectionStatus!.state == MqttConnectionState.connected) {
           print('Browser client connected locally');
           connectionOK = true;
+          expect(MqttClientEnvironment.isWebClient, isTrue);
         } else {
           print(
             'Browser client connection failed - disconnecting, status is ${client.connectionStatus}',
