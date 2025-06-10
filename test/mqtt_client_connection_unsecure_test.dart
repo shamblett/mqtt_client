@@ -365,11 +365,13 @@ void main() {
             socketTimeout: null,
           );
           ch.onConnected = connectCb;
+          expect(MqttClientEnvironment.isWebClient, isFalse);
           final status = await ch.connect(
             mockBrokerAddress,
             mockBrokerPort,
             MqttConnectMessage().withClientIdentifier(testClientId),
           );
+          expect(MqttClientEnvironment.isWebClient, isFalse);
           expect(ch.connectionStatus.state, MqttConnectionState.connected);
           expect(
             ch.connectionStatus.returnCode,
