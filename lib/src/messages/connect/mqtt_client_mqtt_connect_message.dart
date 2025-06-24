@@ -102,6 +102,8 @@ class MqttConnectMessage extends MqttMessage {
   }
 
   /// Sets the authentication
+  /// Note that although passed as a string the password can be any binary data up to a length of
+  /// 65535 bytes.
   MqttConnectMessage authenticateAs(String? username, String? password) {
     if (username != null) {
       variableHeader!.connectFlags.usernameFlag = username.isNotEmpty;

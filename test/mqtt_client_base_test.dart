@@ -1066,6 +1066,11 @@ void main() {
       client.connectTimeoutPeriod = 500;
       expect(client.connectTimeoutPeriod, 5000);
     });
+    test('Check Credentials ', ()
+    {
+      final client = MqttClient('aaaa', 'bbbb');
+
+    });
   });
 
   group('Logging', () {
