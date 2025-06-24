@@ -606,28 +606,33 @@ class MqttClient {
   }
 
   /// Check the username and password validity
-  @protected
   void checkCredentials(String? username, String? password) {
     if (username != null) {
       MqttLogger.log(
         "Authenticating with username '{$username}' "
         "and password '{$password}'",
       );
-      if (username.trim().length >
-          MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-        MqttLogger.log(
-          'MqttClient::checkCredentials - Username length (${username.trim().length}) '
-          'exceeds the max recommended in the MQTT spec. ',
-        );
+      if (Protocol.version == MqttClientConstants.mqttV31ProtocolVersion) {
+        if (username.trim().length >
+            MqttClientConstants.recommendedMaxUsernamePasswordLength) {
+          MqttLogger.log(
+            'MqttClient::checkCredentials - Advisory - Username length (${username.trim().length}) '
+            'exceeds the max recommended in the MQTT 3.1 spec. ',
+          );
+        }
       }
     }
-    if (password != null &&
-        password.trim().length >
+
+    if (password != null) {
+      if (Protocol.version == MqttClientConstants.mqttV31ProtocolVersion) {
+        if (password.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
-      MqttLogger.log(
-        'MqttClient::checkCredentials - Password length (${password.trim().length}) '
-        'exceeds the max recommended in the MQTT spec. ',
-      );
+          MqttLogger.log(
+            'MqttClient::checkCredentials - Advisory - Password length (${password.trim().length}) '
+            'exceeds the max recommended in the MQTT 3.1 spec. ',
+          );
+        }
+      }
     }
   }
 
