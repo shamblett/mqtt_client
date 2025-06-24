@@ -1066,10 +1066,66 @@ void main() {
       client.connectTimeoutPeriod = 500;
       expect(client.connectTimeoutPeriod, 5000);
     });
-    test('Check Credentials ', ()
-    {
+    test('Check Credentials OK for 3.1', () {
       final client = MqttClient('aaaa', 'bbbb');
-
+      client.logging(on: true);
+      MqttLogger.testMode = true;
+      client.setProtocolV31();
+      client.checkCredentials('username', 'password');
+      expect(
+        MqttLogger.testOutput.contains(
+          "Authenticating with username '{username}' "
+          "and password '{password}",
+        ),
+        isTrue,
+      );
+      MqttLogger.testMode = false;
+      client.logging(on: false);
+    });
+    test('Check Credentials username bad for 3.1', () {
+      final client = MqttClient('aaaa', 'bbbb');
+      client.logging(on: true);
+      MqttLogger.testMode = true;
+      client.setProtocolV31();
+      client.checkCredentials('usernameffffffffffffff', 'password');
+      expect(
+        MqttLogger.testOutput.contains('Advisory - Username length'),
+        isTrue,
+      );
+      MqttLogger.testMode = false;
+      client.logging(on: false);
+    });
+    test('Check Credentials password bad for 3.1', () {
+      final client = MqttClient('aaaa', 'bbbb');
+      client.logging(on: true);
+      MqttLogger.testMode = true;
+      client.setProtocolV31();
+      client.checkCredentials('username', 'passwordkkkkkkkkkkkkkkkk');
+      expect(
+        MqttLogger.testOutput.contains('Advisory - Password length'),
+        isTrue,
+      );
+      MqttLogger.testMode = false;
+      client.logging(on: false);
+    });
+    test('Check Credentials always OK for 3.1.1', () {
+      final client = MqttClient('aaaa', 'bbbb');
+      client.logging(on: true);
+      MqttLogger.testMode = true;
+      client.setProtocolV311();
+      client.checkCredentials(
+        'usernamedddddddddddddddd',
+        'passwordfffffffffffffff',
+      );
+      expect(
+        MqttLogger.testOutput.contains(
+          "Authenticating with username '{usernamedddddddddddddddd}' "
+          "and password '{passwordfffffffffffffff}",
+        ),
+        isTrue,
+      );
+      MqttLogger.testMode = false;
+      client.logging(on: false);
     });
   });
 

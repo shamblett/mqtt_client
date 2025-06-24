@@ -606,7 +606,6 @@ class MqttClient {
   }
 
   /// Check the username and password validity
-  @protected
   void checkCredentials(String? username, String? password) {
     if (username != null) {
       MqttLogger.log(
@@ -617,8 +616,8 @@ class MqttClient {
         if (username.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
           MqttLogger.log(
-            'MqttClient::checkCredentials - Username length (${username.trim().length}) '
-            'exceeds the max recommended in the MQTT spec. ',
+            'MqttClient::checkCredentials - Advisory - Username length (${username.trim().length}) '
+            'exceeds the max recommended in the MQTT 3.1 spec. ',
           );
         }
       }
@@ -629,8 +628,8 @@ class MqttClient {
         if (password.trim().length >
             MqttClientConstants.recommendedMaxUsernamePasswordLength) {
           MqttLogger.log(
-            'MqttClient::checkCredentials - Password length (${password.trim().length}) '
-            'exceeds the max recommended in the MQTT spec. ',
+            'MqttClient::checkCredentials - Advisory - Password length (${password.trim().length}) '
+            'exceeds the max recommended in the MQTT 3.1 spec. ',
           );
         }
       }

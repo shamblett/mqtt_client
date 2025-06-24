@@ -18,11 +18,18 @@ class MqttLogger {
   /// Test output
   static String testOutput = '';
 
-  /// Test mode
-  static bool testMode = false;
-
   /// Log publish message payload data
   static bool logPayloads = true;
+
+  static bool _testMode = false;
+
+  /// Test mode
+  static bool get testMode => _testMode;
+
+  static set testMode(bool state) {
+    _testMode = state;
+    testOutput = '';
+  }
 
   /// Log method
   /// If the optimise parameter is supplied it must have a toString method,
