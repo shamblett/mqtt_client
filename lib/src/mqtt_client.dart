@@ -247,11 +247,14 @@ class MqttClient {
   /// if this callback is supplied.
   FailedConnectionAttemptCallback? onFailedConnectionAttempt;
 
-  /// Subscribed callback, function returns a void and takes a
-  /// string parameter, the topic that has been subscribed to.
+  /// On subscribed
   SubscribeCallback? _onSubscribed;
 
-  /// On subscribed
+  /// On subscribed.
+  /// Called for each single subscription request on reception of
+  /// the associated subscription acknowledge message.
+  /// Called only once for a batch subscription request, the topic will be
+  /// set to the first topic of the request.
   SubscribeCallback? get onSubscribed => _onSubscribed;
 
   set onSubscribed(SubscribeCallback? cb) {
@@ -259,10 +262,10 @@ class MqttClient {
     subscriptionsManager?.onSubscribed = cb;
   }
 
-  /// Subscribed failed callback, function returns a void and takes a
-  /// string parameter, the topic that has failed subscription.
+  /// On subscribe fail.
   /// Invoked either by subscribe if an invalid topic is supplied or on
   /// reception of a failed subscribe indication from the broker.
+  /// This is never invoked in batch processing of subscriptions.
   SubscribeFailCallback? _onSubscribeFail;
 
   /// On subscribed fail
@@ -441,11 +444,10 @@ class MqttClient {
     }
   }
 
-  /// Initiates a topic subscription request to the broker
-  /// with a strongly typed data processor callback.
+  /// Initiates a topic subscription request to the broker.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
-  /// Returns the subscription or null on failure
+  /// Returns the subscription or null on failure.
   Subscription? subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
@@ -457,6 +459,7 @@ class MqttClient {
   /// This sends multiple subscription requests to the broker in a single
   /// subscription message. The returned [Subscription] allows the tracking
   /// of the status of the individual subscriptions.
+  /// Returns the subscription or null on failure.
   Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
