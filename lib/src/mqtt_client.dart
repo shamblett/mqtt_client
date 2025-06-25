@@ -456,7 +456,7 @@ class MqttClient {
   /// Initiates a batch subscription request to the broker.
   /// This sends multiple subscription requests to the broker in a single
   /// subscription message. The returned [Subscription] allows the tracking
-  /// of the status of the individual subscription topics.
+  /// of the status of the individual subscriptions.
   Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
