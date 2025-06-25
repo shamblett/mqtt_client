@@ -441,7 +441,7 @@ class MqttClient {
     }
   }
 
-  /// Initiates a topic subscription request to the connected broker
+  /// Initiates a topic subscription request to the broker
   /// with a strongly typed data processor callback.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
@@ -453,7 +453,18 @@ class MqttClient {
     return subscriptionsManager!.registerSubscription(topic, qosLevel);
   }
 
+  /// Initiates a batch subscription request to the broker.
+  /// This sends multiple topics/QoS levels to the broker in a single
+  /// subscription message. The returned [Subscription] allows the tracking
+  /// of the status of the individual subscription topics.
   /// Re subscribe.
+  Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
+    if (connectionStatus!.state != MqttConnectionState.connected) {
+      throw ConnectionException(connectionHandler?.connectionStatus.state);
+    }
+    return subscriptionsManager!.registerBatchSubscription(subscriptions);
+  }
+
   /// Unsubscribes all confirmed subscriptions and re subscribes them
   /// without sending unsubscribe messages to the broker.
   /// If an unsubscribe message to the broker is needed then use
@@ -463,7 +474,7 @@ class MqttClient {
   void resubscribe() => subscriptionsManager!.resubscribe();
 
   /// Publishes a message to the message broker.
-  /// Returns The message identifer assigned to the message.
+  /// Returns The message identifier assigned to the message.
   /// Raises InvalidTopicException if the topic supplied violates the
   /// MQTT topic format rules.
   int publishMessage(
@@ -503,6 +514,12 @@ class MqttClient {
   }
 
   /// Gets the current status of a subscription.
+  ///
+  /// A batch subscription contains the status of each subscribed topic as returned
+  /// by the broker only if the status is active.
+  ///
+  /// A status of [MqttSubscriptionStatus.doesNotExist] is returned if a single subscription fails
+  /// or all the subscriptions in a batch subscription fail.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       subscriptionsManager!.getSubscriptionsStatus(topic);
 
