@@ -143,7 +143,7 @@ void main() {
       expect(msg.variableHeader!.messageIdentifier, 1);
       expect(msg.header!.qos, MqttQos.atLeastOnce);
     });
-    test('Acknowledged subscription request creates active subscription', () {
+    test('Acknowledged subscription request creates active subscription single', () {
       var cbCalled = false;
       void subCallback(String topic) {
         expect(topic, 'testtopic');
