@@ -454,7 +454,9 @@ class MqttClient {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
     }
-    return subscriptionsManager!.registerBatchSubscription(subscriptions);
+    return subscriptions.isEmpty
+        ? null
+        : subscriptionsManager!.registerBatchSubscription(subscriptions);
   }
 
   /// Re subscribe.

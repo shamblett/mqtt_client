@@ -87,6 +87,15 @@ class SubscriptionsManager {
     return cn ??= createNewSubscription(topic, qos);
   }
 
+  /// Registers a new batch subscription with the subscription manager.
+  Subscription? registerBatchSubscription(
+    List<BatchSubscription> subscriptions,
+  ) {
+    // Use the first topic in the batch
+    var cn = tryGetExistingSubscription(subscriptions.first.topic);
+    return cn ??= createNewBatchSubscription(subscriptions);
+  }
+
   /// Gets a view on the existing observable, if the subscription
   /// already exists.
   Subscription? tryGetExistingSubscription(String topic) {
@@ -131,6 +140,40 @@ class SubscriptionsManager {
       if (onSubscribeFail != null) {
         onSubscribeFail!(topic);
       }
+      return null;
+    }
+  }
+
+  /// Creates a new batch subscription for the specified topic.
+  /// If the subscription cannot be created null is returned.
+  Subscription? createNewBatchSubscription(
+    List<BatchSubscription> subscriptions,
+  ) {
+    try {
+      // Get an ID that represents the subscription. We will use this
+      // same ID for unsubscribe as well.
+      final msgId = messageIdentifierDispenser.getNextMessageIdentifier();
+      final sub = Subscription();
+      sub.batch = true;
+      sub.batchSubscriptions = subscriptions;
+      sub.messageIdentifier = msgId;
+      sub.createdTime = DateTime.now();
+      pendingSubscriptions[sub.messageIdentifier] = sub;
+      // Build a subscribe message for the caller and send it off to the broker.
+      final msg = MqttSubscribeMessage().withMessageIdentifier(
+        sub.messageIdentifier,
+      );
+      for (final subscription in subscriptions) {
+        msg.toTopic(subscription.topic);
+        msg.atQos(subscription.qosLevel);
+      }
+      connectionHandler!.sendMessage(msg);
+      return sub;
+    } on Exception catch (e) {
+      MqttLogger.log(
+        'Subscriptionsmanager::createNewBatchSubscription '
+        'exception raised, text is $e',
+      );
       return null;
     }
   }
