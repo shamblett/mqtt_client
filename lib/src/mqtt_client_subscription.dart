@@ -25,16 +25,19 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   /// The time the subscription was created.
   DateTime? createdTime;
 
-  /// The Topic that is subscribed to.
-  /// Single subscription only.
-  late SubscriptionTopic topic;
-
   /// The QOS level of the topics subscription
-  /// Single subscription only.
+  /// For a baych subscription the first topic in the batch.
   MqttQos? qos;
 
   /// Empty if a single subscription.
   List<BatchSubscription> batchSubscriptions = [];
+
+  late SubscriptionTopic _topic;
+
+  /// The Topic that is subscribed to.
+  /// For a batch subscription the first topic in the batch.
+  SubscriptionTopic get topic =>
+      batch ? SubscriptionTopic(batchSubscriptions.first.topic) : _topic;
 
   /// Failed batch subscriptions.
   List<BatchSubscription> get failedSubscriptions =>
@@ -53,6 +56,8 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   /// Total batch subscriptions.
   int get totalBatchSubscriptions =>
       totalFailedSubscriptions + totalSucceededSubscriptions;
+
+  set topic(SubscriptionTopic topic) => _topic = topic;
 }
 
 /// A subscription used in batch subscription processing.
