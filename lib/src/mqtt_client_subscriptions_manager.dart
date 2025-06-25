@@ -150,11 +150,13 @@ class SubscriptionsManager {
     List<BatchSubscription> subscriptions,
   ) {
     try {
+      final subscriptionTopic = SubscriptionTopic(subscriptions.first.topic);
       // Get an ID that represents the subscription. We will use this
       // same ID for unsubscribe as well.
       final msgId = messageIdentifierDispenser.getNextMessageIdentifier();
       final sub = Subscription();
       sub.batch = true;
+      sub.topic = subscriptionTopic;
       sub.batchSubscriptions = subscriptions;
       sub.messageIdentifier = msgId;
       sub.createdTime = DateTime.now();

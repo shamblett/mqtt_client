@@ -26,7 +26,7 @@ class MockCON extends Mock implements MqttServerNormalConnection {}
 void main() {
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
   group('Manager', () {
-    test('Invalid topic returns null subscription', () {
+    test('Invalid topic returns null subscription single', () {
       var cbCalled = false;
       void subCallback(String topic) {
         expect(topic, 'house#');
@@ -47,6 +47,21 @@ void main() {
       final ret = subs.registerSubscription(topic, qos);
       expect(ret, isNull);
       expect(cbCalled, isTrue);
+    });
+    test('Invalid topic returns null subscription batch', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.messageIdentifierDispenser.reset();
+      const topic = 'house#';
+      const qos = MqttQos.atLeastOnce;
+      final batchSubscription = BatchSubscription(topic, qos);
+      final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+      final ret = subs.registerBatchSubscription([batchSubscription]);
+      expect(ret, isNull);
     });
     test('Subscription request creates pending subscription', () {
       final clientEventBus = events.EventBus();
