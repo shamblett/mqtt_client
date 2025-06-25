@@ -62,6 +62,8 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
   set topic(SubscriptionTopic topic) => _topic = topic;
 
+  void updateBatchQos(List<MqttQos> qosList) {}
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

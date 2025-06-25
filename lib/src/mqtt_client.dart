@@ -261,9 +261,10 @@ class MqttClient {
   }
 
   /// On subscribe fail.
-  /// Invoked either by subscribe if an invalid topic is supplied or on
+  /// Invoked by subscribe if an invalid topic is supplied or on
   /// reception of a failed subscribe indication from the broker.
-  /// This is never invoked in batch processing of subscriptions.
+  /// For batch subscriptions this is only invoked if all subscriptions in
+  /// the batch fail.
   SubscribeFailCallback? _onSubscribeFail;
   SubscribeFailCallback? get onSubscribeFail => _onSubscribeFail;
 
