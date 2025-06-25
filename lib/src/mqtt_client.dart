@@ -457,7 +457,6 @@ class MqttClient {
   /// This sends multiple topics/QoS levels to the broker in a single
   /// subscription message. The returned [Subscription] allows the tracking
   /// of the status of the individual subscription topics.
-  /// Re subscribe.
   Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
@@ -465,6 +464,7 @@ class MqttClient {
     return subscriptionsManager!.registerBatchSubscription(subscriptions);
   }
 
+  /// Re subscribe.
   /// Unsubscribes all confirmed subscriptions and re subscribes them
   /// without sending unsubscribe messages to the broker.
   /// If an unsubscribe message to the broker is needed then use
