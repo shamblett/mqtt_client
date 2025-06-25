@@ -247,14 +247,12 @@ class MqttClient {
   /// if this callback is supplied.
   FailedConnectionAttemptCallback? onFailedConnectionAttempt;
 
-  /// On subscribed
-  SubscribeCallback? _onSubscribed;
-
   /// On subscribed.
   /// Called for each single subscription request on reception of
   /// the associated subscription acknowledge message.
   /// Called only once for a batch subscription request, the topic will be
   /// set to the first topic of the request.
+  SubscribeCallback? _onSubscribed;
   SubscribeCallback? get onSubscribed => _onSubscribed;
 
   set onSubscribed(SubscribeCallback? cb) {
@@ -267,8 +265,6 @@ class MqttClient {
   /// reception of a failed subscribe indication from the broker.
   /// This is never invoked in batch processing of subscriptions.
   SubscribeFailCallback? _onSubscribeFail;
-
-  /// On subscribed fail
   SubscribeFailCallback? get onSubscribeFail => _onSubscribeFail;
 
   set onSubscribeFail(SubscribeFailCallback? cb) {
@@ -279,8 +275,6 @@ class MqttClient {
   /// Unsubscribed callback, function returns a void and takes a
   /// string parameter, the topic that has been unsubscribed.
   UnsubscribeCallback? _onUnsubscribed;
-
-  /// On unsubscribed
   UnsubscribeCallback? get onUnsubscribed => _onUnsubscribed;
 
   set onUnsubscribed(UnsubscribeCallback? cb) {
@@ -293,8 +287,6 @@ class MqttClient {
   /// this will be called.
   /// Can be used for health monitoring outside of the client itself.
   PongCallback? _pongCallback;
-
-  /// The ping received callback
   PongCallback? get pongCallback => _pongCallback;
 
   set pongCallback(PongCallback? cb) {
@@ -307,8 +299,6 @@ class MqttClient {
   /// this will be called.
   /// Can be used in tandem with the [pongCallback] for latency calculations.
   PingCallback? _pingCallback;
-
-  /// The ping sent callback
   PingCallback? get pingCallback => _pingCallback;
 
   set pingCallback(PingCallback? cb) {
