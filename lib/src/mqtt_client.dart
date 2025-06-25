@@ -454,7 +454,7 @@ class MqttClient {
   }
 
   /// Initiates a batch subscription request to the broker.
-  /// This sends multiple topics/QoS levels to the broker in a single
+  /// This sends multiple subscription requests to the broker in a single
   /// subscription message. The returned [Subscription] allows the tracking
   /// of the status of the individual subscription topics.
   Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
