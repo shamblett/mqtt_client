@@ -89,6 +89,60 @@ void main() {
       expect(msg.variableHeader!.messageIdentifier, 1);
       expect(msg.header!.qos, MqttQos.atLeastOnce);
     });
+    test('Batch Subscription request creates pending subscription', () {
+      final clientEventBus = events.EventBus();
+      final testCHS = TestConnectionHandlerSend(
+        clientEventBus,
+        socketOptions: socketOptions,
+      );
+      final pm = PublishingManager(testCHS, clientEventBus);
+      pm.messageIdentifierDispenser.reset();
+      final subscriptions = <BatchSubscription>[
+        BatchSubscription('topic1', MqttQos.atLeastOnce),
+        BatchSubscription('topic2', MqttQos.atMostOnce),
+        BatchSubscription('topic3', MqttQos.exactlyOnce),
+      ];
+      final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+      final subRet = subs.registerBatchSubscription(subscriptions);
+      expect(subRet, isNotNull);
+      expect(subRet?.batch, isTrue);
+      expect(subRet?.topic.rawTopic, 'topic1');
+      expect(subRet?.totalBatchSubscriptions, 3);
+      expect(subRet?.failedSubscriptions, []);
+      expect(subRet?.succeededSubscriptions.length, 3);
+      expect(
+        subRet?.batchSubscriptions.first ==
+            BatchSubscription('topic1', MqttQos.atLeastOnce),
+        isTrue,
+      );
+      expect(
+        subRet?.batchSubscriptions[1] ==
+            BatchSubscription('topic2', MqttQos.atMostOnce),
+        isTrue,
+      );
+        expect(
+        subRet?.batchSubscriptions.last ==
+        BatchSubscription('topic3', MqttQos.exactlyOnce),
+        isTrue,
+        );
+      expect(
+        subs.getSubscriptionsStatus('topic1'),
+        MqttSubscriptionStatus.pending,
+      );
+      expect(
+        testCHS.sentMessages[0],
+        const TypeMatcher<MqttSubscribeMessage>(),
+      );
+      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
+      expect(msg.payload.subscriptions.containsKey('topic1'), isTrue);
+      expect(msg.payload.subscriptions['topic1'], MqttQos.atLeastOnce);
+      expect(msg.payload.subscriptions.containsKey('topic2'), isTrue);
+      expect(msg.payload.subscriptions['topic2'], MqttQos.atMostOnce);
+      expect(msg.payload.subscriptions.containsKey('topic3'), isTrue);
+      expect(msg.payload.subscriptions['topic3'], MqttQos.exactlyOnce);
+      expect(msg.variableHeader!.messageIdentifier, 1);
+      expect(msg.header!.qos, MqttQos.atLeastOnce);
+    });
     test('Acknowledged subscription request creates active subscription', () {
       var cbCalled = false;
       void subCallback(String topic) {

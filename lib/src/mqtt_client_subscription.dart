@@ -26,7 +26,7 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   DateTime? createdTime;
 
   /// The QOS level of the topics subscription
-  /// For a baych subscription the first topic in the batch.
+  /// For a batch subscription the QoS of the first topic in the batch.
   MqttQos? qos;
 
   /// Empty if a single subscription.
@@ -57,7 +57,28 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   int get totalBatchSubscriptions =>
       totalFailedSubscriptions + totalSucceededSubscriptions;
 
+  @override
+  int get hashCode => topic.hashCode + qos.hashCode + batch.hashCode;
+
   set topic(SubscriptionTopic topic) => _topic = topic;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Subscription &&
+          runtimeType == other.runtimeType &&
+          topic.rawTopic == other.topic.rawTopic &&
+          qos == other.qos &&
+          batch == other.batch;
+
+  @override
+  String toString() {
+    final sb = StringBuffer();
+    sb.writeln(
+      'Subscription:: Batch $batch, MID $messageIdentifier, Topic ${topic.rawTopic}, QoS ${qos?.toString().split(':')[1]}, Total Batch $totalBatchSubscriptions',
+    );
+    return sb.toString();
+  }
 }
 
 /// A subscription used in batch subscription processing.
@@ -66,5 +87,23 @@ class BatchSubscription {
 
   final MqttQos qosLevel;
 
+  @override
+  int get hashCode => topic.hashCode + qosLevel.hashCode;
+
   BatchSubscription(this.topic, this.qosLevel);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatchSubscription &&
+          runtimeType == other.runtimeType &&
+          topic == other.topic &&
+          qosLevel == other.qosLevel;
+
+  @override
+  String toString() {
+    final sb = StringBuffer();
+    sb.writeln('BatchSubscription:: Topic $topic, QoS $qosLevel');
+    return sb.toString();
+  }
 }
