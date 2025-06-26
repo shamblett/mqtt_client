@@ -25,19 +25,26 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   /// The time the subscription was created.
   DateTime? createdTime;
 
-  /// The QOS level of the topics subscription
-  /// For a batch subscription the QoS of the first topic in the batch.
-  MqttQos? qos;
-
   /// Empty if a single subscription.
   List<BatchSubscription> batchSubscriptions = [];
 
-  late SubscriptionTopic _topic;
+  MqttQos _qos = MqttQos.failure;
+
+  SubscriptionTopic _topic = SubscriptionTopic('rawtopic');
+
+  /// QoS, if batch this is the QoS of the first topic.
+  MqttQos get qos {
+    if (batch && batchSubscriptions.isNotEmpty) {
+      return batchSubscriptions.first.qos;
+    }
+    return _qos;
+  }
 
   /// The Topic that is subscribed to.
   /// For a batch subscription the first topic in the batch.
-  SubscriptionTopic get topic =>
-      batch ? SubscriptionTopic(batchSubscriptions.first.topic) : _topic;
+  SubscriptionTopic get topic => batch && batchSubscriptions.isNotEmpty
+      ? SubscriptionTopic(batchSubscriptions.first.topic)
+      : _topic;
 
   /// Failed batch subscriptions.
   List<BatchSubscription> get failedSubscriptions =>
@@ -62,6 +69,12 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
   set topic(SubscriptionTopic topic) => _topic = topic;
 
+  set qos(MqttQos qos) {
+    if (!batch) {
+      _qos = qos;
+    }
+  }
+
   /// Update the subscriptions in the subscriptions list with the QoS
   /// grants returned by the broker.
   /// Returns false if the number of qos grants is not equal to the
@@ -73,6 +86,8 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
     for (int i = 0; i < totalBatchSubscriptions; i++) {
       batchSubscriptions[i].qos = qosList[i];
     }
+    qos = batchSubscriptions.first.qos;
+
     return true;
   }
 
@@ -83,13 +98,14 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
           runtimeType == other.runtimeType &&
           topic.rawTopic == other.topic.rawTopic &&
           qos == other.qos &&
-          batch == other.batch;
+          batch == other.batch &&
+          messageIdentifier == other.messageIdentifier;
 
   @override
   String toString() {
     final sb = StringBuffer();
     sb.writeln(
-      'Subscription:: Batch $batch, MID $messageIdentifier, Topic ${topic.rawTopic}, QoS ${qos?.toString().split(':')[1]}, Total Batch $totalBatchSubscriptions',
+      'Subscription:: Batch: $batch, MID: $messageIdentifier, Topic: ${topic.rawTopic}, QoS: $qos, Total Batch: $totalBatchSubscriptions',
     );
     return sb.toString();
   }
@@ -99,12 +115,13 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 class BatchSubscription {
   final String topic;
 
+  /// Qos, default to failure.
   MqttQos qos = MqttQos.failure;
 
   @override
   int get hashCode => topic.hashCode + qos.hashCode;
 
-  BatchSubscription(this.topic, MqttQos qos);
+  BatchSubscription(this.topic, this.qos);
 
   @override
   bool operator ==(Object other) =>
@@ -117,9 +134,7 @@ class BatchSubscription {
   @override
   String toString() {
     final sb = StringBuffer();
-    sb.writeln(
-      'BatchSubscription:: Topic $topic, QoS ${qos.toString().split(':')[1]}',
-    );
+    sb.writeln('BatchSubscription:: Topic: $topic, QoS: $qos');
     return sb.toString();
   }
 }

@@ -124,7 +124,7 @@ class SubscriptionsManager {
           .getNextMessageIdentifier();
       final sub = Subscription();
       sub.topic = subscriptionTopic;
-      sub.qos = qos;
+      sub.qos = qos!;
       sub.messageIdentifier = messageIdentifier;
       sub.createdTime = DateTime.now();
       pendingSubscriptions[messageIdentifier] = sub;
