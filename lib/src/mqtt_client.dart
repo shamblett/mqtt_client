@@ -519,6 +519,14 @@ class MqttClient {
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       subscriptionsManager!.getSubscriptionsStatus(topic);
 
+  /// Gets the current status of a subscription using its
+  /// returned [Subscription].
+  ///
+  /// Functionally equivalent to [getSubscriptionsStatus].
+  MqttSubscriptionStatus getSubscriptionsStatusBySubscription(
+    Subscription sub,
+  ) => subscriptionsManager!.getSubscriptionsStatusBySubscription(sub);
+
   /// Disconnect from the broker.
   /// This is a hard disconnect, a disconnect message is sent to the
   /// broker and the client is then reset to its pre-connection state,

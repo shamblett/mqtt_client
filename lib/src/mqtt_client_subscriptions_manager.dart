@@ -171,7 +171,7 @@ class SubscriptionsManager {
       );
       for (final subscription in subscriptions) {
         msg.toTopic(subscription.topic);
-        msg.atQos(subscription.qosLevel);
+        msg.atQos(subscription.qos);
       }
       connectionHandler!.sendMessage(msg);
       return sub;
@@ -264,12 +264,10 @@ class SubscriptionsManager {
 
     // Update individual subscription status from batch subscription.
     if (sub.batch) {
-      if (subAck.payload.qosGrants.length != sub.totalBatchSubscriptions) {
-        // The list of qos grants returned by the broker is not the same as
-        // the number sent, fail.
+      final res = sub.updateBatchQos(subAck.payload.qosGrants);
+      if (!res) {
         return false;
       }
-      sub.updateBatchQos(subAck.payload.qosGrants);
     }
 
     // Success, call the subscribed callback
@@ -295,11 +293,10 @@ class SubscriptionsManager {
   /// Gets the current status of a subscription.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) {
     var status = MqttSubscriptionStatus.doesNotExist;
-    final noSubscription = Subscription()..qos = MqttQos.reserved1;
 
     Subscription sub = subscriptions.values.firstWhere(
       (s) => s.topic.rawTopic == topic,
-      orElse: (() => noSubscription),
+      orElse: (() => Subscription()..qos = MqttQos.reserved1),
     );
     if (sub.qos != MqttQos.reserved1) {
       status = MqttSubscriptionStatus.active;
@@ -307,12 +304,26 @@ class SubscriptionsManager {
 
     sub = pendingSubscriptions.values.firstWhere(
       (s) => s.topic.rawTopic == topic,
-      orElse: (() => noSubscription),
+      orElse: (() => Subscription()..qos = MqttQos.reserved1),
     );
     if (sub.qos != MqttQos.reserved1) {
       status = MqttSubscriptionStatus.pending;
     }
 
+    return status;
+  }
+
+  /// Gets the current status of a subscription.
+  MqttSubscriptionStatus getSubscriptionsStatusBySubscription(
+    Subscription sub,
+  ) {
+    var status = MqttSubscriptionStatus.doesNotExist;
+    if (subscriptions.containsValue(sub)) {
+      status == MqttSubscriptionStatus.active;
+    }
+    if (pendingSubscriptions.containsValue(sub)) {
+      status == MqttSubscriptionStatus.pending;
+    }
     return status;
   }
 

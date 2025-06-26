@@ -41,11 +41,11 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
   /// Failed batch subscriptions.
   List<BatchSubscription> get failedSubscriptions =>
-      batchSubscriptions.where((s) => s.qosLevel == MqttQos.failure).toList();
+      batchSubscriptions.where((s) => s.qos == MqttQos.failure).toList();
 
   /// Succeeded batch subscriptions.
   List<BatchSubscription> get succeededSubscriptions =>
-      batchSubscriptions.where((s) => s.qosLevel != MqttQos.failure).toList();
+      batchSubscriptions.where((s) => s.qos != MqttQos.failure).toList();
 
   /// Total failed batch subscriptions.
   int get totalFailedSubscriptions => failedSubscriptions.length;
@@ -62,7 +62,19 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
   set topic(SubscriptionTopic topic) => _topic = topic;
 
-  void updateBatchQos(List<MqttQos> qosList) {}
+  /// Update the subscriptions in the subscriptions list with the QoS
+  /// grants returned by the broker.
+  /// Returns false if the number of qos grants is not equal to the
+  /// number of subscriptions.
+  bool updateBatchQos(List<MqttQos> qosList) {
+    if (qosList.length != totalBatchSubscriptions) {
+      return false;
+    }
+    for (int i = 0; i < totalBatchSubscriptions; i++) {
+      batchSubscriptions[i].qos = qosList[i];
+    }
+    return true;
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -87,12 +99,12 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 class BatchSubscription {
   final String topic;
 
-  final MqttQos qosLevel;
+  MqttQos qos = MqttQos.failure;
 
   @override
-  int get hashCode => topic.hashCode + qosLevel.hashCode;
+  int get hashCode => topic.hashCode + qos.hashCode;
 
-  BatchSubscription(this.topic, this.qosLevel);
+  BatchSubscription(this.topic, MqttQos qos);
 
   @override
   bool operator ==(Object other) =>
@@ -100,12 +112,14 @@ class BatchSubscription {
       other is BatchSubscription &&
           runtimeType == other.runtimeType &&
           topic == other.topic &&
-          qosLevel == other.qosLevel;
+          qos == other.qos;
 
   @override
   String toString() {
     final sb = StringBuffer();
-    sb.writeln('BatchSubscription:: Topic $topic, QoS $qosLevel');
+    sb.writeln(
+      'BatchSubscription:: Topic $topic, QoS ${qos.toString().split(':')[1]}',
+    );
     return sb.toString();
   }
 }
