@@ -137,7 +137,7 @@ class SubscriptionsManager {
       return sub;
     } on Exception catch (e) {
       MqttLogger.log(
-        'Subscriptionsmanager::createNewSubscription '
+        'SubscriptionsManager::createNewSubscription '
         'exception raised, text is $e',
       );
       if (onSubscribeFail != null) {
@@ -177,7 +177,7 @@ class SubscriptionsManager {
       return sub;
     } on Exception catch (e) {
       MqttLogger.log(
-        'Subscriptionsmanager::createNewBatchSubscription '
+        'SubscriptionsManager::createNewBatchSubscription '
         'exception raised, text is $e',
       );
       return null;
@@ -192,7 +192,7 @@ class SubscriptionsManager {
   }
 
   /// Unsubscribe from a topic.
-  /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
+  /// Some brokers(AWS for instance) need to have each unsubscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     final messageIdentifier = messageIdentifierDispenser
@@ -205,13 +205,19 @@ class SubscriptionsManager {
     }
     connectionHandler!.sendMessage(unsubscribeMsg);
 
-    // Create the pending subscription.
-    Subscription sub = subscriptions.values.firstWhere(
-      (s) => s.topic.rawTopic == topic,
-      orElse: (() => Subscription()..qos = MqttQos.reserved1),
-    );
-    if (sub.qos != MqttQos.reserved1) {
-      pendingUnsubscriptions[messageIdentifier] = sub;
+    // Create the pending subscription if acknowledge requested
+    if (expectAcknowledge) {
+      Subscription sub = subscriptions.values.firstWhere(
+        (s) => s.topic.rawTopic == topic,
+        orElse: (() => Subscription()..qos = MqttQos.reserved1),
+      );
+      if (sub.qos != MqttQos.reserved1) {
+        pendingUnsubscriptions[messageIdentifier] = sub;
+      }
+    } else {
+      if (onUnsubscribed != null) {
+        onUnsubscribed!(topic);
+      }
     }
   }
 
@@ -239,6 +245,9 @@ class SubscriptionsManager {
     if (pendingSubscriptions.containsKey(messageIdentifier)) {
       sub = pendingSubscriptions[messageIdentifier]!;
     } else {
+      MqttLogger.log(
+        'SubscriptionsManager::confirmSubscription Sub Ack received for non pending subscription',
+      );
       return false;
     }
 
@@ -251,6 +260,10 @@ class SubscriptionsManager {
         pendingSubscriptions.remove(messageIdentifier);
         if (onSubscribeFail != null) {
           onSubscribeFail!(sub.topic.rawTopic);
+        } else {
+          MqttLogger.log(
+            'SubscriptionsManager::confirmSubscription failed for single subscription ${subAck.payload.qosGrants.first}',
+          );
         }
         return false;
       }
@@ -300,6 +313,10 @@ class SubscriptionsManager {
       if (onUnsubscribed != null) {
         onUnsubscribed!(sub.topic.rawTopic);
       }
+    } else {
+      MqttLogger.log(
+        'SubscriptionsManager::confirmUnsubscribe subscription not found in pending unsubscriptions',
+      );
     }
     return true;
   }
