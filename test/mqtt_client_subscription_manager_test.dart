@@ -25,6 +25,9 @@ class MockCON extends Mock implements MqttServerNormalConnection {}
 
 void main() {
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
+  group('Subscription', () {
+    test('Construction', () {});
+  });
   group('Manager', () {
     test('Invalid topic returns null subscription single', () {
       var cbCalled = false;
