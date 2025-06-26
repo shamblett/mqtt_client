@@ -27,7 +27,7 @@ class SubscriptionsManager {
 
   /// A list of unsubscribe requests waiting for an unsubscribe ack message.
   /// Index is the message identifier of the unsubscribe message
-  Map<int, String> pendingUnsubscriptions = <int, String>{};
+  Map<int, Subscription> pendingUnsubscriptions = <int, Subscription>{};
 
   /// The connection handler that we use to subscribe to subscription
   /// acknowledgements.
@@ -198,15 +198,21 @@ class SubscriptionsManager {
     final messageIdentifier = messageIdentifierDispenser
         .getNextMessageIdentifier();
     final unsubscribeMsg = MqttUnsubscribeMessage()
-        .withMessageIdentifier(
-          messageIdentifierDispenser.getNextMessageIdentifier(),
-        )
+        .withMessageIdentifier(messageIdentifier)
         .fromTopic(topic);
     if (expectAcknowledge) {
       unsubscribeMsg.expectAcknowledgement();
     }
     connectionHandler!.sendMessage(unsubscribeMsg);
-    pendingUnsubscriptions[messageIdentifier] = topic;
+
+    // Create the pending subscription.
+    Subscription sub = subscriptions.values.firstWhere(
+      (s) => s.topic.rawTopic == topic,
+      orElse: (() => Subscription()..qos = MqttQos.reserved1),
+    );
+    if (sub.qos != MqttQos.reserved1) {
+      pendingUnsubscriptions[messageIdentifier] = sub;
+    }
   }
 
   /// Re subscribe.
@@ -263,6 +269,7 @@ class SubscriptionsManager {
     pendingSubscriptions.remove(messageIdentifier);
 
     // Update individual subscription status from batch subscription.
+    // Return if this fails.
     if (sub.batch) {
       final res = sub.updateBatchQos(subAck.payload.qosGrants);
       if (!res) {
@@ -270,7 +277,8 @@ class SubscriptionsManager {
       }
     }
 
-    // Success, call the subscribed callback
+    // Success, make the subscription active and call the subscribed callback
+    subscriptions[messageIdentifier] = sub;
     if (onSubscribed != null) {
       onSubscribed!(sub.topic.rawTopic);
     }
@@ -282,10 +290,16 @@ class SubscriptionsManager {
   bool confirmUnsubscribe(MqttMessage? msg) {
     final unSubAck = msg as MqttUnsubscribeAckMessage;
     final messageIdentifier = unSubAck.variableHeader.messageIdentifier;
-    subscriptions.remove(messageIdentifier);
-    pendingUnsubscriptions.remove(messageIdentifier);
-    if (onUnsubscribed != null) {
-      onUnsubscribed!(unSubAck.variableHeader.topicName);
+    Subscription? sub;
+    if (pendingUnsubscriptions.containsKey(messageIdentifier)) {
+      sub = pendingUnsubscriptions[messageIdentifier];
+      subscriptions.remove(sub?.messageIdentifier);
+    }
+    if (sub != null) {
+      pendingUnsubscriptions.remove(messageIdentifier);
+      if (onUnsubscribed != null) {
+        onUnsubscribed!(sub.topic.rawTopic);
+      }
     }
     return true;
   }
@@ -319,10 +333,10 @@ class SubscriptionsManager {
   ) {
     var status = MqttSubscriptionStatus.doesNotExist;
     if (subscriptions.containsValue(sub)) {
-      status == MqttSubscriptionStatus.active;
+      status = MqttSubscriptionStatus.active;
     }
     if (pendingSubscriptions.containsValue(sub)) {
-      status == MqttSubscriptionStatus.pending;
+      status = MqttSubscriptionStatus.pending;
     }
     return status;
   }

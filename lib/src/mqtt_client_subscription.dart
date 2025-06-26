@@ -46,11 +46,13 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
       ? SubscriptionTopic(batchSubscriptions.first.topic)
       : _topic;
 
-  /// Failed batch subscriptions.
+  /// Failed batch subscriptions. Only valid when the subscription becomes
+  /// active, i.e. we know the status of the QoS grants from the broker.
   List<BatchSubscription> get failedSubscriptions =>
       batchSubscriptions.where((s) => s.qos == MqttQos.failure).toList();
 
-  /// Succeeded batch subscriptions.
+  /// Succeeded batch subscriptions. Will reflect the user supplied QoS
+  /// levels while the subscription is pending.
   List<BatchSubscription> get succeededSubscriptions =>
       batchSubscriptions.where((s) => s.qos != MqttQos.failure).toList();
 
