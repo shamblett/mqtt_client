@@ -196,25 +196,42 @@ class SubscriptionsManager {
   /// Some brokers(AWS for instance) need to have each unsubscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
+    // Get the subscription
+    Subscription sub = subscriptions.values.firstWhere(
+      (s) => s.topic.rawTopic == topic,
+      orElse: (() => Subscription()..qos = MqttQos.reserved1),
+    );
+    // Check its been found, return if not
+    if (sub.qos == MqttQos.reserved1) {
+      MqttLogger.log(
+        'SubscriptionsManager::unsubscribe '
+        'Unable to find active subscription for topic $topic',
+      );
+      return;
+    }
+
+    // Build the message
     final messageIdentifier = messageIdentifierDispenser
         .getNextMessageIdentifier();
-    final unsubscribeMsg = MqttUnsubscribeMessage()
-        .withMessageIdentifier(messageIdentifier)
-        .fromTopic(topic);
+    final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
+      messageIdentifier);
     if (expectAcknowledge) {
       unsubscribeMsg.expectAcknowledgement();
     }
+
+    // Add the topic(s)
+    if (sub.batch) {
+      unsubscribeMsg.payload.subscriptions = sub.allTopics;
+    } else {
+      unsubscribeMsg.fromTopic(topic);
+    }
+
+    // Send the message
     connectionHandler!.sendMessage(unsubscribeMsg);
 
     // Create the pending subscription if acknowledge requested
     if (expectAcknowledge) {
-      Subscription sub = subscriptions.values.firstWhere(
-        (s) => s.topic.rawTopic == topic,
-        orElse: (() => Subscription()..qos = MqttQos.reserved1),
-      );
-      if (sub.qos != MqttQos.reserved1) {
-        pendingUnsubscriptions[messageIdentifier] = sub;
-      }
+      pendingUnsubscriptions[messageIdentifier] = sub;
     } else {
       if (onUnsubscribed != null) {
         onUnsubscribed!(topic);

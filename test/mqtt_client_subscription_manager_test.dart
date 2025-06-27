@@ -111,6 +111,7 @@ void main() {
       expect(sub.totalSucceededSubscriptions, 3);
       expect(sub.totalFailedSubscriptions, 0);
       expect(sub.batch, isTrue);
+      expect(sub.allTopics, ['mytopic1', 'mytopic2', 'mytopic3']);
     });
     test('Subscription batch update QoS', () {
       final sub = Subscription();

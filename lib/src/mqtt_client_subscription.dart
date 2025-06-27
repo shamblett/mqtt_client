@@ -70,6 +70,15 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   int get totalBatchSubscriptions =>
       totalFailedSubscriptions + totalSucceededSubscriptions;
 
+  /// Get all the topics in the batch.
+  List<String> get allTopics {
+    final tmp = <String>[];
+    for (final subscription in subscriptions) {
+      tmp.add(subscription.topic);
+    }
+    return tmp;
+  }
+
   @override
   int get hashCode => topic.hashCode + qos.hashCode + batch.hashCode;
 
