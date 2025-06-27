@@ -214,7 +214,8 @@ class SubscriptionsManager {
     final messageIdentifier = messageIdentifierDispenser
         .getNextMessageIdentifier();
     final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
-      messageIdentifier);
+      messageIdentifier,
+    );
     if (expectAcknowledge) {
       unsubscribeMsg.expectAcknowledgement();
     }
@@ -243,13 +244,14 @@ class SubscriptionsManager {
   /// Unsubscribes all confirmed subscriptions and re subscribes them
   /// without sending unsubscribe messages to the broker.
   void resubscribe() {
-    for (final subscription in subscriptions.values) {
+    final subs = subscriptions.values.toList();
+    subscriptions.clear();
+    for (final subscription in subs) {
       if (subscription.batch) {
         createNewBatchSubscription(subscription.requestedSubscriptions);
       } else {
         createNewSubscription(subscription.topic.rawTopic, subscription.qos);
       }
-      subscriptions.clear();
     }
   }
 
