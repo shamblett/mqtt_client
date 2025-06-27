@@ -282,47 +282,110 @@ void main() {
       expect(msg.variableHeader!.messageIdentifier, 1);
       expect(msg.header!.qos, MqttQos.atLeastOnce);
     });
-    test('Acknowledged subscription request creates active subscription', () {
-      var cbCalled = false;
-      void subCallback(String topic) {
-        expect(topic, 'testtopic');
-        cbCalled = true;
-      }
+    test(
+      'Acknowledged subscription request creates active subscription batch',
+      () {
+        var cbCalled = false;
+        void subCallback(String topic) {
+          expect(topic, 'topic1');
+          cbCalled = true;
+        }
 
-      final clientEventBus = events.EventBus();
-      final testCHS = TestConnectionHandlerSend(
-        clientEventBus,
-        socketOptions: socketOptions,
-      );
-      final pm = PublishingManager(testCHS, clientEventBus);
-      pm.messageIdentifierDispenser.reset();
-      const topic = 'testtopic';
-      const qos = MqttQos.atLeastOnce;
-      final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
-      subs.onSubscribed = subCallback;
-      subs.registerSubscription(topic, qos);
-      expect(
-        subs.getSubscriptionsStatus(topic),
-        MqttSubscriptionStatus.pending,
-      );
-      expect(
-        testCHS.sentMessages[0],
-        const TypeMatcher<MqttSubscribeMessage>(),
-      );
-      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
-      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
-      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader!.messageIdentifier, 1);
-      expect(msg.header!.qos, MqttQos.atLeastOnce);
-      // Confirm the subscription
-      final subAckMsg = MqttSubscribeAckMessage()
-          .withMessageIdentifier(1)
-          .addQosGrant(MqttQos.atLeastOnce);
-      final ret = subs.confirmSubscription(subAckMsg);
-      expect(ret, isTrue);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
-      expect(cbCalled, isTrue);
-    });
+        final clientEventBus = events.EventBus();
+        final testCHS = TestConnectionHandlerSend(
+          clientEventBus,
+          socketOptions: socketOptions,
+        );
+        final pm = PublishingManager(testCHS, clientEventBus);
+        pm.messageIdentifierDispenser.reset();
+        final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+        subs.onSubscribed = subCallback;
+        final subscriptions = <BatchSubscription>[
+          BatchSubscription('topic1', MqttQos.atLeastOnce),
+          BatchSubscription('topic2', MqttQos.atMostOnce),
+          BatchSubscription('topic3', MqttQos.exactlyOnce),
+        ];
+        final subRet = subs.registerBatchSubscription(subscriptions);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet!),
+          MqttSubscriptionStatus.pending,
+        );
+        expect(
+          testCHS.sentMessages[0],
+          const TypeMatcher<MqttSubscribeMessage>(),
+        );
+        final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
+        expect(msg.payload.subscriptions.length, 3);
+        expect(msg.payload.subscriptions['topic1'], MqttQos.atLeastOnce);
+        expect(msg.payload.subscriptions['topic2'], MqttQos.atMostOnce);
+        expect(msg.payload.subscriptions['topic3'], MqttQos.exactlyOnce);
+        expect(msg.variableHeader!.messageIdentifier, 1);
+        expect(msg.header!.qos, MqttQos.atLeastOnce);
+        // Confirm the subscription
+        final subAckMsg = MqttSubscribeAckMessage()
+            .withMessageIdentifier(1)
+            .addQosGrant(MqttQos.atLeastOnce)
+            .addQosGrant(MqttQos.atMostOnce)
+            .addQosGrant(MqttQos.exactlyOnce);
+        final ret = subs.confirmSubscription(subAckMsg);
+        expect(ret, isTrue);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet),
+          MqttSubscriptionStatus.active,
+        );
+        expect(subRet.batch, isTrue);
+        expect(subRet.subscriptions.length, 3);
+        expect(subRet.requestedSubscriptions.length, 3);
+        expect(cbCalled, isTrue);
+      },
+    );
+    test(
+      'Acknowledged subscription request creates active subscription single',
+      () {
+        var cbCalled = false;
+        void subCallback(String topic) {
+          expect(topic, 'testtopic');
+          cbCalled = true;
+        }
+
+        final clientEventBus = events.EventBus();
+        final testCHS = TestConnectionHandlerSend(
+          clientEventBus,
+          socketOptions: socketOptions,
+        );
+        final pm = PublishingManager(testCHS, clientEventBus);
+        pm.messageIdentifierDispenser.reset();
+        const topic = 'testtopic';
+        const qos = MqttQos.atLeastOnce;
+        final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+        subs.onSubscribed = subCallback;
+        subs.registerSubscription(topic, qos);
+        expect(
+          subs.getSubscriptionsStatus(topic),
+          MqttSubscriptionStatus.pending,
+        );
+        expect(
+          testCHS.sentMessages[0],
+          const TypeMatcher<MqttSubscribeMessage>(),
+        );
+        final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
+        expect(msg.payload.subscriptions.containsKey(topic), isTrue);
+        expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
+        expect(msg.variableHeader!.messageIdentifier, 1);
+        expect(msg.header!.qos, MqttQos.atLeastOnce);
+        // Confirm the subscription
+        final subAckMsg = MqttSubscribeAckMessage()
+            .withMessageIdentifier(1)
+            .addQosGrant(MqttQos.atLeastOnce);
+        final ret = subs.confirmSubscription(subAckMsg);
+        expect(ret, isTrue);
+        expect(
+          subs.getSubscriptionsStatus(topic),
+          MqttSubscriptionStatus.active,
+        );
+        expect(cbCalled, isTrue);
+      },
+    );
     test(
       'Acknowledged subscription request for no pending subscription is ignored',
       () {
