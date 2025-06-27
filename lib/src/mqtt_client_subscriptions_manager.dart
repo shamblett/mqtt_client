@@ -161,7 +161,8 @@ class SubscriptionsManager {
       final sub = Subscription();
       sub.batch = true;
       sub.topic = subscriptionTopic;
-      sub.batchSubscriptions = subscriptions;
+      sub.subscriptions = subscriptions;
+      sub.requestedSubscriptions = subscriptions;
       sub.messageIdentifier = messageIdentifier;
       sub.createdTime = DateTime.now();
       pendingSubscriptions[messageIdentifier] = sub;
@@ -226,9 +227,13 @@ class SubscriptionsManager {
   /// without sending unsubscribe messages to the broker.
   void resubscribe() {
     for (final subscription in subscriptions.values) {
-      createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+      if (subscription.batch) {
+        createNewBatchSubscription(subscription.requestedSubscriptions);
+      } else {
+        createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+      }
+      subscriptions.clear();
     }
-    subscriptions.clear();
   }
 
   /// Confirms a subscription has been made with the broker.
@@ -379,7 +384,11 @@ class SubscriptionsManager {
         ...subscriptionList,
         ...pendingSubscriptionList,
       ]) {
-        createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+        if (subscription.batch) {
+          createNewBatchSubscription(subscription.requestedSubscriptions);
+        } else {
+          createNewSubscription(subscription.topic.rawTopic, subscription.qos);
+        }
       }
     } else {
       MqttLogger.log(

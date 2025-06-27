@@ -39,7 +39,7 @@ void main() {
       final sub = Subscription();
       expect(sub.messageIdentifier, isNull);
       expect(sub.topic.rawTopic, 'rawtopic');
-      expect(sub.batchSubscriptions.isEmpty, isTrue);
+      expect(sub.subscriptions.isEmpty, isTrue);
       expect(sub.totalBatchSubscriptions, 0);
       expect(sub.totalSucceededSubscriptions, 0);
       expect(sub.totalFailedSubscriptions, 0);
@@ -53,7 +53,7 @@ void main() {
       expect(sub.messageIdentifier, 1);
       expect(sub.topic.rawTopic, 'rawtopic');
       expect(sub.qos, MqttQos.exactlyOnce);
-      expect(sub.batchSubscriptions.isEmpty, isTrue);
+      expect(sub.subscriptions.isEmpty, isTrue);
       expect(sub.totalBatchSubscriptions, 0);
       expect(sub.totalSucceededSubscriptions, 0);
       expect(sub.totalFailedSubscriptions, 0);
@@ -102,11 +102,11 @@ void main() {
       final sub1 = BatchSubscription('mytopic1', MqttQos.exactlyOnce);
       final sub2 = BatchSubscription('mytopic2', MqttQos.atMostOnce);
       final sub3 = BatchSubscription('mytopic3', MqttQos.atLeastOnce);
-      sub.batchSubscriptions.addAll([sub1, sub2, sub3]);
+      sub.subscriptions.addAll([sub1, sub2, sub3]);
       expect(sub.messageIdentifier, 1);
       expect(sub.topic.rawTopic, 'mytopic1');
       expect(sub.qos, MqttQos.exactlyOnce);
-      expect(sub.batchSubscriptions.isEmpty, isFalse);
+      expect(sub.subscriptions.isEmpty, isFalse);
       expect(sub.totalBatchSubscriptions, 3);
       expect(sub.totalSucceededSubscriptions, 3);
       expect(sub.totalFailedSubscriptions, 0);
@@ -120,7 +120,7 @@ void main() {
       final sub1 = BatchSubscription('mytopic1', MqttQos.exactlyOnce);
       final sub2 = BatchSubscription('mytopic2', MqttQos.atMostOnce);
       final sub3 = BatchSubscription('mytopic3', MqttQos.atLeastOnce);
-      sub.batchSubscriptions.addAll([sub1, sub2, sub3]);
+      sub.subscriptions.addAll([sub1, sub2, sub3]);
       expect(sub.messageIdentifier, 1);
       expect(sub.topic.rawTopic, 'mytopic1');
       final qosList = <MqttQos>[
@@ -131,12 +131,12 @@ void main() {
       final res = sub.updateBatchQos(qosList);
       expect(res, isTrue);
       expect(sub.qos, MqttQos.atLeastOnce);
-      expect(sub.batchSubscriptions.isEmpty, isFalse);
+      expect(sub.subscriptions.isEmpty, isFalse);
       expect(sub.totalBatchSubscriptions, 3);
       expect(sub.totalSucceededSubscriptions, 2);
       expect(sub.totalFailedSubscriptions, 1);
-      expect(sub.batchSubscriptions[1].qos, MqttQos.exactlyOnce);
-      expect(sub.batchSubscriptions[2].qos, MqttQos.failure);
+      expect(sub.subscriptions[1].qos, MqttQos.exactlyOnce);
+      expect(sub.subscriptions[2].qos, MqttQos.failure);
       expect(sub.batch, isTrue);
     });
     test('Subscription Batch update QoS unequal lengths', () {
@@ -148,14 +148,14 @@ void main() {
       final sub1 = BatchSubscription('mytopic1', MqttQos.exactlyOnce);
       final sub2 = BatchSubscription('mytopic2', MqttQos.atMostOnce);
       final sub3 = BatchSubscription('mytopic3', MqttQos.atLeastOnce);
-      sub.batchSubscriptions.addAll([sub1, sub2, sub3]);
+      sub.subscriptions.addAll([sub1, sub2, sub3]);
       expect(sub.messageIdentifier, 1);
       expect(sub.topic.rawTopic, 'mytopic1');
       final qosList = <MqttQos>[MqttQos.atLeastOnce, MqttQos.exactlyOnce];
       final res = sub.updateBatchQos(qosList);
       expect(res, isFalse);
       expect(sub.qos, MqttQos.exactlyOnce);
-      expect(sub.batchSubscriptions.isEmpty, isFalse);
+      expect(sub.subscriptions.isEmpty, isFalse);
       expect(sub.totalBatchSubscriptions, 3);
       expect(sub.totalSucceededSubscriptions, 3);
       expect(sub.totalFailedSubscriptions, 0);
@@ -249,17 +249,17 @@ void main() {
       expect(subRet?.failedSubscriptions.length, 0);
       expect(subRet?.succeededSubscriptions.length, 3);
       expect(
-        subRet?.batchSubscriptions.first ==
+        subRet?.subscriptions.first ==
             BatchSubscription('topic1', MqttQos.atLeastOnce),
         isTrue,
       );
       expect(
-        subRet?.batchSubscriptions[1] ==
+        subRet?.subscriptions[1] ==
             BatchSubscription('topic2', MqttQos.atMostOnce),
         isTrue,
       );
       expect(
-        subRet?.batchSubscriptions.last ==
+        subRet?.subscriptions.last ==
             BatchSubscription('topic3', MqttQos.exactlyOnce),
         isTrue,
       );

@@ -502,6 +502,8 @@ class MqttClient {
   /// Unsubscribe from a topic.
   /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
+  /// For a batch subscription provide the topic of the first subscription
+  /// in the batch.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     subscriptionsManager!.unsubscribe(
       topic,

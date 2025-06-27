@@ -13,7 +13,7 @@ part of '../mqtt_client.dart';
 /// Note that batch subscriptions are treated as an individual subscription
 /// as only one subscription message is sent to the broker.
 ///
-/// A batch subscription contains additional information see [batchSubscriptions]
+/// A batch subscription contains additional information see [subscriptions]
 /// below.
 class Subscription extends observe.Observable<observe.ChangeRecord> {
   /// The message identifier assigned to the subscription
@@ -26,7 +26,11 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   DateTime? createdTime;
 
   /// Empty if a single subscription.
-  List<BatchSubscription> batchSubscriptions = [];
+  List<BatchSubscription> subscriptions = [];
+
+  /// The requested subscription, used in re subscribe operations.
+  /// Empty if a single subscription.
+  List<BatchSubscription> requestedSubscriptions = [];
 
   MqttQos _qos = MqttQos.failure;
 
@@ -34,27 +38,27 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
   /// QoS, if batch this is the QoS of the first topic.
   MqttQos get qos {
-    if (batch && batchSubscriptions.isNotEmpty) {
-      return batchSubscriptions.first.qos;
+    if (batch && subscriptions.isNotEmpty) {
+      return subscriptions.first.qos;
     }
     return _qos;
   }
 
   /// The Topic that is subscribed to.
   /// For a batch subscription the first topic in the batch.
-  SubscriptionTopic get topic => batch && batchSubscriptions.isNotEmpty
-      ? SubscriptionTopic(batchSubscriptions.first.topic)
+  SubscriptionTopic get topic => batch && subscriptions.isNotEmpty
+      ? SubscriptionTopic(subscriptions.first.topic)
       : _topic;
 
   /// Failed batch subscriptions. Only valid when the subscription becomes
   /// active, i.e. we know the status of the QoS grants from the broker.
   List<BatchSubscription> get failedSubscriptions =>
-      batchSubscriptions.where((s) => s.qos == MqttQos.failure).toList();
+      subscriptions.where((s) => s.qos == MqttQos.failure).toList();
 
   /// Succeeded batch subscriptions. Will reflect the user supplied QoS
   /// levels while the subscription is pending.
   List<BatchSubscription> get succeededSubscriptions =>
-      batchSubscriptions.where((s) => s.qos != MqttQos.failure).toList();
+      subscriptions.where((s) => s.qos != MqttQos.failure).toList();
 
   /// Total failed batch subscriptions.
   int get totalFailedSubscriptions => failedSubscriptions.length;
@@ -86,9 +90,9 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
       return false;
     }
     for (int i = 0; i < totalBatchSubscriptions; i++) {
-      batchSubscriptions[i].qos = qosList[i];
+      subscriptions[i].qos = qosList[i];
     }
-    qos = batchSubscriptions.first.qos;
+    qos = subscriptions.first.qos;
 
     return true;
   }
