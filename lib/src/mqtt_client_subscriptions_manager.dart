@@ -292,6 +292,15 @@ class SubscriptionsManager {
         return false;
       }
     } else {
+      // Update individual subscription status from batch subscription.
+      final res = sub.updateBatchQos(subAck.payload.qosGrants);
+      if (!res) {
+        pendingSubscriptions.remove(messageIdentifier);
+        if (onSubscribeFail != null) {
+          onSubscribeFail!(sub.topic.rawTopic);
+        }
+        return false;
+      }
       if (subAck.payload.qosGrants.isEmpty ||
           sub.totalFailedSubscriptions == sub.totalBatchSubscriptions) {
         pendingSubscriptions.remove(messageIdentifier);
@@ -302,19 +311,8 @@ class SubscriptionsManager {
       }
     }
 
-    // Subscription is valid, move to subscriptions, i.e. active
-    pendingSubscriptions.remove(messageIdentifier);
-
-    // Update individual subscription status from batch subscription.
-    // Return if this fails.
-    if (sub.batch) {
-      final res = sub.updateBatchQos(subAck.payload.qosGrants);
-      if (!res) {
-        return false;
-      }
-    }
-
     // Success, make the subscription active and call the subscribed callback
+    pendingSubscriptions.remove(messageIdentifier);
     subscriptions[messageIdentifier] = sub;
     if (onSubscribed != null) {
       onSubscribed!(sub.topic.rawTopic);

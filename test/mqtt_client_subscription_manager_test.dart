@@ -426,7 +426,7 @@ void main() {
       },
     );
     test(
-      'Acknowledged but failed subscription request removed pending subscription',
+      'Acknowledged but failed subscription request removed pending subscription single',
       () {
         var cbCalled = false;
         void subFailCallback(String topic) {
@@ -473,7 +473,60 @@ void main() {
       },
     );
     test(
-      'Acknowledged but no Qos grants in payload removes pending subscription',
+      'Acknowledged but failed subscription request removed pending subscription batch',
+      () {
+        var cbCalled = false;
+        void subFailCallback(String topic) {
+          expect(topic, 'topic1');
+          cbCalled = true;
+        }
+
+        final clientEventBus = events.EventBus();
+        final testCHS = TestConnectionHandlerSend(
+          clientEventBus,
+          socketOptions: socketOptions,
+        );
+        final pm = PublishingManager(testCHS, clientEventBus);
+        pm.messageIdentifierDispenser.reset();
+        final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+        subs.onSubscribeFail = subFailCallback;
+        final subscriptions = <BatchSubscription>[
+          BatchSubscription('topic1', MqttQos.atLeastOnce),
+          BatchSubscription('topic2', MqttQos.atMostOnce),
+          BatchSubscription('topic3', MqttQos.exactlyOnce),
+        ];
+        final subRet = subs.registerBatchSubscription(subscriptions);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet!),
+          MqttSubscriptionStatus.pending,
+        );
+        expect(
+          testCHS.sentMessages[0],
+          const TypeMatcher<MqttSubscribeMessage>(),
+        );
+        final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
+        expect(msg.payload.subscriptions['topic1'], MqttQos.atLeastOnce);
+        expect(msg.payload.subscriptions['topic2'], MqttQos.atMostOnce);
+        expect(msg.payload.subscriptions['topic3'], MqttQos.exactlyOnce);
+        expect(msg.variableHeader!.messageIdentifier, 1);
+        expect(msg.header!.qos, MqttQos.atLeastOnce);
+        // Confirm the subscription
+        final subAckMsg = MqttSubscribeAckMessage()
+            .withMessageIdentifier(1)
+            .addQosGrant(MqttQos.failure)
+            .addQosGrant(MqttQos.failure)
+            .addQosGrant(MqttQos.failure);
+        final ret = subs.confirmSubscription(subAckMsg);
+        expect(ret, isFalse);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet),
+          MqttSubscriptionStatus.doesNotExist,
+        );
+        expect(cbCalled, isTrue);
+      },
+    );
+    test(
+      'Acknowledged but no Qos grants in payload removes pending subscription single',
       () {
         var cbCalled = false;
         void subFailCallback(String topic) {
@@ -512,6 +565,52 @@ void main() {
         expect(ret, isFalse);
         expect(
           subs.getSubscriptionsStatus(topic),
+          MqttSubscriptionStatus.doesNotExist,
+        );
+        expect(cbCalled, isTrue);
+      },
+    );
+    test(
+      'Acknowledged but no Qos grants in payload removes pending subscription batch',
+      () {
+        var cbCalled = false;
+        void subFailCallback(String topic) {
+          expect(topic, 'topic1');
+          cbCalled = true;
+        }
+
+        final clientEventBus = events.EventBus();
+        final testCHS = TestConnectionHandlerSend(
+          clientEventBus,
+          socketOptions: socketOptions,
+        );
+        final pm = PublishingManager(testCHS, clientEventBus);
+        pm.messageIdentifierDispenser.reset();
+        final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
+        subs.onSubscribeFail = subFailCallback;
+        final subscriptions = <BatchSubscription>[
+          BatchSubscription('topic1', MqttQos.atLeastOnce),
+          BatchSubscription('topic2', MqttQos.atMostOnce),
+          BatchSubscription('topic3', MqttQos.exactlyOnce),
+        ];
+        final subRet = subs.registerBatchSubscription(subscriptions);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet!),
+          MqttSubscriptionStatus.pending,
+        );
+        expect(
+          testCHS.sentMessages[0],
+          const TypeMatcher<MqttSubscribeMessage>(),
+        );
+        final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
+        expect(msg.variableHeader!.messageIdentifier, 1);
+        expect(msg.header!.qos, MqttQos.atLeastOnce);
+        // Confirm the subscription
+        final subAckMsg = MqttSubscribeAckMessage().withMessageIdentifier(1);
+        final ret = subs.confirmSubscription(subAckMsg);
+        expect(ret, isFalse);
+        expect(
+          subs.getSubscriptionsStatusBySubscription(subRet),
           MqttSubscriptionStatus.doesNotExist,
         );
         expect(cbCalled, isTrue);
