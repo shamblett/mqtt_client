@@ -231,9 +231,11 @@ class SubscriptionsManager {
     connectionHandler!.sendMessage(unsubscribeMsg);
 
     // Create the pending subscription if acknowledge requested
+    // Remove it if not.
     if (expectAcknowledge) {
       pendingUnsubscriptions[messageIdentifier] = sub;
     } else {
+      subscriptions.remove(sub.messageIdentifier);
       if (onUnsubscribed != null) {
         onUnsubscribed!(topic);
       }
@@ -299,6 +301,11 @@ class SubscriptionsManager {
         if (onSubscribeFail != null) {
           onSubscribeFail!(sub.topic.rawTopic);
         }
+        MqttLogger.log(
+          'SubscriptionsManager::confirmSubscription '
+              'failed to update qos grants for batch subscription, lengths differ',
+          'Requested: ${sub.requestedSubscriptions.length}, Received: ${subAck.payload.qosGrants.length}',
+        );
         return false;
       }
       if (subAck.payload.qosGrants.isEmpty ||
@@ -307,6 +314,9 @@ class SubscriptionsManager {
         if (onSubscribeFail != null) {
           onSubscribeFail!(sub.topic.rawTopic);
         }
+        MqttLogger.log(
+          'SubscriptionsManager::confirmSubscription all qos grants failed',
+        );
         return false;
       }
     }
