@@ -11,9 +11,9 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 /// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
-/// tests QOS1 protocol handling.
+/// tests QOS1 protocol handling. This example also shoes how to use batch topic subscription.
 Future<int> main() async {
-  final client = MqttServerClient('test.mosquitto.org', '');
+  final client = MqttServerClient('broker.hivemq.com', '');
 
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
@@ -49,12 +49,12 @@ Future<int> main() async {
   }
 
   /// Lets try our subscriptions
-  print('EXAMPLE:: <<<< SUBSCRIBE 1 >>>>');
+  print('EXAMPLE:: <<<< SUBSCRIBING >>>>');
   const topic1 = 'SJHTopic1'; // Not a wildcard topic
-  client.subscribe(topic1, MqttQos.atLeastOnce);
-  print('EXAMPLE:: <<<< SUBSCRIBE 2 >>>>');
+  final sub1 = BatchSubscription(topic1, MqttQos.atLeastOnce);
   const topic2 = 'SJHTopic2'; // Not a wildcard topic
-  client.subscribe(topic2, MqttQos.atLeastOnce);
+  final sub2 = BatchSubscription(topic2, MqttQos.atMostOnce);
+  client.subscribeBatch([sub1, sub2]);
   const topic3 = 'SJHTopic3'; // Not a wildcard topic - no subscription
 
   client.updates!.listen((messageList) {
@@ -95,13 +95,16 @@ Future<int> main() async {
   client.publishMessage(topic3, MqttQos.atLeastOnce, builder3.payload!);
 
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(60);
+  await MqttUtilities.asyncSleep(20);
 
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic1);
-  client.unsubscribe(topic2);
 
-  await MqttUtilities.asyncSleep(10);
+  await MqttUtilities.asyncSleep(5);
+  final status = client.getSubscriptionsStatus(topic1);
+  if (status != MqttSubscriptionStatus.doesNotExist) {
+    print('EXAMPLE::Unsubscribing - failed to unsubscribe batch topic $topic1');
+  }
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
@@ -109,7 +112,13 @@ Future<int> main() async {
 
 /// The subscribed callback
 void onSubscribed(String topic) {
-  print('EXAMPLE::Subscription confirmed for topic $topic');
+  if (topic == 'SJHTopic1') {
+    print('EXAMPLE::Subscription confirmed for topic $topic, this is correct');
+  } else {
+    print(
+      'EXAMPLE::Subscription confirmed for topic $topic, this is incorrect',
+    );
+  }
 }
 
 /// The unsolicited disconnect callback
