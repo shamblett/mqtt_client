@@ -247,11 +247,15 @@ class MqttClient {
   /// if this callback is supplied.
   FailedConnectionAttemptCallback? onFailedConnectionAttempt;
 
-  /// Subscribed callback, function returns a void and takes a
-  /// string parameter, the topic that has been subscribed to.
+  /// On subscribed.
+  /// Called for each single subscription request on reception of
+  /// the associated subscription acknowledge message.
+  ///
+  /// Called only once for a successful batch subscription request, the
+  /// topic will be set to the first topic of the request. Note that a successful
+  /// one is one that has a least one valid QoS grant where the requested subscription
+  /// number equals the number of subscriptions returned from the broker.
   SubscribeCallback? _onSubscribed;
-
-  /// On subscribed
   SubscribeCallback? get onSubscribed => _onSubscribed;
 
   set onSubscribed(SubscribeCallback? cb) {
@@ -259,13 +263,13 @@ class MqttClient {
     subscriptionsManager?.onSubscribed = cb;
   }
 
-  /// Subscribed failed callback, function returns a void and takes a
-  /// string parameter, the topic that has failed subscription.
-  /// Invoked either by subscribe if an invalid topic is supplied or on
+  /// On subscribe fail.
+  /// Invoked by subscribe if an invalid topic is supplied or on
   /// reception of a failed subscribe indication from the broker.
+  /// For batch subscriptions this is only invoked if all subscriptions in
+  /// the batch fail or the number of returned subscriptions does not
+  /// match the number of requested subscriptions.
   SubscribeFailCallback? _onSubscribeFail;
-
-  /// On subscribed fail
   SubscribeFailCallback? get onSubscribeFail => _onSubscribeFail;
 
   set onSubscribeFail(SubscribeFailCallback? cb) {
@@ -273,11 +277,11 @@ class MqttClient {
     subscriptionsManager?.onSubscribeFail = cb;
   }
 
-  /// Unsubscribed callback, function returns a void and takes a
+  /// Unsubscribed callback, takes a
   /// string parameter, the topic that has been unsubscribed.
+  /// For a batch subscription this will be the first topic in the
+  /// batch.
   UnsubscribeCallback? _onUnsubscribed;
-
-  /// On unsubscribed
   UnsubscribeCallback? get onUnsubscribed => _onUnsubscribed;
 
   set onUnsubscribed(UnsubscribeCallback? cb) {
@@ -290,8 +294,6 @@ class MqttClient {
   /// this will be called.
   /// Can be used for health monitoring outside of the client itself.
   PongCallback? _pongCallback;
-
-  /// The ping received callback
   PongCallback? get pongCallback => _pongCallback;
 
   set pongCallback(PongCallback? cb) {
@@ -304,8 +306,6 @@ class MqttClient {
   /// this will be called.
   /// Can be used in tandem with the [pongCallback] for latency calculations.
   PingCallback? _pingCallback;
-
-  /// The ping sent callback
   PingCallback? get pingCallback => _pingCallback;
 
   set pingCallback(PingCallback? cb) {
@@ -441,16 +441,29 @@ class MqttClient {
     }
   }
 
-  /// Initiates a topic subscription request to the connected broker
-  /// with a strongly typed data processor callback.
+  /// Initiates a single topic subscription request to the broker.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
-  /// Returns the subscription or null on failure
+  /// Returns the subscription or null on failure.
   Subscription? subscribe(String topic, MqttQos qosLevel) {
     if (connectionStatus!.state != MqttConnectionState.connected) {
       throw ConnectionException(connectionHandler?.connectionStatus.state);
     }
     return subscriptionsManager!.registerSubscription(topic, qosLevel);
+  }
+
+  /// Initiates a batch subscription request to the broker.
+  /// This sends multiple subscription requests to the broker in a single
+  /// subscription message. The returned [Subscription] allows the tracking
+  /// of the status of the individual subscriptions.
+  /// Returns the subscription or null on failure.
+  Subscription? subscribeBatch(List<BatchSubscription> subscriptions) {
+    if (connectionStatus!.state != MqttConnectionState.connected) {
+      throw ConnectionException(connectionHandler?.connectionStatus.state);
+    }
+    return subscriptions.isEmpty
+        ? null
+        : subscriptionsManager!.registerBatchSubscription(subscriptions);
   }
 
   /// Re subscribe.
@@ -463,7 +476,7 @@ class MqttClient {
   void resubscribe() => subscriptionsManager!.resubscribe();
 
   /// Publishes a message to the message broker.
-  /// Returns The message identifer assigned to the message.
+  /// Returns The message identifier assigned to the message.
   /// Raises InvalidTopicException if the topic supplied violates the
   /// MQTT topic format rules.
   int publishMessage(
@@ -495,6 +508,8 @@ class MqttClient {
   /// Unsubscribe from a topic.
   /// Some brokers(AWS for instance) need to have each un subscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
+  /// For a batch subscription provide the topic of the first subscription
+  /// in the batch.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     subscriptionsManager!.unsubscribe(
       topic,
@@ -502,9 +517,26 @@ class MqttClient {
     );
   }
 
-  /// Gets the current status of a subscription.
+  /// Gets the current status of a subscription by topic.
+  ///
+  /// A batch subscription contains the status of each subscribed topic as returned
+  /// by the broker only if the status is active.
+  ///
+  /// A status of [MqttSubscriptionStatus.doesNotExist] is returned if a single
+  /// subscription failed or all the subscriptions in a batch subscription fail.
+  ///
+  /// For a batch subscription the topic is the topic of the first
+  /// subscription in the batch.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       subscriptionsManager!.getSubscriptionsStatus(topic);
+
+  /// Gets the current status of a subscription using its
+  /// returned [Subscription].
+  ///
+  /// Functionally equivalent to [getSubscriptionsStatus].
+  MqttSubscriptionStatus getSubscriptionsStatusBySubscription(
+    Subscription sub,
+  ) => subscriptionsManager!.getSubscriptionsStatusBySubscription(sub);
 
   /// Disconnect from the broker.
   /// This is a hard disconnect, a disconnect message is sent to the
