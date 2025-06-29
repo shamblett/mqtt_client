@@ -1,3 +1,7 @@
+# 10.10.0
+Batch subscriptions added.
+- [Issue 611](https://github.com/shamblett/mqtt_client/issues/611)
+
 # 10.9.2
 - [Issue 608](https://github.com/shamblett/mqtt_client/issues/608)
 
