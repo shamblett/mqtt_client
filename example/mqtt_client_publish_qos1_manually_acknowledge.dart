@@ -13,7 +13,7 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 /// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
 /// tests QOS1 protocol handling when manual acknowledgement is in force.
 Future<int> main() async {
-  final client = MqttServerClient('test.mosquitto.org', '');
+  final client = MqttServerClient('broker.hivemq.com', '');
 
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
@@ -28,7 +28,7 @@ Future<int> main() async {
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
       .withWillQos(MqttQos.atLeastOnce);
-  print('EXAMPLE::Mosquitto client connecting....');
+  print('EXAMPLE::Hive client connecting....');
   client.connectionMessage = connMess;
 
   try {
@@ -40,10 +40,10 @@ Future<int> main() async {
 
   /// Check we are connected
   if (client.connectionStatus!.state == MqttConnectionState.connected) {
-    print('EXAMPLE::Mosquitto client connected');
+    print('EXAMPLE::Hive client connected');
   } else {
     print(
-      'EXAMPLE::ERROR Mosquitto client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
+      'EXAMPLE::ERROR Hive client connection failed - disconnecting, state is ${client.connectionStatus!.state}',
     );
     client.disconnect();
     exit(-1);
@@ -61,8 +61,7 @@ Future<int> main() async {
   try {
     client.updates!.listen((messageList) {
       final recMess = messageList[0];
-      if (recMess is! MqttReceivedMessage<MqttPublishMessage>) return;
-      final pubMess = recMess.payload;
+      final pubMess = recMess.payload as MqttPublishMessage;
       final pt = MqttPublishPayload.bytesToStringAsString(
         pubMess.payload.message,
       );
@@ -119,13 +118,13 @@ Future<int> main() async {
   client.publishMessage(topic3, MqttQos.atLeastOnce, builder3.payload!);
 
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(60);
+  await MqttUtilities.asyncSleep(20);
 
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic1);
   client.unsubscribe(topic2);
 
-  await MqttUtilities.asyncSleep(10);
+  await MqttUtilities.asyncSleep(5);
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
