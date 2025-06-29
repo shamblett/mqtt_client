@@ -250,8 +250,11 @@ class MqttClient {
   /// On subscribed.
   /// Called for each single subscription request on reception of
   /// the associated subscription acknowledge message.
-  /// Called only once for a batch subscription request, the topic will be
-  /// set to the first topic of the request.
+  ///
+  /// Called only once for a successful batch subscription request, the
+  /// topic will be set to the first topic of the request. Note that a successful
+  /// one is one that has a least one valid QoS grant where the requested subscription
+  /// number equals the number of subscriptions returned from the broker.
   SubscribeCallback? _onSubscribed;
   SubscribeCallback? get onSubscribed => _onSubscribed;
 
@@ -264,7 +267,8 @@ class MqttClient {
   /// Invoked by subscribe if an invalid topic is supplied or on
   /// reception of a failed subscribe indication from the broker.
   /// For batch subscriptions this is only invoked if all subscriptions in
-  /// the batch fail.
+  /// the batch fail or the number of returned subscriptions does not
+  /// match the number of requested subscriptions.
   SubscribeFailCallback? _onSubscribeFail;
   SubscribeFailCallback? get onSubscribeFail => _onSubscribeFail;
 
@@ -273,8 +277,10 @@ class MqttClient {
     subscriptionsManager?.onSubscribeFail = cb;
   }
 
-  /// Unsubscribed callback, function returns a void and takes a
+  /// Unsubscribed callback, takes a
   /// string parameter, the topic that has been unsubscribed.
+  /// For a batch subscription this will be the first topic in the
+  /// batch.
   UnsubscribeCallback? _onUnsubscribed;
   UnsubscribeCallback? get onUnsubscribed => _onUnsubscribed;
 
@@ -435,7 +441,7 @@ class MqttClient {
     }
   }
 
-  /// Initiates a topic subscription request to the broker.
+  /// Initiates a single topic subscription request to the broker.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
   /// Returns the subscription or null on failure.
@@ -511,13 +517,16 @@ class MqttClient {
     );
   }
 
-  /// Gets the current status of a subscription.
+  /// Gets the current status of a subscription by topic.
   ///
   /// A batch subscription contains the status of each subscribed topic as returned
   /// by the broker only if the status is active.
   ///
-  /// A status of [MqttSubscriptionStatus.doesNotExist] is returned if a single subscription fails
-  /// or all the subscriptions in a batch subscription fail.
+  /// A status of [MqttSubscriptionStatus.doesNotExist] is returned if a single
+  /// subscription failed or all the subscriptions in a batch subscription fail.
+  ///
+  /// For a batch subscription the topic is the topic of the first
+  /// subscription in the batch.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) =>
       subscriptionsManager!.getSubscriptionsStatus(topic);
 

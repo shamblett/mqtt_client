@@ -113,7 +113,7 @@ class SubscriptionsManager {
     return null;
   }
 
-  /// Creates a new subscription for the specified topic.
+  /// Creates a new single subscription for the specified topic.
   /// If the subscription cannot be created null is returned.
   Subscription? createNewSubscription(String topic, MqttQos? qos) {
     try {
@@ -195,6 +195,7 @@ class SubscriptionsManager {
   /// Unsubscribe from a topic.
   /// Some brokers(AWS for instance) need to have each unsubscription acknowledged, use
   /// the [expectAcknowledge] parameter for this, default is false.
+  /// For a batch subscription the topic is the first topic in the batch.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     // Get the subscription
     Subscription sub = subscriptions.values.firstWhere(
@@ -260,7 +261,11 @@ class SubscriptionsManager {
   /// Confirms a subscription has been made with the broker.
   /// Moves the subscription from pending to active if the subscription has
   /// not failed.
-  /// Batch subscriptions only fail if all the subscriptions in the batch fail.
+  ///
+  /// Batch subscriptions only fail if all the subscriptions in the batch fail
+  /// or the length of the returned subscriptions does not match the length of
+  /// the requested subscriptions.
+  ///
   /// Returns true on successful subscription, false on fail.
   bool confirmSubscription(MqttMessage? msg) {
     final subAck = msg as MqttSubscribeAckMessage;
@@ -354,6 +359,8 @@ class SubscriptionsManager {
   }
 
   /// Gets the current status of a subscription.
+  /// For a batch subscription the topic is the topic of the first
+  /// subscription in the batch.
   MqttSubscriptionStatus getSubscriptionsStatus(String topic) {
     var status = MqttSubscriptionStatus.doesNotExist;
 
@@ -376,7 +383,7 @@ class SubscriptionsManager {
     return status;
   }
 
-  /// Gets the current status of a subscription.
+  /// Gets the current status of a subscription from its [Subscription].
   MqttSubscriptionStatus getSubscriptionsStatusBySubscription(
     Subscription sub,
   ) {
