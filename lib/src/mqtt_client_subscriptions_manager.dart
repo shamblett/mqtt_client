@@ -98,12 +98,14 @@ class SubscriptionsManager {
 
   /// Batch unsubscribes in a single UNSUBSCRIBE packet.
   void registerBatchUnsubscription(
-    List<BatchSubscription> subscriptionsList, 
-    {bool expectAcknowledge = false}
-    ) {
-    final messageIdentifier = messageIdentifierDispenser.getNextMessageIdentifier();
-    final unsubscribeMsg = MqttUnsubscribeMessage()
-        .withMessageIdentifier(messageIdentifier);
+    List<BatchSubscription> subscriptionsList, {
+    bool expectAcknowledge = false,
+  }) {
+    final messageIdentifier = messageIdentifierDispenser
+        .getNextMessageIdentifier();
+    final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
+      messageIdentifier,
+    );
 
     if (expectAcknowledge) {
       unsubscribeMsg.expectAcknowledgement();
@@ -119,10 +121,13 @@ class SubscriptionsManager {
 
     // Update local subscription state
     if (expectAcknowledge) {
-      pendingUnsubscriptions[messageIdentifier] = Subscription()..subscriptions = subscriptionsList;
+      pendingUnsubscriptions[messageIdentifier] = Subscription()
+        ..subscriptions = subscriptionsList;
     } else {
       for (var subscription in subscriptionsList) {
-        subscriptions.removeWhere((_, sub) => sub.topic.rawTopic == subscription.topic);
+        subscriptions.removeWhere(
+          (_, sub) => sub.topic.rawTopic == subscription.topic,
+        );
         if (onUnsubscribed != null) {
           onUnsubscribed!(subscription.topic);
         }
