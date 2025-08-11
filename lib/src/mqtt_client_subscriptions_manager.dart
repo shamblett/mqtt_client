@@ -96,6 +96,40 @@ class SubscriptionsManager {
     return cn ??= createNewBatchSubscription(subscriptions);
   }
 
+  /// Batch unsubscribes in a single UNSUBSCRIBE packet.
+  void registerBatchUnsubscription(
+    List<BatchSubscription> subscriptionsList, 
+    {bool expectAcknowledge = false}
+    ) {
+    final messageIdentifier = messageIdentifierDispenser.getNextMessageIdentifier();
+    final unsubscribeMsg = MqttUnsubscribeMessage()
+        .withMessageIdentifier(messageIdentifier);
+
+    if (expectAcknowledge) {
+      unsubscribeMsg.expectAcknowledgement();
+    }
+
+    // Add each topic to the unsubscribe payload
+    for (final subscription in subscriptionsList) {
+      unsubscribeMsg.fromTopic(subscription.topic);
+    }
+
+    // Send the combined packet
+    connectionHandler!.sendMessage(unsubscribeMsg);
+
+    // Update local subscription state
+    if (expectAcknowledge) {
+      pendingUnsubscriptions[messageIdentifier] = Subscription()..subscriptions = subscriptionsList;
+    } else {
+      for (var subscription in subscriptionsList) {
+        subscriptions.removeWhere((_, sub) => sub.topic.rawTopic == subscription.topic);
+        if (onUnsubscribed != null) {
+          onUnsubscribed!(subscription.topic);
+        }
+      }
+    }
+  }
+
   /// Gets a view on the existing observable, if the subscription
   /// already exists.
   Subscription? tryGetExistingSubscription(String topic) {
