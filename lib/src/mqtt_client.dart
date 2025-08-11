@@ -466,6 +466,17 @@ class MqttClient {
         : subscriptionsManager!.registerBatchSubscription(subscriptions);
   }
 
+  /// Initiates a batch unsubscription request to the broker.
+  /// This sends multiple unsubscription requests to the broker in a single
+  /// unsubscription message.
+  void unsubscribeBatch(List<BatchSubscription> subscriptions) {
+    if (connectionStatus!.state != MqttConnectionState.connected) {
+      throw ConnectionException(connectionHandler?.connectionStatus.state);
+    }
+
+    subscriptionsManager?.registerBatchUnsubscription(subscriptions);
+  }
+
   /// Re subscribe.
   /// Unsubscribes all confirmed subscriptions and re subscribes them
   /// without sending unsubscribe messages to the broker.
