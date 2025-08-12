@@ -97,7 +97,7 @@ class SubscriptionsManager {
   }
 
   /// Batch unsubscribes in a single UNSUBSCRIBE packet.
-  void registerBatchUnsubscription(
+  void unsubscribeBatch(
     List<BatchSubscription> subscriptionsList, {
     bool expectAcknowledge = false,
   }) {
@@ -374,8 +374,8 @@ class SubscriptionsManager {
     return true;
   }
 
-  /// Cleans up after an unsubscribe message is received from the broker.
-  /// returns true, always
+  /// Cleans up after an unsubscribe acknowledge message is received
+  /// from the broker returns true, always
   bool confirmUnsubscribe(MqttMessage? msg) {
     final unSubAck = msg as MqttUnsubscribeAckMessage;
     final messageIdentifier = unSubAck.variableHeader.messageIdentifier;
@@ -385,10 +385,22 @@ class SubscriptionsManager {
       subscriptions.remove(sub?.messageIdentifier);
     }
     if (sub != null) {
-      pendingUnsubscriptions.remove(messageIdentifier);
-      if (onUnsubscribed != null) {
-        onUnsubscribed!(sub.topic.rawTopic);
+      // Check for a batch unsubscription
+      if (sub.subscriptions.isNotEmpty) {
+        for (var subscription in sub.subscriptions) {
+          subscriptions.removeWhere(
+            (_, sub) => sub.topic.rawTopic == subscription.topic,
+          );
+          if (onUnsubscribed != null) {
+            onUnsubscribed!(subscription.topic);
+          }
+        }
+      } else {
+        if (onUnsubscribed != null) {
+          onUnsubscribed!(sub.topic.rawTopic);
+        }
       }
+      pendingUnsubscriptions.remove(messageIdentifier);
     } else {
       MqttLogger.log(
         'SubscriptionsManager::confirmUnsubscribe subscription not found in pending unsubscriptions',
