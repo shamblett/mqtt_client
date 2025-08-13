@@ -28,6 +28,9 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
   /// Empty if a single subscription.
   List<BatchSubscription> subscriptions = [];
 
+  /// List of pending unsubscriptions
+  List<MultiUnsubscription> unSubscriptions = [];
+
   /// The requested subscription, used in re subscribe operations.
   /// Empty if a single subscription.
   List<BatchSubscription> requestedSubscriptions = [];

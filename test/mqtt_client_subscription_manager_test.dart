@@ -997,11 +997,10 @@ void main() {
       expect(subs.pendingUnsubscriptions.length, 0);
       expect(cbCalled, isTrue);
     });
-    test('Unsubscribe expect acknowledge multi', () {
-      var cbCalled = false;
+    test('Unsubscribe expect acknowledge multi with ack', () {
+      var cbCalledCount = 0;
       void unsubCallback(String? topic) {
-        expect(topic, 'testtopic');
-        cbCalled = true;
+        cbCalledCount++;
       }
 
       final clientEventBus = events.EventBus();
@@ -1011,53 +1010,80 @@ void main() {
       );
       final pm = PublishingManager(testCHS, clientEventBus);
       pm.messageIdentifierDispenser.reset();
-      const topic = 'testtopic';
+      const topic1 = 'testtopic1';
+      const topic2 = 'testtopic2';
+      const topic3 = 'testtopic3';
       const qos = MqttQos.atLeastOnce;
       final subs = SubscriptionsManager(testCHS, pm, clientEventBus);
-      subs.registerSubscription(topic, qos);
       subs.onUnsubscribed = unsubCallback;
+      subs.registerSubscription(topic1, qos);
+      subs.registerSubscription(topic2, qos);
+      subs.registerSubscription(topic3, qos);
       expect(
-        subs.getSubscriptionsStatus(topic),
+        subs.getSubscriptionsStatus(topic1),
         MqttSubscriptionStatus.pending,
       );
       expect(
-        testCHS.sentMessages[0],
-        const TypeMatcher<MqttSubscribeMessage>(),
+        subs.getSubscriptionsStatus(topic2),
+        MqttSubscriptionStatus.pending,
       );
-      final msg = testCHS.sentMessages[0] as MqttSubscribeMessage;
-      expect(msg.payload.subscriptions.containsKey(topic), isTrue);
-      expect(msg.payload.subscriptions[topic], MqttQos.atLeastOnce);
-      expect(msg.variableHeader!.messageIdentifier, 1);
-      expect(msg.header!.qos, MqttQos.atLeastOnce);
-      // Confirm the subscription
-      final subAckMsg = MqttSubscribeAckMessage()
+      expect(
+        subs.getSubscriptionsStatus(topic3),
+        MqttSubscriptionStatus.pending,
+      );
+      // Confirm
+      var subAckMsg = MqttSubscribeAckMessage()
           .withMessageIdentifier(1)
           .addQosGrant(MqttQos.atLeastOnce);
       subs.confirmSubscription(subAckMsg);
-      expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
-      // Unsubscribe
-      subs.unsubscribe(topic, expectAcknowledge: true);
       expect(
-        testCHS.sentMessages[1],
+        subs.getSubscriptionsStatus(topic1),
+        MqttSubscriptionStatus.active,
+      );
+      subAckMsg = MqttSubscribeAckMessage()
+          .withMessageIdentifier(2)
+          .addQosGrant(MqttQos.atLeastOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(
+        subs.getSubscriptionsStatus(topic2),
+        MqttSubscriptionStatus.active,
+      );
+      subAckMsg = MqttSubscribeAckMessage()
+          .withMessageIdentifier(3)
+          .addQosGrant(MqttQos.atLeastOnce);
+      subs.confirmSubscription(subAckMsg);
+      expect(
+        subs.getSubscriptionsStatus(topic3),
+        MqttSubscriptionStatus.active,
+      );
+      // Unsubscribe
+      subs.unsubscribeMulti([
+        MultiUnsubscription(topic1, qos),
+        MultiUnsubscription(topic2, qos),
+        MultiUnsubscription(topic3, qos),
+      ], expectAcknowledge: true);
+      expect(
+        testCHS.sentMessages[3],
         const TypeMatcher<MqttUnsubscribeMessage>(),
       );
-      final unSub = testCHS.sentMessages[1] as MqttUnsubscribeMessage;
-      expect(unSub.variableHeader!.messageIdentifier, 2);
-      expect(unSub.payload.subscriptions.length, 1);
-      expect(unSub.payload.subscriptions[0], topic);
-      expect(unSub.header!.qos, MqttQos.atLeastOnce);
-      expect(subs.pendingUnsubscriptions.length, 1);
-      expect(subs.pendingUnsubscriptions.values.first.topic.rawTopic, topic);
 
       // Unsubscribe ack
-      final unsubAck = MqttUnsubscribeAckMessage().withMessageIdentifier(2);
+      final unsubAck = MqttUnsubscribeAckMessage().withMessageIdentifier(4);
       subs.confirmUnsubscribe(unsubAck);
       expect(
-        subs.getSubscriptionsStatus(topic),
+        subs.getSubscriptionsStatus(topic1),
+        MqttSubscriptionStatus.doesNotExist,
+      );
+      expect(
+        subs.getSubscriptionsStatus(topic2),
+        MqttSubscriptionStatus.doesNotExist,
+      );
+      expect(
+        subs.getSubscriptionsStatus(topic3),
         MqttSubscriptionStatus.doesNotExist,
       );
       expect(subs.pendingUnsubscriptions.length, 0);
-      expect(cbCalled, isTrue);
+      expect(cbCalledCount, 3);
     });
     test('Unsubscribe expect acknowledge batch', () {
       var cbCalled = false;
