@@ -5,18 +5,18 @@ DocumentName: mqtt_client
 DocumentNamespace: https://pub.dev/packages/mqtt_client
 LicenseListVersion: 3.8
 Creator: Tool: https://pub.dev/packages/sbom
-Created: 2025-06-29T11:34:31Z
+Created: 2025-08-13T11:16:17Z
 
 
 PackageName: mqtt-client
 SPDXID: SPDXRef-Package-mqtt-client
-PackageVersion: 10.10.0
+PackageVersion: 10.11.0
 PackageFileName: mqtt_client
 PackageSupplier: NOASSERTION
 PackageOriginator: NOASSERTION
 PackageDownloadLocation: https://pub.dev/packages/mqtt_client
 FilesAnalyzed: true
-PackageVerificationCode: 46d433a6760afd4fa8a0cded9fe7fff0ce368b4e
+PackageVerificationCode: 6cc451a0eb10a0b710c1a77bf0ed1110d771f889
 PackageHomePage: https://pub.dev/packages/mqtt_client
 PackageLicenseConcluded: MIT
 PackageLicenseInfoFromFiles: NOASSERTION
@@ -856,7 +856,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/observable/src/observable.dart
 SPDXID: SPDXRef-observable-92
 FileType: SOURCE
-FileChecksum: SHA1: f8b096b2683ce90226c55d5c4676e040f0e16c56
+FileChecksum: SHA1: 4aaa5792a4abac1ad2d7dbdb31b9946ae087c036
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -865,7 +865,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/observable/src/records.dart
 SPDXID: SPDXRef-records-93
 FileType: SOURCE
-FileChecksum: SHA1: a1d25c07c00c9e383502afeb6c5dc5027a624dbb
+FileChecksum: SHA1: 423911ecc4a045cb35f12e6aea97114d31b97ffc
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -874,7 +874,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/utility/mqtt_client_byte_buffer.dart
 SPDXID: SPDXRef-mqtt-client-byte-buffer-94
 FileType: SOURCE
-FileChecksum: SHA1: 6e94b40155585ea700e46095cccf146f4d906042
+FileChecksum: SHA1: 105bc23a2adbd804bdfe99472e48fc88c82d0519
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -910,7 +910,7 @@ FileCopyrightText: NOASSERTION
 FileName: pubspec.yaml
 SPDXID: SPDXRef-pubspec-98
 FileType: TEXT
-FileChecksum: SHA1: f823356ef60db52a3669aa21242b3950122f2c00
+FileChecksum: SHA1: f419197488f92603fc27189532ad3f5e2ec9ae31
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
