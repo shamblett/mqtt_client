@@ -387,9 +387,8 @@ class SubscriptionsManager {
       subscriptions.remove(sub?.messageIdentifier);
     }
     if (sub != null) {
-      // Check for a batch unsubscription, if not a batch
-      // then unsubscribe each topic if not part of a batch.
-      if (!sub.batch) {
+      // Unsubscribe each topic if not part of a batch.
+      if (sub.unSubscriptions.isNotEmpty) {
         for (var subscription in sub.unSubscriptions) {
           subscriptions.removeWhere(
             (_, sub) =>
