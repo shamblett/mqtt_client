@@ -385,14 +385,17 @@ class SubscriptionsManager {
       subscriptions.remove(sub?.messageIdentifier);
     }
     if (sub != null) {
-      // Check for a batch unsubscription
-      if (sub.subscriptions.isNotEmpty) {
-        for (var subscription in sub.subscriptions) {
-          subscriptions.removeWhere(
-            (_, sub) => sub.topic.rawTopic == subscription.topic,
-          );
-          if (onUnsubscribed != null) {
-            onUnsubscribed!(subscription.topic);
+      // Check for a batch unsubscription, if not a batch
+      // then unsubscribe each topic.
+      if (subscriptions.isNotEmpty) {
+        if (!sub.batch) {
+          for (var subscription in sub.subscriptions) {
+            subscriptions.removeWhere(
+              (_, sub) => sub.topic.rawTopic == subscription.topic,
+            );
+            if (onUnsubscribed != null) {
+              onUnsubscribed!(subscription.topic);
+            }
           }
         }
       } else {
