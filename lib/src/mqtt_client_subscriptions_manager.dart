@@ -96,6 +96,47 @@ class SubscriptionsManager {
     return cn ??= createNewBatchSubscription(subscriptions);
   }
 
+  /// Batch unsubscribes in a single UNSUBSCRIBE packet.
+  void unsubscribeMulti(
+    List<MultiUnsubscription> subscriptionsList, {
+    bool expectAcknowledge = false,
+  }) {
+    final messageIdentifier = messageIdentifierDispenser
+        .getNextMessageIdentifier();
+    final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
+      messageIdentifier,
+    );
+
+    if (expectAcknowledge) {
+      unsubscribeMsg.expectAcknowledgement();
+    }
+
+    // Add each topic to the unsubscribe payload
+    for (final subscription in subscriptionsList) {
+      unsubscribeMsg.fromTopic(subscription.topic);
+    }
+
+    // Send the combined packet
+    connectionHandler!.sendMessage(unsubscribeMsg);
+
+    // Update local subscription state
+    if (expectAcknowledge) {
+      pendingUnsubscriptions[messageIdentifier] = Subscription()
+        ..unSubscriptions = subscriptionsList;
+    } else {
+      for (var subscription in subscriptionsList) {
+        // Don't remove any batch subscriptions
+        subscriptions.removeWhere(
+          (_, sub) =>
+              ((sub.topic.rawTopic == subscription.topic) && !sub.batch),
+        );
+        if (onUnsubscribed != null) {
+          onUnsubscribed!(subscription.topic);
+        }
+      }
+    }
+  }
+
   /// Gets a view on the existing observable, if the subscription
   /// already exists.
   Subscription? tryGetExistingSubscription(String topic) {
@@ -335,8 +376,8 @@ class SubscriptionsManager {
     return true;
   }
 
-  /// Cleans up after an unsubscribe message is received from the broker.
-  /// returns true, always
+  /// Cleans up after an unsubscribe acknowledge message is received
+  /// from the broker returns true, always
   bool confirmUnsubscribe(MqttMessage? msg) {
     final unSubAck = msg as MqttUnsubscribeAckMessage;
     final messageIdentifier = unSubAck.variableHeader.messageIdentifier;
@@ -346,10 +387,23 @@ class SubscriptionsManager {
       subscriptions.remove(sub?.messageIdentifier);
     }
     if (sub != null) {
-      pendingUnsubscriptions.remove(messageIdentifier);
-      if (onUnsubscribed != null) {
-        onUnsubscribed!(sub.topic.rawTopic);
+      // Unsubscribe each topic if not part of a batch.
+      if (sub.unSubscriptions.isNotEmpty) {
+        for (var subscription in sub.unSubscriptions) {
+          subscriptions.removeWhere(
+            (_, sub) =>
+                (sub.topic.rawTopic == subscription.topic) && !sub.batch,
+          );
+          if (onUnsubscribed != null) {
+            onUnsubscribed!(subscription.topic);
+          }
+        }
+      } else {
+        if (onUnsubscribed != null) {
+          onUnsubscribed!(sub.topic.rawTopic);
+        }
       }
+      pendingUnsubscriptions.remove(messageIdentifier);
     } else {
       MqttLogger.log(
         'SubscriptionsManager::confirmUnsubscribe subscription not found in pending unsubscriptions',
