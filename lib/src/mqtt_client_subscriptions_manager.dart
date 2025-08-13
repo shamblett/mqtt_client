@@ -97,7 +97,7 @@ class SubscriptionsManager {
   }
 
   /// Batch unsubscribes in a single UNSUBSCRIBE packet.
-  void unsubscribeBatch(
+  void unsubscribeMulti(
     List<BatchSubscription> subscriptionsList, {
     bool expectAcknowledge = false,
   }) {

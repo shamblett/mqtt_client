@@ -517,15 +517,15 @@ class MqttClient {
     );
   }
 
-  /// Initiates a batch unsubscription request to the broker.
+  /// Initiates a multiple unsubscription request to the broker.
   /// This sends multiple unsubscription requests to the broker in a single
   /// unsubscription message.
   /// If you are using a batch subscription and you want to unsubscribe all
   /// the topics in the batch us [unsubcribe] with the first batch topic.
   /// If you want to unsubscribe a list of topics subscribed individually
   /// and use only one unsubscription message use this method.
-  void unsubscribeBatch(List<BatchSubscription> subscriptions) =>
-      subscriptionsManager?.unsubscribeBatch(subscriptions);
+  void unsubscribeMulti(List<BatchSubscription> subscriptions) =>
+      subscriptionsManager?.unsubscribeMulti(subscriptions);
 
   /// Gets the current status of a subscription by topic.
   ///
