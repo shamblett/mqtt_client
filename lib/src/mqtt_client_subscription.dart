@@ -128,7 +128,7 @@ class Subscription extends observe.Observable<observe.ChangeRecord> {
 
 /// A subscription used in batch subscription processing.
 class BatchSubscription {
-  final String topic;
+  String topic;
 
   /// Qos, default to failure.
   MqttQos qos = MqttQos.failure;
@@ -137,6 +137,40 @@ class BatchSubscription {
   int get hashCode => topic.hashCode + qos.hashCode;
 
   BatchSubscription(this.topic, this.qos);
+
+  factory BatchSubscription.fromSubscription(Subscription subscription) =>
+      BatchSubscription(subscription.topic.rawTopic, subscription.qos);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BatchSubscription &&
+          runtimeType == other.runtimeType &&
+          topic == other.topic &&
+          qos == other.qos;
+
+  @override
+  String toString() {
+    final sb = StringBuffer();
+    sb.writeln('BatchSubscription:: Topic: $topic, QoS: $qos');
+    return sb.toString();
+  }
+}
+
+/// A subscription used in multi unsubscription processing.
+class MultiUnsubscription {
+  String topic;
+
+  /// Qos, default to failure.
+  MqttQos qos = MqttQos.failure;
+
+  @override
+  int get hashCode => topic.hashCode + qos.hashCode;
+
+  MultiUnsubscription(this.topic, this.qos);
+
+  factory MultiUnsubscription.fromSubscription(Subscription subscription) =>
+      MultiUnsubscription(subscription.topic.rawTopic, subscription.qos);
 
   @override
   bool operator ==(Object other) =>

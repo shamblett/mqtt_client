@@ -98,7 +98,7 @@ class SubscriptionsManager {
 
   /// Batch unsubscribes in a single UNSUBSCRIBE packet.
   void unsubscribeMulti(
-    List<BatchSubscription> subscriptionsList, {
+    List<MultiUnsubscription> subscriptionsList, {
     bool expectAcknowledge = false,
   }) {
     final messageIdentifier = messageIdentifierDispenser
@@ -122,7 +122,7 @@ class SubscriptionsManager {
     // Update local subscription state
     if (expectAcknowledge) {
       pendingUnsubscriptions[messageIdentifier] = Subscription()
-        ..subscriptions = subscriptionsList;
+        ..subscriptions = subscriptionsList as List<BatchSubscription>;
     } else {
       for (var subscription in subscriptionsList) {
         subscriptions.removeWhere(
