@@ -529,7 +529,7 @@ class MqttClient {
   /// If you want to unsubscribe a list of topics subscribed individually
   /// and use only one unsubscription message use this method.
   ///
-  /// If the list contains any subscriptions marked as batch subscriptions they will NOT
+  /// If the list contains any subscriptions marked as 'batch' subscriptions they will NOT
   /// be removed.
   void unsubscribeMulti(List<MultiUnsubscription> subscriptions) =>
       subscriptionsManager?.unsubscribeMulti(subscriptions);
