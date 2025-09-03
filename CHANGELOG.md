@@ -1,3 +1,6 @@
+# 10.11.1
+- [Issue 620](https://github.com/shamblett/mqtt_client/issues/620)
+
 # 10.11.0
 Multi unsubscriptions added.
 - [Issue 616](https://github.com/shamblett/mqtt_client/issues/616)
