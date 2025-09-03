@@ -158,7 +158,14 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     if (connectionStatus.state == MqttConnectionState.connected) {
       connection.onDisconnected = onDisconnected;
       // Fire the re subscribe event.
-      clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
+      if (!clientEventBus!.streamController.isClosed) {
+        clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
+      } else {
+        MqttLogger.log(
+          'MqttConnectionHandlerBase::autoReconnect - event bus is closed, not firing '
+          'resubscribe event.',
+        );
+      }
       MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete',
       );
