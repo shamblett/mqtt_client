@@ -184,7 +184,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   }
 
   /// Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed => (clientEventBus?.streamController.isClosed ?? true);
+  bool get _isClientEventBusClosed =>
+      (clientEventBus?.streamController.isClosed ?? true);
 
   /// Sends a message to the broker through the current connection.
   @override
