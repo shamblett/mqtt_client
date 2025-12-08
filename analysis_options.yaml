@@ -24,13 +24,51 @@ dart_code_metrics:
     rules:
       - test/**
       - example/**
-  extends:
-    - package:dart_code_metrics_presets/dart_all.yaml
   rules:
-    - avoid-dynamic : false
-    - avoid-non-null-assertion : false
     - newline-before-return : false
     - avoid-late-keyword : false
-    - prefer-match-file-name : false
     - avoid-global-state : false
+    - avoid-non-null-assertion : false
     - no-magic-number : false
+    - avoid-substring : false
+    - avoid-dynamic : false
+
+
+    - avoid-cascade-after-if-null
+    - avoid-casting-to-extension-type
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-conditions-with-boolean-literals
+    - avoid-double-slash-imports
+    - avoid-duplicate-exports
+    - avoid-duplicate-mixins
+    - avoid-duplicate-named-imports
+    - avoid-empty-spread
+    - avoid-generics-shadowing
+    - avoid-misused-set-literals
+    - avoid-passing-async-when-sync-expected : false
+    - avoid-passing-self-as-argument
+    - avoid-redundant-async
+    - avoid-self-assignment
+    - avoid-self-compare
+    - avoid-throw-in-catch-block
+    - avoid-top-level-members-in-tests
+    - avoid-unnecessary-conditionals
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
+    - avoid-unused-parameters
+    - binary-expression-operand-order
+    - double-literal-format
+    - member-ordering
+    - missing-test-assertion
+    - no-equal-then-else
+    - prefer-commenting-analyzer-ignores
+    - prefer-conditional-expressions
+    - prefer-first
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-last
+    - prefer-match-file-name : false
+    - prefer-moving-to-variable : false
+    - prefer-static-class
+    - avoid-commented-out-code
