@@ -70,7 +70,7 @@ abstract class MqttBrowserConnection<T extends Object>
           'MqttBrowserConnection::_onData - message received ',
           msg,
         );
-        if (!clientEventBus!.streamController.isClosed) {
+        if (!_isClientEventBusClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
           } else {
@@ -87,6 +87,9 @@ abstract class MqttBrowserConnection<T extends Object>
       }
     }
   }
+
+  /// Checks if the client event bus is closed.
+  bool get _isClientEventBusClosed => (clientEventBus?.streamController.isClosed ?? true);
 
   /// Create the listening stream subscription and subscribe the callbacks
   void _startListening() {
