@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-static-class
+
 /*
  * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
@@ -271,7 +273,7 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     return completer.future;
   }
 
-  Future<bool> _performWSHandshake(Socket socket, Uri uri) async {
+  Future<bool> _performWSHandshake(Socket socket, Uri uri) {
     _response = '';
     final c = Completer<bool>();
     const endL = '\r\n';

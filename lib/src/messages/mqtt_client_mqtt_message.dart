@@ -29,9 +29,7 @@ class MqttMessage {
   MqttMessage();
 
   /// Initializes a new instance of the MqttMessage class.
-  MqttMessage.fromHeader(MqttHeader header) {
-    header = header;
-  }
+  MqttMessage.fromHeader(MqttHeader this.header);
 
   /// Creates a new instance of an MQTT Message based on a raw message stream.
   static MqttMessage createFrom(MqttByteBuffer messageStream) {
@@ -65,7 +63,7 @@ class MqttMessage {
   }
 
   /// Reads a message from the supplied stream.
-  void readFrom(MqttByteBuffer messageStream) {
+  void readFrom(MqttByteBuffer _) {
     return;
   }
 
