@@ -76,7 +76,7 @@ abstract class MqttServerConnection<T extends Object>
           'MqttServerConnection::_onData - message received ',
           msg,
         );
-        if (!clientEventBus!.streamController.isClosed) {
+        if (!_isClientEventBusClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
             clientEventBus!.fire(ConnectAckMessageAvailable(msg));
           } else {
@@ -93,6 +93,9 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
   }
+
+  /// Checks if the client event bus is closed.
+  bool get _isClientEventBusClosed => (clientEventBus?.streamController.isClosed ?? true);
 
   // Apply any socket options, true indicates options applied
   bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {
