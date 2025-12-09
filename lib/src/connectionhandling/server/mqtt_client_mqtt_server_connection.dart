@@ -20,6 +20,10 @@ abstract class MqttServerConnection<T extends Object>
   /// Socket timeout duration
   Duration? socketTimeout;
 
+  // Checks if the client event bus is closed.
+  bool get _isClientEventBusClosed =>
+      (clientEventBus?.streamController.isClosed ?? true);
+
   /// Default constructor
   MqttServerConnection(
     super.clientEventBus,
@@ -93,10 +97,6 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
   }
-
-  /// Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed =>
-      (clientEventBus?.streamController.isClosed ?? true);
 
   // Apply any socket options, true indicates options applied
   bool _applySocketOptions(Socket socket, List<RawSocketOption> socketOptions) {

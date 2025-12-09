@@ -573,7 +573,7 @@ class MqttClient {
   /// Called when the keep alive mechanism has determined that
   /// a ping response expected from the broker has not arrived in the
   /// time period specified by [disconnectOnNoResponsePeriod].
-  void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
+  void disconnectOnNoPingResponse(DisconnectOnNoPingResponse _) {
     MqttLogger.log(
       'MqttClient::_disconnectOnNoPingResponse - disconnecting, no ping request response for $disconnectOnNoResponsePeriod seconds',
     );
@@ -585,7 +585,7 @@ class MqttClient {
   /// Called when the send message function throws exception
   /// a ping response expected from the broker has not arrived in the
   /// time period specified by [disconnectOnNoResponsePeriod].
-  void disconnectOnNoMessageSent(DisconnectOnNoMessageSent event) {
+  void disconnectOnNoMessageSent(DisconnectOnNoMessageSent _) {
     MqttLogger.log(
       'MqttClient::disconnectOnNoMessageSent - disconnecting, no message sent due to exception like socket exception',
     );

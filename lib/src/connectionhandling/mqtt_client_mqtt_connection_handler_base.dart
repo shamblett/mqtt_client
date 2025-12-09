@@ -88,6 +88,10 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 
+  // Checks if the client event bus is closed.
+  bool get _isClientEventBusClosed =>
+      (clientEventBus?.streamController.isClosed ?? true);
+
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
   MqttConnectionHandlerBase(
     this.clientEventBus, {
@@ -107,8 +111,8 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     MqttLogger.log(
       'MqttConnectionHandlerBase::connect - server $server, port $port',
     );
-    // ignore: unnecessary_this
-    this.connectionMessage = message;
+
+    connectionMessage = message;
     try {
       await internalConnect(server, port, message);
       return connectionStatus;
@@ -182,10 +186,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       }
     }
   }
-
-  /// Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed =>
-      (clientEventBus?.streamController.isClosed ?? true);
 
   /// Sends a message to the broker through the current connection.
   @override
@@ -320,7 +320,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     } on Exception {
       _performConnectionDisconnect();
     }
-    // Cancel the connect timer;
+    // Cancel the connect timer
     MqttLogger.log('MqttConnectionHandlerBase:: cancelling connect timer');
     connectTimer.cancel();
     return true;

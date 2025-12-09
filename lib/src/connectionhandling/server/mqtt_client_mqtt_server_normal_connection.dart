@@ -128,7 +128,8 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
   /// Sends the message in the stream to the broker.
   @override
   void send(MqttByteBuffer message) {
-    final messageBytes = message.read(message.length);
+    final length = message.length;
+    final messageBytes = message.read(length);
     client?.add(messageBytes.toList());
   }
 
