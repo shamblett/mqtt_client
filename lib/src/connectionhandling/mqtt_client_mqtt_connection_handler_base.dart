@@ -163,7 +163,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       connection.onDisconnected = onDisconnected;
       // Fire the re subscribe event.
       if (!_isClientEventBusClosed) {
-        clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
+        clientEventBus.safeFire(Resubscribe(fromAutoReconnect: true));
       } else {
         MqttLogger.log(
           'MqttConnectionHandlerBase::autoReconnect - event bus is closed, not firing '
@@ -181,9 +181,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect failed - re trying',
       );
-      if (!_isClientEventBusClosed) {
-        clientEventBus!.fire(AutoReconnect());
-      }
+      clientEventBus.safeFire(AutoReconnect());
     }
   }
 

@@ -236,7 +236,7 @@ class MqttConnectionKeepAlive {
         'MqttConnectionKeepAlive::noPingResponseReceived - connected, attempting to disconnect',
       );
       if (_clientEventBus != null) {
-        _clientEventBus!.fire(DisconnectOnNoPingResponse());
+        _clientEventBus.safeFire(DisconnectOnNoPingResponse());
         MqttLogger.log(
           'MqttConnectionKeepAlive::noPingResponseReceived - OK - disconnect event fired',
         );
@@ -260,7 +260,7 @@ class MqttConnectionKeepAlive {
         'MqttConnectionKeepAlive::noMessageSent - connected, attempting to disconnect',
       );
       if (_clientEventBus != null) {
-        _clientEventBus!.fire(DisconnectOnNoMessageSent());
+        _clientEventBus.safeFire(DisconnectOnNoMessageSent());
         MqttLogger.log(
           'MqttConnectionKeepAlive::noMessageSent - OK - disconnect event fired',
         );

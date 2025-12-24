@@ -281,7 +281,7 @@ class PublishingManager implements IPublishingManager {
   void _fireMessageReceived(PublicationTopic topic, MqttMessage msg) {
     if (_clientEventBus != null &&
         !_clientEventBus!.streamController.isClosed) {
-      _clientEventBus?.fire(MessageReceived(topic, msg));
+      _clientEventBus?.safeFire(MessageReceived(topic, msg));
     } else {
       MqttLogger.log(
         'PublishingManager::_fireMessageReceived - event not fired, event bus closed',

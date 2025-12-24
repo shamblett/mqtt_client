@@ -82,9 +82,9 @@ abstract class MqttServerConnection<T extends Object>
         );
         if (!_isClientEventBusClosed) {
           if (msg!.header!.messageType == MqttMessageType.connectAck) {
-            clientEventBus!.fire(ConnectAckMessageAvailable(msg));
+            clientEventBus.safeFire(ConnectAckMessageAvailable(msg));
           } else {
-            clientEventBus!.fire(MessageAvailable(msg));
+            clientEventBus.safeFire(MessageAvailable(msg));
           }
           MqttLogger.log(
             'MqttServerConnection::_onData - message available event fired',
