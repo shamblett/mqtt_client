@@ -479,6 +479,8 @@ class SubscriptionsManager {
         }
       }
     } else {
+      subscriptions.clear();
+      pendingSubscriptions.clear();
       MqttLogger.log(
         'Subscriptionsmanager::_resubscribe - '
         'NOT resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}, resubscribeOnAutoReconnect is false',
