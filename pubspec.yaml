@@ -33,6 +33,7 @@ dev_dependencies:
 false_secrets:
   - /test/pem/self_signed.key
   - /test/pem/localhost.key
+  - /example/pem/databroker.pem
 
 topics:
   - iot
