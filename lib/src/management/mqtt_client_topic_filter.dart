@@ -53,7 +53,7 @@ class MqttClientTopicFilter {
         }
       }
       if (tmp.isNotEmpty) {
-        _updates.add(tmp);
+        _updates.safeAdd(tmp);
       }
     } on RangeError catch (e) {
       MqttLogger.log(

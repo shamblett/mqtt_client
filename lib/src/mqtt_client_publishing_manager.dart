@@ -273,7 +273,7 @@ class PublishingManager implements IPublishingManager {
       MqttLogger.log(
         'PublishingManager::_notifyPublish - adding message to published stream for topic ${message.variableHeader!.topicName}',
       );
-      _published.add(message);
+      _published.safeAdd(message);
     }
   }
 

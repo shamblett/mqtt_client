@@ -230,7 +230,7 @@ class SubscriptionsManager {
   void publishMessageReceived(MessageReceived event) {
     final topic = event.topic;
     final msg = MqttReceivedMessage<MqttMessage>(topic.rawTopic, event.message);
-    _subscriptionNotifier.add([msg]);
+    _subscriptionNotifier.safeAdd([msg]);
   }
 
   /// Unsubscribe from a topic.

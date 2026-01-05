@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:mqtt_client/src/extension/stream_controller_extension.dart';
 
 import 'observable.dart';
 import 'records.dart';
@@ -58,7 +59,7 @@ class ChangeNotifier<C extends ChangeRecord> implements Observable<C> {
     if (_scheduled && hasObservers) {
       changes = ChangeRecord.any as List<C>;
       _scheduled = false;
-      _changes.add(changes);
+      _changes.safeAdd(changes);
       return true;
     }
     return false;
