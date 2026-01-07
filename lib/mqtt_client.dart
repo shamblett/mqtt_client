@@ -173,3 +173,5 @@ part 'src/connectionhandling/mqtt_client_mqtt_connection_keep_alive.dart';
 part 'src/connectionhandling/mqtt_client_read_wrapper.dart';
 
 part 'src/extensions/mqtt_event_bus.dart';
+
+part 'src/extensions/mqtt_stream_controller.dart';

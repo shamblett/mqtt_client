@@ -1,7 +1,7 @@
 /*
- * Package : mqtt5_client
+ * Package : mqtt_client
  * Author : S. Hamblett <steve.hamblett@linux.com>
- * Date   : 06/11/2025
+ * Date   : 07/01/2026
  * Copyright :  S.Hamblett
  */
 
