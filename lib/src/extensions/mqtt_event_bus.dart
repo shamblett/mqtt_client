@@ -1,5 +1,3 @@
-// ignore_for_file: prefer-match-file-name
-
 /*
  * Package : mqtt5_client
  * Author : S. Hamblett <steve.hamblett@linux.com>

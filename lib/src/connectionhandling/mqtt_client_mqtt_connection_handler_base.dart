@@ -88,7 +88,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 
-
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
   MqttConnectionHandlerBase(
     this.clientEventBus, {
@@ -159,14 +158,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
     if (connectionStatus.state == MqttConnectionState.connected) {
       connection.onDisconnected = onDisconnected;
       // Fire the re subscribe event.
-      if (!_isClientEventBusClosed) {
-        clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
-      } else {
-        MqttLogger.log(
-          'MqttConnectionHandlerBase::autoReconnect - event bus is closed, not firing '
-          'resubscribe event.',
-        );
-      }
+      clientEventBus!.fire(Resubscribe(fromAutoReconnect: true));
       MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect complete',
       );
@@ -178,9 +170,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
       MqttLogger.log(
         'MqttConnectionHandlerBase::autoReconnect - auto reconnect failed - re trying',
       );
-      if (!_isClientEventBusClosed) {
-        clientEventBus!.fire(AutoReconnect());
-      }
+      clientEventBus!.fire(AutoReconnect());
     }
   }
 
@@ -330,9 +320,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
 
   /// Initialise the event listeners;
   void initialiseListeners() {
-    if (_isClientEventBusClosed) {
-      return;
-    }
     clientEventBus!.on<AutoReconnect>().listen(autoReconnect);
     clientEventBus!.on<MessageAvailable>().listen(messageAvailable);
     clientEventBus!.on<ConnectAckMessageAvailable>().listen(connectAckReceived);

@@ -10,16 +10,12 @@ part of '../../../mqtt_browser_client.dart';
 /// The MQTT browser connection base class
 abstract class MqttBrowserConnection<T extends Object>
     extends MqttConnectionBase<T> {
-
   /// Default constructor
   MqttBrowserConnection(super.clientEventBus);
 
   /// Initializes a new instance of the MqttBrowserConnection class.
-  MqttBrowserConnection.fromConnect(
-    String server,
-    int port,
-    clientEventBus,
-  ) : super(clientEventBus) {
+  MqttBrowserConnection.fromConnect(String server, int port, clientEventBus)
+    : super(clientEventBus) {
     connect(server, port);
   }
 
@@ -71,20 +67,18 @@ abstract class MqttBrowserConnection<T extends Object>
           'MqttBrowserConnection::_onData - message received ',
           msg,
         );
-        if (!_isClientEventBusClosed) {
-          if (msg!.header!.messageType == MqttMessageType.connectAck) {
-            clientEventBus!.fire(ConnectAckMessageAvailable(msg));
-          } else {
-            clientEventBus!.fire(MessageAvailable(msg));
-          }
-          MqttLogger.log(
-            'MqttBrowserConnection::_onData - message available event fired',
-          );
+        if (msg!.header!.messageType == MqttMessageType.connectAck) {
+          clientEventBus!.fire(ConnectAckMessageAvailable(msg));
         } else {
-          MqttLogger.log(
-            'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed',
-          );
+          clientEventBus!.fire(MessageAvailable(msg));
         }
+        MqttLogger.log(
+          'MqttBrowserConnection::_onData - message available event fired',
+        );
+      } else {
+        MqttLogger.log(
+          'MqttBrowserConnection::_onData - WARN - message available event not fired, event bus is closed',
+        );
       }
     }
   }

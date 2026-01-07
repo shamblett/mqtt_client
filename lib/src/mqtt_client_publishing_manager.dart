@@ -174,11 +174,11 @@ class PublishingManager implements IPublishingManager {
       if (pubMsg.header!.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
-        _fireMessageReceived(topic, msg);
+        _clientEventBus?.fire(MessageReceived(topic, msg));
       } else if (pubMsg.header!.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 requires an acknowledgement
         // Send the message for processing to whoever is waiting.
-        _fireMessageReceived(topic, msg);
+        _clientEventBus?.fire(MessageReceived(topic, msg));
         // If configured the client will send the acknowledgement, else the user must.
         final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
         if (!manuallyAcknowledgeQos1) {
@@ -224,7 +224,7 @@ class PublishingManager implements IPublishingManager {
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
         final topic = PublicationTopic(pubMsg.variableHeader!.topicName);
-        _fireMessageReceived(topic, pubMsg);
+        _clientEventBus?.fire(MessageReceived(topic, msg));
         final compMsg = MqttPublishCompleteMessage().withMessageIdentifier(
           pubMsg.variableHeader!.messageIdentifier,
         );
@@ -276,5 +276,4 @@ class PublishingManager implements IPublishingManager {
       _published.add(message);
     }
   }
-
 }
