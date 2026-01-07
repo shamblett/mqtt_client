@@ -12,6 +12,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:event_bus/event_bus.dart' as events;
 import 'package:test/test.dart';
 import 'package:typed_data/typed_data.dart' as typed;
 
@@ -1174,6 +1175,24 @@ void main() {
         final decoded = MqttPublishPayload.bytesToStringAsString(buffer);
         expect(decoded == original, isTrue);
       });
+    });
+  });
+  group('Event Bus', () {
+    test('Guarded fire', () async {
+      final eb = MqttEventBus.fromEventBus(events.EventBus());
+      int count = 0;
+      void cb(MqttMessage event) {
+        count++;
+      }
+
+      eb.on<MqttMessage>().listen(cb);
+      eb.fire(MqttMessage());
+      await Future.delayed(Duration(milliseconds: 10));
+      expect(count, 1);
+      eb.destroy();
+      eb.fire(MqttMessage());
+      await Future.delayed(Duration(milliseconds: 10));
+      expect(count, 1);
     });
   });
 }
