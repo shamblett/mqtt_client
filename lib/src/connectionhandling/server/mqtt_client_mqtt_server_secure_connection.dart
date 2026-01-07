@@ -18,7 +18,7 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   /// Default constructor
   MqttServerSecureConnection(
     this.context,
-    events.EventBus? eventBus,
+    MqttEventBus? eventBus,
     this.onBadCertificate,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
@@ -28,7 +28,7 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
   MqttServerSecureConnection.fromConnect(
     String server,
     int port,
-    events.EventBus eventBus,
+    MqttEventBus eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
   ) : super(eventBus, socketOptions, socketTimeout) {

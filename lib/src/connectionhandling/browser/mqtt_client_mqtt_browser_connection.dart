@@ -10,9 +10,6 @@ part of '../../../mqtt_browser_client.dart';
 /// The MQTT browser connection base class
 abstract class MqttBrowserConnection<T extends Object>
     extends MqttConnectionBase<T> {
-  // Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed =>
-      (clientEventBus?.streamController.isClosed ?? true);
 
   /// Default constructor
   MqttBrowserConnection(super.clientEventBus);
@@ -21,7 +18,7 @@ abstract class MqttBrowserConnection<T extends Object>
   MqttBrowserConnection.fromConnect(
     String server,
     int port,
-    events.EventBus clientEventBus,
+    clientEventBus,
   ) : super(clientEventBus) {
     connect(server, port);
   }

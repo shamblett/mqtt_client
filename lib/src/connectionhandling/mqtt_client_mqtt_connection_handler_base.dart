@@ -58,7 +58,7 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
 
   /// The event bus
   @protected
-  events.EventBus? clientEventBus;
+  MqttEventBus? clientEventBus;
 
   /// User supplied websocket protocols
   List<String>? websocketProtocols;
@@ -88,9 +88,6 @@ abstract class MqttConnectionHandlerBase implements IMqttConnectionHandler {
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 
-  // Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed =>
-      (clientEventBus?.streamController.isClosed ?? true);
 
   /// Initializes a new instance of the [MqttConnectionHandlerBase] class.
   MqttConnectionHandlerBase(

@@ -94,7 +94,7 @@ class MqttServerClient extends MqttClient {
     // A server client
     MqttClientEnvironment.isWebClient = false;
     instantiationCorrect = true;
-    clientEventBus = events.EventBus();
+    clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
     clientEventBus?.on<DisconnectOnNoPingResponse>().listen(
       disconnectOnNoPingResponse,
     );

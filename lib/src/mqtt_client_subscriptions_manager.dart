@@ -49,7 +49,7 @@ class SubscriptionsManager {
   bool resubscribeOnAutoReconnect = true;
 
   /// The event bus
-  final events.EventBus? _clientEventBus;
+  final MqttEventBus? _clientEventBus;
 
   /// Stream for all subscribed topics
   final _subscriptionNotifier =

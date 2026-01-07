@@ -323,7 +323,7 @@ class MqttClient {
 
   /// The event bus
   @protected
-  events.EventBus? clientEventBus;
+  MqttEventBus? clientEventBus;
 
   /// The stream on which all subscribed topic updates are published to
   Stream<List<MqttReceivedMessage<MqttMessage>>>? get updates =>

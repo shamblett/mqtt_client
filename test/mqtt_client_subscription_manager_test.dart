@@ -171,7 +171,7 @@ void main() {
         cbCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -187,7 +187,7 @@ void main() {
       expect(cbCalled, isTrue);
     });
     test('Invalid topic returns null subscription batch', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -202,7 +202,7 @@ void main() {
       expect(ret, isNull);
     });
     test('Subscription request creates pending subscription single', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -228,7 +228,7 @@ void main() {
       expect(msg.header!.qos, MqttQos.atLeastOnce);
     });
     test('Subscription request creates pending subscription batch', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -291,7 +291,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -348,7 +348,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -389,7 +389,7 @@ void main() {
     test(
       'Acknowledged subscription request for no pending subscription is ignored',
       () {
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -434,7 +434,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -481,7 +481,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -534,7 +534,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -579,7 +579,7 @@ void main() {
           cbCalled = true;
         }
 
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -617,7 +617,7 @@ void main() {
       },
     );
     test('Re subscribe single', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -663,7 +663,7 @@ void main() {
       expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
     });
     test('Re subscribe batch', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -726,7 +726,7 @@ void main() {
       );
     });
     test('Get subscription with valid topic returns subscription', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -759,7 +759,7 @@ void main() {
       expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
     });
     test('Get subscription with invalid topic returns null', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -791,7 +791,7 @@ void main() {
       expect(subs.getSubscriptionsStatus(topic), MqttSubscriptionStatus.active);
     });
     test('Get subscription for pending subscription', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -823,7 +823,7 @@ void main() {
         cbCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -875,7 +875,7 @@ void main() {
         cbCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -942,7 +942,7 @@ void main() {
         cbCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -1003,7 +1003,7 @@ void main() {
         cbCalledCount++;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -1091,7 +1091,7 @@ void main() {
         cbCalledCount++;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -1176,7 +1176,7 @@ void main() {
         cbCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -1270,7 +1270,7 @@ void main() {
 
       // Wrap the callback
       final dynamic t1 = expectAsync1(subRec, count: 2);
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,

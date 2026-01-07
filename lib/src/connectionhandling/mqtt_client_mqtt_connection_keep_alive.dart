@@ -51,7 +51,7 @@ class MqttConnectionKeepAlive {
   int averageCycleLatency = 0;
 
   /// The event bus
-  events.EventBus? _clientEventBus;
+  MqttEventBus? _clientEventBus;
 
   // The connection handler
   late IMqttConnectionHandler _connectionHandler;
@@ -66,7 +66,7 @@ class MqttConnectionKeepAlive {
   /// Initializes a new instance of the MqttConnectionKeepAlive class.
   MqttConnectionKeepAlive(
     IMqttConnectionHandler connectionHandler,
-    events.EventBus? eventBus,
+    MqttEventBus? eventBus,
     int keepAliveSeconds, [
     int disconnectOnNoResponsePeriod = 0,
   ]) {

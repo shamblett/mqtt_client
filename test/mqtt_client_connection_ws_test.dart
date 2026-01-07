@@ -31,7 +31,7 @@ void main() {
   group('Connection parameters', () {
     test('Invalid URL', () async {
       try {
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final ch = SynchronousMqttServerConnectionHandler(
           clientEventBus,
           maxConnectionAttempts: 3,
@@ -65,7 +65,7 @@ void main() {
 
     test('Invalid URL - bad scheme', () async {
       try {
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final ch = SynchronousMqttServerConnectionHandler(
           clientEventBus,
           maxConnectionAttempts: 3,
@@ -113,7 +113,7 @@ void main() {
       }
 
       await brokerWs.start();
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final ch = SynchronousMqttServerConnectionHandler(
         clientEventBus,
         maxConnectionAttempts: 3,

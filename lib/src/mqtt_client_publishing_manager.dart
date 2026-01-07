@@ -68,7 +68,7 @@ class PublishingManager implements IPublishingManager {
       StreamController<MqttPublishMessage>.broadcast();
 
   /// The event bus
-  final events.EventBus? _clientEventBus;
+  final MqttEventBus? _clientEventBus;
 
   /// The stream on which all confirmed published messages are added to
   StreamController<MqttPublishMessage> get published => _published;
@@ -277,15 +277,4 @@ class PublishingManager implements IPublishingManager {
     }
   }
 
-  // Guarded event bus fire for the received message.
-  void _fireMessageReceived(PublicationTopic topic, MqttMessage msg) {
-    if (_clientEventBus != null &&
-        !_clientEventBus!.streamController.isClosed) {
-      _clientEventBus?.fire(MessageReceived(topic, msg));
-    } else {
-      MqttLogger.log(
-        'PublishingManager::_fireMessageReceived - event not fired, event bus closed',
-      );
-    }
-  }
 }

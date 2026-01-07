@@ -107,7 +107,7 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
   /// Default constructor
   MqttServerWs2Connection(
     this.context,
-    events.EventBus? eventBus,
+    MqttEventBus? eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
   ) : super(eventBus, socketOptions, socketTimeout);
@@ -116,7 +116,7 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
   MqttServerWs2Connection.fromConnect(
     String server,
     int port,
-    events.EventBus eventBus,
+    MqttEventBus eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
   ) : super(eventBus, socketOptions, socketTimeout) {
