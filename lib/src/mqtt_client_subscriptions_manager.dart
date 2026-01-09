@@ -53,8 +53,12 @@ class SubscriptionsManager {
 
   /// Stream for all subscribed topics
   final _subscriptionNotifier =
-      StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
-        sync: true,
+      MqttStreamController<
+        List<MqttReceivedMessage<MqttMessage>>
+      >.fromStreamController(
+        StreamController<List<MqttReceivedMessage<MqttMessage>>>.broadcast(
+          sync: true,
+        ),
       );
 
   /// Subscription notifier

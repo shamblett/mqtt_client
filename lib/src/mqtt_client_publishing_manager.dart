@@ -64,14 +64,16 @@ class PublishingManager implements IPublishingManager {
   @override
   MessageReceived? publishEvent;
 
-  final StreamController<MqttPublishMessage> _published =
-      StreamController<MqttPublishMessage>.broadcast();
+  final MqttStreamController<MqttPublishMessage> _published =
+      MqttStreamController<MqttPublishMessage>.fromStreamController(
+        StreamController<MqttPublishMessage>.broadcast(),
+      );
 
   /// The event bus
   final MqttEventBus? _clientEventBus;
 
   /// The stream on which all confirmed published messages are added to
-  StreamController<MqttPublishMessage> get published => _published;
+  MqttStreamController<MqttPublishMessage> get published => _published;
 
   /// Initializes a new instance of the PublishingManager class.
   PublishingManager(this.connectionHandler, this._clientEventBus) {
