@@ -41,7 +41,7 @@ Future<int> main() async {
   /// list so in most cases you can ignore this.
 
   /// Set logging on if needed, defaults to off
-  client.logging(on: true);
+  client.logging(on: false);
 
   /// Set the correct MQTT protocol for testing against mosquito
   client.setProtocolV311();
@@ -172,7 +172,7 @@ Future<int> main() async {
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(60);
+  await MqttUtilities.asyncSleep(30);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');

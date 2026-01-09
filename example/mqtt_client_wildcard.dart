@@ -105,10 +105,9 @@ Future<int> main() async {
     print('');
   });
 
-  /// Ok, we will now sleep a while, in this gap you will see ping request/response
-  /// messages being exchanged by the keep alive mechanism.
+  /// Ok, we will now sleep a while.
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(60);
+  await MqttUtilities.asyncSleep(30);
 
   /// Finally, unsubscribe and exit gracefully
   print('EXAMPLE::Unsubscribing');

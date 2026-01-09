@@ -225,8 +225,6 @@ class PublishingManager implements IPublishingManager {
       final pubMsg = receivedMessages.remove(messageIdentifier);
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
-        final topic = PublicationTopic(pubMsg.variableHeader!.topicName);
-        _clientEventBus?.fire(MessageReceived(topic, msg));
         final compMsg = MqttPublishCompleteMessage().withMessageIdentifier(
           pubMsg.variableHeader!.messageIdentifier,
         );
