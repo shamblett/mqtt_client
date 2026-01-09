@@ -1177,8 +1177,8 @@ void main() {
       });
     });
   });
-  group('Event Bus', () {
-    test('Guarded fire', () async {
+  group('Extensions', () {
+    test('Event Bus', () async {
       final eb = MqttEventBus.fromEventBus(events.EventBus());
       int count = 0;
       void cb(MqttMessage event) {
@@ -1191,6 +1191,25 @@ void main() {
       expect(count, 1);
       eb.destroy();
       eb.fire(MqttMessage());
+      await Future.delayed(Duration(milliseconds: 10));
+      expect(count, 1);
+    });
+    test('Stream Controller', () async {
+      final sc = MqttStreamController<String>.fromStreamController(
+        StreamController<String>(),
+      );
+      int count = 0;
+      void cb(String event) {
+        count++;
+      }
+
+      sc.stream.listen(cb);
+      expect(sc.hasListener, isTrue);
+      sc.add('Hello');
+      await Future.delayed(Duration(milliseconds: 10));
+      expect(count, 1);
+      await sc.close();
+      sc.add('Hello Again');
       await Future.delayed(Duration(milliseconds: 10));
       expect(count, 1);
     });
