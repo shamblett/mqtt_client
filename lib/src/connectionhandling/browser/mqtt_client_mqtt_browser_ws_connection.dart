@@ -19,7 +19,7 @@ class MqttBrowserWsConnection extends MqttBrowserConnection<WebSocket> {
   MqttBrowserWsConnection.fromConnect(
     String server,
     int port,
-    events.EventBus eventBus,
+    MqttEventBus eventBus,
   ) : super(eventBus) {
     connect(server, port);
   }

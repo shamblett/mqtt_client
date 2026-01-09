@@ -16,7 +16,7 @@ import 'package:mocktail/mocktail.dart';
 
 // Mock classes
 class MockCH extends Mock implements MqttServerConnectionHandler {
-  MockCH(events.EventBus clientEventBus, {required int? maxConnectionAttempts});
+  MockCH(MqttEventBus clientEventBus, {required int? maxConnectionAttempts});
   @override
   MqttClientConnectionStatus connectionStatus = MqttClientConnectionStatus();
 }
@@ -24,7 +24,7 @@ class MockCH extends Mock implements MqttServerConnectionHandler {
 void main() {
   group('Normal operation', () {
     test('Successful response - no pong callback', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -60,7 +60,7 @@ void main() {
         pongCalled = true;
       }
 
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -95,7 +95,7 @@ void main() {
   });
   group('Disconnect on no response', () {
     test('Successful response', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -128,7 +128,7 @@ void main() {
       expect(ka.disconnectTimer?.isActive, isFalse);
     });
     test('No response', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -161,7 +161,7 @@ void main() {
   });
   group('Not connected', () {
     test('No ping sent', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -193,7 +193,7 @@ void main() {
   });
   group('Latency', () {
     test('Ping callback', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;
@@ -232,7 +232,7 @@ void main() {
     });
     test('Latency counts', () async {
       final latencies = <int>[0, 0, 0];
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       var disconnect = false;
       void disconnectOnNoPingResponse(DisconnectOnNoPingResponse event) {
         disconnect = true;

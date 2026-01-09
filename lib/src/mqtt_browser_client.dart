@@ -49,7 +49,7 @@ class MqttBrowserClient extends MqttClient {
     // A browser client
     MqttClientEnvironment.isWebClient = true;
     instantiationCorrect = true;
-    clientEventBus = events.EventBus();
+    clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
     clientEventBus?.on<DisconnectOnNoPingResponse>().listen(
       disconnectOnNoPingResponse,
     );

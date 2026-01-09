@@ -31,7 +31,7 @@ abstract class MqttConnectionBase<T extends Object> {
 
   /// The event bus
   @protected
-  events.EventBus? clientEventBus;
+  MqttEventBus? clientEventBus;
 
   /// Default constructor
   MqttConnectionBase(this.clientEventBus);

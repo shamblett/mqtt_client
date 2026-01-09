@@ -20,10 +20,6 @@ abstract class MqttServerConnection<T extends Object>
   /// Socket timeout duration
   Duration? socketTimeout;
 
-  // Checks if the client event bus is closed.
-  bool get _isClientEventBusClosed =>
-      (clientEventBus?.streamController.isClosed ?? true);
-
   /// Default constructor
   MqttServerConnection(
     super.clientEventBus,
@@ -35,7 +31,7 @@ abstract class MqttServerConnection<T extends Object>
   MqttServerConnection.fromConnect(
     String server,
     int port,
-    events.EventBus clientEventBus,
+    MqttEventBus clientEventBus,
     this.socketOptions,
     this.socketTimeout,
   ) : super(clientEventBus) {
@@ -80,20 +76,14 @@ abstract class MqttServerConnection<T extends Object>
           'MqttServerConnection::_onData - message received ',
           msg,
         );
-        if (!_isClientEventBusClosed) {
-          if (msg!.header!.messageType == MqttMessageType.connectAck) {
-            clientEventBus!.fire(ConnectAckMessageAvailable(msg));
-          } else {
-            clientEventBus!.fire(MessageAvailable(msg));
-          }
-          MqttLogger.log(
-            'MqttServerConnection::_onData - message available event fired',
-          );
+        if (msg!.header!.messageType == MqttMessageType.connectAck) {
+          clientEventBus!.fire(ConnectAckMessageAvailable(msg));
         } else {
-          MqttLogger.log(
-            'MqttServerConnection::_onData - WARN - message available event not fired, event bus is closed',
-          );
+          clientEventBus!.fire(MessageAvailable(msg));
         }
+        MqttLogger.log(
+          'MqttServerConnection::_onData - message available event fired',
+        );
       }
     }
   }

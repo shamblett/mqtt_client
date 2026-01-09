@@ -56,7 +56,7 @@ void main() {
     // Group wide
     final con = MockCON();
     final ch = MockCH();
-    final clientEventBus = events.EventBus();
+    final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
     final testCHNS = TestConnectionHandlerNoSend(
       clientEventBus,
       socketOptions: socketOptions,
@@ -132,7 +132,7 @@ void main() {
 
   group('Publishing', () {
     test('Publish at least once', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -165,7 +165,7 @@ void main() {
     });
 
     test('Publish at least once', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -196,7 +196,7 @@ void main() {
       );
     });
     test('Publish at exactly once', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -226,7 +226,7 @@ void main() {
       );
     });
     test('Publish consecutive topics', () async {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -251,7 +251,7 @@ void main() {
     });
     test('Publish at least once and ack', () async {
       var messageOnPublished = false;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -281,7 +281,7 @@ void main() {
     });
     test('Publish exactly once, release and complete', () async {
       var messageOnPublished = false;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -317,7 +317,7 @@ void main() {
     });
     test('Publish received at most once', () async {
       var nothingOnPublished = true;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -344,7 +344,7 @@ void main() {
     });
     test('Publish received at least once', () async {
       var nothingOnPublished = true;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -376,7 +376,7 @@ void main() {
       'Publish received at least once  - manual acknowledge in force',
       () async {
         var nothingOnPublished = true;
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final testCHS = TestConnectionHandlerSend(
           clientEventBus,
           socketOptions: socketOptions,
@@ -407,7 +407,7 @@ void main() {
     );
     test('Publish received exactly once', () async {
       var nothingOnPublished = true;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -437,7 +437,7 @@ void main() {
     });
     test('Release received exactly once', () async {
       var nothingOnPublished = true;
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -473,7 +473,7 @@ void main() {
       expect(nothingOnPublished, isTrue);
     });
     test('Publish exactly once, interleaved scenario 1', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -520,7 +520,7 @@ void main() {
       expect(pm.publishedMessages, isEmpty);
     });
     test('Publish exactly once, interleaved scenario 2', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -578,7 +578,7 @@ void main() {
   });
   group('Manual Acknowledge', () {
     test('Manual Acknowledge not set', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -590,7 +590,7 @@ void main() {
       expect(testCHS.sentMessages.length, 0);
     });
     test('Not Awaiting Acknowledge', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,
@@ -605,7 +605,7 @@ void main() {
       expect(testCHS.sentMessages.length, 0);
     });
     test('Valid manual acknowledge', () {
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final testCHS = TestConnectionHandlerSend(
         clientEventBus,
         socketOptions: socketOptions,

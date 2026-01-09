@@ -30,7 +30,7 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
   MqttServerWsConnection.fromConnect(
     String server,
     int port,
-    events.EventBus eventBus,
+    MqttEventBus eventBus,
     List<RawSocketOption> socketOptions,
     Duration? socketTimeout,
   ) : super(eventBus, socketOptions, socketTimeout) {

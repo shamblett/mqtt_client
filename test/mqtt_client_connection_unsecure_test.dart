@@ -26,7 +26,7 @@ class MockCH extends Mock implements MqttServerConnectionHandler {
 class MockKA extends Mock implements MqttConnectionKeepAlive {
   MockKA(
     IMqttConnectionHandler connectionHandler,
-    events.EventBus? clientEventBus,
+    MqttEventBus? clientEventBus,
     int keepAliveSeconds,
   ) {
     ka = MqttConnectionKeepAlive(
@@ -52,7 +52,7 @@ void main() {
     test('Connect to bad host name', () async {
       await IOOverrides.runZoned(
         () async {
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -95,7 +95,7 @@ void main() {
     test('Connect invalid port', () async {
       await IOOverrides.runZoned(
         () async {
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -137,7 +137,7 @@ void main() {
     test('Connect no connect ack', () async {
       await IOOverrides.runZoned(
         () async {
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -193,7 +193,7 @@ void main() {
               connectionFailed = true;
             }
 
-            final clientEventBus = events.EventBus();
+            final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
             final ch = SynchronousMqttServerConnectionHandler(
               clientEventBus,
               maxConnectionAttempts: 3,
@@ -254,7 +254,7 @@ void main() {
               connectionFailed = true;
             }
 
-            final clientEventBus = events.EventBus();
+            final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
             final ch = SynchronousMqttServerConnectionHandler(
               clientEventBus,
               maxConnectionAttempts: 3,
@@ -304,7 +304,7 @@ void main() {
     test('1000ms connect period', () async {
       await IOOverrides.runZoned(
         () async {
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -357,7 +357,7 @@ void main() {
             connectCbCalled = true;
           }
 
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -407,7 +407,7 @@ void main() {
       await IOOverrides.runZoned(
         () async {
           Protocol.version = MqttClientConstants.mqttV311ProtocolVersion;
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,
@@ -451,7 +451,7 @@ void main() {
     test('Successful response', () async {
       await IOOverrides.runZoned(
         () async {
-          final clientEventBus = events.EventBus();
+          final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
           final ch = SynchronousMqttServerConnectionHandler(
             clientEventBus,
             maxConnectionAttempts: 3,

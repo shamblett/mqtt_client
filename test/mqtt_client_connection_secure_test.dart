@@ -27,7 +27,7 @@ class MockCH extends Mock implements MqttServerConnectionHandler {
 class MockKA extends Mock implements MqttConnectionKeepAlive {
   MockKA(
     IMqttConnectionHandler connectionHandler,
-    events.EventBus clientEventBus,
+    MqttEventBus clientEventBus,
     int keepAliveSeconds,
   ) {
     ka = MqttConnectionKeepAlive(
@@ -83,7 +83,7 @@ void main() {
       }
 
       await broker.start();
-      final clientEventBus = events.EventBus();
+      final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
       final ch = SynchronousMqttServerConnectionHandler(
         clientEventBus,
         maxConnectionAttempts: 3,
@@ -131,7 +131,7 @@ void main() {
 
         broker.pemName = 'self_signed';
         await broker.start();
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final ch = SynchronousMqttServerConnectionHandler(
           clientEventBus,
           maxConnectionAttempts: 3,
@@ -164,7 +164,7 @@ void main() {
       () async {
         broker.pemName = 'self_signed';
         await broker.start();
-        final clientEventBus = events.EventBus();
+        final clientEventBus = MqttEventBus.fromEventBus(events.EventBus());
         final ch = SynchronousMqttServerConnectionHandler(
           clientEventBus,
           maxConnectionAttempts: 3,

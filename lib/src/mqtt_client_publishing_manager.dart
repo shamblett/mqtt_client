@@ -64,14 +64,16 @@ class PublishingManager implements IPublishingManager {
   @override
   MessageReceived? publishEvent;
 
-  final StreamController<MqttPublishMessage> _published =
-      StreamController<MqttPublishMessage>.broadcast();
+  final MqttStreamController<MqttPublishMessage> _published =
+      MqttStreamController<MqttPublishMessage>.fromStreamController(
+        StreamController<MqttPublishMessage>.broadcast(),
+      );
 
   /// The event bus
-  final events.EventBus? _clientEventBus;
+  final MqttEventBus? _clientEventBus;
 
   /// The stream on which all confirmed published messages are added to
-  StreamController<MqttPublishMessage> get published => _published;
+  MqttStreamController<MqttPublishMessage> get published => _published;
 
   /// Initializes a new instance of the PublishingManager class.
   PublishingManager(this.connectionHandler, this._clientEventBus) {
@@ -174,11 +176,11 @@ class PublishingManager implements IPublishingManager {
       if (pubMsg.header!.qos == MqttQos.atMostOnce) {
         // QOS AtMostOnce 0 require no response.
         // Send the message for processing to whoever is waiting.
-        _fireMessageReceived(topic, msg);
+        _clientEventBus?.fire(MessageReceived(topic, msg));
       } else if (pubMsg.header!.qos == MqttQos.atLeastOnce) {
         // QOS AtLeastOnce 1 requires an acknowledgement
         // Send the message for processing to whoever is waiting.
-        _fireMessageReceived(topic, msg);
+        _clientEventBus?.fire(MessageReceived(topic, msg));
         // If configured the client will send the acknowledgement, else the user must.
         final messageIdentifier = pubMsg.variableHeader!.messageIdentifier;
         if (!manuallyAcknowledgeQos1) {
@@ -223,8 +225,6 @@ class PublishingManager implements IPublishingManager {
       final pubMsg = receivedMessages.remove(messageIdentifier);
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
-        final topic = PublicationTopic(pubMsg.variableHeader!.topicName);
-        _fireMessageReceived(topic, pubMsg);
         final compMsg = MqttPublishCompleteMessage().withMessageIdentifier(
           pubMsg.variableHeader!.messageIdentifier,
         );
@@ -274,18 +274,6 @@ class PublishingManager implements IPublishingManager {
         'PublishingManager::_notifyPublish - adding message to published stream for topic ${message.variableHeader!.topicName}',
       );
       _published.add(message);
-    }
-  }
-
-  // Guarded event bus fire for the received message.
-  void _fireMessageReceived(PublicationTopic topic, MqttMessage msg) {
-    if (_clientEventBus != null &&
-        !_clientEventBus!.streamController.isClosed) {
-      _clientEventBus?.fire(MessageReceived(topic, msg));
-    } else {
-      MqttLogger.log(
-        'PublishingManager::_fireMessageReceived - event not fired, event bus closed',
-      );
     }
   }
 }

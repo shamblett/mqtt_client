@@ -20,7 +20,7 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
   MqttServerNormalConnection.fromConnect(
     String server,
     int port,
-    events.EventBus eventBus,
+    MqttEventBus eventBus,
     List<RawSocketOption> socketOptions,
     Duration socketTimeout,
   ) : super(eventBus, socketOptions, socketTimeout) {

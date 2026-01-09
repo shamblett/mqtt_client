@@ -21,7 +21,12 @@ class MqttClientTopicFilter {
 
   final Stream<List<MqttReceivedMessage<MqttMessage?>>?>? _clientUpdates;
 
-  late StreamController<List<MqttReceivedMessage<MqttMessage?>>> _updates;
+  final MqttStreamController<List<MqttReceivedMessage<MqttMessage?>>> _updates =
+      MqttStreamController.fromStreamController(
+        StreamController<List<MqttReceivedMessage<MqttMessage?>>>.broadcast(
+          sync: true,
+        ),
+      );
 
   /// The topic on which to filter
   String get topic => _topic;
@@ -34,10 +39,6 @@ class MqttClientTopicFilter {
   MqttClientTopicFilter(this._topic, this._clientUpdates) {
     _subscriptionTopic = SubscriptionTopic(_topic);
     _clientUpdates!.listen(_topicIn);
-    _updates =
-        StreamController<List<MqttReceivedMessage<MqttMessage?>>>.broadcast(
-          sync: true,
-        );
   }
 
   void _topicIn(List<MqttReceivedMessage<MqttMessage?>>? c) {
