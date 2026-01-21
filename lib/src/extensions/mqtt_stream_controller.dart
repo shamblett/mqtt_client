@@ -14,6 +14,7 @@ extension type MqttStreamController<T>._(StreamController controller) {
   MqttStreamController.fromStreamController(this.controller);
   void add(dynamic event) {
     if (controller.isClosed) {
+      MqttLogger.log('Guarded add - stream is closed');
       return;
     }
     controller.add(event);
