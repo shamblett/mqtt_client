@@ -206,6 +206,9 @@ class MqttConnectionKeepAlive {
 
     // Call the pong callback if not null
     if (pongCallback != null) {
+      MqttLogger.log(
+        'MqttConnectionKeepAlive::pingResponseReceived - calling pong callback',
+      );
       pongCallback!();
     }
 

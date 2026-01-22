@@ -5,18 +5,18 @@ DocumentName: mqtt_client
 DocumentNamespace: https://pub.dev/packages/mqtt_client
 LicenseListVersion: 3.8
 Creator: Tool: https://pub.dev/packages/sbom
-Created: 2026-01-21T15:24:53Z
+Created: 2026-01-22T09:21:34Z
 
 
 PackageName: mqtt-client
 SPDXID: SPDXRef-Package-mqtt-client
-PackageVersion: 10.11.6
+PackageVersion: 10.11.7
 PackageFileName: mqtt_client
 PackageSupplier: NOASSERTION
 PackageOriginator: NOASSERTION
 PackageDownloadLocation: https://pub.dev/packages/mqtt_client
 FilesAnalyzed: true
-PackageVerificationCode: 316c45bed85e2ac3d10b87bae7608aed0981dbbb
+PackageVerificationCode: e443e09f99c5467070ec4653f81d608e73fb97c9
 PackageHomePage: https://pub.dev/packages/mqtt_client
 PackageLicenseConcluded: MIT
 PackageLicenseInfoFromFiles: NOASSERTION
@@ -172,7 +172,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/connectionhandling/server/mqtt_client_mqtt_server_secure_connection.dart
 SPDXID: SPDXRef-mqtt-client-mqtt-server-secure-connection-16
 FileType: SOURCE
-FileChecksum: SHA1: 24e34c7ec74e611402fd64a722b5432c7965af6a
+FileChecksum: SHA1: 19aa2083a11b82da65b506f8907759f430dee0c3
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -838,7 +838,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/mqtt_client_topic.dart
 SPDXID: SPDXRef-mqtt-client-topic-90
 FileType: SOURCE
-FileChecksum: SHA1: 8f5972e0c6587019ff33dd6636622f1fc378c4f0
+FileChecksum: SHA1: 45aac84a8773293e68a2a267859178dd693daa96
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -847,7 +847,7 @@ FileCopyrightText: NOASSERTION
 FileName: lib/src/mqtt_server_client.dart
 SPDXID: SPDXRef-mqtt-server-client-91
 FileType: SOURCE
-FileChecksum: SHA1: 09206ee8c143aa6eec6dece895f7c281d4e576d2
+FileChecksum: SHA1: 46ef2223b876139c162c4149bc4f9f4759d0369c
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION
@@ -928,7 +928,7 @@ FileCopyrightText: NOASSERTION
 FileName: pubspec.yaml
 SPDXID: SPDXRef-pubspec-100
 FileType: TEXT
-FileChecksum: SHA1: 044145e54c89b1abb68c8f72893731624beb2c4b
+FileChecksum: SHA1: c8dac15f402c12fef88965dca1050b5f26a58063
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: NOASSERTION
 FileCopyrightText: NOASSERTION

@@ -20,6 +20,8 @@ extension type MqttEventBus._(events.EventBus eventbus) {
   void fire(dynamic event) {
     if (!eventbus.streamController.isClosed) {
       eventbus.fire(event);
+    } else {
+      MqttLogger.log('Guarded fire - event bus is closed - event not fired');
     }
   }
 }

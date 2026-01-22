@@ -17,6 +17,9 @@ extension type MqttStreamController<T>._(StreamController controller) {
       MqttLogger.log('Guarded add - stream is closed');
       return;
     }
+    if (!controller.hasListener) {
+      MqttLogger.log('Guarded add - stream has no listeners - adding anyway');
+    }
     controller.add(event);
   }
 
