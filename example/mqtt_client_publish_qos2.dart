@@ -10,11 +10,16 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-/// A QOS2 publishing example, two QOS two topics are subscribed to and published in quick succession,
+/// A QoS2 publishing example, two QoS2 two topics are subscribed to and published in quick succession,
 /// tests QOS2 protocol handling.
-Future<int> main() async {
-  final client = MqttServerClient('broker.hivemq.com', '');
+///
+const topic1 = 'SJHTopic1';
+const topic2 = 'SJHTopic2';
+MqttServerClient client = MqttServerClient('broker.hivemq.com', '');
+bool topic1Subscribed = false;
+bool topic2Subscribed = false;
 
+Future<int> main() async {
   /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
   client.logging(on: false);
@@ -50,10 +55,8 @@ Future<int> main() async {
 
   /// Lets try our subscriptions
   print('EXAMPLE:: <<<< SUBSCRIBE 1 >>>>');
-  const topic1 = 'SJHTopic1'; // Not a wildcard topic
   client.subscribe(topic1, MqttQos.exactlyOnce);
   print('EXAMPLE:: <<<< SUBSCRIBE 2 >>>>');
-  const topic2 = 'SJHTopic2'; // Not a wildcard topic
   client.subscribe(topic2, MqttQos.exactlyOnce);
 
   client.updates!.listen((messageList) {
@@ -77,18 +80,28 @@ Future<int> main() async {
     );
   });
 
-  final builder1 = MqttClientPayloadBuilder();
-  builder1.addString('Hello from mqtt_client topic 1');
-  print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
-  client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload!);
+  /// Publish once the subscriptions are acknowledged
+  bool wait = true;
+  while (wait) {
+    if (topic1Subscribed && topic2Subscribed) {
+      wait = false;
+      print('EXAMPLE::Both topics confirmed, publishing');
+      final builder1 = MqttClientPayloadBuilder();
+      builder1.addString('Hello from mqtt_client topic 1');
+      print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
+      client.publishMessage(topic1, MqttQos.exactlyOnce, builder1.payload!);
 
-  final builder2 = MqttClientPayloadBuilder();
-  builder2.addString('Hello from mqtt_client topic 2');
-  print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
-  client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload!);
+      final builder2 = MqttClientPayloadBuilder();
+      builder2.addString('Hello from mqtt_client topic 2');
+      print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
+      client.publishMessage(topic2, MqttQos.exactlyOnce, builder2.payload!);
+    } else {
+      await MqttUtilities.asyncSleep(1);
+    }
+  }
 
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(20);
+  await MqttUtilities.asyncSleep(30);
 
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic1);
@@ -103,6 +116,12 @@ Future<int> main() async {
 /// The subscribed callback
 void onSubscribed(String topic) {
   print('EXAMPLE::Subscription confirmed for topic $topic');
+  if (topic == topic1) {
+    topic1Subscribed = true;
+  }
+  if (topic == topic2) {
+    topic2Subscribed = true;
+  }
 }
 
 /// The unsolicited disconnect callback

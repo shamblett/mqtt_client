@@ -195,7 +195,7 @@ class PublishingManager implements IPublishingManager {
       } else if (pubMsg.header!.qos == MqttQos.exactlyOnce) {
         // QOS ExactlyOnce means we can't give it away yet, we need to do a handshake
         // to make sure the broker knows we got it, and we know he knows we got it.
-        // If we've already got it thats ok, it just means its being republished because
+        // If we've already got it that's ok, it just means its being republished because
         // of a handshake breakdown, overwrite our existing one for the sake of it
         if (!receivedMessages.containsKey(
           pubMsg.variableHeader!.messageIdentifier,
@@ -245,7 +245,19 @@ class PublishingManager implements IPublishingManager {
       'PublishingManager::handlePublishComplete - for message identifier $messageIdentifier',
     );
     final publishMessage = publishedMessages.remove(messageIdentifier);
-    _notifyPublish(publishMessage);
+    if (publishMessage != null) {
+      _notifyPublish(publishMessage);
+      MqttLogger.log(
+        'PublishingManager::handlePublishComplete- adding message to the updates stream for topic ${msg.variableHeader.topicName}',
+      );
+      final topic = PublicationTopic(publishMessage.variableHeader!.topicName);
+      _clientEventBus?.fire(MessageReceived(topic, publishMessage));
+    } else {
+      MqttLogger.log(
+        'PublishingManager::handlePublishComplete - no received publish message '
+        'found for message id $messageIdentifier',
+      );
+    }
     return true;
   }
 
@@ -267,7 +279,8 @@ class PublishingManager implements IPublishingManager {
     return true;
   }
 
-  // On publish complete add the message to the published stream if needed
+  // On publish complete add the message to the published stream if needed and
+  // to the updates stream
   void _notifyPublish(MqttPublishMessage? message) {
     if (_published.hasListener && message != null) {
       MqttLogger.log(

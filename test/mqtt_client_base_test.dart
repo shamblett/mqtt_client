@@ -1179,6 +1179,7 @@ void main() {
   });
   group('Extensions', () {
     test('Event Bus', () async {
+      MqttLogger.loggingOn = true;
       final eb = MqttEventBus.fromEventBus(events.EventBus());
       int count = 0;
       void cb(MqttMessage event) {
@@ -1195,6 +1196,7 @@ void main() {
       expect(count, 1);
     });
     test('Stream Controller', () async {
+      MqttLogger.loggingOn = true;
       final sc = MqttStreamController<String>.fromStreamController(
         StreamController<String>(),
       );
