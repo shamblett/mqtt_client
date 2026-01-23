@@ -10,22 +10,24 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-bool unsubscribed = false;
+/// A QoS1 publishing example, two QoS1 two topics are subscribed to and published in quick succession,
+/// tests QOS1 protocol handling.
+///
+const topic1 = 'SJHTopic1';
+const topic2 = 'SJHTopic2';
+MqttServerClient client = MqttServerClient('broker.hivemq.com', '');
+bool topic1Subscribed = false;
+bool topic2Subscribed = false;
 
-/// A QOS1 publishing example, two QOS one topics are subscribed to and published in quick succession,
-/// tests QOS1 protocol handling. This example also shows how to use batch topic subscription.
-/// This sample also uses the Hive MQ broker.
 Future<int> main() async {
-  final client = MqttServerClient('broker.hivemq.com', '');
-
-  /// Set the correct MQTT protocol
+  /// Set the correct MQTT protocol for mosquito
   client.setProtocolV311();
   client.logging(on: false);
   client.keepAlivePeriod = 20;
   client.onDisconnected = onDisconnected;
   client.onSubscribed = onSubscribed;
   final connMess = MqttConnectMessage()
-      .withClientIdentifier('Mqtt_MyClientUniqueIdQ1')
+      .withClientIdentifier('Mqtt_MyClientUniqueIdQ2')
       .withWillTopic('willtopic') // If you set this you must set a will message
       .withWillMessage('My Will message')
       .startClean() // Non persistent session for testing
@@ -52,13 +54,10 @@ Future<int> main() async {
   }
 
   /// Lets try our subscriptions
-  print('EXAMPLE:: <<<< SUBSCRIBING >>>>');
-  const topic1 = 'SJHTopic1'; // Not a wildcard topic
-  final sub1 = BatchSubscription(topic1, MqttQos.atLeastOnce);
-  const topic2 = 'SJHTopic2'; // Not a wildcard topic
-  final sub2 = BatchSubscription(topic2, MqttQos.atMostOnce);
-  client.subscribeBatch([sub1, sub2]);
-  const topic3 = 'SJHTopic3'; // Not a wildcard topic - no subscription
+  print('EXAMPLE:: <<<< SUBSCRIBE 1 >>>>');
+  client.subscribe(topic1, MqttQos.atLeastOnce);
+  print('EXAMPLE:: <<<< SUBSCRIBE 2 >>>>');
+  client.subscribe(topic2, MqttQos.atLeastOnce);
 
   client.updates!.listen((messageList) {
     final recMess = messageList[0];
@@ -74,39 +73,41 @@ Future<int> main() async {
   /// If needed you can listen for published messages that have completed the publishing
   /// handshake which is Qos dependant. Any message received on this stream has completed its
   /// publishing handshake with the broker.
+  // ignore: avoid_types_on_closure_parameters
   client.published!.listen((MqttPublishMessage message) {
     print(
       'EXAMPLE::Published notification:: topic is ${message.variableHeader!.topicName}, with Qos ${message.header!.qos}',
     );
   });
 
-  final builder1 = MqttClientPayloadBuilder();
-  builder1.addString('Hello from mqtt_client topic 1');
-  print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
-  client.publishMessage(topic1, MqttQos.atLeastOnce, builder1.payload!);
+  /// Publish once the subscriptions are acknowledged
+  bool wait = true;
+  while (wait) {
+    if (topic1Subscribed && topic2Subscribed) {
+      wait = false;
+      print('EXAMPLE::Both topics confirmed, publishing');
+      final builder1 = MqttClientPayloadBuilder();
+      builder1.addString('Hello from mqtt_client topic 1');
+      print('EXAMPLE:: <<<< PUBLISH 1 >>>>');
+      client.publishMessage(topic1, MqttQos.atLeastOnce, builder1.payload!);
 
-  final builder2 = MqttClientPayloadBuilder();
-  builder2.addString('Hello from mqtt_client topic 2');
-  print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
-  client.publishMessage(topic2, MqttQos.atMostOnce, builder2.payload!);
-
-  final builder3 = MqttClientPayloadBuilder();
-  builder3.addString('Hello from mqtt_client topic 3');
-  print('EXAMPLE:: <<<< PUBLISH 3 - NO SUBSCRIPTION >>>>');
-  client.publishMessage(topic3, MqttQos.exactlyOnce, builder3.payload!);
+      final builder2 = MqttClientPayloadBuilder();
+      builder2.addString('Hello from mqtt_client topic 2');
+      print('EXAMPLE:: <<<< PUBLISH 2 >>>>');
+      client.publishMessage(topic2, MqttQos.atLeastOnce, builder2.payload!);
+    } else {
+      await MqttUtilities.asyncSleep(1);
+    }
+  }
 
   print('EXAMPLE::Sleeping....');
-  await MqttUtilities.asyncSleep(20);
+  await MqttUtilities.asyncSleep(30);
 
   print('EXAMPLE::Unsubscribing');
   client.unsubscribe(topic1);
+  client.unsubscribe(topic2);
 
   await MqttUtilities.asyncSleep(5);
-  unsubscribed = true;
-  final status = client.getSubscriptionsStatus(topic1);
-  if (status != MqttSubscriptionStatus.doesNotExist) {
-    print('EXAMPLE::Unsubscribing - failed to unsubscribe batch topic $topic1');
-  }
   print('EXAMPLE::Disconnecting');
   client.disconnect();
   return 0;
@@ -114,24 +115,16 @@ Future<int> main() async {
 
 /// The subscribed callback
 void onSubscribed(String topic) {
-  if (topic == 'SJHTopic1') {
-    print('EXAMPLE::Subscription confirmed for topic $topic, this is correct');
-  } else {
-    print(
-      'EXAMPLE::Subscription confirmed for topic $topic, this is incorrect',
-    );
+  print('EXAMPLE::Subscription confirmed for topic $topic');
+  if (topic == topic1) {
+    topic1Subscribed = true;
+  }
+  if (topic == topic2) {
+    topic2Subscribed = true;
   }
 }
 
 /// The unsolicited disconnect callback
 void onDisconnected() {
-  if (unsubscribed) {
-    print(
-      'EXAMPLE::OnDisconnected client callback - Client disconnection - this is correct',
-    );
-  } else {
-    print(
-      'EXAMPLE::OnDisconnected client callback - Client disconnection - not unsubscribed  - this is correct',
-    );
-  }
+  print('EXAMPLE::OnDisconnected client callback - Client disconnection');
 }
