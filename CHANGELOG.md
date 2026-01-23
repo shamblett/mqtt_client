@@ -1,3 +1,6 @@
+# 10.11.8
+- [Issue 637](https://github.com/shamblett/mqtt_client/issues/637)
+
 # 10.11.7
 - [Issue 637](https://github.com/shamblett/mqtt_client/issues/637)
 
