@@ -225,6 +225,8 @@ class PublishingManager implements IPublishingManager {
       final pubMsg = receivedMessages.remove(messageIdentifier);
       if (pubMsg != null) {
         // Send the message for processing to whoever is waiting.
+        final topic = PublicationTopic(pubMsg.variableHeader!.topicName);
+        _clientEventBus?.fire(MessageReceived(topic, pubMsg));
         final compMsg = MqttPublishCompleteMessage().withMessageIdentifier(
           pubMsg.variableHeader!.messageIdentifier,
         );
@@ -245,19 +247,7 @@ class PublishingManager implements IPublishingManager {
       'PublishingManager::handlePublishComplete - for message identifier $messageIdentifier',
     );
     final publishMessage = publishedMessages.remove(messageIdentifier);
-    if (publishMessage != null) {
-      _notifyPublish(publishMessage);
-      MqttLogger.log(
-        'PublishingManager::handlePublishComplete- adding message to the updates stream for topic ${msg.variableHeader.topicName}',
-      );
-      final topic = PublicationTopic(publishMessage.variableHeader!.topicName);
-      _clientEventBus?.fire(MessageReceived(topic, publishMessage));
-    } else {
-      MqttLogger.log(
-        'PublishingManager::handlePublishComplete - no received publish message '
-        'found for message id $messageIdentifier',
-      );
-    }
+    _notifyPublish(publishMessage);
     return true;
   }
 
@@ -279,8 +269,7 @@ class PublishingManager implements IPublishingManager {
     return true;
   }
 
-  // On publish complete add the message to the published stream if needed and
-  // to the updates stream
+  // On publish complete add the message to the published stream if needed
   void _notifyPublish(MqttPublishMessage? message) {
     if (_published.hasListener && message != null) {
       MqttLogger.log(
