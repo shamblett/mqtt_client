@@ -278,7 +278,9 @@ class MqttServerWs2Connection extends MqttServerWsConnection {
     final c = Completer<bool>();
     const endL = '\r\n';
     final path = '${uri.path}?${uri.query}';
-    final host = '${uri.host}:${uri.port.toString()}';
+    final isDefaultPort = (uri.scheme == 'wss' && uri.port == 443) ||
+        (uri.scheme == 'ws' && uri.port == 80);
+    final host = isDefaultPort ? uri.host : '${uri.host}:${uri.port}';
     final now = DateTime.now().millisecondsSinceEpoch;
     final key = 'mqtt-$now';
     final key64 = base64.encode(utf8.encode(key));
