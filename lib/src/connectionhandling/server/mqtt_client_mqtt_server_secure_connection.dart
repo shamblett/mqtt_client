@@ -122,6 +122,8 @@ class MqttServerSecureConnection extends MqttServerConnection<SecureSocket> {
               );
             }
             client = socket;
+            readWrapper = ReadWrapper();
+            messageStream = MqttByteBuffer(typed.Uint8Buffer());
             MqttLogger.log(
               'MqttSecureConnection::connectAuto - start listening',
             );

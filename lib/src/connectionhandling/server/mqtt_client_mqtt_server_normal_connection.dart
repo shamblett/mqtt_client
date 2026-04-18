@@ -94,6 +94,8 @@ class MqttServerNormalConnection extends MqttServerConnection<Socket> {
               );
             }
             client = socket;
+            readWrapper = ReadWrapper();
+            messageStream = MqttByteBuffer(typed.Uint8Buffer());
             _startListening();
             completer.complete();
           })
