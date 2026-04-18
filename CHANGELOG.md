@@ -1,3 +1,6 @@
+# 10.11.11
+- [PR 644](https://github.com/shamblett/mqtt_client/pull/644)
+
 # 10.11.10
 - [PR 643](https://github.com/shamblett/mqtt_client/pull/643)
 
