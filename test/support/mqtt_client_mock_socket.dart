@@ -482,3 +482,31 @@ class MqttMockSocketTimeoutNix extends MockSocket {
     return completer.future;
   }
 }
+
+///
+/// Connection timeout, a TCP connect that never completes
+///
+class MqttMockSocketConnectionTimeout extends MockSocket {
+  /// The timeout the last connect was given
+  static Duration? connectTimeout;
+
+  static Future<MqttMockSocketConnectionTimeout> connect(
+    String host,
+    int port, {
+    sourceAddress,
+    int sourcePort = 0,
+    Duration? timeout,
+  }) async {
+    MqttMockSocketConnectionTimeout.connectTimeout = timeout;
+    if (timeout == null) {
+      return Completer<MqttMockSocketConnectionTimeout>().future;
+    }
+    // As the runtime does when the connect timeout elapses
+    await Future.delayed(timeout);
+    throw SocketException(
+      'Connection timed out, host: $host, port: $port',
+      osError: OSError('Connection timed out', 110),
+      port: port,
+    );
+  }
+}

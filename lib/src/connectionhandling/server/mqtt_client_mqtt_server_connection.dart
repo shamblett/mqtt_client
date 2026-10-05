@@ -20,6 +20,9 @@ abstract class MqttServerConnection<T extends Object>
   /// Socket timeout duration
   Duration? socketTimeout;
 
+  /// Connection timeout duration, see [MqttServerClient.connectionTimeout].
+  Duration? connectionTimeout;
+
   /// Default constructor
   MqttServerConnection(
     super.clientEventBus,
@@ -99,6 +102,53 @@ abstract class MqttServerConnection<T extends Object>
       }
     }
     return socketOptions.isNotEmpty;
+  }
+
+  // The TCP connect's own timeout: the socket timeout when set, otherwise the
+  // connection timeout, so the runtime cancels a TCP connect still pending
+  // when the connection timeout elapses.
+  Duration? get _tcpConnectTimeout => socketTimeout ?? connectionTimeout;
+
+  // Fail the socket connect, including any TLS handshake, if it does not
+  // complete within the connection timeout. The Dart runtime cannot abort a
+  // TLS handshake in progress, so a socket that completes after the timeout
+  // is destroyed when it does and is never used.
+  Future<S> _withinConnectionTimeout<S extends Socket>(
+    Future<S> socket,
+    String server,
+    int port,
+  ) {
+    final timeout = connectionTimeout;
+    if (timeout == null) {
+      return socket;
+    }
+    NoConnectionException timedOut() {
+      final message =
+          'MqttServerConnection::connect - The connection to the message broker '
+          '{$server}:{$port} could not be made, the connection timeout of '
+          '${timeout.inMilliseconds}ms has elapsed';
+      MqttLogger.log(message);
+      return NoConnectionException(message);
+    }
+
+    return socket
+        .timeout(
+          timeout,
+          onTimeout: () {
+            unawaited(
+              socket.then((connected) => connected.destroy(), onError: (_) {}),
+            );
+            throw timedOut();
+          },
+        )
+        // Without a socket timeout the TCP connect's timeout is this one.
+        .catchError(
+          (_) => throw timedOut(),
+          test: (e) =>
+              socketTimeout == null &&
+              e is SocketException &&
+              _isSocketTimeout(e),
+        );
   }
 
   // Check for a timeout exception

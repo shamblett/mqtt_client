@@ -8,6 +8,7 @@
 @TestOn('vm')
 library;
 
+import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -189,5 +190,120 @@ void main() {
         ch.close();
       },
     );
+  });
+
+  group('Connection Timeout', () {
+    test('TLS handshake never answered', () async {
+      // Accepts the TCP connection, never answers the TLS client hello
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final accepted = <Socket>[];
+      server.listen(accepted.add);
+      final client = MqttServerClient.withPort(
+        InternetAddress.loopbackIPv4.address,
+        testClientId,
+        server.port,
+        maxConnectionAttempts: 1,
+      );
+      client.logging(on: false);
+      client.secure = true;
+      client.securityContext = SecurityContext();
+      client.connectionTimeout = 1000;
+      final stopwatch = Stopwatch()..start();
+      Object? error;
+      try {
+        await client.connect();
+      } on NoConnectionException catch (e) {
+        error = e;
+      }
+      stopwatch.stop();
+      expect(
+        error.toString(),
+        contains('the connection timeout of 1000ms has elapsed'),
+      );
+      expect(stopwatch.elapsedMilliseconds, lessThan(4000));
+      // The TCP connection was made, the handshake was not answered
+      expect(accepted, hasLength(1));
+      expect(client.connectionStatus!.state, MqttConnectionState.faulted);
+      for (final socket in accepted) {
+        socket.destroy();
+      }
+      await server.close();
+    });
+
+    test('TLS handshake completed after the timeout is never used', () async {
+      final context = SecurityContext();
+      final currDir = path.current + path.separator;
+      context.useCertificateChain(
+        currDir + path.join('test', 'pem', 'self_signed.cert'),
+      );
+      context.usePrivateKey(
+        currDir + path.join('test', 'pem', 'self_signed.key'),
+      );
+      final received = <int>[];
+      final closed = Completer<void>();
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((socket) async {
+        // Answer the TLS handshake only after the connection timeout
+        await Future<void>.delayed(const Duration(milliseconds: 1500));
+        try {
+          final secureSocket = await SecureSocket.secureServer(socket, context);
+          secureSocket.listen(
+            received.addAll,
+            onDone: closed.complete,
+            onError: (_) => closed.complete(),
+          );
+        } on Exception {
+          // Closed by the client during the last handshake flight
+          closed.complete();
+        }
+      });
+      final client = MqttServerClient.withPort(
+        InternetAddress.loopbackIPv4.address,
+        testClientId,
+        server.port,
+        maxConnectionAttempts: 1,
+      );
+      client.logging(on: false);
+      client.secure = true;
+      client.securityContext = SecurityContext();
+      client.onBadCertificate = (Object certificate) => true;
+      client.connectionTimeout = 500;
+      await expectLater(
+        client.connect(),
+        throwsA(isA<NoConnectionException>()),
+      );
+      // The late socket is destroyed by the client, it sends nothing
+      await closed.future.timeout(const Duration(seconds: 5));
+      expect(received, isEmpty);
+      await server.close();
+    });
+
+    test('Connects to a broker within the timeout', () async {
+      final broker = MockBrokerSecure();
+      broker.pemName = 'self_signed';
+      broker.setMessageHandler = (typed.Uint8Buffer? messageArrived) {
+        broker.sendMessage(
+          MqttConnectAckMessage().withReturnCode(
+            MqttConnectReturnCode.connectionAccepted,
+          ),
+        );
+      };
+      await broker.start();
+      final client = MqttServerClient.withPort(
+        mockBrokerAddress,
+        testClientId,
+        mockBrokerPort,
+        maxConnectionAttempts: 1,
+      );
+      client.logging(on: false);
+      client.secure = true;
+      client.securityContext = SecurityContext();
+      client.onBadCertificate = (Object certificate) => true;
+      client.connectionTimeout = 5000;
+      final status = await client.connect();
+      expect(status!.state, MqttConnectionState.connected);
+      client.disconnect();
+      broker.close();
+    });
   });
 }
