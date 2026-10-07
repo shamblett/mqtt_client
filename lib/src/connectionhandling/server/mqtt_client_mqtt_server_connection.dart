@@ -23,6 +23,11 @@ abstract class MqttServerConnection<T extends Object>
   /// Connection timeout duration, see [MqttServerClient.connectionTimeout].
   Duration? connectionTimeout;
 
+  // The TCP connect's own timeout: the socket timeout when set, otherwise the
+  // connection timeout, so the runtime cancels a TCP connect still pending
+  // when the connection timeout elapses.
+  Duration? get _tcpConnectTimeout => socketTimeout ?? connectionTimeout;
+
   /// Default constructor
   MqttServerConnection(
     super.clientEventBus,
@@ -103,11 +108,6 @@ abstract class MqttServerConnection<T extends Object>
     }
     return socketOptions.isNotEmpty;
   }
-
-  // The TCP connect's own timeout: the socket timeout when set, otherwise the
-  // connection timeout, so the runtime cancels a TCP connect still pending
-  // when the connection timeout elapses.
-  Duration? get _tcpConnectTimeout => socketTimeout ?? connectionTimeout;
 
   // Fail the socket connect, including any TLS handshake, if it does not
   // complete within the connection timeout. The Dart runtime cannot abort a
