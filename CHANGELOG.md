@@ -1,3 +1,6 @@
+# 10.12.0
+Connection timeout added, `MqttServerClient.connectionTimeout` bounds the TCP connect and TLS handshake of a connection attempt.
+
 # 10.11.11
 - [PR 644](https://github.com/shamblett/mqtt_client/pull/644)
 
