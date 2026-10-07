@@ -41,6 +41,28 @@ class MqttServerClient extends MqttClient {
   /// Applicable only to TCP sockets
   List<RawSocketOption> socketOptions = <RawSocketOption>[];
 
+  /// Connection timeout period.
+  ///
+  /// The maximum time in milliseconds a connection attempt may take to
+  /// establish the network connection to the broker: the TCP connect and,
+  /// for a secure connection, the TLS handshake. If it elapses the attempt
+  /// fails with a [NoConnectionException], as a refused connection or a
+  /// failed handshake does, and the socket is never used.
+  ///
+  /// Unlike [socketTimeout], which bounds the TCP connect only, this also
+  /// bounds the TLS handshake, so a peer that accepts the TCP connection but
+  /// never completes the handshake cannot hold a connection attempt
+  /// indefinitely. It does not change [connectTimeoutPeriod], the wait for
+  /// the broker's connection acknowledgement once connected.
+  ///
+  /// The Dart runtime cannot abort a TLS handshake in progress, so a socket
+  /// that completes its handshake after the timeout is destroyed when it
+  /// does.
+  ///
+  /// For TCP and secure TCP connections only, not websockets.
+  /// Defaults to null, no timeout.
+  int? connectionTimeout;
+
   /// User definable websocket headers.
   /// This allows the specification of additional HTTP headers for setting up the connection
   /// should a broker need specific headers.
@@ -110,6 +132,9 @@ class MqttServerClient extends MqttClient {
           ? Duration(milliseconds: socketTimeout!)
           : null,
     );
+    connectionHandler.connectionTimeout = connectionTimeout != null
+        ? Duration(milliseconds: connectionTimeout!)
+        : null;
     if (useWebSocket) {
       connectionHandler.secure = false;
       connectionHandler.useWebSocket = true;

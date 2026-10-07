@@ -92,7 +92,7 @@ class SynchronousMqttServerConnectionHandler
             onBadCertificate,
             socketOptions,
             socketTimeout,
-          );
+          )..connectionTimeout = connectionTimeout;
         } else {
           MqttLogger.log(
             'SynchronousMqttServerConnectionHandler::internalConnect - '
@@ -102,7 +102,7 @@ class SynchronousMqttServerConnectionHandler
             clientEventBus,
             socketOptions,
             socketTimeout,
-          );
+          )..connectionTimeout = connectionTimeout;
         }
         connection.onDisconnected = onDisconnected;
       }

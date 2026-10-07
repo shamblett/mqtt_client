@@ -702,5 +702,98 @@ void main() {
             ),
       );
     });
+    test('Connection Timeout - TCP connect never completes', () async {
+      await IOOverrides.runZoned(
+        () async {
+          final client = MqttServerClient(
+            'localhost',
+            '',
+            maxConnectionAttempts: 1,
+          );
+          client.logging(on: false);
+          expect(client.connectionTimeout, isNull);
+          client.connectionTimeout = 1000;
+          final stopwatch = Stopwatch()..start();
+          Object? error;
+          try {
+            await client.connect();
+          } on NoConnectionException catch (e) {
+            error = e;
+          }
+          stopwatch.stop();
+          expect(
+            error.toString(),
+            contains('the connection timeout of 1000ms has elapsed'),
+          );
+          // Failed at the connection timeout, not after the connect
+          // acknowledgement wait (connectTimeoutPeriod, 5000ms).
+          expect(stopwatch.elapsedMilliseconds, lessThan(4000));
+          // The TCP connect itself is given the connection timeout.
+          expect(
+            MqttMockSocketConnectionTimeout.connectTimeout,
+            const Duration(milliseconds: 1000),
+          );
+          expect(client.connectionStatus!.state, MqttConnectionState.faulted);
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketConnectionTimeout.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
+    });
+    test('Connection Timeout - socket timeout unchanged', () async {
+      await IOOverrides.runZoned(
+        () async {
+          final client = MqttServerClient(
+            'localhost',
+            '',
+            maxConnectionAttempts: 1,
+          );
+          client.logging(on: false);
+          client.socketTimeout = 2000;
+          client.connectionTimeout = 5000;
+          Object? error;
+          try {
+            await client.connect();
+          } on NoConnectionException catch (e) {
+            error = e;
+          }
+          // The socket timeout bounds the TCP connect and fails the attempt
+          // as before.
+          expect(
+            MqttMockSocketConnectionTimeout.connectTimeout,
+            const Duration(milliseconds: 2000),
+          );
+          expect(
+            error.toString(),
+            contains('The maximum allowed connection attempts'),
+          );
+        },
+        socketConnect:
+            (
+              dynamic host,
+              int port, {
+              dynamic sourceAddress,
+              int sourcePort = 0,
+              Duration? timeout,
+            }) => MqttMockSocketConnectionTimeout.connect(
+              host,
+              port,
+              sourceAddress: sourceAddress,
+              sourcePort: sourcePort,
+              timeout: timeout,
+            ),
+      );
+    });
   });
 }

@@ -37,6 +37,9 @@ abstract class MqttServerConnectionHandler extends MqttConnectionHandlerBase {
   /// Socket timeout duration.
   Duration? socketTimeout;
 
+  /// Connection timeout duration, see [MqttServerClient.connectionTimeout].
+  Duration? connectionTimeout;
+
   /// Initializes a new instance of the [MqttServerConnectionHandler] class.
   MqttServerConnectionHandler(
     super.clientEventBus, {
