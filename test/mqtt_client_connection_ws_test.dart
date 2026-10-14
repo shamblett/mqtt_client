@@ -149,4 +149,83 @@ void main() {
       ch.close();
     });
   });
+
+  group('Connection Timeout - WS', () {
+    // A broker that accepts the TCP connection but never answers the
+    // websocket upgrade, as a network that has dropped behind a proxy does.
+    Future<ServerSocket> silentBroker(List<Socket> held) async {
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen(held.add);
+      return server;
+    }
+
+    test('Upgrade never answered fails at the connection timeout', () async {
+      final held = <Socket>[];
+      final server = await silentBroker(held);
+      final client = MqttServerClient.withPort(
+        'ws://127.0.0.1/mqtt',
+        testClientId,
+        server.port,
+        maxConnectionAttempts: 1,
+      );
+      client.logging(on: false);
+      client.useWebSocket = true;
+      client.connectionTimeout = 1000;
+      final stopwatch = Stopwatch()..start();
+      Object? error;
+      try {
+        await client.connect();
+      } on NoConnectionException catch (e) {
+        error = e;
+      }
+      stopwatch.stop();
+      expect(
+        error.toString(),
+        contains('the connection timeout of 1000ms has elapsed'),
+      );
+      // Failed at the connection timeout, not after the connect
+      // acknowledgement wait (connectTimeoutPeriod, 5000ms).
+      expect(stopwatch.elapsedMilliseconds, lessThan(4000));
+      expect(client.connectionStatus!.state, MqttConnectionState.faulted);
+      for (final socket in held) {
+        socket.destroy();
+      }
+      await server.close();
+    });
+
+    test('Auto reconnect retries when an attempt is never answered', () async {
+      // Each reconnect attempt hangs on the upgrade: without the timeout the
+      // first one would hold the auto reconnect forever, so a second attempt
+      // reaching the broker proves it moved on.
+      final held = <Socket>[];
+      final server = await silentBroker(held);
+      final ch = SynchronousMqttServerConnectionHandler(
+        MqttEventBus.fromEventBus(events.EventBus()),
+        maxConnectionAttempts: 1,
+        reconnectTimePeriod: 1000,
+        socketOptions: socketOptions,
+        socketTimeout: null,
+      );
+      ch.useWebSocket = true;
+      ch.connectionTimeout = const Duration(milliseconds: 500);
+      try {
+        await ch.connect(
+          'ws://127.0.0.1/mqtt',
+          server.port,
+          MqttConnectMessage().withClientIdentifier(testClientId),
+        );
+      } on NoConnectionException {
+        // The first connect times out too.
+      }
+      final before = held.length;
+      ch.autoReconnect(AutoReconnect(userRequested: true));
+      await Future<void>.delayed(const Duration(seconds: 4));
+      expect(held.length - before, greaterThanOrEqualTo(2));
+      ch.autoReconnectInProgress = false;
+      for (final socket in held) {
+        socket.destroy();
+      }
+      await server.close();
+    });
+  });
 }

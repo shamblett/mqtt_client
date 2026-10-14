@@ -66,7 +66,7 @@ class SynchronousMqttServerConnectionHandler
               clientEventBus,
               socketOptions,
               socketTimeout,
-            );
+            )..connectionTimeout = connectionTimeout;
           }
 
           final websocketProtocols = this.websocketProtocols;

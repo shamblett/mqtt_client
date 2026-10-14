@@ -72,13 +72,22 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
           return onBadCertificate!(cert);
         };
     }
+    // The TCP connect is also given the connection timeout, so the runtime
+    // cancels a connect still pending when it elapses.
+    if (connectionTimeout != null) {
+      httpClient ??= HttpClient();
+      httpClient.connectionTimeout = connectionTimeout;
+    }
     try {
       // Connect and save the socket.
-      WebSocket.connect(
+      _webSocketWithinConnectionTimeout(
+            WebSocket.connect(
+              uriString,
+              protocols: protocols.isNotEmpty ? protocols : null,
+              headers: headers,
+              customClient: httpClient,
+            ),
             uriString,
-            protocols: protocols.isNotEmpty ? protocols : null,
-            headers: headers,
-            customClient: httpClient,
           )
           .then((socket) {
             client = socket;
@@ -130,10 +139,16 @@ class MqttServerWsConnection extends MqttServerConnection<WebSocket> {
     );
     try {
       // Connect and save the socket.
-      WebSocket.connect(
+      _webSocketWithinConnectionTimeout(
+            WebSocket.connect(
+              uriString,
+              protocols: protocols.isNotEmpty ? protocols : null,
+              headers: headers,
+              customClient: connectionTimeout != null
+                  ? (HttpClient()..connectionTimeout = connectionTimeout)
+                  : null,
+            ),
             uriString,
-            protocols: protocols.isNotEmpty ? protocols : null,
-            headers: headers,
           )
           .then((socket) {
             client = socket;
