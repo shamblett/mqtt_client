@@ -1,5 +1,5 @@
-# Unreleased
-- connectionTimeout now also applies to websocket connections (connect and auto reconnect)
+# 10.13.0
+- [PR 651](https://github.com/shamblett/mqtt_client/pull/651)
 
 # 10.12.0
 - [PR 649](https://github.com/shamblett/mqtt_client/pull/649)
