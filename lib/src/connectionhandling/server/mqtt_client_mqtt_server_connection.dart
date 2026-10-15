@@ -109,6 +109,34 @@ abstract class MqttServerConnection<T extends Object>
     return socketOptions.isNotEmpty;
   }
 
+  /// Applies [connectionTimeout] to a websocket connect: the TCP connect, the
+  /// TLS handshake of a wss connection and the websocket upgrade. If it
+  /// elapses the attempt fails with a [NoConnectionException]; a websocket
+  /// that connects after the timeout is closed when it does and is never used.
+  Future<WebSocket> _webSocketWithinConnectionTimeout(
+    Future<WebSocket> socket,
+    String uri,
+  ) {
+    final timeout = connectionTimeout;
+    if (timeout == null) {
+      return socket;
+    }
+    return socket.timeout(
+      timeout,
+      onTimeout: () {
+        unawaited(
+          socket.then((connected) => connected.close(), onError: (_) {}),
+        );
+        final message =
+            'MqttServerConnection::connect - The connection to the message broker '
+            '{$uri} could not be made, the connection timeout of '
+            '${timeout.inMilliseconds}ms has elapsed';
+        MqttLogger.log(message);
+        throw NoConnectionException(message);
+      },
+    );
+  }
+
   // Fail the socket connect, including any TLS handshake, if it does not
   // complete within the connection timeout. The Dart runtime cannot abort a
   // TLS handshake in progress, so a socket that completes after the timeout

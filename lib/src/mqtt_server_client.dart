@@ -59,7 +59,15 @@ class MqttServerClient extends MqttClient {
   /// that completes its handshake after the timeout is destroyed when it
   /// does.
   ///
-  /// For TCP and secure TCP connections only, not websockets.
+  /// For a websocket connection it bounds the TCP connect, the TLS handshake
+  /// of a wss connection and the websocket upgrade, so a broker or network
+  /// that accepts the connection but never answers the upgrade cannot hold a
+  /// connection attempt, or an auto reconnect, indefinitely. A websocket that
+  /// connects after the timeout is closed when it does and is never used.
+  ///
+  /// For TCP, secure TCP and websocket connections. The alternate websocket
+  /// implementation, see [useAlternateWebSocketImplementation], is not
+  /// covered.
   /// Defaults to null, no timeout.
   int? connectionTimeout;
 
