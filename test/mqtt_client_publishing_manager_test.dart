@@ -42,7 +42,7 @@ void main() {
       dispenser.reset();
       for (
         var i = 0;
-        i == MessageIdentifierDispenser.maxMessageIdentifier;
+        i < MessageIdentifierDispenser.maxMessageIdentifier - 1;
         i++
       ) {
         dispenser.getNextMessageIdentifier();

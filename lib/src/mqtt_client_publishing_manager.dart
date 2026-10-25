@@ -38,6 +38,9 @@ class PublishingManager implements IPublishingManager {
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
 
+  // Both managers on this connection share the outbound packet identifier space.
+  SubscriptionsManager? _subscriptionsManager;
+
   /// Stores messages that have been pubished but not yet acknowledged.
   Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
 
@@ -114,7 +117,20 @@ class PublishingManager implements IPublishingManager {
     MqttLogger.log(
       'PublishingManager::publish - entered with topic ${topic.rawTopic}',
     );
-    final msgId = messageIdentifierDispenser.getNextMessageIdentifier();
+    final requiresAcknowledgement =
+        qualityOfService == MqttQos.atLeastOnce ||
+        qualityOfService == MqttQos.exactlyOnce;
+    // QoS 0 has no packet identifier on the wire (MQTT-2.3.1-5).
+    final msgId = requiresAcknowledgement
+        ? _allocatePacketIdentifier(
+            messageIdentifierDispenser,
+            publishing: this,
+            subscriptions: _subscriptionsManager,
+          )
+        : messageIdentifierDispenser.getNextMessageIdentifier();
+    if (msgId == null) {
+      throw NoMessageIdentifiersException();
+    }
     final msg = MqttPublishMessage()
         .toTopic(topic.toString())
         .withMessageIdentifier(msgId)
@@ -123,8 +139,7 @@ class PublishingManager implements IPublishingManager {
     // Retain
     msg.setRetain(state: retain);
     // QOS level 1 or 2 messages need to be saved so we can do the ack processes
-    if (qualityOfService == MqttQos.atLeastOnce ||
-        qualityOfService == MqttQos.exactlyOnce) {
+    if (requiresAcknowledgement) {
       publishedMessages[msgId] = msg;
     }
     connectionHandler!.sendMessage(msg);

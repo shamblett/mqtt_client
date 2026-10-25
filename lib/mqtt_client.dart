@@ -32,6 +32,8 @@ part 'src/exception/mqtt_client_connection_exception.dart';
 
 part 'src/exception/mqtt_client_noconnection_exception.dart';
 
+part 'src/exception/mqtt_client_no_message_identifiers_exception.dart';
+
 part 'src/exception/mqtt_client_invalid_header_exception.dart';
 
 part 'src/exception/mqtt_client_invalid_message_exception.dart';
@@ -73,6 +75,8 @@ part 'src/mqtt_client_subscription.dart';
 part 'src/mqtt_client_subscriptions_manager.dart';
 
 part 'src/mqtt_client_message_identifier_dispenser.dart';
+
+part 'src/mqtt_client_packet_identifier.dart';
 
 part 'src/dataconvertors/mqtt_client_payload_convertor.dart';
 
