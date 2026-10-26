@@ -1,3 +1,6 @@
+# 10.14.0
+- [Issue 653](https://github.com/shamblett/mqtt_client/issues/653)
+
 # 10.13.0
 - [PR 651](https://github.com/shamblett/mqtt_client/pull/651)
 
