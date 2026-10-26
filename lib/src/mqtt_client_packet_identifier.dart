@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-static-class
+
 part of '../mqtt_client.dart';
 
 // MQTT-2.3.1-2/3: pending outbound exchanges share one packet identifier space.

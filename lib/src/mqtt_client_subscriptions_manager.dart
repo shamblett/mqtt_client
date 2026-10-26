@@ -18,9 +18,6 @@ class SubscriptionsManager {
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
 
-  // An immediate application callback does not complete the wire exchange.
-  final Set<int> _unsubscriptionsAwaitingAck = {};
-
   /// List of confirmed subscriptions, keyed on the message identifier..
   Map<int, Subscription> subscriptions = <int, Subscription>{};
 
@@ -50,6 +47,9 @@ class SubscriptionsManager {
 
   /// Re subscribe on auto reconnect.
   bool resubscribeOnAutoReconnect = true;
+
+  // An immediate application callback does not complete the wire exchange.
+  final Set<int> _unsubscriptionsAwaitingAck = {};
 
   /// The event bus
   final MqttEventBus? _clientEventBus;

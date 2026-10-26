@@ -38,10 +38,7 @@ class PublishingManager implements IPublishingManager {
   MessageIdentifierDispenser messageIdentifierDispenser =
       MessageIdentifierDispenser();
 
-  // Both managers on this connection share the outbound packet identifier space.
-  SubscriptionsManager? _subscriptionsManager;
-
-  /// Stores messages that have been pubished but not yet acknowledged.
+  /// Stores messages that have been published but not yet acknowledged.
   Map<int, MqttPublishMessage> publishedMessages = <int, MqttPublishMessage>{};
 
   /// Stores Qos 1 messages that have been received but not yet acknowledged as
@@ -71,6 +68,9 @@ class PublishingManager implements IPublishingManager {
       MqttStreamController<MqttPublishMessage>.fromStreamController(
         StreamController<MqttPublishMessage>.broadcast(),
       );
+
+  // Both managers on this connection share the outbound packet identifier space.
+  SubscriptionsManager? _subscriptionsManager;
 
   /// The event bus
   final MqttEventBus? _clientEventBus;
