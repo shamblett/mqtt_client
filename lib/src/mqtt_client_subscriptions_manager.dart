@@ -48,6 +48,9 @@ class SubscriptionsManager {
   /// Re subscribe on auto reconnect.
   bool resubscribeOnAutoReconnect = true;
 
+  // An immediate application callback does not complete the wire exchange.
+  final Set<int> _unsubscriptionsAwaitingAck = {};
+
   /// The event bus
   final MqttEventBus? _clientEventBus;
 
@@ -72,6 +75,7 @@ class SubscriptionsManager {
     this.publishingManager,
     this._clientEventBus,
   ) {
+    publishingManager?._subscriptionsManager = this;
     connectionHandler!.registerForMessage(
       MqttMessageType.subscribeAck,
       confirmSubscription,
@@ -105,8 +109,14 @@ class SubscriptionsManager {
     List<MultiUnsubscription> subscriptionsList, {
     bool expectAcknowledge = false,
   }) {
-    final messageIdentifier = messageIdentifierDispenser
-        .getNextMessageIdentifier();
+    final messageIdentifier = _allocatePacketIdentifier(
+      messageIdentifierDispenser,
+      publishing: publishingManager,
+      subscriptions: this,
+    );
+    if (messageIdentifier == null) {
+      throw NoMessageIdentifiersException();
+    }
     final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
       messageIdentifier,
     );
@@ -120,14 +130,17 @@ class SubscriptionsManager {
       unsubscribeMsg.fromTopic(subscription.topic);
     }
 
-    // Send the combined packet
-    connectionHandler!.sendMessage(unsubscribeMsg);
-
-    // Update local subscription state
+    // Track the exchange before sending, including synchronous sent callbacks.
     if (expectAcknowledge) {
       pendingUnsubscriptions[messageIdentifier] = Subscription()
         ..unSubscriptions = subscriptionsList;
     } else {
+      _unsubscriptionsAwaitingAck.add(messageIdentifier);
+    }
+    connectionHandler!.sendMessage(unsubscribeMsg);
+
+    // Preserve immediate local notification when acknowledgement was not requested.
+    if (!expectAcknowledge) {
       for (var subscription in subscriptionsList) {
         // Don't remove any batch subscriptions
         subscriptions.removeWhere(
@@ -163,10 +176,15 @@ class SubscriptionsManager {
   Subscription? createNewSubscription(String topic, MqttQos? qos) {
     try {
       final subscriptionTopic = SubscriptionTopic(topic);
-      // Get an ID that represents the subscription. We will use this
-      // same ID for unsubscribe as well.
-      final messageIdentifier = messageIdentifierDispenser
-          .getNextMessageIdentifier();
+      final messageIdentifier = _allocatePacketIdentifier(
+        messageIdentifierDispenser,
+        publishing: publishingManager,
+        subscriptions: this,
+        forSubscription: true,
+      );
+      if (messageIdentifier == null) {
+        throw NoMessageIdentifiersException();
+      }
       final sub = Subscription();
       sub.topic = subscriptionTopic;
       sub.qos = qos!;
@@ -199,10 +217,15 @@ class SubscriptionsManager {
   ) {
     try {
       final subscriptionTopic = SubscriptionTopic(subscriptions.first.topic);
-      // Get an ID that represents the subscription. We will use this
-      // same ID for unsubscribe as well.
-      final messageIdentifier = messageIdentifierDispenser
-          .getNextMessageIdentifier();
+      final messageIdentifier = _allocatePacketIdentifier(
+        messageIdentifierDispenser,
+        publishing: publishingManager,
+        subscriptions: this,
+        forSubscription: true,
+      );
+      if (messageIdentifier == null) {
+        throw NoMessageIdentifiersException();
+      }
       final sub = Subscription();
       sub.batch = true;
       sub.topic = subscriptionTopic;
@@ -257,8 +280,14 @@ class SubscriptionsManager {
     }
 
     // Build the message
-    final messageIdentifier = messageIdentifierDispenser
-        .getNextMessageIdentifier();
+    final messageIdentifier = _allocatePacketIdentifier(
+      messageIdentifierDispenser,
+      publishing: publishingManager,
+      subscriptions: this,
+    );
+    if (messageIdentifier == null) {
+      throw NoMessageIdentifiersException();
+    }
     final unsubscribeMsg = MqttUnsubscribeMessage().withMessageIdentifier(
       messageIdentifier,
     );
@@ -273,14 +302,15 @@ class SubscriptionsManager {
       unsubscribeMsg.fromTopic(topic);
     }
 
-    // Send the message
-    connectionHandler!.sendMessage(unsubscribeMsg);
-
-    // Create the pending subscription if acknowledge requested
-    // Remove it if not.
+    // Track the exchange before sending, including synchronous sent callbacks.
     if (expectAcknowledge) {
       pendingUnsubscriptions[messageIdentifier] = sub;
     } else {
+      _unsubscriptionsAwaitingAck.add(messageIdentifier);
+    }
+    connectionHandler!.sendMessage(unsubscribeMsg);
+
+    if (!expectAcknowledge) {
       subscriptions.remove(sub.messageIdentifier);
       if (onUnsubscribed != null) {
         onUnsubscribed!(topic);
@@ -385,6 +415,7 @@ class SubscriptionsManager {
   bool confirmUnsubscribe(MqttMessage? msg) {
     final unSubAck = msg as MqttUnsubscribeAckMessage;
     final messageIdentifier = unSubAck.variableHeader.messageIdentifier;
+    _unsubscriptionsAwaitingAck.remove(messageIdentifier);
     Subscription? sub;
     if (pendingUnsubscriptions.containsKey(messageIdentifier)) {
       sub = pendingUnsubscriptions[messageIdentifier];
@@ -463,6 +494,11 @@ class SubscriptionsManager {
   // [resubscribeOnAutoReconnect] is true.
   // Automatically fired after auto reconnect has completed.
   void _resubscribe(Resubscribe resubscribeEvent) {
+    if (resubscribeEvent.fromAutoReconnect) {
+      // These wire requests are not replayed and their callbacks already ran.
+      // Keep existing pendingUnsubscriptions callback tracking unchanged.
+      _unsubscriptionsAwaitingAck.clear();
+    }
     if (resubscribeOnAutoReconnect) {
       MqttLogger.log(
         'Subscriptionsmanager::_resubscribe - resubscribing from auto reconnect ${resubscribeEvent.fromAutoReconnect}',
