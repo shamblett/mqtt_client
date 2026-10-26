@@ -479,6 +479,9 @@ class MqttClient {
   /// Returns The message identifier assigned to the message.
   /// Raises InvalidTopicException if the topic supplied violates the
   /// MQTT topic format rules.
+  ///
+  /// If no packet identifier is available for a QoS 1 or QoS 2 publish, throws a
+  /// [NoMessageIdentifiersException] without sending the message.
   int publishMessage(
     String topic,
     MqttQos qualityOfService,
@@ -497,6 +500,8 @@ class MqttClient {
         data,
         retain,
       );
+    } on NoMessageIdentifiersException {
+      rethrow;
     } on Exception catch (e, stack) {
       Error.throwWithStackTrace(
         InvalidTopicException(e.toString(), topic),
@@ -511,6 +516,9 @@ class MqttClient {
   /// the [expectAcknowledge] parameter for this, default is false.
   /// For a batch subscription provide the topic of the first subscription
   /// in the batch.
+  ///
+  /// If no packet identifier is available, throws a
+  /// [NoMessageIdentifiersException] without sending the request.
   void unsubscribe(String topic, {expectAcknowledge = false}) {
     subscriptionsManager!.unsubscribe(
       topic,
@@ -531,6 +539,9 @@ class MqttClient {
   ///
   /// If the list contains any subscriptions marked as 'batch' subscriptions they will NOT
   /// be removed.
+  ///
+  /// If no packet identifier is available, throws a
+  /// [NoMessageIdentifiersException] without sending the request.
   void unsubscribeMulti(List<MultiUnsubscription> subscriptions) =>
       subscriptionsManager?.unsubscribeMulti(subscriptions);
 
